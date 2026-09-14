@@ -1,0 +1,964 @@
+@import "tailwindcss";
+
+/*
+ * NeoAssets System Art design system (pure Tailwind, no daisyUI). The daisyUI
+ * class names used by the pages are re-implemented here as Tailwind utilities so
+ * the markup stays idiomatic while the look matches the brand aesthetic.
+ */
+
+@theme {
+	/* Typography */
+	--font-sans: "Anta", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: "Anta", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+	/* Brand + semantic colors */
+	--color-primary: #4a90e2;
+	--color-primary-soft: #7fb3f0;
+	--color-secondary: #e879f9;
+	--color-success: #34d399;
+	--color-warning: #fbbf24;
+	--color-error: #f87171;
+	--color-info: #38bdf8;
+	--color-accent: #4a90e2;
+
+	/* Surfaces (dark default): cool blue-gray with soft off-white content */
+	--color-base-100: #10151d;
+	--color-base-200: #171d27;
+	--color-base-300: #242c38;
+	--color-base-content: #dde5ee;
+
+	/* Animations */
+	--animate-fade-in: fade-in 0.4s ease-out both;
+	--animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+	--animate-scale-in: scale-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
+	--animate-progress-slide: progress-slide 1.2s linear infinite;
+
+	@keyframes progress-slide {
+		from {
+			transform: translateX(-100%);
+		}
+		to {
+			transform: translateX(100%);
+		}
+	}
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	@keyframes fade-up {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	@keyframes scale-in {
+		from {
+			opacity: 0;
+			transform: scale(0.96);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+}
+
+:root {
+	--default-border-color: #242c38;
+	color-scheme: dark;
+	font-family:
+		"Anta",
+		ui-sans-serif,
+		system-ui,
+		-apple-system,
+		"Segoe UI",
+		Roboto,
+		Helvetica,
+		Arial,
+		sans-serif;
+	font-feature-settings: "cv11", "ss01";
+}
+
+/* Light theme: toggled by adding .light to <html>. Pale blue-gray surfaces
+   with dark navy text, matching the boarding-pass palette. */
+html.light {
+	--color-base-100: #dde5e7;
+	--color-base-200: #e6ecee;
+	--color-base-300: #c5d1d5;
+	--color-base-content: #16232f;
+	--default-border-color: #c5d1d5;
+	color-scheme: light;
+}
+
+html.light body {
+	background-color: var(--color-base-100);
+	color: var(--color-base-content);
+}
+
+/* NeoAssets isotype: renders the SVG as a mask filled with currentColor so it
+   follows the theme (light mark on dark, dark mark on light). */
+.isotype-mask {
+	display: inline-block;
+	background-color: currentColor;
+	-webkit-mask-image: url("/neoassets-isotype.svg");
+	mask-image: url("/neoassets-isotype.svg");
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: var(--color-base-100);
+	color: var(--color-base-content);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+*,
+::before,
+::after {
+	border-color: var(--default-border-color);
+}
+
+::selection {
+	background: color-mix(in oklab, var(--color-primary) 35%, transparent);
+}
+
+:focus-visible {
+	outline: 2px solid color-mix(in oklab, var(--color-primary) 55%, transparent);
+	outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+::-webkit-scrollbar-thumb {
+	background: rgb(128 128 128 / 0.35);
+	border-radius: 9999px;
+	border: 2px solid var(--color-base-100);
+}
+::-webkit-scrollbar-thumb:hover {
+	background: rgb(128 128 128 / 0.5);
+}
+
+/* -------------------------------------------------------------------------
+   Backgrounds
+   ------------------------------------------------------------------------- */
+@utility bg-grid {
+	background-image: radial-gradient(
+		color-mix(in oklab, var(--color-base-content) 22%, transparent) 1.2px,
+		transparent 1.2px
+	);
+	background-size: 18px 18px;
+	background-position: 0 0;
+}
+
+/* -------------------------------------------------------------------------
+   Cards
+   ------------------------------------------------------------------------- */
+@utility card {
+	border-radius: 1rem;
+	border: 1px solid var(--color-base-300);
+	background-color: var(--color-base-200);
+}
+
+@utility card-border {
+	border: 1px solid var(--color-base-300);
+}
+
+@utility card-hover {
+	transition:
+		border-color 0.2s ease,
+		background-color 0.2s ease,
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+
+	&:hover {
+		border-color: color-mix(in oklab, var(--color-primary) 45%, var(--color-base-300));
+		transform: translateY(-2px);
+		box-shadow: 0 12px 32px -16px rgb(0 0 0 / 0.5);
+	}
+}
+
+@utility card-body {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding: 1.25rem;
+}
+
+@utility card-title {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 1.125rem;
+	font-weight: 700;
+	line-height: 1.375rem;
+	letter-spacing: -0.01em;
+}
+
+/* -------------------------------------------------------------------------
+   Buttons
+   ------------------------------------------------------------------------- */
+@utility btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	border-radius: 0.625rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	line-height: 1.25rem;
+	white-space: nowrap;
+	cursor: pointer;
+	user-select: none;
+	transition:
+		background-color 0.15s ease,
+		border-color 0.15s ease,
+		color 0.15s ease,
+		box-shadow 0.15s ease,
+		transform 0.15s ease;
+	padding: 0.625rem 1rem;
+
+	&:active {
+		transform: scale(0.98);
+	}
+	&:disabled {
+		pointer-events: none;
+		opacity: 0.5;
+	}
+}
+
+@utility btn-primary {
+	background-color: var(--color-primary);
+	color: #fff;
+	border: 1px solid transparent;
+	box-shadow: 0 8px 24px -8px color-mix(in oklab, var(--color-primary) 55%, transparent);
+
+	&:hover {
+		background-color: color-mix(in oklab, var(--color-primary) 88%, #000);
+	}
+}
+
+@utility btn-secondary {
+	border: 1px solid var(--color-base-300);
+	background-color: var(--color-base-200);
+	color: var(--color-base-content);
+
+	&:hover {
+		background-color: var(--color-base-300);
+	}
+}
+
+@utility btn-ghost {
+	color: color-mix(in oklab, var(--color-base-content) 65%, transparent);
+	border: 1px solid transparent;
+
+	&:hover {
+		color: var(--color-base-content);
+		background-color: var(--color-base-300);
+	}
+}
+
+@utility btn-danger {
+	background-color: var(--color-error);
+	color: #fff;
+	border: 1px solid transparent;
+
+	&:hover {
+		background-color: color-mix(in oklab, var(--color-error) 85%, #000);
+	}
+}
+
+@utility btn-outline {
+	border: 1px solid var(--color-base-300);
+	background-color: transparent;
+	color: var(--color-base-content);
+
+	&:hover {
+		background-color: var(--color-base-300);
+	}
+}
+
+@utility btn-lg {
+	height: 3rem;
+	padding-inline: 1.5rem;
+	font-size: 1rem;
+}
+
+@utility btn-sm {
+	height: 2rem;
+	padding-inline: 0.75rem;
+	font-size: 0.8125rem;
+}
+
+@utility btn-xs {
+	height: 1.5rem;
+	padding-inline: 0.5rem;
+	font-size: 0.75rem;
+}
+
+@utility btn-square {
+	width: 2.5rem;
+	padding: 0;
+}
+
+@utility btn-block {
+	width: 100%;
+}
+
+/* -------------------------------------------------------------------------
+   Badges / pills
+   ------------------------------------------------------------------------- */
+@utility badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	border-radius: 9999px;
+	border: 1px solid var(--color-base-300);
+	background-color: var(--color-base-200);
+	padding: 0.25rem 0.625rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	line-height: 1.25rem;
+}
+
+@utility badge-primary {
+	border-color: color-mix(in oklab, var(--color-primary) 40%, transparent);
+	background-color: color-mix(in oklab, var(--color-primary) 14%, transparent);
+	color: var(--color-primary-soft);
+}
+
+@utility badge-secondary {
+	border-color: color-mix(in oklab, var(--color-secondary) 40%, transparent);
+	background-color: color-mix(in oklab, var(--color-secondary) 14%, transparent);
+	color: var(--color-secondary);
+}
+
+@utility badge-accent {
+	border-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
+	background-color: color-mix(in oklab, var(--color-accent) 14%, transparent);
+	color: var(--color-accent);
+}
+
+@utility badge-info {
+	border-color: color-mix(in oklab, var(--color-info) 40%, transparent);
+	background-color: color-mix(in oklab, var(--color-info) 14%, transparent);
+	color: var(--color-info);
+}
+
+@utility badge-success {
+	border-color: color-mix(in oklab, var(--color-success) 40%, transparent);
+	background-color: color-mix(in oklab, var(--color-success) 14%, transparent);
+	color: var(--color-success);
+}
+
+@utility badge-warning {
+	border-color: color-mix(in oklab, var(--color-warning) 40%, transparent);
+	background-color: color-mix(in oklab, var(--color-warning) 14%, transparent);
+	color: var(--color-warning);
+}
+
+@utility badge-error {
+	border-color: color-mix(in oklab, var(--color-error) 40%, transparent);
+	background-color: color-mix(in oklab, var(--color-error) 14%, transparent);
+	color: var(--color-error);
+}
+
+@utility badge-outline {
+	border-color: var(--color-base-300);
+	background-color: transparent;
+	color: var(--color-base-content);
+}
+
+@utility badge-ghost {
+	border-color: transparent;
+	background-color: transparent;
+	color: color-mix(in oklab, var(--color-base-content) 70%, transparent);
+}
+
+@utility badge-lg {
+	padding: 0.375rem 0.875rem;
+	font-size: 0.875rem;
+}
+
+@utility badge-sm {
+	padding: 0.125rem 0.5rem;
+	font-size: 0.6875rem;
+}
+
+@utility badge-xs {
+	padding: 0 0.375rem;
+	font-size: 0.625rem;
+}
+
+/* -------------------------------------------------------------------------
+   Alerts
+   ------------------------------------------------------------------------- */
+@utility alert {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	border-radius: 1rem;
+	border: 1px solid var(--color-base-300);
+	background-color: var(--color-base-200);
+	padding: 1rem;
+	font-size: 0.875rem;
+}
+
+@utility alert-info {
+	border-color: color-mix(in oklab, var(--color-info) 30%, transparent);
+	background-color: color-mix(in oklab, var(--color-info) 8%, transparent);
+	color: var(--color-info);
+}
+
+@utility alert-warning {
+	border-color: color-mix(in oklab, var(--color-warning) 30%, transparent);
+	background-color: color-mix(in oklab, var(--color-warning) 8%, transparent);
+	color: var(--color-warning);
+}
+
+@utility alert-success {
+	border-color: color-mix(in oklab, var(--color-success) 30%, transparent);
+	background-color: color-mix(in oklab, var(--color-success) 8%, transparent);
+	color: var(--color-success);
+}
+
+@utility alert-error {
+	border-color: color-mix(in oklab, var(--color-error) 30%, transparent);
+	background-color: color-mix(in oklab, var(--color-error) 8%, transparent);
+	color: var(--color-error);
+}
+
+/* -------------------------------------------------------------------------
+   Forms
+   ------------------------------------------------------------------------- */
+@utility input {
+	height: 2.75rem;
+	width: 100%;
+	border-radius: 0.625rem;
+	border: 1px solid var(--color-base-300);
+	background-color: var(--color-base-100);
+	padding-inline: 0.875rem;
+	font-size: 0.875rem;
+	color: var(--color-base-content);
+	outline: none;
+	transition:
+		border-color 0.15s ease,
+		box-shadow 0.15s ease,
+		background-color 0.15s ease;
+
+	&::placeholder {
+		color: color-mix(in oklab, var(--color-base-content) 35%, transparent);
+	}
+	&:focus {
+		border-color: color-mix(in oklab, var(--color-primary) 55%, transparent);
+		box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 18%, transparent);
+	}
+}
+
+@utility select {
+	height: 2.5rem;
+	width: 100%;
+	border-radius: 0.625rem;
+	border: 1px solid var(--color-base-300);
+	background-color: var(--color-base-100);
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23f4f4f5' stroke-opacity='0.6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 0.625rem center;
+	background-size: 1rem;
+	padding-inline: 0.75rem 2rem;
+	-webkit-appearance: none;
+	appearance: none;
+	font-size: 0.875rem;
+	color: var(--color-base-content);
+	outline: none;
+	cursor: pointer;
+	transition:
+		border-color 0.15s ease,
+		box-shadow 0.15s ease;
+
+	&:focus {
+		border-color: color-mix(in oklab, var(--color-primary) 55%, transparent);
+		box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 18%, transparent);
+	}
+}
+
+@utility checkbox {
+	appearance: none;
+	width: 1.125rem;
+	height: 1.125rem;
+	border-radius: 0.375rem;
+	border: 1px solid var(--color-base-300);
+	background-color: var(--color-base-100);
+	cursor: pointer;
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	&:checked {
+		background-color: var(--color-primary);
+		border-color: var(--color-primary);
+	}
+	&:checked::after {
+		content: "";
+		width: 0.625rem;
+		height: 0.375rem;
+		border-left: 2px solid #fff;
+		border-bottom: 2px solid #fff;
+		transform: rotate(-45deg) translate(0.5px, -1px);
+	}
+}
+
+@utility checkbox-primary {
+	&:checked {
+		background-color: var(--color-primary);
+		border-color: var(--color-primary);
+	}
+}
+
+@utility label-text {
+	margin-bottom: 0.375rem;
+	display: block;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	color: color-mix(in oklab, var(--color-base-content) 80%, transparent);
+}
+
+@utility sidebar-section {
+	margin-bottom: 0.375rem;
+	display: block;
+	padding-left: 0.75rem;
+	font-size: 0.6875rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: color-mix(in oklab, var(--color-base-content) 45%, transparent);
+}
+
+/* -------------------------------------------------------------------------
+   Boarding-pass style sidebar (blue ticket look)
+   ------------------------------------------------------------------------- */
+.sap-sidebar {
+	background-color: #4a90e2;
+	color: #0f2145;
+	border-right: 1px solid #2f6bb0;
+}
+
+.sap-section {
+	display: block;
+	padding-left: 0.75rem;
+	margin-bottom: 0.375rem;
+	font-size: 0.625rem;
+	font-weight: 700;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: color-mix(in oklab, #0f2145 60%, transparent);
+}
+
+.sap-nav {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.375rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: #0f2145;
+	transition:
+		background-color 0.15s ease,
+		color 0.15s ease;
+}
+
+.sap-nav:hover {
+	background-color: color-mix(in oklab, #0f2145 14%, transparent);
+}
+
+.sap-nav-active {
+	background-color: #0f2145;
+	color: #ffffff;
+}
+
+.sap-divider {
+	border-top: 1px dashed color-mix(in oklab, #0f2145 45%, transparent);
+	margin: 0.25rem 0;
+}
+
+.sap-icon-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	padding: 0.5rem;
+	border-radius: 0.375rem;
+	color: #0f2145;
+	transition:
+		background-color 0.15s ease,
+		color 0.15s ease;
+}
+
+.sap-icon-btn:hover {
+	background-color: color-mix(in oklab, #0f2145 14%, transparent);
+}
+
+.sap-icon-btn-active {
+	background-color: #0f2145;
+	color: #ffffff;
+}
+
+/* Collapsed sidebar: icon-only buttons stack and never grow vertically. */
+.sap-sidebar.sap-collapsed .sap-icon-btn {
+	flex: none;
+	width: 100%;
+}
+
+.sap-lang {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 0.375rem;
+	width: 100%;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.375rem;
+	color: #0f2145;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+.sap-lang:hover {
+	background-color: color-mix(in oklab, #0f2145 14%, transparent);
+}
+
+.sap-lang-select {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.sap-lang-native {
+	flex: 1;
+	min-width: 0;
+	background-color: transparent;
+	color: #0f2145;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
+
+.sap-lang-native option {
+	color: #0f2145;
+}
+
+.sap-sidebar.sap-collapsed .sap-lang {
+	flex: none;
+	width: 100%;
+	justify-content: center;
+	padding: 0.5rem;
+}
+
+.sap-auth-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	width: 100%;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.375rem;
+	background-color: #0f2145;
+	color: #ffffff;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	transition: opacity 0.15s ease;
+}
+
+.sap-auth-btn:hover {
+	opacity: 0.9;
+}
+
+.sap-auth-btn-outline {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	width: 100%;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.375rem;
+	border: 1px solid color-mix(in oklab, #0f2145 45%, transparent);
+	color: #0f2145;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	transition: background-color 0.15s ease;
+}
+
+.sap-auth-btn-outline:hover {
+	background-color: color-mix(in oklab, #0f2145 14%, transparent);
+}
+
+@utility sidebar-item-disabled {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.625rem 0.75rem;
+	border-radius: 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: color-mix(in oklab, var(--color-base-content) 40%, transparent);
+	background: color-mix(in oklab, var(--color-base-300) 30%, transparent);
+	cursor: not-allowed;
+	user-select: none;
+}
+
+/* -------------------------------------------------------------------------
+   Navigation
+   ------------------------------------------------------------------------- */
+@utility navbar {
+	display: flex;
+	align-items: center;
+	min-height: 4rem;
+}
+
+@utility navbar-start {
+	display: flex;
+	align-items: center;
+	flex: 1;
+	justify-content: flex-start;
+}
+
+@utility navbar-center {
+	display: flex;
+	align-items: center;
+	flex: 2;
+	justify-content: center;
+}
+
+@utility navbar-end {
+	display: flex;
+	align-items: center;
+	flex: 1;
+	justify-content: flex-end;
+}
+
+@utility menu {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	padding: 0.5rem;
+	border-radius: 1rem;
+	background-color: var(--color-base-200);
+}
+
+@utility menu-horizontal {
+	flex-direction: row;
+	background-color: transparent;
+}
+
+@utility menu-sm {
+	padding: 0.25rem;
+}
+
+@utility dropdown {
+	position: relative;
+}
+
+@utility dropdown-content {
+	position: absolute;
+	z-index: 50;
+	display: none;
+	animation: scale-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dropdown:focus-within .dropdown-content,
+.dropdown:has(.dropdown-content:focus) .dropdown-content {
+	display: block;
+}
+
+/* -------------------------------------------------------------------------
+   Hero
+   ------------------------------------------------------------------------- */
+@utility hero {
+	display: grid;
+	place-items: center;
+	width: 100%;
+}
+
+@utility hero-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	padding: 2rem;
+}
+
+/* -------------------------------------------------------------------------
+   Misc
+   ------------------------------------------------------------------------- */
+@utility divider {
+	height: 1px;
+	background-color: var(--color-base-300);
+}
+
+@utility link {
+	color: var(--color-primary);
+	cursor: pointer;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+
+	&:hover {
+		opacity: 0.8;
+	}
+}
+
+@utility glass {
+	background-color: color-mix(in oklab, var(--color-base-100) 78%, transparent);
+	backdrop-filter: blur(16px) saturate(140%);
+}
+
+@utility text-gradient {
+	background-image: linear-gradient(120deg, var(--color-primary-soft), var(--color-secondary));
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+}
+
+@utility pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	border-radius: 9999px;
+	border: 1px solid var(--color-base-300);
+	background-color: var(--color-base-200);
+	padding: 0.25rem 0.625rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	line-height: 1.25rem;
+}
+
+/* stats */
+@utility stat {
+	display: grid;
+	grid-auto-columns: minmax(0, 1fr);
+	gap: 0.25rem;
+}
+
+@utility stat-value {
+	font-size: 2rem;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+	line-height: 1;
+}
+
+@utility stat-desc {
+	font-size: 0.75rem;
+	color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+}
+
+/* table */
+@utility table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.875rem;
+}
+
+/* footer */
+@utility footer {
+	display: grid;
+	gap: 1.5rem;
+}
+
+@utility footer-horizontal {
+	grid-auto-flow: column;
+}
+
+@utility footer-title {
+	opacity: 0.6;
+	font-weight: 600;
+}
+
+/* rating */
+@utility rating {
+	display: inline-flex;
+	align-items: center;
+}
+
+@layer base {
+	:target {
+		scroll-margin-block: 5ex;
+	}
+}
+
+/* -------------------------------------------------------------------------
+   Completed cards: 3D tilt + magnification on the card, and a holographic
+   "Completed" badge whose sheen follows the pointer.
+   ------------------------------------------------------------------------- */
+.holo-card {
+	--rotation: rotateY(calc(var(--mx, 0) * 12deg)) rotateX(calc(var(--my, 0) * -12deg));
+	transform: var(--rotation) scale(1);
+	transform-style: preserve-3d;
+	transition: transform 100ms ease;
+}
+
+.holo-card:hover {
+	transform: var(--rotation) scale(1.02);
+}
+
+.holo-badge {
+	background-color: #f4f4f5;
+	background-image:
+		radial-gradient(
+			circle at calc(50% + var(--mx, 0) * 50%) calc(50% + var(--my, 0) * 50%),
+			#ffffffcc,
+			transparent 60%
+		),
+		repeating-linear-gradient(
+			115deg,
+			#f87171,
+			#fef08a,
+			#86efac,
+			#5eead4,
+			#60a5fa,
+			#e879f9,
+			#fb7185
+		);
+	background-size: 100% 100%, 200% 200%;
+	background-position:
+		0 0,
+		calc(50% + var(--mx, 0) * 50%) calc(50% + var(--my, 0) * 50%);
+	color: #111827;
+}

@@ -1,0 +1,16 @@
+# build output
+dist/
+*.tsbuildinfo
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+
+# environment variables
+.env
+
+# macOS
+.DS_Store

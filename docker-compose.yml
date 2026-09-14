@@ -1,0 +1,19 @@
+services:
+  # NeoAssets web frontend (nginx serving the built SPA).
+  neoassets-web:
+    build:
+      context: .
+      args:
+        VITE_ASSETS_API_URL: ${VITE_ASSETS_API_URL:-http://localhost:8090}
+        VITE_CDN_BASE: ${VITE_CDN_BASE:-https://cdn.neoassets.dev}
+    container_name: neoassets-web
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8091}:80"
+    networks:
+      - neoassets-network
+
+networks:
+  neoassets-network:
+    name: neoassets-shared-network
+    external: true
