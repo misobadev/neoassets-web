@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { AlertTriangle, ChevronLeft, ShieldCheck, X } from "lucide-react";
+import { AlertTriangle, ChevronLeft, Image as ImageIcon, ShieldCheck, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import UserLink from "../components/UserLink";
 import {
@@ -62,6 +62,8 @@ function mediaUrl(objectKey: string, v?: string): string {
 export default function MetadataAdminView() {
 	const { t } = useTranslation();
 	const [status, setStatus] = useState<MetadataStatus | "">("pending");
+	const [kindFilter, setKindFilter] = useState("");
+	const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 	const [submissions, setSubmissions] = useState<MetadataSubmission[] | null>(null);
 	const [detail, setDetail] = useState<MetadataSubmissionDetail | null>(null);
 	const [lightbox, setLightbox] = useState<{ url: string; label: string } | null>(null);
@@ -178,6 +180,20 @@ export default function MetadataAdminView() {
 		return TEXT_LABEL[key] ? t(TEXT_LABEL[key]) : key;
 	}
 
+	// kindLabel resolves a change kind (a payload field or a media kind) to a
+	// human label for the list badges and the filter chips.
+	function kindLabel(key: string): string {
+		if (TEXT_LABEL[key]) return t(TEXT_LABEL[key]);
+		const media = MEDIA_LABEL[key as MediaKind];
+		if (media) return t(media);
+		return key;
+	}
+
+	const allKinds = [...new Set((submissions || []).flatMap((s) => s.change_kinds || []))].sort();
+	const visible = [...(submissions || [])]
+		.filter((s) => !kindFilter || (s.change_kinds || []).includes(kindFilter))
+		.sort((a, b) => (sortDir === "asc" ? (a.created_at > b.created_at ? 1 : -1) : a.created_at < b.created_at ? 1 : -1));
+
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-3">
@@ -218,24 +234,66 @@ export default function MetadataAdminView() {
 			) : submissions.length === 0 ? (
 				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-6">{listMsg || t("metadataAdmin.noSubmissions")}</p>
 			) : (
-				<div className="space-y-3">
-					{submissions.map((s) => (
-						<div key={s.id} className="card card-hover p-4 cursor-pointer" onClick={() => open(s.id)}>
-							<div className="flex items-center justify-between gap-3">
-								<div className="min-w-0">
-									<p className="font-semibold truncate text-sm">
-										{s.game_id ? t("metadataAdmin.gameContribution") : t("metadataAdmin.systemContribution")}
-									</p>
-									<p className="text-xs text-[var(--color-base-content)]/50 mt-0.5">
-										{t("metadataAdmin.by")} <UserLink>{s.submitted_by_name}</UserLink> · {formatDate(s.created_at)}
-										{s.reviewed_by_name ? <span> · {t("metadataAdmin.reviewedBy")} <UserLink>{s.reviewed_by_name}</UserLink></span> : null}
-									</p>
+				<>
+					<div className="flex flex-wrap items-center gap-2">
+						<span className="text-xs text-[var(--color-base-content)]/50">{t("metadataAdmin.filterBy")}</span>
+						<button type="button" className={kindFilter === "" ? "btn btn-xs btn-primary" : "btn btn-xs btn-ghost"} onClick={() => setKindFilter("")}>
+							{t("common.all")}
+						</button>
+						{allKinds.map((k) => (
+							<button key={k} type="button" className={kindFilter === k ? "btn btn-xs btn-primary" : "btn btn-xs btn-ghost"} onClick={() => setKindFilter(k)}>
+								{kindLabel(k)}
+							</button>
+						))}
+						<select className="select select-sm ml-auto" value={sortDir} onChange={(e) => setSortDir(e.target.value as "asc" | "desc")} aria-label={t("metadataAdmin.sortBy")}>
+							<option value="desc">{t("metadataAdmin.newestFirst")}</option>
+							<option value="asc">{t("metadataAdmin.oldestFirst")}</option>
+						</select>
+					</div>
+
+					{visible.length === 0 ? (
+						<p className="text-sm text-[var(--color-base-content)]/50 text-center py-6">{t("metadataAdmin.noSubmissions")}</p>
+					) : (
+						<div className="space-y-3">
+							{visible.map((s) => (
+								<div key={s.id} className="card card-hover p-4 cursor-pointer" onClick={() => open(s.id)}>
+									<div className="flex items-center gap-3">
+										{s.cover ? (
+											<img
+												src={cdnUrl(s.cover) + (s.cover_updated ? `?v=${encodeURIComponent(s.cover_updated)}` : "")}
+												alt=""
+												className="w-14 h-14 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
+												onError={(e) => (e.currentTarget.style.display = "none")}
+											/>
+										) : (
+											<div className="w-14 h-14 rounded-lg bg-[var(--color-base-300)] grid place-items-center shrink-0 text-[var(--color-base-content)]/30">
+												<ImageIcon className="w-6 h-6" />
+											</div>
+										)}
+										<div className="min-w-0 flex-1">
+											<div className="flex items-center gap-2 flex-wrap">
+												<p className="font-semibold truncate text-sm">
+													{s.game_name || (s.game_id ? t("metadataAdmin.gameContribution") : t("metadataAdmin.systemContribution"))}
+												</p>
+												{s.system_name ? <span className="badge badge-ghost badge-sm shrink-0">{s.system_name}</span> : null}
+											</div>
+											<div className="flex flex-wrap gap-1 mt-1">
+												{(s.change_kinds || []).map((k) => (
+													<span key={k} className="badge badge-outline badge-xs">{kindLabel(k)}</span>
+												))}
+											</div>
+											<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
+												{t("metadataAdmin.by")} <UserLink>{s.submitted_by_name}</UserLink> · {formatDate(s.created_at)}
+												{s.reviewed_by_name ? <span> · {t("metadataAdmin.reviewedBy")} <UserLink>{s.reviewed_by_name}</UserLink></span> : null}
+											</p>
+										</div>
+										<span className={`badge ${BADGE[s.status]} shrink-0`}>{t("metadataStatus." + s.status, { defaultValue: s.status })}</span>
+									</div>
 								</div>
-								<span className={`badge ${BADGE[s.status]} shrink-0`}>{t("metadataStatus." + s.status, { defaultValue: s.status })}</span>
-							</div>
+							))}
 						</div>
-					))}
-				</div>
+					)}
+				</>
 			)}
 
 			{detail ? (

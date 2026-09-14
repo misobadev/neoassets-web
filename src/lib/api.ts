@@ -281,6 +281,11 @@ export interface MetadataSubmission {
 	created_at: string;
 	reviewed_by_name?: string;
 	submitted_by_name?: string;
+	game_name?: string;
+	system_name?: string;
+	cover?: string;
+	cover_updated?: string;
+	change_kinds?: string[];
 }
 
 export interface MetadataSubmissionFile {
