@@ -462,6 +462,10 @@
 		"reviewedBy": "レビュー担当",
 		"submissionTitle": "メタデータ投稿",
 		"payload": "ペイロード",
+		"note": "メモ",
+		"textChanges": "テキストの変更",
+		"mediaChanges": "メディアの変更",
+		"none": "なし",
 		"files_one": "ファイル（{{count}}）",
 		"files_other": "ファイル（{{count}}）",
 		"format": "形式",
@@ -610,13 +614,17 @@
 			"frameRateUnknown": "不明",
 			"frameRateRange": "（{{fps}} fps である必要があります）",
 			"videoOk": "動画は送信可能です。",
-			"whyLabel": "理由（簡単なメモ）",
+			"whyLabel": "理由（簡単なメモ、任意）",
 			"whyPlaceholder": "簡単な理由、出典、または修正内容...",
 			"coverHint": "カバーは最大1024pxに縮小されます。",
 			"charCount": "{{count}}/{{max}} 文字"
 		},
 		"working": "処理中...",
-		"submitForReview": "レビューに提出"
+		"submitForReview": "レビューに提出",
+		"confirmSubmit": {
+			"title": "レビューに提出しますか？",
+			"body": "提出後、チームが確認します。保留中は同じ項目を再度提出できません。"
+		}
 	},
 	"nav": {
 		"menu": "メニュー",

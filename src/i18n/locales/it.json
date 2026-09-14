@@ -462,6 +462,10 @@
 		"reviewedBy": "Revisionato da",
 		"submissionTitle": "Proposta di metadati",
 		"payload": "Payload",
+		"note": "Nota",
+		"textChanges": "Modifiche al testo",
+		"mediaChanges": "Modifiche ai media",
+		"none": "Nessuno",
 		"files_one": "File ({{count}})",
 		"files_other": "File ({{count}})",
 		"format": "Formato",
@@ -610,13 +614,17 @@
 			"frameRateUnknown": "sconosciuta",
 			"frameRateRange": "(deve essere {{fps}} fps)",
 			"videoOk": "Il video è pronto per l'invio.",
-			"whyLabel": "Perché (breve nota)",
+			"whyLabel": "Perché (breve nota, facoltativo)",
 			"whyPlaceholder": "Breve motivo, fonte o cosa viene corretto...",
 			"coverHint": "La copertina viene ridimensionata a max 1024px.",
 			"charCount": "{{count}}/{{max}} caratteri"
 		},
 		"working": "Elaborazione...",
-		"submitForReview": "Invia per la revisione"
+		"submitForReview": "Invia per la revisione",
+		"confirmSubmit": {
+			"title": "Inviare per la revisione?",
+			"body": "Una volta inviato, il team lo esaminerà. Non puoi inviare di nuovo lo stesso campo finché è in sospeso."
+		}
 	},
 	"nav": {
 		"menu": "Menu",

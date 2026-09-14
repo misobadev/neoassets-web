@@ -600,8 +600,16 @@ export function fetchMetadataSubmissions(status = ""): Promise<MetadataSubmissio
 	return api<{ submissions: MetadataSubmission[] }>(`/api/v1/admin/metadata/submissions${q}`, { token: reviewToken() }).then((d) => d.submissions || []);
 }
 
-export function fetchMetadataSubmissionDetail(id: string): Promise<{ submission: MetadataSubmission; files: MetadataSubmissionFile[] }> {
-	return api<{ submission: MetadataSubmission; files: MetadataSubmissionFile[] }>(`/api/v1/admin/metadata/submissions/${id}`, { token: reviewToken() });
+export interface MetadataSubmissionDetail {
+	submission: MetadataSubmission;
+	files: MetadataSubmissionFile[];
+	game?: GameDetail;
+	system?: MetadataSystem;
+	media: MetadataMedia[];
+}
+
+export function fetchMetadataSubmissionDetail(id: string): Promise<MetadataSubmissionDetail> {
+	return api<MetadataSubmissionDetail>(`/api/v1/admin/metadata/submissions/${id}`, { token: reviewToken() });
 }
 
 export function approveMetadataSubmission(id: string, comment = ""): Promise<MetadataSubmission> {

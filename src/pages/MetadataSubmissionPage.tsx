@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Check, ChevronLeft, Clapperboard, FileText, Image as ImageIcon, Upload } from "lucide-react";
+import { AlertTriangle, Check, ChevronLeft, Clapperboard, FileText, Image as ImageIcon, Upload } from "lucide-react";
 import {
 	cdnUrl,
 	createMetadataSubmission,
@@ -150,11 +150,13 @@ export default function MetadataSubmissionPage() {
 	const [textValue, setTextValue] = useState("");
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const [converting, setConverting] = useState(false);
 	const [videoMeta, setVideoMeta] = useState<{ duration: number; width: number; height: number; fps: number; aspect: string } | null>(null);
 	const [fileError, setFileError] = useState<string | null>(null);
 	const [status, setStatus] = useState<{ text: string; tone: string } | null>(null);
 	const [busy, setBusy] = useState(false);
+	const [confirmSubmit, setConfirmSubmit] = useState(false);
 	const [progress, setProgress] = useState<number | null>(null);
 	const [pendingKeys, setPendingKeys] = useState<string[]>([]);
 	const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -287,6 +289,18 @@ export default function MetadataSubmissionPage() {
 		};
 	}, [isVideo, file]);
 
+	// Object URL for the freshly picked image so it can be shown next to the
+	// current one (old left, new right) before submitting.
+	useEffect(() => {
+		if (!file || isVideo) {
+			setPreviewUrl(null);
+			return;
+		}
+		const url = URL.createObjectURL(file);
+		setPreviewUrl(url);
+		return () => URL.revokeObjectURL(url);
+	}, [file, isVideo]);
+
 	// Every picked image is converted to WebP before upload; fanart is
 	// additionally cropped/scaled to 1920x1080 (16:9). Videos are uploaded
 	// as-is (the backend re-encodes them to WebM on approval).
@@ -372,6 +386,7 @@ export default function MetadataSubmissionPage() {
 	};
 
 	async function submit() {
+		setConfirmSubmit(false);
 		if (!game) return;
 		if (!type) {
 			setStatus({ text: t("metadataSubmit.status.pickType"), tone: "error" });
@@ -627,23 +642,42 @@ export default function MetadataSubmissionPage() {
 						</div>
 					) : (
 						<div className="space-y-3">
-							<div>
-								<p className="label-text">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
-								{currentMedia.length > 0 ? (
-									<div className="grid grid-cols-2 gap-3 mt-2">
-										{currentMedia.map((m) =>
-											isVideo ? (
-												<video key={m.id} src={mediaUrl(m)} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-black" controls muted />
-											) : (
-												<img key={m.id} src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-											),
+							{!isVideo && file && previewUrl ? (
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+									<div>
+										<p className="label-text mb-2">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
+										{currentMedia.length > 0 ? (
+											<img src={mediaUrl(currentMedia[0])} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+										) : (
+											<div className="w-full h-44 flex items-center justify-center rounded-lg border border-dashed border-[var(--color-base-300)] bg-[var(--color-base-300)]/30 px-2">
+												<p className="text-sm text-[var(--color-base-content)]/50 text-center">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+											</div>
 										)}
 									</div>
-								) : (
-									<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
-								)}
-								<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.replaceMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
-							</div>
+									<div>
+										<p className="label-text mb-2">{t("metadataSubmit.form.newField", { field: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+										<img src={previewUrl} alt="" className="w-full h-44 object-contain rounded-lg border border-[var(--color-primary)] bg-[var(--color-base-300)]" />
+									</div>
+								</div>
+							) : (
+								<div>
+									<p className="label-text">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
+									{currentMedia.length > 0 ? (
+										<div className="grid grid-cols-2 gap-3 mt-2">
+											{currentMedia.map((m) =>
+												isVideo ? (
+													<video key={m.id} src={mediaUrl(m)} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-black" controls muted />
+												) : (
+													<img key={m.id} src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+												),
+											)}
+										</div>
+									) : (
+										<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+									)}
+								</div>
+							)}
+							<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.replaceMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
 
 							<label className="btn btn-outline cursor-pointer">
 								{isVideo ? <Clapperboard className="w-4 h-4" /> : <Upload className="w-4 h-4" />}
@@ -703,10 +737,30 @@ export default function MetadataSubmissionPage() {
 
 			<div className="flex justify-end gap-2">
 				<button className="btn btn-ghost" onClick={() => navigate(`/app/metadata/${game.system_id}/game/${game.id}`)} disabled={busy}>{t("common.cancel")}</button>
-				<button className="btn btn-primary" onClick={submit} disabled={busy || converting || (isVideo && !!fileError)}>
+				<button className="btn btn-primary" onClick={() => setConfirmSubmit(true)} disabled={busy || converting || (isVideo && !!fileError)}>
 					{busy ? t("metadataSubmit.working") : <><Check className="w-4 h-4" /> {t("metadataSubmit.submitForReview")}</>}
 				</button>
 			</div>
+
+			{confirmSubmit ? (
+				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && setConfirmSubmit(false)}>
+					<div className="card w-full max-w-md p-6 space-y-4">
+						<div className="flex items-start gap-3">
+							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-warning)]/15 shrink-0">
+								<AlertTriangle className="w-5 h-5 text-[var(--color-warning)]" />
+							</div>
+							<div className="min-w-0">
+								<h2 className="text-lg font-bold">{t("metadataSubmit.confirmSubmit.title")}</h2>
+								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">{t("metadataSubmit.confirmSubmit.body")}</p>
+							</div>
+						</div>
+						<div className="flex justify-end gap-2">
+							<button className="btn btn-ghost" type="button" onClick={() => setConfirmSubmit(false)}>{t("common.cancel")}</button>
+							<button className="btn btn-primary" type="button" disabled={busy} onClick={submit}>{t("metadataSubmit.submitForReview")}</button>
+						</div>
+					</div>
+				</div>
+			) : null}
 		</div>
 	);
 }

@@ -443,6 +443,10 @@
 		"reviewedBy": "Revisado por",
 		"submissionTitle": "Envío de metadatos",
 		"payload": "Datos",
+		"note": "Nota",
+		"textChanges": "Cambios de texto",
+		"mediaChanges": "Cambios de medios",
+		"none": "Ninguno",
 		"files_one": "Archivo ({{count}})",
 		"files_other": "Archivos ({{count}})",
 		"format": "Formato",
@@ -591,13 +595,17 @@
 			"frameRateUnknown": "desconocida",
 			"frameRateRange": "(debe ser {{fps}} fps)",
 			"videoOk": "El vídeo se ve bien para enviar.",
-			"whyLabel": "Por qué (nota breve)",
+			"whyLabel": "Por qué (nota breve, opcional)",
 			"whyPlaceholder": "Motivo breve, fuente o qué se está corrigiendo...",
 			"coverHint": "La portada se escala a un máximo de 1024px.",
 			"charCount": "{{count}}/{{max}} caracteres"
 		},
 		"working": "Procesando...",
-		"submitForReview": "Enviar para revisión"
+		"submitForReview": "Enviar para revisión",
+		"confirmSubmit": {
+			"title": "¿Enviar para revisión?",
+			"body": "Una vez enviado, el equipo lo revisará. No puedes enviar el mismo campo de nuevo mientras esté pendiente."
+		}
 	},
 	"nav": {
 		"menu": "Menú",

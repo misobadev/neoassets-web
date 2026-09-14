@@ -462,6 +462,10 @@
 		"reviewedBy": "Geprüft von",
 		"submissionTitle": "Metadaten-Einreichung",
 		"payload": "Payload",
+		"note": "Notiz",
+		"textChanges": "Textänderungen",
+		"mediaChanges": "Medienänderungen",
+		"none": "Keine",
 		"files_one": "Datei ({{count}})",
 		"files_other": "Dateien ({{count}})",
 		"format": "Format",
@@ -610,13 +614,17 @@
 			"frameRateUnknown": "unbekannt",
 			"frameRateRange": "(muss {{fps}} fps sein)",
 			"videoOk": "Das Video kann so eingereicht werden.",
-			"whyLabel": "Warum (kurze Notiz)",
+			"whyLabel": "Warum (kurze Notiz, optional)",
 			"whyPlaceholder": "Kurzer Grund, Quelle oder was korrigiert wird...",
 			"coverHint": "Cover wird auf maximal 1024px skaliert.",
 			"charCount": "{{count}}/{{max}} Zeichen"
 		},
 		"working": "Wird verarbeitet...",
-		"submitForReview": "Zur Prüfung einreichen"
+		"submitForReview": "Zur Prüfung einreichen",
+		"confirmSubmit": {
+			"title": "Zur Prüfung einreichen?",
+			"body": "Nach dem Einreichen prüft das Team die Angabe. Du kannst dasselbe Feld nicht erneut einreichen, solange es aussteht."
+		}
 	},
 	"nav": {
 		"menu": "Menü",

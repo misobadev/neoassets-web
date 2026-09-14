@@ -443,6 +443,10 @@
 		"reviewedBy": "Reviewed by",
 		"submissionTitle": "Metadata submission",
 		"payload": "Payload",
+		"note": "Note",
+		"textChanges": "Text changes",
+		"mediaChanges": "Media changes",
+		"none": "None",
 		"files_one": "File ({{count}})",
 		"files_other": "Files ({{count}})",
 		"format": "Format",
@@ -591,13 +595,17 @@
 			"frameRateUnknown": "unknown",
 			"frameRateRange": "(must be {{fps}} fps)",
 			"videoOk": "Video looks good to submit.",
-			"whyLabel": "Why (brief note)",
+			"whyLabel": "Why (brief note, optional)",
 			"whyPlaceholder": "Brief reason, source, or what is being corrected...",
 			"coverHint": "Cover is scaled to max 1024px.",
 			"charCount": "{{count}}/{{max}} characters"
 		},
 		"working": "Working...",
-		"submitForReview": "Submit for review"
+		"submitForReview": "Submit for review",
+		"confirmSubmit": {
+			"title": "Submit for review?",
+			"body": "Once submitted, the team will review it. You cannot submit the same field again while it is pending."
+		}
 	},
 	"nav": {
 		"menu": "Menu",

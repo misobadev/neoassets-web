@@ -462,6 +462,10 @@
 		"reviewedBy": "검토자",
 		"submissionTitle": "메타데이터 제출",
 		"payload": "페이로드",
+		"note": "메모",
+		"textChanges": "텍스트 변경",
+		"mediaChanges": "미디어 변경",
+		"none": "없음",
 		"files_one": "파일 ({{count}})",
 		"files_other": "파일 ({{count}})",
 		"format": "형식",
@@ -610,13 +614,17 @@
 			"frameRateUnknown": "알 수 없음",
 			"frameRateRange": "({{fps}} fps여야 함)",
 			"videoOk": "제출해도 좋은 비디오입니다.",
-			"whyLabel": "이유 (간단한 메모)",
+			"whyLabel": "이유 (간단한 메모, 선택 사항)",
 			"whyPlaceholder": "간단한 이유, 출처 또는 수정 내용...",
 			"coverHint": "커버는 최대 1024px로 조정됩니다.",
 			"charCount": "{{count}}/{{max}}자"
 		},
 		"working": "작업 중...",
-		"submitForReview": "검토를 위해 제출"
+		"submitForReview": "검토를 위해 제출",
+		"confirmSubmit": {
+			"title": "검토를 위해 제출할까요?",
+			"body": "제출하면 팀이 검토합니다. 대기 중에는 같은 항목을 다시 제출할 수 없습니다."
+		}
 	},
 	"nav": {
 		"menu": "메뉴",

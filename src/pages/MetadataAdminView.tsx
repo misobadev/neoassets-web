@@ -9,7 +9,9 @@ import {
 	rejectMetadataSubmission,
 	fetchMetadataSubmissionDetail,
 	fetchMetadataSubmissions,
+	type MediaKind,
 	type MetadataSubmission,
+	type MetadataSubmissionDetail,
 	type MetadataSubmissionFile,
 	type MetadataStatus,
 } from "../lib/api";
@@ -22,11 +24,47 @@ const BADGE: Record<MetadataStatus, string> = {
 	rejected: "badge-error",
 };
 
+const MEDIA_LABEL: Record<MediaKind, string> = {
+	cover: "metadataSubmit.mediaKind.cover",
+	boxfront: "metadataSubmit.mediaKind.boxfront",
+	boxback: "metadataSubmit.mediaKind.boxback",
+	screenshot: "metadataSubmit.mediaKind.screenshot",
+	logo: "metadataSubmit.mediaKind.logo",
+	fanart: "metadataSubmit.mediaKind.fanart",
+	video: "metadataSubmit.mediaKind.video",
+};
+
+// Text payload fields, in the order they are shown in the comparison.
+const TEXT_ORDER = ["name", "description", "region", "genre", "developer", "publisher", "release_year", "rating", "type"];
+const TEXT_LABEL: Record<string, string> = {
+	name: "metadataSubmit.textTypes.name",
+	description: "metadataSubmit.textTypes.description",
+	region: "metadataSubmit.textTypes.region",
+	genre: "metadataSubmit.textTypes.genre",
+	developer: "metadataSubmit.textTypes.developer",
+	publisher: "metadataSubmit.textTypes.publisher",
+	release_year: "metadataSubmit.textTypes.release",
+	rating: "metadataSubmit.textTypes.rating",
+	type: "metadataSubmit.textTypes.type",
+};
+
+function fmtSize(bytes?: number): string {
+	if (!bytes) return "—";
+	if (bytes < 1024) return `${bytes} B`;
+	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+	return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
+
+function mediaUrl(objectKey: string, v?: string): string {
+	return cdnUrl(objectKey) + (v ? `?v=${encodeURIComponent(v)}` : "");
+}
+
 export default function MetadataAdminView() {
 	const { t } = useTranslation();
 	const [status, setStatus] = useState<MetadataStatus | "">("pending");
 	const [submissions, setSubmissions] = useState<MetadataSubmission[] | null>(null);
-	const [detail, setDetail] = useState<{ submission: MetadataSubmission; files: MetadataSubmissionFile[] } | null>(null);
+	const [detail, setDetail] = useState<MetadataSubmissionDetail | null>(null);
+	const [lightbox, setLightbox] = useState<{ url: string; label: string } | null>(null);
 	const [comment, setComment] = useState("");
 	const [listMsg, setListMsg] = useState<string | null>(null);
 	const [busy, setBusy] = useState(false);
@@ -52,7 +90,7 @@ export default function MetadataAdminView() {
 	async function open(id: string) {
 		try {
 			const d = await fetchMetadataSubmissionDetail(id);
-			setDetail({ submission: d.submission, files: d.files || [] });
+			setDetail({ ...d, files: d.files || [], media: d.media || [] });
 			setComment("");
 		} catch (e) {
 			alert((e as Error).message);
@@ -88,6 +126,56 @@ export default function MetadataAdminView() {
 		} finally {
 			setBusy(false);
 		}
+	}
+
+	const payload = (detail?.submission.payload || {}) as Record<string, unknown>;
+	const note = typeof payload.note === "string" ? payload.note : "";
+	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month");
+	const textKeys = [...TEXT_ORDER.filter((k) => payloadKeys.includes(k)), ...payloadKeys.filter((k) => !TEXT_ORDER.includes(k))];
+
+	// currentValue resolves the target's currently published value for a payload
+	// key so it can be compared against the proposed one.
+	function currentValue(key: string): string {
+		const g = detail?.game;
+		const sys = detail?.system;
+		if (key === "release_year") {
+			if (!g?.release_year) return "";
+			return `${g.release_year}${g.release_month ? `-${String(g.release_month).padStart(2, "0")}` : ""}`;
+		}
+		if (g) {
+			switch (key) {
+				case "name": return g.name || "";
+				case "description": return g.description || "";
+				case "region": return g.region || "";
+				case "genre": return g.genre || "";
+				case "developer": return g.developer || "";
+				case "publisher": return g.publisher || "";
+				case "rating": return g.rating ? String(g.rating) : "";
+				case "type": return g.type || "";
+			}
+		}
+		if (sys) {
+			switch (key) {
+				case "description": return sys.description || "";
+				case "region": return sys.region || "";
+			}
+		}
+		return "";
+	}
+
+	function newValue(key: string): string {
+		if (key === "release_year") {
+			const y = payload.release_year;
+			if (y === undefined || y === null || y === "") return "";
+			const m = payload.release_month;
+			return `${y}${m ? `-${String(m).padStart(2, "0")}` : ""}`;
+		}
+		const v = payload[key];
+		return v === undefined || v === null ? "" : String(v);
+	}
+
+	function textLabel(key: string): string {
+		return TEXT_LABEL[key] ? t(TEXT_LABEL[key]) : key;
 	}
 
 	return (
@@ -152,7 +240,7 @@ export default function MetadataAdminView() {
 
 			{detail ? (
 				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4" onClick={(e) => e.target === e.currentTarget && setDetail(null)}>
-					<div className="card w-full max-w-3xl my-8 p-6 space-y-4">
+					<div className="card w-full max-w-5xl my-8 p-6 space-y-4">
 						<div className="flex items-center justify-between">
 							<h2 className="text-xl font-bold">{t("metadataAdmin.submissionTitle")}</h2>
 							<button className="btn btn-ghost !p-2" onClick={() => setDetail(null)} aria-label={t("common.close")}>
@@ -171,34 +259,76 @@ export default function MetadataAdminView() {
 							</div>
 						</div>
 
-						<div>
-							<p className="label-text">{t("metadataAdmin.payload")}</p>
-							<pre className="text-xs bg-[var(--color-base-300)]/40 rounded-lg p-3 overflow-x-auto">{JSON.stringify(detail.submission.payload, null, 2)}</pre>
-						</div>
+						{note ? (
+							<div>
+								<p className="label-text">{t("metadataAdmin.note")}</p>
+								<p className="text-sm text-[var(--color-base-content)]/70 whitespace-pre-wrap">{note}</p>
+							</div>
+						) : null}
 
-						<div>
-							<p className="label-text">{t("metadataAdmin.files", { count: detail.files.length })}</p>
-							<div className="flex flex-wrap gap-3 mt-1">
-								{detail.files.map((f) =>
-									f.kind === "video" ? (
-										<div key={f.id} className="w-full space-y-2 rounded-lg border border-[var(--color-base-300)] p-3">
-											<video src={cdnUrl(f.object_key) + (f.created_at ? `?v=${encodeURIComponent(f.created_at)}` : "")} controls className="w-full max-h-72 rounded-lg bg-black" />
-											<div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 text-xs text-[var(--color-base-content)]/70">
-												<p><span className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">{t("metadataAdmin.format")}</span> {f.video_format || f.file_name.split(".").pop() || "—"}</p>
-												<p><span className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">{t("metadataAdmin.codec")}</span> {f.video_codec || "—"}</p>
-												<p><span className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">{t("metadataAdmin.resolution")}</span> {f.width && f.height ? `${f.width}×${f.height}` : "—"}</p>
-												<p><span className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">{t("metadataAdmin.aspectRatio")}</span> {f.width && f.height ? `${(f.width / f.height).toFixed(2)}:1` : "—"}</p>
-												<p><span className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">{t("metadataAdmin.fps")}</span> {f.fps ? `${f.fps} fps` : "—"}</p>
-												<p><span className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">{t("metadataAdmin.duration")}</span> {f.duration_sec ? `${f.duration_sec.toFixed(1)}s` : "—"}</p>
+						{textKeys.length > 0 ? (
+							<div>
+								<p className="label-text mb-2">{t("metadataAdmin.textChanges")}</p>
+								<div className="space-y-3">
+									{textKeys.map((k) => (
+										<div key={k} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-2">
+											<p className="font-medium text-sm">{textLabel(k)}</p>
+											<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+												<div className="min-w-0">
+													<span className="inline-block badge badge-ghost badge-sm mb-1">{t("admin.old")}</span>
+													<p className="text-sm whitespace-pre-wrap break-words max-h-64 overflow-y-auto text-[var(--color-base-content)]/60">
+														{currentValue(k) || <span className="italic opacity-60">{t("metadataAdmin.none")}</span>}
+													</p>
+												</div>
+												<div className="min-w-0">
+													<span className="inline-block badge badge-primary badge-sm mb-1">{t("admin.new")}</span>
+													<p className="text-sm whitespace-pre-wrap break-words max-h-64 overflow-y-auto">
+														{newValue(k) || <span className="italic opacity-60">{t("metadataAdmin.none")}</span>}
+													</p>
+												</div>
 											</div>
 										</div>
-									) : (
-										<img key={f.id} src={cdnUrl(f.object_key) + (f.created_at ? `?v=${encodeURIComponent(f.created_at)}` : "")} alt={f.kind} className="w-24 h-24 object-cover rounded-lg border border-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-									),
-								)}
-								{detail.files.length === 0 ? <p className="text-sm text-[var(--color-base-content)]/50">{t("metadataAdmin.noFiles")}</p> : null}
+									))}
+								</div>
 							</div>
-						</div>
+						) : null}
+
+						{detail.files.length > 0 ? (
+							<div>
+								<p className="label-text mb-2">{t("metadataAdmin.mediaChanges")}</p>
+								<div className="space-y-4">
+									{detail.files.map((f) => {
+										const current = detail.media.find((m) => m.kind === f.kind);
+										const isVideo = f.kind === "video";
+										return (
+											<div key={f.id} className="space-y-2">
+												<p className="font-medium text-sm">{t(MEDIA_LABEL[f.kind])}</p>
+												<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+													{isVideo ? (
+														current ? (
+															<CompareVideo label={t("admin.old")} url={mediaUrl(current.object_key, current.created_at)} size={current.size} />
+														) : (
+															<EmptySlot label={t("admin.old")} />
+														)
+													) : current ? (
+														<CompareImage label={t("admin.old")} url={mediaUrl(current.object_key, current.created_at)} size={current.size} onOpen={setLightbox} />
+													) : (
+														<EmptySlot label={t("admin.old")} />
+													)}
+													{isVideo ? (
+														<CompareVideo label={t("admin.new")} url={mediaUrl(f.object_key, f.created_at)} size={f.size} file={f} highlight />
+													) : (
+														<CompareImage label={t("admin.new")} url={mediaUrl(f.object_key, f.created_at)} size={f.size} onOpen={setLightbox} highlight />
+													)}
+												</div>
+											</div>
+										);
+									})}
+								</div>
+							</div>
+						) : (
+							<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataAdmin.noFiles")}</p>
+						)}
 
 						{detail.submission.status === "pending" ? (
 							<div className="space-y-3">
@@ -236,6 +366,20 @@ export default function MetadataAdminView() {
 				</div>
 			) : null}
 
+			{lightbox ? (
+				<div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && setLightbox(null)}>
+					<div className="w-full max-w-6xl space-y-3">
+						<div className="flex items-center justify-between text-white">
+							<h2 className="text-lg font-bold">{lightbox.label}</h2>
+							<button className="btn btn-ghost !p-2" type="button" onClick={() => setLightbox(null)} aria-label={t("common.close")}>
+								<X className="w-5 h-5" />
+							</button>
+						</div>
+						<img src={lightbox.url} alt={lightbox.label} className="w-full max-h-[85vh] object-contain rounded-lg bg-black/40" />
+					</div>
+				</div>
+			) : null}
+
 			{approved ? (
 				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
 					<div className="card w-full max-w-md p-6 space-y-4 text-center">
@@ -252,6 +396,65 @@ export default function MetadataAdminView() {
 							</button>
 						</div>
 					</div>
+				</div>
+			) : null}
+		</div>
+	);
+}
+
+// EmptySlot renders a placeholder when the target has no current media of the
+// submitted kind (a brand-new asset rather than a replacement).
+function EmptySlot({ label }: { label: string }) {
+	const { t } = useTranslation();
+	return (
+		<div className="rounded-lg border border-dashed border-[var(--color-base-300)] p-3 space-y-2">
+			<span className="inline-block badge badge-ghost badge-sm">{label}</span>
+			<div className="h-40 flex items-center justify-center text-sm text-[var(--color-base-content)]/40">{t("metadataAdmin.none")}</div>
+		</div>
+	);
+}
+
+// CompareImage shows an image at full size with its resolution (read from the
+// loaded bitmap) and file size. Clicking opens the lightbox.
+function CompareImage({ label, url, size, highlight, onOpen }: { label: string; url: string; size?: number; highlight?: boolean; onOpen: (lb: { url: string; label: string }) => void }) {
+	const [dim, setDim] = useState<string | null>(null);
+	return (
+		<div className={`rounded-lg border p-3 space-y-2 ${highlight ? "border-[var(--color-primary)]/40" : "border-[var(--color-base-300)]"}`}>
+			<div className="flex items-center justify-between gap-2">
+				<span className={`badge badge-sm ${highlight ? "badge-primary" : "badge-ghost"}`}>{label}</span>
+				<span className="text-[11px] text-[var(--color-base-content)]/50">{dim ? `${dim} · ` : ""}{fmtSize(size)}</span>
+			</div>
+			<button type="button" className="block w-full" onClick={() => onOpen({ url, label })}>
+				<img
+					src={url}
+					alt={label}
+					className="w-full max-h-[45vh] object-contain rounded-md bg-[var(--color-base-300)]/40"
+					onLoad={(e) => setDim(`${e.currentTarget.naturalWidth}×${e.currentTarget.naturalHeight}`)}
+					onError={(e) => (e.currentTarget.style.display = "none")}
+				/>
+			</button>
+		</div>
+	);
+}
+
+// CompareVideo shows a video with its size and (for new submissions) the probe
+// metadata captured at upload time.
+function CompareVideo({ label, url, size, file, highlight }: { label: string; url: string; size?: number; file?: MetadataSubmissionFile; highlight?: boolean }) {
+	const { t } = useTranslation();
+	return (
+		<div className={`rounded-lg border p-3 space-y-2 ${highlight ? "border-[var(--color-primary)]/40" : "border-[var(--color-base-300)]"}`}>
+			<div className="flex items-center justify-between gap-2">
+				<span className={`badge badge-sm ${highlight ? "badge-primary" : "badge-ghost"}`}>{label}</span>
+				<span className="text-[11px] text-[var(--color-base-content)]/50">{fmtSize(size)}</span>
+			</div>
+			<video src={url} controls className="w-full max-h-[45vh] rounded-md bg-black" />
+			{file ? (
+				<div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[11px] text-[var(--color-base-content)]/60">
+					<p>{t("metadataAdmin.format")}: {file.video_format || file.file_name.split(".").pop() || "—"}</p>
+					<p>{t("metadataAdmin.codec")}: {file.video_codec || "—"}</p>
+					<p>{t("metadataAdmin.resolution")}: {file.width && file.height ? `${file.width}×${file.height}` : "—"}</p>
+					<p>{t("metadataAdmin.fps")}: {file.fps ? `${file.fps} fps` : "—"}</p>
+					<p>{t("metadataAdmin.duration")}: {file.duration_sec ? `${file.duration_sec.toFixed(1)}s` : "—"}</p>
 				</div>
 			) : null}
 		</div>

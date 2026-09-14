@@ -462,6 +462,10 @@
 		"reviewedBy": "Révisé par",
 		"submissionTitle": "Soumission de métadonnées",
 		"payload": "Charge utile",
+		"note": "Note",
+		"textChanges": "Modifications du texte",
+		"mediaChanges": "Modifications des médias",
+		"none": "Aucun",
 		"files_one": "Fichier ({{count}})",
 		"files_other": "Fichiers ({{count}})",
 		"format": "Format",
@@ -610,13 +614,17 @@
 			"frameRateUnknown": "inconnue",
 			"frameRateRange": "(doit être {{fps}} fps)",
 			"videoOk": "La vidéo semble bonne à soumettre.",
-			"whyLabel": "Pourquoi (brève note)",
+			"whyLabel": "Pourquoi (brève note, facultatif)",
 			"whyPlaceholder": "Brève raison, source, ou ce qui est corrigé...",
 			"coverHint": "La jaquette est redimensionnée à 1024px maximum.",
 			"charCount": "{{count}}/{{max}} caractères"
 		},
 		"working": "Traitement...",
-		"submitForReview": "Soumettre pour révision"
+		"submitForReview": "Soumettre pour révision",
+		"confirmSubmit": {
+			"title": "Soumettre pour révision ?",
+			"body": "Une fois soumis, l'équipe l'examinera. Vous ne pouvez pas soumettre le même champ tant qu'il est en attente."
+		}
 	},
 	"nav": {
 		"menu": "Menu",

@@ -462,6 +462,10 @@
 		"reviewedBy": "Ditinjau oleh",
 		"submissionTitle": "Kiriman metadata",
 		"payload": "Payload",
+		"note": "Catatan",
+		"textChanges": "Perubahan teks",
+		"mediaChanges": "Perubahan media",
+		"none": "Tidak ada",
 		"files_one": "Berkas ({{count}})",
 		"files_other": "Berkas ({{count}})",
 		"format": "Format",
@@ -610,13 +614,17 @@
 			"frameRateUnknown": "tidak diketahui",
 			"frameRateRange": "(harus {{fps}} fps)",
 			"videoOk": "Video tampak siap untuk dikirim.",
-			"whyLabel": "Alasan (catatan singkat)",
+			"whyLabel": "Alasan (catatan singkat, opsional)",
 			"whyPlaceholder": "Alasan singkat, sumber, atau apa yang dikoreksi...",
 			"coverHint": "Cover diskalakan hingga maks 1024px.",
 			"charCount": "{{count}}/{{max}} karakter"
 		},
 		"working": "Bekerja...",
-		"submitForReview": "Kirim untuk ditinjau"
+		"submitForReview": "Kirim untuk ditinjau",
+		"confirmSubmit": {
+			"title": "Kirim untuk ditinjau?",
+			"body": "Setelah dikirim, tim akan meninjaunya. Kamu tidak dapat mengirim kolom yang sama lagi selama masih menunggu."
+		}
 	},
 	"nav": {
 		"menu": "Menu",

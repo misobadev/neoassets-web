@@ -462,6 +462,10 @@
 		"reviewedBy": "审核人",
 		"submissionTitle": "元数据投稿",
 		"payload": "数据内容",
+		"note": "备注",
+		"textChanges": "文本更改",
+		"mediaChanges": "媒体更改",
+		"none": "无",
 		"files_one": "文件（{{count}}）",
 		"files_other": "文件（{{count}}）",
 		"format": "格式",
@@ -610,13 +614,17 @@
 			"frameRateUnknown": "未知",
 			"frameRateRange": "（必须为 {{fps}} fps）",
 			"videoOk": "视频可以提交。",
-			"whyLabel": "原因（简要说明）",
+			"whyLabel": "原因（简要说明，可选）",
 			"whyPlaceholder": "简要原因、来源或正在更正的内容……",
 			"coverHint": "封面将缩放至最大 1024px。",
 			"charCount": "{{count}}/{{max}} 字符"
 		},
 		"working": "正在处理……",
-		"submitForReview": "提交审核"
+		"submitForReview": "提交审核",
+		"confirmSubmit": {
+			"title": "提交审核？",
+			"body": "提交后团队将进行审核。待审核期间，你无法再次提交同一字段。"
+		}
 	},
 	"nav": {
 		"menu": "菜单",

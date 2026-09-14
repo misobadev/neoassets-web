@@ -462,6 +462,10 @@
 		"reviewedBy": "Revisado por",
 		"submissionTitle": "Envio de metadados",
 		"payload": "Payload",
+		"note": "Nota",
+		"textChanges": "Alterações de texto",
+		"mediaChanges": "Alterações de mídia",
+		"none": "Nenhum",
 		"files_one": "Arquivo ({{count}})",
 		"files_other": "Arquivos ({{count}})",
 		"format": "Formato",
@@ -610,13 +614,17 @@
 			"frameRateUnknown": "desconhecida",
 			"frameRateRange": "(deve ser {{fps}} fps)",
 			"videoOk": "O vídeo parece bom para enviar.",
-			"whyLabel": "Por quê (nota breve)",
+			"whyLabel": "Por quê (nota breve, opcional)",
 			"whyPlaceholder": "Motivo breve, fonte ou o que está sendo corrigido...",
 			"coverHint": "A capa é redimensionada para no máximo 1024px.",
 			"charCount": "{{count}}/{{max}} caracteres"
 		},
 		"working": "Processando...",
-		"submitForReview": "Enviar para revisão"
+		"submitForReview": "Enviar para revisão",
+		"confirmSubmit": {
+			"title": "Enviar para revisão?",
+			"body": "Depois de enviado, a equipe irá revisá-lo. Você não pode enviar o mesmo campo novamente enquanto estiver pendente."
+		}
 	},
 	"nav": {
 		"menu": "Menu",
