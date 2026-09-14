@@ -14,6 +14,7 @@ import {
 	type MediaKind,
 } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
+import MediaGrid from "../components/MediaGrid";
 import { uploadWithProgress } from "../lib/upload";
 
 const TEXT_TYPES = [
@@ -528,21 +529,7 @@ export default function MetadataSubmissionPage() {
 			<section className="card p-6">
 				<h2 className="font-semibold mb-3">{t("metadataSubmit.mediaTitle", { count: game.media.filter((m) => m.kind !== "cover").length })}</h2>
 				{game.media.filter((m) => m.kind !== "cover").length > 0 ? (
-					<div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-						{game.media.filter((m) => m.kind !== "cover").map((m) =>
-							m.kind === "video" ? (
-								<div key={m.id} className="space-y-1">
-									<video src={mediaUrl(m)} className="w-full h-32 object-contain rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]" muted />
-									<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40 text-center">{t(MEDIA_LABEL[m.kind])}</p>
-								</div>
-							) : (
-								<div key={m.id} className="space-y-1">
-									<img src={mediaUrl(m)} alt={t(MEDIA_LABEL[m.kind])} className="w-full h-32 object-contain rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-									<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40 text-center">{t(MEDIA_LABEL[m.kind])}</p>
-								</div>
-							),
-						)}
-					</div>
+					<MediaGrid items={game.media.filter((m) => m.kind !== "cover")} url={mediaUrl} label={(k) => t(MEDIA_LABEL[k])} />
 				) : (
 					<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataSubmit.noMedia")}</p>
 				)}
@@ -643,12 +630,12 @@ export default function MetadataSubmissionPage() {
 							<div>
 								<p className="label-text">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
 								{currentMedia.length > 0 ? (
-									<div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
+									<div className="grid grid-cols-2 gap-3 mt-2">
 										{currentMedia.map((m) =>
 											isVideo ? (
-												<video key={m.id} src={mediaUrl(m)} className="w-full h-32 object-contain rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]" muted />
+												<video key={m.id} src={mediaUrl(m)} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-black" controls muted />
 											) : (
-												<img key={m.id} src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-32 object-contain rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+												<img key={m.id} src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
 											),
 										)}
 									</div>

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ChevronLeft, PenSquare, PlusCircle } from "lucide-react";
 import { cdnUrl, fetchMetadataGameDetail, userToken, type GameDetail, type Language, type MediaKind, type MetadataMedia } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
+import MediaGrid from "../components/MediaGrid";
 import { usePageTitle } from "../lib/seo";
 
 // FieldValue renders a metadata value, or a "Data needed" link to the submit
@@ -41,40 +42,6 @@ const KIND_LABEL: Record<MediaKind, string> = {
 function mediaUrl(m: MetadataMedia): string {
 	const url = cdnUrl(m.object_key);
 	return m.created_at ? `${url}?v=${encodeURIComponent(m.created_at)}` : url;
-}
-
-// MediaThumb shows one media asset with its kind, intrinsic dimensions (read
-// from the already-loaded element, no extra request) and who contributed it.
-function MediaThumb({ m, url }: { m: MetadataMedia; url: string }) {
-	const { t } = useTranslation();
-	const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
-	const label = t(KIND_LABEL[m.kind] || m.kind);
-	const isVideo = m.kind === "video";
-	return (
-		<div className="space-y-1">
-			{isVideo ? (
-				<video
-					src={url}
-					controls
-					className="w-full h-32 object-contain rounded-md border border-[var(--color-base-300)] bg-black"
-					onLoadedMetadata={(e) => setDims({ w: e.currentTarget.videoWidth, h: e.currentTarget.videoHeight })}
-				/>
-			) : (
-				<img
-					src={url}
-					alt={label}
-					className="w-full h-32 object-contain rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]"
-					onLoad={(e) => setDims({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight })}
-					onError={(e) => (e.currentTarget.style.display = "none")}
-				/>
-			)}
-			<div className="text-center leading-tight">
-				<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/50">{label}</p>
-				{dims ? <p className="text-[10px] text-[var(--color-base-content)]/40">{dims.w}×{dims.h}</p> : null}
-				<p className="text-[10px] text-[var(--color-base-content)]/40">{t("metadataGame.mediaBy", { name: m.submitted_by_name || t("metadataGame.mediaSystem") })}</p>
-			</div>
-		</div>
-	);
 }
 
 // isGameComplete mirrors the "Completed" flag from the game list: full text
@@ -233,13 +200,7 @@ export default function MetadataGameDetail() {
 					if (list.length === 0) {
 						return <p className="text-sm text-[var(--color-base-content)]/50">{t("metadataGame.noMedia")}</p>;
 					}
-					return (
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-							{list.map((m) => (
-								<MediaThumb key={m.id} m={m} url={mediaUrl(m)} />
-							))}
-						</div>
-					);
+					return <MediaGrid items={list} url={mediaUrl} label={(k) => t(KIND_LABEL[k] || k)} showMeta />;
 				})()}
 			</section>
 
