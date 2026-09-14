@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import { cdnUrl, fetchMetadataGamesBySystem, fetchMetadataSystems, searchMetadataGames, type GameSummary, type MetadataSystem } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
+import { usePageTitle } from "../lib/seo";
 
 const LIMIT = 20;
 
@@ -261,6 +262,7 @@ function GameCard({ g }: { g: GameSummary }) {
 
 export default function MetadataBrowse() {
 	const { t } = useTranslation();
+	usePageTitle(t("metadata.title"));
 	const navigate = useNavigate();
 	const { systemId } = useParams<{ systemId: string }>();
 	const [systems, setSystems] = useState<MetadataSystem[] | null>(null);

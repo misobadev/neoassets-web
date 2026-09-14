@@ -7,6 +7,7 @@ import { useSystems } from "../lib/systems";
 import { loadPackDraft, type PackDraft } from "../lib/draft";
 import UserLink from "../components/UserLink";
 import DonateButton from "../components/DonateButton";
+import { usePageTitle } from "../lib/seo";
 
 // coveredSystems counts how many distinct systems already have a background
 // image in a submission.
@@ -36,6 +37,7 @@ const STATUS_BADGE: Record<string, string> = {
 export default function SubmissionsView() {
 	const { t } = useTranslation();
 	const signedIn = !!userToken();
+	usePageTitle(t("nav.systemArtPack"));
 	const [submissions, setSubmissions] = useState<SubmissionDetail[] | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [packs, setPacks] = useState<Pack[] | null>(null);
@@ -238,11 +240,11 @@ export default function SubmissionsView() {
 										{icons.length > 0 ? (
 											<div className="flex flex-wrap items-center justify-center gap-1 p-2">
 												{icons.slice(0, 4).map((src, i) => (
-													<img key={i} src={src} alt="" className="w-16 h-16 object-cover rounded-md" onError={(e) => (e.currentTarget.style.display = "none")} />
+													<img key={i} src={src} alt="" loading="lazy" className="w-16 h-16 object-cover rounded-md" onError={(e) => (e.currentTarget.style.display = "none")} />
 												))}
 											</div>
 										) : preview ? (
-											<img src={preview} alt={p.name} className="object-cover w-full h-full" onError={(e) => (e.currentTarget.style.display = "none")} />
+											<img src={preview} alt={p.name} loading="lazy" className="object-cover w-full h-full" onError={(e) => (e.currentTarget.style.display = "none")} />
 										) : (
 											<span className="text-sm font-semibold text-[var(--color-base-content)]/30">{t("submissions.noImages")}</span>
 										)}

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import CopyButton from "../components/CopyButton";
+import { usePageTitle } from "../lib/seo";
 
 const BASE_URL = "https://neoassets.dev";
 
@@ -111,6 +112,7 @@ function ParamTable({ params }: { params: Param[] }) {
 
 export default function ApiDocsPage() {
 	const { t } = useTranslation();
+	usePageTitle("NeoAssets — API Docs");
 
 	const gameParams: Param[] = [
 		{ name: "system_id", type: "string", required: false, description: t("apiDocs.pSystemId") },

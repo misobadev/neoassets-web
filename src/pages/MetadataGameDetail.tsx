@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ChevronLeft, PenSquare, PlusCircle } from "lucide-react";
 import { cdnUrl, fetchMetadataGameDetail, userToken, type GameDetail, type Language, type MediaKind, type MetadataMedia } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
+import { usePageTitle } from "../lib/seo";
 
 // FieldValue renders a metadata value, or a "Data needed" link to the submit
 // page for that field when it is missing, to motivate contributors to fill it.
@@ -92,6 +93,7 @@ export default function MetadataGameDetail() {
 	const [error, setError] = useState<string | null>(null);
 	const [holoMx, setHoloMx] = useState(0);
 	const [holoMy, setHoloMy] = useState(0);
+	usePageTitle(game ? `${game.name} — NeoAssets` : "NeoAssets — Game Metadata");
 
 	useEffect(() => {
 		if (!gameId) return;

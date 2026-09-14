@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { userToken } from "../lib/api";
+import { usePageTitle } from "../lib/seo";
 
 // HomeView is the in-app landing: the "Contribute to the NeoAssets ecosystem"
 // hero, shown to everyone (guests included) inside the app shell.
 export default function HomeView() {
 	const signedIn = !!userToken();
 	const { t } = useTranslation();
+	usePageTitle("NeoAssets — System Art Packs & Game Metadata");
 
 	return (
 		<div className="relative overflow-hidden">
