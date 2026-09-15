@@ -591,6 +591,7 @@
 		"images": "Gambar",
 		"video": "Video",
 		"videoHint": "Format umum apa pun (WebM, MP4, MOV, MKV, AVI...). Antara {{min}} dan {{max}} detik, maks {{fps}} fps, sesuai rasio aspek game. Dikonversi ke AV1 (WebM) saat disetujui.",
+		"videoAspectHint": "Resolusi apa pun diterima selama sesuai dengan rasio aspek sebenarnya (DAR - Display Aspect Ratio) dari arcade atau TV asli, tidak harus resolusi internal (beberapa sistem ditarik). Kami ingin video seperti yang terlihat di arcade atau TV; resolusi lebih tinggi lebih baik. Harus direkam tanpa shader, jika tidak akan ditolak.",
 		"detailsTitle": "2. Detail",
 		"form": {
 			"currentField": "{{field}} saat ini",
@@ -609,6 +610,7 @@
 			"chooseVideo": "Pilih video",
 			"chooseImage": "Pilih gambar",
 			"imageHint": "Format gambar apa pun diterima; otomatis dikonversi ke WebP.",
+			"screenshotHint": "Resolusi apa pun diterima selama sesuai dengan rasio aspek sebenarnya (DAR - Display Aspect Ratio) dari arcade atau TV asli, tidak harus resolusi internal (beberapa sistem ditarik). Kami ingin screenshot seperti yang terlihat di arcade atau TV; resolusi lebih tinggi (mis. 1280x920) lebih baik. Tidak boleh menggunakan shader, jika tidak akan ditolak.",
 			"fanartHint": "Fanart dipotong menjadi 1920x1080 (16:9).",
 			"logoHint": "Logo diskalakan hingga maks 1024px.",
 			"resolution": "Resolusi: {{width}}×{{height}} ({{aspect}})",

@@ -591,6 +591,7 @@
 		"images": "이미지",
 		"video": "비디오",
 		"videoHint": "일반적인 형식(WebM, MP4, MOV, MKV, AVI...)이면 됩니다. {{min}}~{{max}}초, 최대 {{fps}} fps, 게임 화면 비율과 일치. 승인 시 AV1(WebM)으로 변환됩니다.",
+		"videoAspectHint": "해상도는 원래 아케이드 기판이나 TV의 실제 화면 비율(DAR - Display Aspect Ratio)만 맞으면 어떤 것이든 허용됩니다. 내부 해상도일 필요는 없습니다(일부 시스템은 늘어나 있습니다). 아케이드나 TV에서 보던 그대로의 영상을 원합니다. 더 높은 해상도면 더 좋습니다. 셰이더 없이 녹화해야 하며, 그렇지 않으면 거부됩니다.",
 		"detailsTitle": "2. 세부 정보",
 		"form": {
 			"currentField": "현재 {{field}}",
@@ -609,6 +610,7 @@
 			"chooseVideo": "비디오 선택",
 			"chooseImage": "이미지 선택",
 			"imageHint": "모든 이미지 형식이 허용되며 자동으로 WebP로 변환됩니다.",
+			"screenshotHint": "해상도는 원래 아케이드 기판이나 TV의 실제 화면 비율(DAR - Display Aspect Ratio)만 맞으면 어떤 것이든 허용됩니다. 내부 해상도일 필요는 없습니다(일부 시스템은 늘어나 있습니다). 아케이드나 TV에서 보던 그대로의 스크린샷을 원합니다. 더 높은 해상도(예: 1280x920)면 더 좋습니다. 셰이더가 없어야 하며, 그렇지 않으면 거부됩니다.",
 			"fanartHint": "팬아트는 1920x1080(16:9)으로 잘립니다.",
 			"logoHint": "로고는 최대 1024px로 조정됩니다.",
 			"resolution": "해상도: {{width}}×{{height}} ({{aspect}})",

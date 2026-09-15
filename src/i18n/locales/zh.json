@@ -591,6 +591,7 @@
 		"images": "图片",
 		"video": "视频",
 		"videoHint": "任何常见格式（WebM、MP4、MOV、MKV、AVI……）。时长在 {{min}} 到 {{max}} 秒之间，最高 {{fps}} fps，且与游戏的宽高比匹配。批准后转换为 AV1（WebM）。",
+		"videoAspectHint": "只要符合原始街机或电视的真实宽高比（DAR - Display Aspect Ratio），任何分辨率都可以，不一定是内部分辨率（有些系统被拉伸）。我们想要的是街机或电视上看到的那种视频；更高的分辨率更好。必须在不使用着色器的情况下录制，否则将被拒绝。",
 		"detailsTitle": "2. 详情",
 		"form": {
 			"currentField": "当前{{field}}",
@@ -609,6 +610,7 @@
 			"chooseVideo": "选择视频",
 			"chooseImage": "选择图片",
 			"imageHint": "接受任何图片格式；会自动转换为 WebP。",
+			"screenshotHint": "只要符合原始街机或电视的真实宽高比（DAR - Display Aspect Ratio），任何分辨率都可以，不一定是内部分辨率（有些系统被拉伸）。我们想要的是街机或电视上看到的那种截图；更高的分辨率（例如 1280x920）更好。不得使用着色器，否则将被拒绝。",
 			"fanartHint": "同人图将裁剪为 1920x1080（16:9）。",
 			"logoHint": "标志将缩放至最大 1024px。",
 			"resolution": "分辨率：{{width}}×{{height}}（{{aspect}}）",

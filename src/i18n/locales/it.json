@@ -591,6 +591,7 @@
 		"images": "Immagini",
 		"video": "Video",
 		"videoHint": "Qualsiasi formato comune (WebM, MP4, MOV, MKV, AVI...). Tra {{min}} e {{max}} secondi, max {{fps}} fps, con le proporzioni del gioco. Convertito in AV1 (WebM) all'approvazione.",
+		"videoAspectHint": "Qualsiasi risoluzione è accettata purché rispetti le proporzioni reali (DAR - Display Aspect Ratio) della scheda arcade o del televisore originale, non necessariamente la risoluzione interna (alcuni sistemi sono allungati). Vogliamo il video come appariva su un cabinato arcade o un televisore; una risoluzione più alta è ancora meglio. Deve essere registrato senza shader, altrimenti sarà rifiutato.",
 		"detailsTitle": "2. Dettagli",
 		"form": {
 			"currentField": "{{field}} attuale",
@@ -609,6 +610,7 @@
 			"chooseVideo": "Scegli video",
 			"chooseImage": "Scegli immagine",
 			"imageHint": "Qualsiasi formato immagine è accettato; viene convertito automaticamente in WebP.",
+			"screenshotHint": "Qualsiasi risoluzione è accettata purché rispetti le proporzioni reali (DAR - Display Aspect Ratio) della scheda arcade o del televisore originale, non necessariamente la risoluzione interna (alcuni sistemi sono allungati). Vogliamo lo screenshot come appariva su un cabinato arcade o un televisore; una risoluzione più alta (es. 1280x920) è ancora meglio. Non deve avere shader, altrimenti sarà rifiutato.",
 			"fanartHint": "La fanart viene ritagliata a 1920x1080 (16:9).",
 			"logoHint": "Il logo viene ridimensionato a max 1024px.",
 			"resolution": "Risoluzione: {{width}}×{{height}} ({{aspect}})",

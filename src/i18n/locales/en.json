@@ -572,6 +572,7 @@
 		"images": "Images",
 		"video": "Video",
 		"videoHint": "Any common format (WebM, MP4, MOV, MKV, AVI...). Between {{min}} and {{max}} seconds, max {{fps}} fps, matching the game's aspect ratio. Converted to AV1 (WebM) on approval.",
+		"videoAspectHint": "Any resolution is accepted as long as it matches the real aspect ratio (DAR - Display Aspect Ratio) of the original arcade board or TV, not necessarily the internal resolution (some systems are stretched). We want the video as it looked on an arcade monitor or TV; a higher resolution is even better. It must be recorded without shaders, otherwise it will be rejected.",
 		"detailsTitle": "2. Details",
 		"form": {
 			"currentField": "Current {{field}}",
@@ -590,6 +591,7 @@
 			"chooseVideo": "Choose video",
 			"chooseImage": "Choose image",
 			"imageHint": "Any image format is accepted; it is converted to WebP automatically.",
+			"screenshotHint": "Any resolution is accepted as long as it matches the real aspect ratio (DAR - Display Aspect Ratio) of the original arcade board or TV, not necessarily the internal resolution (some systems are stretched). We want the screenshot as it looked on an arcade monitor or TV; a higher resolution (e.g. 1280x920) is even better. It must be captured without shaders, otherwise it will be rejected.",
 			"fanartHint": "Fanart is cropped to 1920x1080 (16:9).",
 			"logoHint": "Logo is scaled to max 1024px.",
 			"resolution": "Resolution: {{width}}×{{height}} ({{aspect}})",

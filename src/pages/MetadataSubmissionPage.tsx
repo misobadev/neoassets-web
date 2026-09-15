@@ -696,7 +696,11 @@ export default function MetadataSubmissionPage() {
 									{currentKind === "fanart" ? ` ${t("metadataSubmit.form.fanartHint")}` : currentKind === "logo" ? ` ${t("metadataSubmit.form.logoHint")}` : currentKind === "cover" ? ` ${t("metadataSubmit.form.coverHint")}` : ""}
 								</p>
 							) : null}
+							{!isVideo && currentKind === "screenshot" ? (
+								<p className="text-xs text-[var(--color-warning)] leading-relaxed">{t("metadataSubmit.form.screenshotHint")}</p>
+							) : null}
 							{fileError ? <p className="text-xs text-[var(--color-error)]">{fileError}</p> : null}
+							{isVideo ? <p className="text-xs text-[var(--color-warning)] leading-relaxed">{t("metadataSubmit.form.videoAspectHint")}</p> : null}
 
 							{isVideo && file && videoMeta ? (
 								<div className="text-xs space-y-1 text-[var(--color-base-content)]/60">
