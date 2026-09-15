@@ -693,7 +693,7 @@
 		"threadBought": "Compraste 1 hilo por {{cost}} puntos. Ahora tienes {{threads}} hilos.",
 		"redeeming": "Canjeando...",
 		"buyThread": "Comprar hilo ({{cost}} pts)",
-		"earnPoints": "Gana puntos enviando metadatos aprobados (texto 10 / imagen 40 / vídeo 100) e imágenes SAP (1 cada una).",
+		"earnPoints": "Gana XP enviando metadatos aprobados (texto 10 / imagen 50 / vídeo 100), imágenes SAP (20 cada una) y juegos nuevos (bono de 100).",
 		"changePassword": "Cambiar contraseña",
 		"currentPassword": "Contraseña actual",
 		"confirmNewPassword": "Confirmar nueva contraseña",

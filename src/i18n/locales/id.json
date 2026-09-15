@@ -700,7 +700,7 @@
 		"threadBought": "Membeli 1 thread seharga {{cost}} poin. Anda sekarang memiliki {{threads}} thread.",
 		"redeeming": "Menukarkan...",
 		"buyThread": "Beli thread ({{cost}} poin)",
-		"earnPoints": "Dapatkan poin dengan mengirim metadata yang disetujui (teks 10 / gambar 40 / video 100) dan gambar SAP (masing-masing 1).",
+		"earnPoints": "Dapatkan XP dengan mengirim metadata yang disetujui (teks 10 / gambar 50 / video 100), gambar SAP (masing-masing 20) dan game baru (bonus 100).",
 		"changePassword": "Ubah kata sandi",
 		"currentPassword": "Kata sandi saat ini",
 		"confirmNewPassword": "Konfirmasi kata sandi baru",

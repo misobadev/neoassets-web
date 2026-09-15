@@ -700,7 +700,7 @@
 		"threadBought": "已花费 {{cost}} 积分购买 1 个线程。你现在有 {{threads}} 个线程。",
 		"redeeming": "正在兑换……",
 		"buyThread": "购买线程（{{cost}} 积分）",
-		"earnPoints": "通过提交获批准的元数据（文本 10 / 图片 40 / 视频 100）和 SAP 图片（每张 1 分）赚取积分。",
+		"earnPoints": "通过提交已批准的元数据（文本 10 / 图片 50 / 视频 100）、SAP 图片（每张 20）和新游戏（奖励 100）来赚取经验。",
 		"changePassword": "修改密码",
 		"currentPassword": "当前密码",
 		"confirmNewPassword": "确认新密码",

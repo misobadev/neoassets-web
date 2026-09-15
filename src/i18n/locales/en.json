@@ -693,7 +693,7 @@
 		"threadBought": "Bought 1 thread for {{cost}} points. You now have {{threads}} threads.",
 		"redeeming": "Redeeming...",
 		"buyThread": "Buy thread ({{cost}} pts)",
-		"earnPoints": "Earn points by submitting approved metadata (text 10 / image 40 / video 100) and SAP images (1 each).",
+		"earnPoints": "Earn XP by submitting approved metadata (text 10 / image 50 / video 100), SAP images (20 each) and new games (100 bonus).",
 		"changePassword": "Change password",
 		"currentPassword": "Current password",
 		"confirmNewPassword": "Confirm new password",

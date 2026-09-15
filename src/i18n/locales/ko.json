@@ -700,7 +700,7 @@
 		"threadBought": "{{cost}} 포인트로 스레드 1개를 구매했습니다. 이제 {{threads}}개의 스레드가 있습니다.",
 		"redeeming": "사용 중...",
 		"buyThread": "스레드 구매 ({{cost}} 포인트)",
-		"earnPoints": "승인된 메타데이터(텍스트 10 / 이미지 40 / 비디오 100)와 SAP 이미지(각 1)를 제출하여 포인트를 얻으세요.",
+		"earnPoints": "승인된 메타데이터(텍스트 10 / 이미지 50 / 비디오 100), SAP 이미지(각 20), 새 게임(보너스 100)을 제출하여 XP를 얻으세요.",
 		"changePassword": "비밀번호 변경",
 		"currentPassword": "현재 비밀번호",
 		"confirmNewPassword": "새 비밀번호 확인",

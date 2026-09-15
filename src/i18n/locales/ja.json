@@ -700,7 +700,7 @@
 		"threadBought": "{{cost}} ポイントでスレッドを1つ購入しました。現在 {{threads}} スレッドです。",
 		"redeeming": "引き換え中...",
 		"buyThread": "スレッドを購入（{{cost}} pt）",
-		"earnPoints": "承認されたメタデータ（テキスト10 / 画像40 / 動画100）とSAP画像（各1）を投稿してポイントを獲得できます。",
+		"earnPoints": "承認されたメタデータ（テキスト10 / 画像50 / 動画100）、SAP画像（各20）、新規ゲーム（ボーナス100）を投稿してXPを獲得できます。",
 		"changePassword": "パスワードを変更",
 		"currentPassword": "現在のパスワード",
 		"confirmNewPassword": "新しいパスワードの確認",
