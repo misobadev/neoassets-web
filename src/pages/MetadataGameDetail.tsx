@@ -45,11 +45,12 @@ function mediaUrl(m: MetadataMedia): string {
 }
 
 // isGameComplete mirrors the "Completed" flag from the game list: full text
-// metadata, translations and logo/screenshot/fanart/video.
+// metadata, translations and cover/logo/screenshot/fanart/video. The media
+// kinds match the backend's system completion calculation (which counts cover).
 function isGameComplete(g: GameDetail): boolean {
 	const textComplete = Boolean(g.description && g.genre && g.developer && g.publisher && g.release_year && (g.rating ?? 0) > 0);
 	const has = (kind: string) => g.media.some((m) => m.kind === kind);
-	return textComplete && (g.translations?.length ?? 0) > 0 && has("logo") && has("screenshot") && has("fanart") && has("video");
+	return textComplete && (g.translations?.length ?? 0) > 0 && has("cover") && has("logo") && has("screenshot") && has("fanart") && has("video");
 }
 
 export default function MetadataGameDetail() {

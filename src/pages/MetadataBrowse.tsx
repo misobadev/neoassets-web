@@ -146,11 +146,13 @@ function textMetaTitle(t: TFunction, g: GameSummary): string {
 }
 
 // isComplete reports whether a game has all the curated metadata: full text,
-// translations, and logo/screenshot/fanart/video.
+// translations, cover, and logo/screenshot/fanart/video. The media kinds match
+// the backend's system completion calculation (which counts cover).
 function isComplete(g: GameSummary): boolean {
 	return Boolean(
 		g.text_complete &&
 			g.has_translations &&
+			g.cover &&
 			g.has_logo &&
 			g.has_screenshot &&
 			g.has_fanart &&
