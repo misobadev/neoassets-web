@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Check, ChevronLeft, Clock, Coins, Image as ImageIcon, X } from "lucide-react";
-import { cdnUrl, type MediaKind } from "../lib/api";
+import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, X } from "lucide-react";
+import { cdnUrl, fetchMetadataGameDetail, fetchPackDetail, type MediaKind, type MetadataMedia, type PackDetail } from "../lib/api";
 import { formatDate } from "../lib/format";
 import { useReviews, type ReviewItem, type ReviewStatus } from "../lib/reviews";
 
@@ -34,21 +34,60 @@ const TEXT_LABEL: Record<string, string> = {
 	type: "metadataSubmit.textTypes.type",
 };
 
+function mediaUrl(objectKey: string, v?: string): string {
+	return cdnUrl(objectKey) + (v ? `?v=${encodeURIComponent(v)}` : "");
+}
+
 export default function ReviewsPage() {
 	const { t } = useTranslation();
-	const { items, totalPoints, loading, markAllSeen } = useReviews();
+	const { items, totalXP, loading, markAllSeen } = useReviews();
 	const [statusFilter, setStatusFilter] = useState<ReviewStatus | "">("");
 	const [selected, setSelected] = useState<ReviewItem | null>(null);
+	const [gameMedia, setGameMedia] = useState<MetadataMedia[]>([]);
+	const [pack, setPack] = useState<PackDetail | null>(null);
 
 	useEffect(() => {
 		markAllSeen();
 	}, [markAllSeen]);
+
+	// Approved metadata media lives on the game; approved SAP art lives on the
+	// pack. Fetch the target so the review detail can show what was published.
+	useEffect(() => {
+		setGameMedia([]);
+		setPack(null);
+		if (!selected || selected.status !== "approved") return;
+		let cancelled = false;
+		if (selected.kind === "metadata" && selected.gameId) {
+			fetchMetadataGameDetail(selected.gameId)
+				.then((g) => !cancelled && setGameMedia(g.media || []))
+				.catch(() => {});
+		} else if (selected.kind === "sap" && selected.packId) {
+			fetchPackDetail(selected.packId)
+				.then((p) => !cancelled && setPack(p))
+				.catch(() => {});
+		}
+		return () => {
+			cancelled = true;
+		};
+	}, [selected]);
 
 	function kindLabel(key: string): string {
 		if (TEXT_LABEL[key]) return t(TEXT_LABEL[key]);
 		const media = MEDIA_LABEL[key as MediaKind];
 		if (media) return t(media);
 		return key;
+	}
+
+	function textValue(key: string): string {
+		const payload = selected?.payload || {};
+		if (key === "release_year") {
+			const y = payload.release_year;
+			if (y === undefined || y === null || y === "") return "";
+			const m = payload.release_month;
+			return `${y}${m ? `-${String(m).padStart(2, "0")}` : ""}`;
+		}
+		const v = payload[key];
+		return v === undefined || v === null ? "" : String(v);
 	}
 
 	const visible = items.filter((i) => !statusFilter || i.status === statusFilter);
@@ -58,6 +97,11 @@ export default function ReviewsPage() {
 		{ label: t("metadataStatus.approved"), value: "approved" },
 		{ label: t("metadataStatus.rejected"), value: "rejected" },
 	];
+
+	const changeKinds = selected?.changeKinds || [];
+	const textKinds = changeKinds.filter((k) => TEXT_LABEL[k]);
+	const mediaKinds = changeKinds.filter((k) => MEDIA_LABEL[k as MediaKind]);
+	const publishedMedia = gameMedia.filter((m) => mediaKinds.includes(m.kind));
 
 	return (
 		<div className="space-y-6">
@@ -70,10 +114,10 @@ export default function ReviewsPage() {
 					<p className="text-sm text-[var(--color-base-content)]/60 pt-1">{t("reviews.subtitle")}</p>
 				</div>
 				<div className="ml-auto card px-4 py-2 flex items-center gap-2 shrink-0">
-					<Coins className="w-5 h-5 text-[var(--color-warning)]" />
+					<Sparkles className="w-5 h-5 text-[var(--color-primary)]" />
 					<div>
-						<p className="text-[11px] uppercase tracking-wider text-[var(--color-base-content)]/50">{t("reviews.pointsEarned")}</p>
-						<p className="text-lg font-bold leading-none">{totalPoints.toLocaleString()}</p>
+						<p className="text-[11px] uppercase tracking-wider text-[var(--color-base-content)]/50">{t("reviews.experienceEarned")}</p>
+						<p className="text-lg font-bold leading-none">{totalXP.toLocaleString()}</p>
 					</div>
 				</div>
 			</div>
@@ -102,7 +146,7 @@ export default function ReviewsPage() {
 							<div className="flex items-center gap-3">
 								{r.cover ? (
 									<img
-										src={cdnUrl(r.cover) + (r.coverUpdated ? `?v=${encodeURIComponent(r.coverUpdated)}` : "")}
+										src={mediaUrl(r.cover, r.coverUpdated)}
 										alt=""
 										className="w-14 h-14 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
 										onError={(e) => (e.currentTarget.style.display = "none")}
@@ -127,7 +171,7 @@ export default function ReviewsPage() {
 									) : null}
 									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
 										{formatDate(r.at)}
-										{r.status === "approved" && r.points > 0 ? <> · +{r.points} {t("reviews.points")}</> : null}
+										{r.status === "approved" && r.xp > 0 ? <> · +{r.xp} {t("reviews.experience")}</> : null}
 									</p>
 								</div>
 								<span className={`badge ${STATUS_BADGE[r.status]} shrink-0`}>{t("metadataStatus." + r.status, { defaultValue: r.status })}</span>
@@ -139,7 +183,7 @@ export default function ReviewsPage() {
 
 			{selected ? (
 				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4" onClick={(e) => e.target === e.currentTarget && setSelected(null)}>
-					<div className="card w-full max-w-lg my-8 p-6 space-y-4">
+					<div className="card w-full max-w-2xl my-8 p-6 space-y-4">
 						<div className="flex items-center justify-between gap-3">
 							<div className="flex items-center gap-2 min-w-0">
 								{selected.status === "approved" ? (
@@ -180,20 +224,65 @@ export default function ReviewsPage() {
 							) : null}
 							{selected.status === "approved" ? (
 								<div>
-									<p className="label-text">{t("reviews.pointsEarned")}</p>
-									<p className="font-semibold text-[var(--color-warning)]">+{selected.points}</p>
+									<p className="label-text">{t("reviews.experienceEarned")}</p>
+									<p className="font-semibold text-[var(--color-primary)]">+{selected.xp} {t("reviews.experience")}</p>
 								</div>
 							) : null}
 						</div>
 
-						{(selected.changeKinds || []).length > 0 ? (
-							<div>
-								<p className="label-text">{t("reviews.changes")}</p>
-								<div className="flex flex-wrap gap-1 mt-1">
-									{(selected.changeKinds || []).map((k) => (
-										<span key={k} className="badge badge-outline badge-sm">{kindLabel(k)}</span>
-									))}
-								</div>
+						{/* Published content: the approved text and media. */}
+						{textKinds.length > 0 || publishedMedia.length > 0 || (selected.kind === "sap" && pack) ? (
+							<div className="space-y-3">
+								<p className="label-text">{selected.status === "approved" ? t("reviews.approvedContent") : t("reviews.submittedContent")}</p>
+
+								{textKinds.map((k) => (
+									<div key={k} className="rounded-lg border border-[var(--color-base-300)] p-3">
+										<p className="font-medium text-sm mb-1">{kindLabel(k)}</p>
+										<p className="text-sm text-[var(--color-base-content)]/70 whitespace-pre-wrap break-words max-h-64 overflow-y-auto">
+											{textValue(k) || <span className="italic opacity-60">{t("reviews.noComment")}</span>}
+										</p>
+									</div>
+								))}
+
+								{publishedMedia.map((m) =>
+									m.kind === "video" ? (
+										<video key={m.id} src={mediaUrl(m.object_key, m.created_at)} controls className="w-full max-h-[45vh] rounded-lg border border-[var(--color-base-300)] bg-black" />
+									) : (
+										<img
+											key={m.id}
+											src={mediaUrl(m.object_key, m.created_at)}
+											alt={kindLabel(m.kind)}
+											className="w-full max-h-[45vh] object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]/40"
+											onError={(e) => (e.currentTarget.style.display = "none")}
+										/>
+									),
+								)}
+
+								{selected.kind === "sap" && pack ? (
+									<div className="space-y-2">
+										{pack.preview ? (
+											<img
+												src={cdnUrl(pack.preview)}
+												alt={pack.name}
+												className="w-full max-h-[45vh] object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]/40"
+												onError={(e) => (e.currentTarget.style.display = "none")}
+											/>
+										) : null}
+										{(pack.backgrounds || []).length > 0 ? (
+											<div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+												{(pack.backgrounds || []).map((k) => (
+													<img
+														key={k}
+														src={cdnUrl(k)}
+														alt=""
+														className="w-full h-28 object-cover rounded-lg border border-[var(--color-base-300)]"
+														onError={(e) => (e.currentTarget.style.display = "none")}
+													/>
+												))}
+											</div>
+										) : null}
+									</div>
+								) : null}
 							</div>
 						) : null}
 

@@ -857,8 +857,10 @@
 	"reviews": {
 		"title": "Minhas revisões",
 		"subtitle": "Acompanhe o status de revisão das suas contribuições.",
-		"pointsEarned": "Pontos ganhos",
-		"points": "pontos",
+		"experienceEarned": "Experiência ganha",
+		"experience": "XP",
+		"approvedContent": "Conteúdo aprovado",
+		"submittedContent": "Conteúdo enviado",
 		"empty": "Nenhuma contribuição ainda.",
 		"metadata": "Metadados do jogo",
 		"sap": "System art pack",

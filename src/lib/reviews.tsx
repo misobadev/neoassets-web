@@ -21,8 +21,13 @@ export interface ReviewItem {
 	reviewer?: string;
 	at: string;
 	href?: string;
-	points: number;
+	xp: number;
 	changeKinds?: string[];
+	// Target and submitted content, used to render the approved result.
+	gameId?: string;
+	systemId?: string;
+	packId?: string;
+	payload?: Record<string, unknown>;
 }
 
 const SEEN_KEY = "ns-seen-reviews";
@@ -64,8 +69,11 @@ async function loadReviews(): Promise<ReviewItem[]> {
 			reviewer: m.reviewed_by_name,
 			at: m.reviewed_at || m.created_at,
 			href: m.status === "approved" && m.game_id && m.system_id ? `/app/metadata/${m.system_id}/game/${m.game_id}` : undefined,
-			points: m.points_earned || 0,
+			xp: m.points_earned || 0,
 			changeKinds: m.change_kinds,
+			gameId: m.game_id || undefined,
+			systemId: m.system_id || undefined,
+			payload: m.payload,
 		});
 	}
 	for (const s of sap) {
@@ -81,7 +89,8 @@ async function loadReviews(): Promise<ReviewItem[]> {
 			reviewer: log?.user_name || s.reviewed_by_name,
 			at: log?.created_at || s.reviewed_at || s.created_at,
 			href: s.status === "approved" ? "/app/sap" : undefined,
-			points: s.points_earned || 0,
+			xp: s.points_earned || 0,
+			packId: s.pack_id || undefined,
 		});
 	}
 	return items.sort((a, b) => (a.at < b.at ? 1 : -1));
@@ -90,7 +99,7 @@ async function loadReviews(): Promise<ReviewItem[]> {
 interface ReviewsContextValue {
 	items: ReviewItem[];
 	unread: number;
-	totalPoints: number;
+	totalXP: number;
 	loading: boolean;
 	refresh: () => void;
 	markAllSeen: () => void;
@@ -152,9 +161,9 @@ export function ReviewsProvider({ children }: { children: ReactNode }) {
 	}, [items]);
 
 	const unread = useMemo(() => items.filter((i) => i.status !== "pending" && !seen.includes(i.key)).length, [items, seen]);
-	const totalPoints = useMemo(() => items.reduce((sum, i) => sum + (i.status === "approved" ? i.points : 0), 0), [items]);
+	const totalXP = useMemo(() => items.reduce((sum, i) => sum + (i.status === "approved" ? i.xp : 0), 0), [items]);
 
-	return <ReviewsContext.Provider value={{ items, unread, totalPoints, loading, refresh, markAllSeen }}>{children}</ReviewsContext.Provider>;
+	return <ReviewsContext.Provider value={{ items, unread, totalXP, loading, refresh, markAllSeen }}>{children}</ReviewsContext.Provider>;
 }
 
 export function useReviews(): ReviewsContextValue {

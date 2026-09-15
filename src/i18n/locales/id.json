@@ -857,8 +857,10 @@
 	"reviews": {
 		"title": "Tinjauan saya",
 		"subtitle": "Lacak status tinjauan kontribusi kamu.",
-		"pointsEarned": "Poin diperoleh",
-		"points": "poin",
+		"experienceEarned": "Pengalaman diperoleh",
+		"experience": "XP",
+		"approvedContent": "Konten disetujui",
+		"submittedContent": "Konten dikirim",
 		"empty": "Belum ada kontribusi.",
 		"metadata": "Metadata game",
 		"sap": "System art pack",

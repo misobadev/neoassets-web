@@ -857,8 +857,10 @@
 	"reviews": {
 		"title": "我的审核",
 		"subtitle": "查看你的贡献的审核状态。",
-		"pointsEarned": "获得积分",
-		"points": "积分",
+		"experienceEarned": "获得经验",
+		"experience": "XP",
+		"approvedContent": "已批准内容",
+		"submittedContent": "已提交内容",
 		"empty": "还没有贡献。",
 		"metadata": "游戏元数据",
 		"sap": "系统美术包",

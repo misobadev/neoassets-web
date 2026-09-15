@@ -857,8 +857,10 @@
 	"reviews": {
 		"title": "Meine Prüfungen",
 		"subtitle": "Verfolge den Prüfstatus deiner Beiträge.",
-		"pointsEarned": "Erhaltene Punkte",
-		"points": "Punkte",
+		"experienceEarned": "Erhaltene Erfahrung",
+		"experience": "XP",
+		"approvedContent": "Genehmigter Inhalt",
+		"submittedContent": "Eingereichter Inhalt",
 		"empty": "Noch keine Beiträge.",
 		"metadata": "Spiel-Metadaten",
 		"sap": "System-Art-Pack",

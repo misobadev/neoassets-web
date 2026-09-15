@@ -857,8 +857,10 @@
 	"reviews": {
 		"title": "내 리뷰",
 		"subtitle": "기여의 검토 상태를 확인하세요.",
-		"pointsEarned": "획득 포인트",
-		"points": "포인트",
+		"experienceEarned": "획득 경험치",
+		"experience": "XP",
+		"approvedContent": "승인된 콘텐츠",
+		"submittedContent": "제출된 콘텐츠",
 		"empty": "아직 기여가 없습니다.",
 		"metadata": "게임 메타데이터",
 		"sap": "시스템 아트 팩",

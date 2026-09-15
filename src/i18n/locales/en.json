@@ -854,8 +854,10 @@
 	"reviews": {
 		"title": "My reviews",
 		"subtitle": "Track the review status of your contributions.",
-		"pointsEarned": "Points earned",
-		"points": "points",
+		"experienceEarned": "Experience earned",
+		"experience": "XP",
+		"approvedContent": "Approved content",
+		"submittedContent": "Submitted content",
 		"empty": "No contributions yet.",
 		"metadata": "Game metadata",
 		"sap": "System art pack",

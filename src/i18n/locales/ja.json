@@ -857,8 +857,10 @@
 	"reviews": {
 		"title": "マイレビュー",
 		"subtitle": "投稿のレビュー状況を確認できます。",
-		"pointsEarned": "獲得ポイント",
-		"points": "ポイント",
+		"experienceEarned": "獲得経験値",
+		"experience": "XP",
+		"approvedContent": "承認された内容",
+		"submittedContent": "送信された内容",
 		"empty": "まだ投稿がありません。",
 		"metadata": "ゲームメタデータ",
 		"sap": "システムアートパック",

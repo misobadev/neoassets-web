@@ -881,8 +881,10 @@
 	"reviews": {
 		"title": "Мои проверки",
 		"subtitle": "Отслеживайте статус проверки ваших вкладов.",
-		"pointsEarned": "Заработано очков",
-		"points": "очков",
+		"experienceEarned": "Получено опыта",
+		"experience": "XP",
+		"approvedContent": "Одобренный контент",
+		"submittedContent": "Отправленный контент",
 		"empty": "Пока нет вкладов.",
 		"metadata": "Метаданные игры",
 		"sap": "Арт-пак системы",
