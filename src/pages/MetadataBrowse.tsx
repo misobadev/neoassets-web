@@ -7,7 +7,8 @@ import { cdnUrl, fetchMetadataGamesBySystem, fetchMetadataSystems, searchMetadat
 import { RatingBadge } from "../components/Rating";
 import { usePageTitle } from "../lib/seo";
 
-const LIMIT = 20;
+// LIMIT is a multiple of 3 so the 3-column grid always fills its last row.
+const LIMIT = 15;
 
 type TypeFilter = "" | "base" | "hack" | "homebrew";
 
@@ -262,6 +263,25 @@ function GameCard({ g }: { g: GameSummary }) {
 	);
 }
 
+// Pagination renders the prev/next controls. It is shown both above and below
+// the games grid so the user does not have to scroll back to the top.
+function Pagination({ page, totalPages, loading, onChange }: { page: number; totalPages: number; loading: boolean; onChange: (page: number) => void }) {
+	const { t } = useTranslation();
+	return (
+		<div className="flex items-center justify-between gap-3">
+			<button className="btn btn-outline btn-sm" disabled={page <= 1 || loading} onClick={() => onChange(page - 1)}>
+				<ChevronLeft className="w-4 h-4" />
+				{t("metadata.prev")}
+			</button>
+			<p className="text-sm text-[var(--color-base-content)]/50">{t("metadata.pageOf", { page, totalPages })}</p>
+			<button className="btn btn-outline btn-sm" disabled={page >= totalPages || loading} onClick={() => onChange(page + 1)}>
+				{t("metadata.next")}
+				<ChevronRight className="w-4 h-4" />
+			</button>
+		</div>
+	);
+}
+
 export default function MetadataBrowse() {
 	const { t } = useTranslation();
 	usePageTitle(t("metadata.title"));
@@ -365,6 +385,11 @@ export default function MetadataBrowse() {
 	function goSystem(id: string) {
 		setMenuOpen(false);
 		navigate(id ? `/app/metadata/${id}` : "/app/metadata");
+	}
+
+	function goPage(p: number) {
+		setPage(p);
+		window.scrollTo({ top: 0, behavior: "smooth" });
 	}
 
 	return (
@@ -493,19 +518,7 @@ export default function MetadataBrowse() {
 			</div>
 
 			{/* Pagination (top) */}
-			<div className="flex items-center justify-between gap-3">
-				<button className="btn btn-outline btn-sm" disabled={page <= 1 || loading} onClick={() => setPage((p) => p - 1)}>
-					<ChevronLeft className="w-4 h-4" />
-					{t("metadata.prev")}
-				</button>
-				<p className="text-sm text-[var(--color-base-content)]/50">
-					{t("metadata.pageOf", { page, totalPages })}
-				</p>
-				<button className="btn btn-outline btn-sm" disabled={page >= totalPages || loading} onClick={() => setPage((p) => p + 1)}>
-					{t("metadata.next")}
-					<ChevronRight className="w-4 h-4" />
-				</button>
-			</div>
+			<Pagination page={page} totalPages={totalPages} loading={loading} onChange={goPage} />
 
 			{error ? (
 				<p className="text-sm text-[var(--color-error)] py-6 text-center">{error}</p>
@@ -514,11 +527,15 @@ export default function MetadataBrowse() {
 			) : games && games.length === 0 ? (
 				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("metadata.noGamesMatch")}</p>
 			) : games ? (
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-					{games.map((g) => (
-						<GameCard key={g.id} g={g} />
-					))}
-				</div>
+				<>
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+						{games.map((g) => (
+							<GameCard key={g.id} g={g} />
+						))}
+					</div>
+					{/* Pagination (bottom) */}
+					<Pagination page={page} totalPages={totalPages} loading={loading} onChange={goPage} />
+				</>
 			) : null}
 		</div>
 	);
