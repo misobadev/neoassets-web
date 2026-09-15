@@ -612,6 +612,8 @@
 		}
 	},
 	"nav": {
+		"myReviews": "Mi lista de revisiones",
+		"notifications": "Notificaciones",
 		"menu": "Menú",
 		"home": "Inicio",
 		"dashboard": "Panel",
@@ -848,6 +850,23 @@
 			"title": "¿Eliminar el envío permanentemente?",
 			"body": "Esto elimina por completo el envío del paquete de arte de sistemas y borra sus imágenes del almacenamiento. Esta acción no se puede deshacer."
 		}
+	},
+	"reviews": {
+		"title": "Mis revisiones",
+		"subtitle": "Sigue el estado de revisión de tus contribuciones.",
+		"pointsEarned": "Puntos ganados",
+		"points": "puntos",
+		"empty": "Aún no tienes contribuciones.",
+		"metadata": "Metadatos de juego",
+		"sap": "Pack de arte del sistema",
+		"type": "Tipo",
+		"date": "Fecha",
+		"reviewedBy": "Revisado por",
+		"changes": "Cambios",
+		"reviewerComment": "Comentario del revisor",
+		"noComment": "Sin comentario.",
+		"viewGame": "Ver juego",
+		"viewPack": "Ver pack"
 	},
 	"apiDocs": {
 		"title": "API de Scraping",

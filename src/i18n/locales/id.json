@@ -631,6 +631,8 @@
 		}
 	},
 	"nav": {
+		"myReviews": "Daftar tinjauan saya",
+		"notifications": "Notifikasi",
 		"menu": "Menu",
 		"home": "Beranda",
 		"dashboard": "Dasbor",
@@ -851,6 +853,23 @@
 		"publicTitle": "System Art Pack Komunitas",
 		"realAuthor": "Penulis asli",
 		"systemsShort": "sistem"
+	},
+	"reviews": {
+		"title": "Tinjauan saya",
+		"subtitle": "Lacak status tinjauan kontribusi kamu.",
+		"pointsEarned": "Poin diperoleh",
+		"points": "poin",
+		"empty": "Belum ada kontribusi.",
+		"metadata": "Metadata game",
+		"sap": "System art pack",
+		"type": "Jenis",
+		"date": "Tanggal",
+		"reviewedBy": "Ditinjau oleh",
+		"changes": "Perubahan",
+		"reviewerComment": "Komentar peninjau",
+		"noComment": "Tanpa komentar.",
+		"viewGame": "Lihat game",
+		"viewPack": "Lihat pack"
 	},
 	"apiDocs": {
 		"title": "API Scraping",

@@ -612,6 +612,8 @@
 		}
 	},
 	"nav": {
+		"myReviews": "My review list",
+		"notifications": "Notifications",
 		"menu": "Menu",
 		"home": "Home",
 		"dashboard": "Dashboard",
@@ -848,6 +850,23 @@
 			"title": "Delete submission permanently?",
 			"body": "This removes the system art pack submission completely and deletes its images from storage. This cannot be undone."
 		}
+	},
+	"reviews": {
+		"title": "My reviews",
+		"subtitle": "Track the review status of your contributions.",
+		"pointsEarned": "Points earned",
+		"points": "points",
+		"empty": "No contributions yet.",
+		"metadata": "Game metadata",
+		"sap": "System art pack",
+		"type": "Type",
+		"date": "Date",
+		"reviewedBy": "Reviewed by",
+		"changes": "Changes",
+		"reviewerComment": "Reviewer comment",
+		"noComment": "No comment.",
+		"viewGame": "View game",
+		"viewPack": "View pack"
 	},
 	"apiDocs": {
 		"title": "Scraping API",

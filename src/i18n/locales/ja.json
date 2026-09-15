@@ -631,6 +631,8 @@
 		}
 	},
 	"nav": {
+		"myReviews": "マイレビュー一覧",
+		"notifications": "通知",
 		"menu": "メニュー",
 		"home": "ホーム",
 		"dashboard": "ダッシュボード",
@@ -851,6 +853,23 @@
 		"publicTitle": "コミュニティ System Art Pack",
 		"realAuthor": "実際の作者",
 		"systemsShort": "システム"
+	},
+	"reviews": {
+		"title": "マイレビュー",
+		"subtitle": "投稿のレビュー状況を確認できます。",
+		"pointsEarned": "獲得ポイント",
+		"points": "ポイント",
+		"empty": "まだ投稿がありません。",
+		"metadata": "ゲームメタデータ",
+		"sap": "システムアートパック",
+		"type": "種類",
+		"date": "日付",
+		"reviewedBy": "レビュー担当",
+		"changes": "変更",
+		"reviewerComment": "レビュアーのコメント",
+		"noComment": "コメントなし。",
+		"viewGame": "ゲームを見る",
+		"viewPack": "パックを見る"
 	},
 	"apiDocs": {
 		"title": "スクレイピングAPI",

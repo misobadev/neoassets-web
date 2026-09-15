@@ -631,6 +631,8 @@
 		}
 	},
 	"nav": {
+		"myReviews": "Meine Prüfliste",
+		"notifications": "Benachrichtigungen",
 		"menu": "Menü",
 		"home": "Startseite",
 		"dashboard": "Dashboard",
@@ -851,6 +853,23 @@
 		"publicTitle": "Community-System-Art-Packs",
 		"realAuthor": "Tatsächlicher Autor",
 		"systemsShort": "Systeme"
+	},
+	"reviews": {
+		"title": "Meine Prüfungen",
+		"subtitle": "Verfolge den Prüfstatus deiner Beiträge.",
+		"pointsEarned": "Erhaltene Punkte",
+		"points": "Punkte",
+		"empty": "Noch keine Beiträge.",
+		"metadata": "Spiel-Metadaten",
+		"sap": "System-Art-Pack",
+		"type": "Typ",
+		"date": "Datum",
+		"reviewedBy": "Geprüft von",
+		"changes": "Änderungen",
+		"reviewerComment": "Kommentar des Prüfers",
+		"noComment": "Kein Kommentar.",
+		"viewGame": "Spiel ansehen",
+		"viewPack": "Pack ansehen"
 	},
 	"apiDocs": {
 		"title": "Scraping-API",

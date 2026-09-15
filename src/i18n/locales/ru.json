@@ -651,6 +651,8 @@
 		}
 	},
 	"nav": {
+		"myReviews": "Мои проверки",
+		"notifications": "Уведомления",
 		"menu": "Меню",
 		"home": "Главная",
 		"dashboard": "Панель",
@@ -875,6 +877,23 @@
 		"publicTitle": "System Art Packs сообщества",
 		"realAuthor": "Настоящий автор",
 		"systemsShort": "систем"
+	},
+	"reviews": {
+		"title": "Мои проверки",
+		"subtitle": "Отслеживайте статус проверки ваших вкладов.",
+		"pointsEarned": "Заработано очков",
+		"points": "очков",
+		"empty": "Пока нет вкладов.",
+		"metadata": "Метаданные игры",
+		"sap": "Арт-пак системы",
+		"type": "Тип",
+		"date": "Дата",
+		"reviewedBy": "Проверил",
+		"changes": "Изменения",
+		"reviewerComment": "Комментарий проверяющего",
+		"noComment": "Без комментария.",
+		"viewGame": "Открыть игру",
+		"viewPack": "Открыть пак"
 	},
 	"apiDocs": {
 		"title": "API скрапинга",

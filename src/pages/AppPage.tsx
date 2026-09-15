@@ -1,8 +1,9 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
-import { Gamepad2, HelpCircle, Home, KeyRound, LayoutDashboard, LayoutGrid, LogIn, LogOut, Menu, Moon, Palette, Sun, Terminal, User, UserPlus } from "lucide-react";
+import { Bell, Gamepad2, HelpCircle, Home, KeyRound, LayoutDashboard, LayoutGrid, ListChecks, LogIn, LogOut, Menu, Moon, Palette, Sun, Terminal, User, UserPlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSelect from "../components/LanguageSelect";
+import { useReviews } from "../lib/reviews";
 import { userUsername, userRole, userToken, isReviewer, USER_TOKEN_KEY, USER_EMAIL_KEY, USER_NAME_KEY, USER_ROLE_KEY, ADMIN_TOKEN_KEY, ADMIN_EMAIL_KEY } from "../lib/api";
 
 const THEME_KEY = "ns-theme";
@@ -129,6 +130,7 @@ export default function AppPage() {
 					{!collapsed ? <p className="sap-section">{t("nav.submissions")}</p> : null}
 					<SideLink to="/app/metadata" icon={<Gamepad2 className="w-4 h-4 shrink-0" />} label={t("nav.gameMetadata")} active={path === "/app/metadata" || path.startsWith("/app/metadata/")} collapsed={collapsed} />
 					<SideLink to="/app/sap" icon={<Palette className="w-4 h-4 shrink-0" />} label={t("nav.systemArtPack")} end collapsed={collapsed} />
+					{authed ? <SideLink to="/app/reviews" icon={<ListChecks className="w-4 h-4 shrink-0" />} label={t("nav.myReviews")} collapsed={collapsed} /> : null}
 				</div>
 
 				{/* Help */}
@@ -174,6 +176,7 @@ export default function AppPage() {
 							>
 								<User className="w-4 h-4" />
 							</NavLink>
+							<NotificationBell />
 							<button
 								className="sap-icon-btn"
 								type="button"
@@ -250,5 +253,26 @@ export default function AppPage() {
 				</footer>
 			</div>
 		</div>
+	);
+}
+
+// NotificationBell shows the unread review count and opens the review list.
+function NotificationBell() {
+	const { t } = useTranslation();
+	const { unread } = useReviews();
+	const { pathname } = useLocation();
+	return (
+		<NavLink
+			to="/app/reviews"
+			title={t("nav.notifications")}
+			className={`sap-icon-btn relative ${pathname === "/app/reviews" ? "sap-icon-btn-active" : ""}`}
+		>
+			<Bell className="w-4 h-4" />
+			{unread > 0 ? (
+				<span className="absolute -top-1 -right-1 min-w-[1rem] h-4 px-1 rounded-full bg-[var(--color-error)] text-white text-[10px] font-bold grid place-items-center">
+					{unread > 9 ? "9+" : unread}
+				</span>
+			) : null}
+		</NavLink>
 	);
 }

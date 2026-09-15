@@ -23,6 +23,8 @@ import GuidePage from "./pages/GuidePage";
 import PublicProfilePage from "./pages/PublicProfilePage";
 import ApiDocsPage from "./pages/ApiDocsPage";
 import DeveloperPage from "./pages/DeveloperPage";
+import ReviewsPage from "./pages/ReviewsPage";
+import { ReviewsProvider } from "./lib/reviews";
 import "./i18n";
 import "./index.css";
 
@@ -32,7 +34,7 @@ createRoot(document.getElementById("root")!).render(
 			<Layout>
 				<Routes>
 					<Route path="/" element={<Navigate to="/app/home" replace />} />
-					<Route path="/app" element={<AppPage />}>
+					<Route path="/app" element={<ReviewsProvider><AppPage /></ReviewsProvider>}>
 						<Route index element={<Navigate to="/app/home" replace />} />
 						<Route path="home" element={<HomeView />} />
 						<Route path="login" element={<AuthPage mode="login" />} />
@@ -44,6 +46,7 @@ createRoot(document.getElementById("root")!).render(
 						<Route path="developer" element={<RequireAuth><DeveloperPage /></RequireAuth>} />
 						<Route path="u/:username" element={<PublicProfilePage />} />
 						<Route path="sap" element={<SubmissionsView />} />
+						<Route path="reviews" element={<RequireAuth><ReviewsPage /></RequireAuth>} />
 						<Route path="sap/:packID/contribute" element={<RequireAuth><ContributePage /></RequireAuth>} />
 						<Route path="submissions" element={<Navigate to="/app/sap" replace />} />
 						<Route path="submissions/new" element={<RequireAuth><SubmissionEditor /></RequireAuth>} />

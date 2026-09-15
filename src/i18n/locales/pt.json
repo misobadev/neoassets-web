@@ -631,6 +631,8 @@
 		}
 	},
 	"nav": {
+		"myReviews": "Minha lista de revisões",
+		"notifications": "Notificações",
 		"menu": "Menu",
 		"home": "Início",
 		"dashboard": "Painel",
@@ -851,6 +853,23 @@
 		"publicTitle": "System Art Packs da comunidade",
 		"realAuthor": "Autor real",
 		"systemsShort": "sistemas"
+	},
+	"reviews": {
+		"title": "Minhas revisões",
+		"subtitle": "Acompanhe o status de revisão das suas contribuições.",
+		"pointsEarned": "Pontos ganhos",
+		"points": "pontos",
+		"empty": "Nenhuma contribuição ainda.",
+		"metadata": "Metadados do jogo",
+		"sap": "System art pack",
+		"type": "Tipo",
+		"date": "Data",
+		"reviewedBy": "Revisado por",
+		"changes": "Alterações",
+		"reviewerComment": "Comentário do revisor",
+		"noComment": "Sem comentário.",
+		"viewGame": "Ver jogo",
+		"viewPack": "Ver pack"
 	},
 	"apiDocs": {
 		"title": "API de scraping",

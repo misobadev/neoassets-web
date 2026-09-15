@@ -107,6 +107,7 @@ export interface SubmissionDetail {
 	reviewed_by_name?: string;
 	files?: SubmissionFile[];
 	logs?: SubmissionLog[];
+	points_earned?: number;
 }
 
 export interface Pack {
@@ -279,6 +280,7 @@ export interface MetadataSubmission {
 	payload: Record<string, unknown>;
 	review_comment: string;
 	created_at: string;
+	reviewed_at?: string | null;
 	reviewed_by_name?: string;
 	submitted_by_name?: string;
 	game_name?: string;
@@ -286,6 +288,7 @@ export interface MetadataSubmission {
 	cover?: string;
 	cover_updated?: string;
 	change_kinds?: string[];
+	points_earned?: number;
 }
 
 export interface MetadataSubmissionFile {
@@ -597,6 +600,12 @@ export function submitMetadataSubmission(id: string): Promise<MetadataSubmission
 
 export function fetchMyMetadataSubmissions(): Promise<MetadataSubmission[]> {
 	return api<{ submissions: MetadataSubmission[] }>("/api/v1/auth/metadata/submissions", { token: userToken() }).then((d) => d.submissions || []);
+}
+
+// fetchMySubmissions returns the current user's system art pack submissions
+// (including their files and review logs).
+export function fetchMySubmissions(): Promise<SubmissionDetail[]> {
+	return api<{ submissions: SubmissionDetail[] }>("/api/v1/auth/submissions", { token: userToken() }).then((d) => d.submissions || []);
 }
 
 // Admin

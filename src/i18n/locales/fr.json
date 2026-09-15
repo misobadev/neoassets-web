@@ -631,6 +631,8 @@
 		}
 	},
 	"nav": {
+		"myReviews": "Ma liste de révisions",
+		"notifications": "Notifications",
 		"menu": "Menu",
 		"home": "Accueil",
 		"dashboard": "Tableau de bord",
@@ -851,6 +853,23 @@
 		"publicTitle": "Packs d'art système de la communauté",
 		"realAuthor": "Auteur réel",
 		"systemsShort": "systèmes"
+	},
+	"reviews": {
+		"title": "Mes révisions",
+		"subtitle": "Suivez l'état de révision de vos contributions.",
+		"pointsEarned": "Points gagnés",
+		"points": "points",
+		"empty": "Aucune contribution pour le moment.",
+		"metadata": "Métadonnées de jeu",
+		"sap": "Pack d'art système",
+		"type": "Type",
+		"date": "Date",
+		"reviewedBy": "Révisé par",
+		"changes": "Modifications",
+		"reviewerComment": "Commentaire du réviseur",
+		"noComment": "Aucun commentaire.",
+		"viewGame": "Voir le jeu",
+		"viewPack": "Voir le pack"
 	},
 	"apiDocs": {
 		"title": "API de scraping",

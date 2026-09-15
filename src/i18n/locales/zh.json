@@ -631,6 +631,8 @@
 		}
 	},
 	"nav": {
+		"myReviews": "我的审核列表",
+		"notifications": "通知",
 		"menu": "菜单",
 		"home": "首页",
 		"dashboard": "仪表盘",
@@ -851,6 +853,23 @@
 		"publicTitle": "社区 System Art Pack",
 		"realAuthor": "实际作者",
 		"systemsShort": "系统"
+	},
+	"reviews": {
+		"title": "我的审核",
+		"subtitle": "查看你的贡献的审核状态。",
+		"pointsEarned": "获得积分",
+		"points": "积分",
+		"empty": "还没有贡献。",
+		"metadata": "游戏元数据",
+		"sap": "系统美术包",
+		"type": "类型",
+		"date": "日期",
+		"reviewedBy": "审核人",
+		"changes": "更改",
+		"reviewerComment": "审核人评论",
+		"noComment": "无评论。",
+		"viewGame": "查看游戏",
+		"viewPack": "查看包"
 	},
 	"apiDocs": {
 		"title": "抓取 API",
