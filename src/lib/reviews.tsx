@@ -23,6 +23,8 @@ export interface ReviewItem {
 	at: string;
 	href?: string;
 	xp: number;
+	// baseXP is the XP before the donor boost, so the UI can flag boosted awards.
+	baseXP?: number;
 	changeKinds?: string[];
 	// Target and submitted content, used to render the approved result.
 	gameId?: string;
@@ -72,6 +74,7 @@ async function loadReviews(): Promise<ReviewItem[]> {
 			at: m.reviewed_at || m.created_at,
 			href: m.status === "approved" && m.game_id && m.system_id ? `/app/metadata/${m.system_id}/game/${m.game_id}` : undefined,
 			xp: m.points_earned || 0,
+			baseXP: m.base_points_earned,
 			changeKinds: m.change_kinds,
 			gameId: m.game_id || undefined,
 			systemId: m.system_id || undefined,
@@ -92,6 +95,7 @@ async function loadReviews(): Promise<ReviewItem[]> {
 			at: log?.created_at || s.reviewed_at || s.created_at,
 			href: s.status === "approved" ? "/app/sap" : undefined,
 			xp: s.points_earned || 0,
+			baseXP: s.base_points_earned,
 			packId: s.pack_id || undefined,
 		});
 	}

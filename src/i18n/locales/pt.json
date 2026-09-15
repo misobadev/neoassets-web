@@ -889,6 +889,7 @@
 		"subtitle": "Acompanhe o status de revisão das suas contribuições.",
 		"experienceEarned": "Experiência ganha",
 		"experience": "XP",
+		"boostTitle": "Com boost de +{{pct}}% pelo bônus de doador",
 		"approvedContent": "Conteúdo aprovado",
 		"submittedContent": "Conteúdo enviado",
 		"empty": "Nenhuma contribuição ainda.",

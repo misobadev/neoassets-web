@@ -913,6 +913,7 @@
 		"subtitle": "Отслеживайте статус проверки ваших вкладов.",
 		"experienceEarned": "Получено опыта",
 		"experience": "XP",
+		"boostTitle": "С бонусом донатера +{{pct}}%",
 		"approvedContent": "Одобренный контент",
 		"submittedContent": "Отправленный контент",
 		"empty": "Пока нет вкладов.",

@@ -887,6 +887,7 @@
 		"subtitle": "Track the review status of your contributions.",
 		"experienceEarned": "Experience earned",
 		"experience": "XP",
+		"boostTitle": "Boosted +{{pct}}% by the donor XP bonus",
 		"approvedContent": "Approved content",
 		"submittedContent": "Submitted content",
 		"empty": "No contributions yet.",

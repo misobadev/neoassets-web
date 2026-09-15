@@ -889,6 +889,7 @@
 		"subtitle": "기여의 검토 상태를 확인하세요.",
 		"experienceEarned": "획득 경험치",
 		"experience": "XP",
+		"boostTitle": "후원자 XP 보너스로 +{{pct}}% 부스트",
 		"approvedContent": "승인된 콘텐츠",
 		"submittedContent": "제출된 콘텐츠",
 		"empty": "아직 기여가 없습니다.",

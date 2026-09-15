@@ -889,6 +889,7 @@
 		"subtitle": "Lacak status tinjauan kontribusi kamu.",
 		"experienceEarned": "Pengalaman diperoleh",
 		"experience": "XP",
+		"boostTitle": "Di-boost +{{pct}}% oleh bonus donatur",
 		"approvedContent": "Konten disetujui",
 		"submittedContent": "Konten dikirim",
 		"empty": "Belum ada kontribusi.",

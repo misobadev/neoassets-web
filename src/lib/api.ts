@@ -108,6 +108,7 @@ export interface SubmissionDetail {
 	files?: SubmissionFile[];
 	logs?: SubmissionLog[];
 	points_earned?: number;
+	base_points_earned?: number;
 }
 
 export interface Pack {
@@ -290,6 +291,7 @@ export interface MetadataSubmission {
 	cover_updated?: string;
 	change_kinds?: string[];
 	points_earned?: number;
+	base_points_earned?: number;
 }
 
 export interface MetadataSubmissionFile {

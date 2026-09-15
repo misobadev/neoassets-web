@@ -889,6 +889,7 @@
 		"subtitle": "Verfolge den Prüfstatus deiner Beiträge.",
 		"experienceEarned": "Erhaltene Erfahrung",
 		"experience": "XP",
+		"boostTitle": "Mit +{{pct}}% Spender-XP-Bonus",
 		"approvedContent": "Genehmigter Inhalt",
 		"submittedContent": "Eingereichter Inhalt",
 		"empty": "Noch keine Beiträge.",

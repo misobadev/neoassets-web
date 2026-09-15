@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, X } from "lucide-react";
+import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, X, Zap } from "lucide-react";
 import { cdnUrl, fetchMetadataGameDetail, fetchPackDetail, type MediaKind, type MetadataMedia, type PackDetail } from "../lib/api";
 import { formatDate } from "../lib/format";
 import Pagination from "../components/Pagination";
@@ -165,7 +165,10 @@ export default function ReviewsPage() {
 			) : (
 				<>
 					<div className="space-y-3">
-						{pageItems.map((r) => (
+						{pageItems.map((r) => {
+							const boosted = r.status === "approved" && (r.baseXP ?? 0) > 0 && r.xp > (r.baseXP ?? 0);
+							const boostPct = boosted ? Math.round((r.xp / (r.baseXP as number) - 1) * 100) : 0;
+							return (
 						<div key={r.key} className="card card-hover p-4 cursor-pointer" onClick={() => setSelected(r)}>
 							<div className="flex items-center gap-3">
 								{r.cover ? (
@@ -194,15 +197,28 @@ export default function ReviewsPage() {
 											))}
 										</div>
 									) : null}
-									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
-										{formatDate(r.at)}
-										{r.status === "approved" && r.xp > 0 ? <> · +{r.xp} {t("reviews.experience")}</> : null}
-									</p>
+									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{formatDate(r.at)}</p>
 								</div>
-								<span className={`badge ${STATUS_BADGE[r.status]} shrink-0`}>{t("metadataStatus." + r.status, { defaultValue: r.status })}</span>
+								<div className="flex items-center gap-2 shrink-0">
+									{r.status === "approved" && r.xp > 0 ? (
+										boosted ? (
+											<span className="badge badge-lime badge-sm gap-1" title={t("reviews.boostTitle", { pct: boostPct })}>
+												<Zap className="w-3 h-3" />
+												+{r.xp} {t("reviews.experience")} · +{boostPct}%
+											</span>
+										) : (
+											<span className="badge badge-primary badge-sm gap-1">
+												<Sparkles className="w-3 h-3" />
+												+{r.xp} {t("reviews.experience")}
+											</span>
+										)
+									) : null}
+									<span className={`badge ${STATUS_BADGE[r.status]} shrink-0`}>{t("metadataStatus." + r.status, { defaultValue: r.status })}</span>
+								</div>
 							</div>
 						</div>
-					))}
+							);
+						})}
 					</div>
 					{totalPages > 1 ? <Pagination page={page} totalPages={totalPages} onChange={setPage} /> : null}
 				</>

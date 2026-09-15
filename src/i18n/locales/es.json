@@ -887,6 +887,7 @@
 		"subtitle": "Sigue el estado de revisión de tus contribuciones.",
 		"experienceEarned": "Experiencia ganada",
 		"experience": "XP",
+		"boostTitle": "Con boost de +{{pct}}% por ser donante",
 		"approvedContent": "Contenido aprobado",
 		"submittedContent": "Contenido enviado",
 		"empty": "Aún no tienes contribuciones.",

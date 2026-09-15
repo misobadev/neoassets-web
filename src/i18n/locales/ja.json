@@ -889,6 +889,7 @@
 		"subtitle": "投稿のレビュー状況を確認できます。",
 		"experienceEarned": "獲得経験値",
 		"experience": "XP",
+		"boostTitle": "ドナーXPボーナスで +{{pct}}% ブースト",
 		"approvedContent": "承認された内容",
 		"submittedContent": "送信された内容",
 		"empty": "まだ投稿がありません。",
