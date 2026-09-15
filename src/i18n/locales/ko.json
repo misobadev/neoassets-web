@@ -906,9 +906,10 @@
 	"adminDonations": {
 		"title": "후원",
 		"subtitle": "과거 후원을 가져오고 후원자 상태를 갱신합니다.",
-		"hint": "Ko-fi 서포터 내보내기(탭 또는 쉼표 구분)를 붙여넣으세요. 기존 거래는 업데이트되며 중복되지 않습니다.",
-		"placeholder": "이름\t이메일\tOneOff\tMonthly\t...",
-		"parsed": "{{count}}개 행 감지",
+		"hint": "서포터 이메일을 한 줄에 하나씩 붙여넣으세요. 기존 항목은 업데이트되며 중복되지 않습니다.",
+		"placeholder": "supporter@example.com",
+		"parsed": "{{count}}개 이메일",
+		"platform": "플랫폼",
 		"import": "가져오기",
 		"importing": "가져오는 중...",
 		"preview": "미리보기",

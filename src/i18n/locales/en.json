@@ -904,9 +904,10 @@
 	"adminDonations": {
 		"title": "Donations",
 		"subtitle": "Backfill historical donations and refresh donor statuses.",
-		"hint": "Paste the Ko-fi supporters export (tab or comma separated). Existing transactions are updated, not duplicated.",
-		"placeholder": "Name\tEmail\tOneOff\tMonthly\t...",
-		"parsed": "{{count}} rows parsed",
+		"hint": "Paste supporter emails, one per line. Existing emails are updated, not duplicated.",
+		"placeholder": "supporter@example.com",
+		"parsed": "{{count}} emails",
+		"platform": "Platform",
 		"import": "Import",
 		"importing": "Importing...",
 		"preview": "Preview",

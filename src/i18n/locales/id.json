@@ -906,9 +906,10 @@
 	"adminDonations": {
 		"title": "Donasi",
 		"subtitle": "Impor donasi historis dan segarkan status donatur.",
-		"hint": "Tempel ekspor supporter Ko-fi (dipisah tab atau koma). Transaksi yang ada diperbarui, bukan diduplikasi.",
-		"placeholder": "Nama\tEmail\tOneOff\tMonthly\t...",
-		"parsed": "{{count}} baris terdeteksi",
+		"hint": "Tempel email supporter, satu per baris. Yang ada diperbarui, bukan diduplikasi.",
+		"placeholder": "supporter@example.com",
+		"parsed": "{{count}} email",
+		"platform": "Platform",
 		"import": "Impor",
 		"importing": "Mengimpor...",
 		"preview": "Pratinjau",

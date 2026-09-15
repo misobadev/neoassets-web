@@ -906,9 +906,10 @@
 	"adminDonations": {
 		"title": "Spenden",
 		"subtitle": "Historische Spenden importieren und Spenderstatus aktualisieren.",
-		"hint": "Füge den Ko-fi-Supporter-Export ein (tab- oder kommagetrennt). Vorhandene Transaktionen werden aktualisiert, nicht dupliziert.",
-		"placeholder": "Name\tE-Mail\tOneOff\tMonthly\t...",
-		"parsed": "{{count}} Zeilen erkannt",
+		"hint": "Füge Supporter-E-Mails ein, eine pro Zeile. Vorhandene werden aktualisiert, nicht dupliziert.",
+		"placeholder": "supporter@example.com",
+		"parsed": "{{count}} E-Mails",
+		"platform": "Plattform",
 		"import": "Importieren",
 		"importing": "Wird importiert...",
 		"preview": "Vorschau",

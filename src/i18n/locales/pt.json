@@ -906,9 +906,10 @@
 	"adminDonations": {
 		"title": "Doações",
 		"subtitle": "Importe doações históricas e atualize os status de doador.",
-		"hint": "Cole o export de apoiadores do Ko-fi (separado por tabulações ou vírgulas). As transações existentes são atualizadas, não duplicadas.",
-		"placeholder": "Nome\tEmail\tOneOff\tMonthly\t...",
-		"parsed": "{{count}} linhas detectadas",
+		"hint": "Cole os emails dos apoiadores, um por linha. Os existentes são atualizados, não duplicados.",
+		"placeholder": "supporter@example.com",
+		"parsed": "{{count}} emails",
+		"platform": "Plataforma",
 		"import": "Importar",
 		"importing": "Importando...",
 		"preview": "Prévia",

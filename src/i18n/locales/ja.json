@@ -906,9 +906,10 @@
 	"adminDonations": {
 		"title": "寄付",
 		"subtitle": "過去の寄付を取り込み、支援者のステータスを更新します。",
-		"hint": "Ko-fiのサポーターエクスポート（タブまたはカンマ区切り）を貼り付けてください。既存の取引は更新され、重複しません。",
-		"placeholder": "名前\tメール\tOneOff\tMonthly\t...",
-		"parsed": "{{count}} 行を検出",
+		"hint": "サポーターのメールを1行に1つずつ貼り付けてください。既存は更新され、重複しません。",
+		"placeholder": "supporter@example.com",
+		"parsed": "{{count}} 件のメール",
+		"platform": "プラットフォーム",
 		"import": "インポート",
 		"importing": "インポート中...",
 		"preview": "プレビュー",

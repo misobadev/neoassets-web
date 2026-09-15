@@ -741,6 +741,7 @@ export function setDonorStatus(id: string, status: string): Promise<User> {
 
 // DonationImportItem is one normalized supporter row for the historical import.
 export interface DonationImportItem {
+	platform?: "kofi" | "patreon";
 	email: string;
 	from_name?: string;
 	kind: "subscription" | "one_time";
@@ -749,6 +750,7 @@ export interface DonationImportItem {
 	occurred_at?: string;
 	external_id?: string;
 	tier_name?: string;
+	active?: boolean;
 }
 
 // importDonations backfills historical donations (admin only). Idempotent by

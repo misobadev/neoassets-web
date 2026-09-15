@@ -906,9 +906,10 @@
 	"adminDonations": {
 		"title": "Dons",
 		"subtitle": "Importer les dons historiques et actualiser les statuts de donateur.",
-		"hint": "Collez l'export des supporters Ko-fi (séparé par tabulations ou virgules). Les transactions existantes sont mises à jour, pas dupliquées.",
-		"placeholder": "Nom\tE-mail\tOneOff\tMonthly\t...",
-		"parsed": "{{count}} lignes détectées",
+		"hint": "Collez les e-mails des supporters, un par ligne. Les existants sont mis à jour, pas dupliqués.",
+		"placeholder": "supporter@example.com",
+		"parsed": "{{count}} e-mails",
+		"platform": "Plateforme",
 		"import": "Importer",
 		"importing": "Importation...",
 		"preview": "Aperçu",
