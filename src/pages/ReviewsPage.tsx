@@ -40,11 +40,17 @@ function mediaUrl(objectKey: string, v?: string): string {
 
 export default function ReviewsPage() {
 	const { t } = useTranslation();
-	const { items, totalXP, loading, markAllSeen } = useReviews();
+	const { items, totalXP, loading, markAllSeen, refresh } = useReviews();
 	const [statusFilter, setStatusFilter] = useState<ReviewStatus | "">("");
 	const [selected, setSelected] = useState<ReviewItem | null>(null);
 	const [gameMedia, setGameMedia] = useState<MetadataMedia[]>([]);
 	const [pack, setPack] = useState<PackDetail | null>(null);
+
+	// Refetch when the page opens so a review approved elsewhere (e.g. from the
+	// admin view in the same session) is not shown as still pending.
+	useEffect(() => {
+		refresh();
+	}, [refresh]);
 
 	useEffect(() => {
 		markAllSeen();

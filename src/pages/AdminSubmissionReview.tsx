@@ -5,6 +5,7 @@ import { AlertTriangle, Check, ChevronLeft, Loader2, Trash2, X } from "lucide-re
 import { api, reviewToken, cdnUrl, isAdmin, type SubmissionDetail, type SubmissionFile } from "../lib/api";
 import { formatDate } from "../lib/format";
 import { useSystems } from "../lib/systems";
+import { useReviews } from "../lib/reviews";
 import UserLink from "../components/UserLink";
 
 const STATUS_BADGE: Record<string, string> = {
@@ -40,6 +41,7 @@ export default function AdminSubmissionReview() {
 	const [confirmDelete, setConfirmDelete] = useState(false);
 	const [lightbox, setLightbox] = useState<{ oldUrl?: string; newUrl: string; label: string; reason?: string } | null>(null);
 	const { systems } = useSystems();
+	const { refresh: refreshReviews } = useReviews();
 	const sysName = (id: string) => systems.find((s) => s.id === id)?.name || id;
 
 	useEffect(() => {
@@ -73,6 +75,7 @@ export default function AdminSubmissionReview() {
 			setProgress(100);
 			setMsg(t("admin.approvedMsg"));
 			setDetail((d) => (d ? { ...d, status: "approved" } : d));
+			refreshReviews();
 		} catch (e) {
 			setMsg((e as Error).message);
 		} finally {
@@ -106,6 +109,7 @@ export default function AdminSubmissionReview() {
 			setMsg(t("admin.rejectedMsg"));
 			setConfirmReject(false);
 			setDetail((d) => (d ? { ...d, status: "rejected" } : d));
+			refreshReviews();
 		} catch (e) {
 			setMsg((e as Error).message);
 		} finally {

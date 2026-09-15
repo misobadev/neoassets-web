@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { AlertTriangle, ChevronLeft, Image as ImageIcon, ShieldCheck, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import UserLink from "../components/UserLink";
+import { useReviews } from "../lib/reviews";
 import {
 	approveMetadataSubmission,
 	cdnUrl,
@@ -61,6 +62,7 @@ function mediaUrl(objectKey: string, v?: string): string {
 
 export default function MetadataAdminView() {
 	const { t } = useTranslation();
+	const { refresh: refreshReviews } = useReviews();
 	const [status, setStatus] = useState<MetadataStatus | "">("pending");
 	const [kindFilter, setKindFilter] = useState("");
 	const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
@@ -109,6 +111,7 @@ export default function MetadataAdminView() {
 			setApproved({ id: detail.submission.id, description: hasDescription });
 			setDetail(null);
 			load();
+			refreshReviews();
 		} catch (e) {
 			alert((e as Error).message);
 		} finally {
@@ -123,6 +126,7 @@ export default function MetadataAdminView() {
 			await rejectMetadataSubmission(detail.submission.id, comment);
 			setDetail(null);
 			load();
+			refreshReviews();
 		} catch (e) {
 			alert((e as Error).message);
 		} finally {
