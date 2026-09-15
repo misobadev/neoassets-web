@@ -721,14 +721,15 @@
 		"removeAvatar": "Rimuovi avatar"
 	},
 	"publicProfile": {
+		"contributions": "Contributi",
 		"loading": "Caricamento del profilo...",
 		"joined": "iscritto il {{date}}",
 		"following": "Seguiti",
 		"follow": "Segui",
 		"approved": "Approvati",
 		"followers": "Follower",
-		"recentSubmissions": "Proposte recenti",
-		"noSubmissions": "Nessuna proposta ancora.",
+		"recentSubmissions": "Contributi recenti",
+		"noSubmissions": "Nessun contributo ancora.",
 		"untitledPack": "Pacchetto senza titolo",
 		"untitled": "Senza titolo",
 		"metadata": "Metadati",

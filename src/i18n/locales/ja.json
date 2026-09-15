@@ -721,14 +721,15 @@
 		"removeAvatar": "アバターを削除"
 	},
 	"publicProfile": {
+		"contributions": "コントリビューション",
 		"loading": "プロフィールを読み込み中...",
 		"joined": "{{date}} に参加",
 		"following": "フォロー中",
 		"follow": "フォロー",
 		"approved": "承認済み",
 		"followers": "フォロワー",
-		"recentSubmissions": "最近の投稿",
-		"noSubmissions": "投稿はまだありません。",
+		"recentSubmissions": "最近のコントリビューション",
+		"noSubmissions": "まだコントリビューションがありません。",
 		"untitledPack": "無題のパック",
 		"untitled": "無題",
 		"metadata": "メタデータ",

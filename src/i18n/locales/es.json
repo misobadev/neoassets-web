@@ -702,6 +702,7 @@
 		"updatePassword": "Actualizar contraseña"
 	},
 	"publicProfile": {
+		"contributions": "Contribuciones",
 		"loading": "Cargando perfil...",
 		"joined": "se unió el {{date}}",
 		"rank": "Rango",
@@ -709,8 +710,8 @@
 		"follow": "Seguir",
 		"approved": "Aprobados",
 		"followers": "Seguidores",
-		"recentSubmissions": "Envíos recientes",
-		"noSubmissions": "Aún no hay envíos.",
+		"recentSubmissions": "Contribuciones recientes",
+		"noSubmissions": "Aún no hay contribuciones.",
 		"untitledPack": "Paquete sin título",
 		"untitled": "Sin título",
 		"metadata": "Metadatos",

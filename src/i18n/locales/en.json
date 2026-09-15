@@ -702,6 +702,7 @@
 		"updatePassword": "Update password"
 	},
 	"publicProfile": {
+		"contributions": "Contributions",
 		"loading": "Loading profile...",
 		"joined": "joined {{date}}",
 		"rank": "Rank",
@@ -709,8 +710,8 @@
 		"follow": "Follow",
 		"approved": "Approved",
 		"followers": "Followers",
-		"recentSubmissions": "Recent submissions",
-		"noSubmissions": "No submissions yet.",
+		"recentSubmissions": "Recent contributions",
+		"noSubmissions": "No contributions yet.",
 		"untitledPack": "Untitled pack",
 		"untitled": "Untitled",
 		"metadata": "Metadata",

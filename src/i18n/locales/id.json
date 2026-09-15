@@ -721,14 +721,15 @@
 		"removeAvatar": "Hapus avatar"
 	},
 	"publicProfile": {
+		"contributions": "Kontribusi",
 		"loading": "Memuat profil...",
 		"joined": "bergabung {{date}}",
 		"following": "Mengikuti",
 		"follow": "Ikuti",
 		"approved": "Disetujui",
 		"followers": "Pengikut",
-		"recentSubmissions": "Kiriman terbaru",
-		"noSubmissions": "Belum ada kiriman.",
+		"recentSubmissions": "Kontribusi terbaru",
+		"noSubmissions": "Belum ada kontribusi.",
 		"untitledPack": "Paket tanpa judul",
 		"untitled": "Tanpa judul",
 		"metadata": "Metadata",

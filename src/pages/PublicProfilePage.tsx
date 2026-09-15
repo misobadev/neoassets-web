@@ -115,7 +115,7 @@ export default function PublicProfilePage() {
 
 				<div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
 					<Stat n={profile.approved} label={t("publicProfile.approved")} />
-					<Stat n={profile.submitted} label={t("nav.submissions")} />
+					<Stat n={profile.submitted} label={t("publicProfile.contributions")} />
 					<Stat n={profile.followers} label={t("publicProfile.followers")} />
 					<Stat n={profile.following} label={t("publicProfile.following")} />
 				</div>

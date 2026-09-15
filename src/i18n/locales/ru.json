@@ -741,14 +741,15 @@
 		"removeAvatar": "Удалить аватар"
 	},
 	"publicProfile": {
+		"contributions": "Вклады",
 		"loading": "Загрузка профиля...",
 		"joined": "присоединился {{date}}",
 		"following": "Вы подписаны",
 		"follow": "Подписаться",
 		"approved": "Одобрено",
 		"followers": "Подписчики",
-		"recentSubmissions": "Последние заявки",
-		"noSubmissions": "Пока нет заявок.",
+		"recentSubmissions": "Последние вклады",
+		"noSubmissions": "Пока нет вкладов.",
 		"untitledPack": "Пак без названия",
 		"untitled": "Без названия",
 		"metadata": "Метаданные",

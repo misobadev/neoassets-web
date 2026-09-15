@@ -721,14 +721,15 @@
 		"removeAvatar": "移除头像"
 	},
 	"publicProfile": {
+		"contributions": "贡献",
 		"loading": "正在加载个人资料……",
 		"joined": "于 {{date}} 加入",
 		"following": "正在关注",
 		"follow": "关注",
 		"approved": "已批准",
 		"followers": "关注者",
-		"recentSubmissions": "近期投稿",
-		"noSubmissions": "暂无投稿。",
+		"recentSubmissions": "近期贡献",
+		"noSubmissions": "暂无贡献。",
 		"untitledPack": "未命名资源包",
 		"untitled": "未命名",
 		"metadata": "元数据",

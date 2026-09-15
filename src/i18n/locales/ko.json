@@ -721,14 +721,15 @@
 		"removeAvatar": "아바타 삭제"
 	},
 	"publicProfile": {
+		"contributions": "기여",
 		"loading": "프로필 불러오는 중...",
 		"joined": "{{date}} 가입",
 		"following": "팔로잉",
 		"follow": "팔로우",
 		"approved": "승인됨",
 		"followers": "팔로워",
-		"recentSubmissions": "최근 제출물",
-		"noSubmissions": "아직 제출물이 없습니다.",
+		"recentSubmissions": "최근 기여",
+		"noSubmissions": "아직 기여가 없습니다.",
 		"untitledPack": "제목 없는 팩",
 		"untitled": "제목 없음",
 		"metadata": "메타데이터",
