@@ -4,7 +4,7 @@ import { Bell, Gamepad2, HelpCircle, Home, KeyRound, LayoutDashboard, LayoutGrid
 import { useTranslation } from "react-i18next";
 import LanguageSelect from "../components/LanguageSelect";
 import { useReviews } from "../lib/reviews";
-import { userUsername, userRole, userToken, isReviewer, USER_TOKEN_KEY, USER_EMAIL_KEY, USER_NAME_KEY, USER_ROLE_KEY, ADMIN_TOKEN_KEY, ADMIN_EMAIL_KEY } from "../lib/api";
+import { userUsername, userRole, userToken, isAdmin, isReviewer, USER_TOKEN_KEY, USER_EMAIL_KEY, USER_NAME_KEY, USER_ROLE_KEY, ADMIN_TOKEN_KEY, ADMIN_EMAIL_KEY } from "../lib/api";
 
 const THEME_KEY = "ns-theme";
 const SIDEBAR_KEY = "ns-sidebar-collapsed";
@@ -64,6 +64,7 @@ export default function AppPage() {
 	const username = userUsername() || "";
 	const role = userRole() || "user";
 	const reviewer = isReviewer();
+	const admin = isAdmin();
 	const location = useLocation();
 	const { t } = useTranslation();
 	const path = location.pathname;
@@ -97,6 +98,10 @@ export default function AppPage() {
 	// Redirect non-reviewers away from the review section.
 	if (location.pathname.startsWith("/app/admin") && !reviewer) {
 		return <Navigate to="/app/home" replace />;
+	}
+	// Users and donations management are admin-only (reviewers must not see them).
+	if ((location.pathname.startsWith("/app/admin/users") || location.pathname.startsWith("/app/admin/donations")) && !admin) {
+		return <Navigate to="/app/admin" replace />;
 	}
 
 	return (
