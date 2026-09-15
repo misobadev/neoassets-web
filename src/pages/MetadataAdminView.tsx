@@ -142,6 +142,8 @@ export default function MetadataAdminView() {
 	// currentValue resolves the target's currently published value for a payload
 	// key so it can be compared against the proposed one.
 	function currentValue(key: string): string {
+		// A new game has no current value to compare against.
+		if (detail?.submission.kind === "new_game") return "";
 		const g = detail?.game;
 		const sys = detail?.system;
 		if (key === "release_year") {
@@ -280,6 +282,7 @@ export default function MetadataAdminView() {
 													{s.game_name || (s.game_id ? t("metadataAdmin.gameContribution") : t("metadataAdmin.systemContribution"))}
 												</p>
 												{s.system_name ? <span className="badge badge-ghost badge-sm shrink-0">{s.system_name}</span> : null}
+												{s.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
 											</div>
 											<div className="flex flex-wrap gap-1 mt-1">
 												{(s.change_kinds || []).map((k) => (
@@ -304,7 +307,10 @@ export default function MetadataAdminView() {
 				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4" onClick={(e) => e.target === e.currentTarget && setDetail(null)}>
 					<div className="card w-full max-w-5xl my-8 p-6 space-y-4">
 						<div className="flex items-center justify-between">
-							<h2 className="text-xl font-bold">{t("metadataAdmin.submissionTitle")}</h2>
+							<div className="flex items-center gap-2 min-w-0">
+								<h2 className="text-xl font-bold">{t("metadataAdmin.submissionTitle")}</h2>
+								{detail.submission.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
+							</div>
 							<button className="btn btn-ghost !p-2" onClick={() => setDetail(null)} aria-label={t("common.close")}>
 								<X className="w-5 h-5" />
 							</button>

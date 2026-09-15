@@ -180,6 +180,10 @@
 		"title": "奖励与抓取指南",
 		"subtitle": "如何赚取积分、解锁更多线程并使用 NeoAssets 抓取。",
 		"earn": {
+			"newGame": {
+				"label": "新游戏奖励",
+				"note": "新游戏获批时，在字段和媒体之外额外获得的经验。"
+			},
 			"title": "赚取积分",
 			"introPrefix": "每次你贡献的内容获得",
 			"introApproved": "批准",
@@ -360,7 +364,28 @@
 		"rejected": "需要修改"
 	},
 	"metadata": {
-		"title": "元数据",
+		"title": "游戏元数据",
+		"newGame": {
+			"addButton": "添加游戏",
+			"title": "添加游戏",
+			"subtitle": "向目录添加新游戏。发布前会经过审核。",
+			"system": "系统",
+			"systemPlaceholder": "选择系统",
+			"namePlaceholder": "开始输入游戏名称……",
+			"nameSearchHint": "输入以检查该游戏是否已在此系统中存在。",
+			"existingTitle": "该游戏已存在",
+			"existingBody": "此系统中已存在同名游戏。请打开它并在那里贡献，而不要创建重复项。",
+			"openGame": "打开游戏",
+			"fieldsTitle": "详情",
+			"mediaTitle": "媒体",
+			"submit": "添加游戏",
+			"submitted": "已提交审核。谢谢！",
+			"submittedTitle": "游戏已提交",
+			"submittedBody": "你的新游戏正在审核中。你可以在“我的审核”中查看。",
+			"addAnother": "添加另一个游戏",
+			"needSystem": "请选择一个系统。",
+			"needName": "请输入游戏名称。"
+		},
 		"browse": {
 			"subtitle": "浏览系统及其游戏。按类型筛选并搜索。"
 		},
@@ -454,6 +479,7 @@
 		}
 	},
 	"metadataAdmin": {
+		"newGame": "新游戏",
 		"subtitle": "批准或拒绝贡献者的元数据/媒体投稿。",
 		"noSubmissions": "此状态下没有投稿。",
 		"gameContribution": "游戏贡献",

@@ -180,6 +180,10 @@
 		"title": "Guide des récompenses et du scraping",
 		"subtitle": "Comment gagner des points, débloquer plus de threads et scraper avec NeoAssets.",
 		"earn": {
+			"newGame": {
+				"label": "Bonus nouveau jeu",
+				"note": "XP supplémentaire en plus des champs et médias lorsqu'un nouveau jeu est approuvé."
+			},
 			"title": "Gagner des points",
 			"introPrefix": "Vous gagnez des points chaque fois qu'une contribution que vous avez faite est",
 			"introApproved": "approuvée",
@@ -360,7 +364,28 @@
 		"rejected": "Nécessite des modifications"
 	},
 	"metadata": {
-		"title": "Métadonnées",
+		"title": "Métadonnées de jeu",
+		"newGame": {
+			"addButton": "Ajouter un jeu",
+			"title": "Ajouter un jeu",
+			"subtitle": "Ajoutez un nouveau jeu au catalogue. Il est examiné avant publication.",
+			"system": "Système",
+			"systemPlaceholder": "Sélectionnez un système",
+			"namePlaceholder": "Commencez à taper le nom du jeu...",
+			"nameSearchHint": "Tapez pour vérifier si le jeu existe déjà dans ce système.",
+			"existingTitle": "Ce jeu existe déjà",
+			"existingBody": "Un jeu portant ce nom existe déjà dans ce système. Ouvrez-le et contribuez-y au lieu de créer un doublon.",
+			"openGame": "Ouvrir le jeu",
+			"fieldsTitle": "Détails",
+			"mediaTitle": "Médias",
+			"submit": "Ajouter le jeu",
+			"submitted": "Soumis pour révision. Merci !",
+			"submittedTitle": "Jeu soumis",
+			"submittedBody": "Votre nouveau jeu est en révision. Vous pouvez le suivre dans Mes révisions.",
+			"addAnother": "Ajouter un autre jeu",
+			"needSystem": "Sélectionnez un système.",
+			"needName": "Saisissez le nom du jeu."
+		},
 		"browse": {
 			"subtitle": "Parcourez les systèmes et leurs jeux. Filtrez par type et recherchez."
 		},
@@ -454,6 +479,7 @@
 		}
 	},
 	"metadataAdmin": {
+		"newGame": "Nouveau jeu",
 		"subtitle": "Approuvez ou rejetez les soumissions de métadonnées/médias des contributeurs.",
 		"noSubmissions": "Aucune soumission dans cet état.",
 		"gameContribution": "Contribution de jeu",

@@ -44,6 +44,12 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
 - `src/components/LanguageSelect.tsx`  language dropdown in the sidebar footer.
 - `src/lib/image.ts`       `toWebp()` in-browser conversion (png/jpg -> webp).
 - `src/lib/upload.ts`      `uploadWithProgress()` PUT via XHR to the presigned URL.
+- `src/lib/media.ts`       metadata media helpers: `toWebp()`, `measureVideo()`,
+                           accepted aspect ratios and video limits.
+- `src/pages/NewGamePage.tsx`  create a brand-new game (system + type + name with
+                           an existing-game search, all fields and media) as a
+                           `kind=new_game` metadata submission (route
+                           `/app/metadata[/:systemId]/new`).
 - `src/pages/SubmissionsView.tsx`   list of submission cards (reads `/auth/submissions`).
 - `src/components/SubmissionEditor.tsx`  new/edit form + uploads + save/submit.
 - `src/pages/LandingPage.tsx`   approved community packs + contribution categories.

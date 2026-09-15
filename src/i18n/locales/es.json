@@ -186,6 +186,10 @@
 		"title": "Guía de recompensas y scraping",
 		"subtitle": "Cómo ganar XP, subir de nivel y desbloquear más hilos de scraping.",
 		"earn": {
+			"newGame": {
+				"label": "Bono por juego nuevo",
+				"note": "XP extra además de los campos y medios cuando se aprueba un juego nuevo."
+			},
 			"title": "Cómo ganar XP",
 			"introPrefix": "Ganas XP cada vez que una contribución que hiciste es",
 			"introApproved": "aprobada",
@@ -341,7 +345,28 @@
 		"rejected": "Necesita cambios"
 	},
 	"metadata": {
-		"title": "Metadatos",
+		"title": "Metadatos de juego",
+		"newGame": {
+			"addButton": "Agregar un juego",
+			"title": "Agregar un juego",
+			"subtitle": "Agrega un juego nuevo al catálogo. Se revisa antes de publicarse.",
+			"system": "Sistema",
+			"systemPlaceholder": "Selecciona un sistema",
+			"namePlaceholder": "Empieza a escribir el nombre del juego...",
+			"nameSearchHint": "Escribe para comprobar si el juego ya existe en este sistema.",
+			"existingTitle": "Este juego ya existe",
+			"existingBody": "Ya hay un juego con este nombre en este sistema. Ábrelo y contribuye ahí en lugar de crear un duplicado.",
+			"openGame": "Abrir juego",
+			"fieldsTitle": "Detalles",
+			"mediaTitle": "Medios",
+			"submit": "Agregar juego",
+			"submitted": "Enviado para revisión. ¡Gracias!",
+			"submittedTitle": "Juego enviado",
+			"submittedBody": "Tu juego nuevo está en revisión. Puedes seguirlo en Mis revisiones.",
+			"addAnother": "Agregar otro juego",
+			"needSystem": "Selecciona un sistema.",
+			"needName": "Escribe el nombre del juego."
+		},
 		"browse": {
 			"subtitle": "Explora los sistemas y sus juegos. Filtra por tipo y busca."
 		},
@@ -435,6 +460,7 @@
 		}
 	},
 	"metadataAdmin": {
+		"newGame": "Juego nuevo",
 		"subtitle": "Aprueba o rechaza los envíos de metadatos/multimedia de los colaboradores.",
 		"noSubmissions": "No hay envíos en este estado.",
 		"gameContribution": "Contribución de juego",

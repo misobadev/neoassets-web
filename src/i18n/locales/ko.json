@@ -180,6 +180,10 @@
 		"title": "보상 및 스크래핑 가이드",
 		"subtitle": "포인트를 얻고, 더 많은 스레드를 해제하고, NeoAssets으로 스크래핑하는 방법.",
 		"earn": {
+			"newGame": {
+				"label": "새 게임 보너스",
+				"note": "새 게임이 승인되면 필드와 미디어 외에 추가로 받는 XP."
+			},
 			"title": "포인트 얻기",
 			"introPrefix": "기여한 내용이",
 			"introApproved": "승인",
@@ -360,7 +364,28 @@
 		"rejected": "수정 필요"
 	},
 	"metadata": {
-		"title": "메타데이터",
+		"title": "게임 메타데이터",
+		"newGame": {
+			"addButton": "게임 추가",
+			"title": "게임 추가",
+			"subtitle": "카탈로그에 새 게임을 추가합니다. 게시 전에 검토됩니다.",
+			"system": "시스템",
+			"systemPlaceholder": "시스템 선택",
+			"namePlaceholder": "게임 이름을 입력하세요...",
+			"nameSearchHint": "입력하여 이 시스템에 게임이 이미 있는지 확인하세요.",
+			"existingTitle": "이 게임은 이미 존재합니다",
+			"existingBody": "이 이름의 게임이 이미 이 시스템에 있습니다. 중복을 만들지 말고 열어서 기여하세요.",
+			"openGame": "게임 열기",
+			"fieldsTitle": "세부 정보",
+			"mediaTitle": "미디어",
+			"submit": "게임 추가",
+			"submitted": "검토를 위해 제출되었습니다. 감사합니다!",
+			"submittedTitle": "게임 제출됨",
+			"submittedBody": "새 게임이 검토 중입니다. 내 리뷰에서 확인할 수 있습니다.",
+			"addAnother": "다른 게임 추가",
+			"needSystem": "시스템을 선택하세요.",
+			"needName": "게임 이름을 입력하세요."
+		},
 		"browse": {
 			"subtitle": "시스템과 게임을 둘러보세요. 유형별로 필터링하고 검색하세요."
 		},
@@ -454,6 +479,7 @@
 		}
 	},
 	"metadataAdmin": {
+		"newGame": "새 게임",
 		"subtitle": "기여자 메타데이터/미디어 제출물을 승인하거나 거부합니다.",
 		"noSubmissions": "이 상태의 제출물이 없습니다.",
 		"gameContribution": "게임 기여",

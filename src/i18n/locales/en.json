@@ -186,6 +186,10 @@
 		"title": "Rewards & Scraping Guide",
 		"subtitle": "How to earn XP, level up and unlock more scraping threads.",
 		"earn": {
+			"newGame": {
+				"label": "New game bonus",
+				"note": "Extra XP on top of the fields and media when a brand-new game is approved."
+			},
 			"title": "How to earn XP",
 			"introPrefix": "You earn XP every time a contribution you made is",
 			"introApproved": "approved",
@@ -341,7 +345,28 @@
 		"rejected": "Needs changes"
 	},
 	"metadata": {
-		"title": "Metadata",
+		"title": "Game Metadata",
+		"newGame": {
+			"addButton": "Add a Game",
+			"title": "Add a game",
+			"subtitle": "Add a new game to the catalog. It is reviewed before it is published.",
+			"system": "System",
+			"systemPlaceholder": "Select a system",
+			"namePlaceholder": "Start typing the game name...",
+			"nameSearchHint": "Type to check whether the game already exists in this system.",
+			"existingTitle": "This game already exists",
+			"existingBody": "A game with this name is already in this system. Open it and contribute there instead of creating a duplicate.",
+			"openGame": "Open game",
+			"fieldsTitle": "Details",
+			"mediaTitle": "Media",
+			"submit": "Add game",
+			"submitted": "Submitted for review. Thanks!",
+			"submittedTitle": "Game submitted",
+			"submittedBody": "Your new game is now in review. You can track it in My reviews.",
+			"addAnother": "Add another game",
+			"needSystem": "Select a system.",
+			"needName": "Enter the game name."
+		},
 		"browse": {
 			"subtitle": "Browse systems and their games. Filter by type and search."
 		},
@@ -435,6 +460,7 @@
 		"scrapedTimes": "Scraped {{n}} times"
 	},
 	"metadataAdmin": {
+		"newGame": "New game",
 		"subtitle": "Approve or reject contributor metadata/media submissions.",
 		"noSubmissions": "No submissions in this state.",
 		"gameContribution": "Game contribution",

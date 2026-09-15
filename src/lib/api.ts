@@ -277,6 +277,7 @@ export interface MetadataSubmission {
 	system_id?: string | null;
 	user_id: string;
 	status: MetadataStatus;
+	kind?: "edit" | "new_game";
 	payload: Record<string, unknown>;
 	review_comment: string;
 	created_at: string;
@@ -357,6 +358,7 @@ export interface PublicConfig {
 		image_metadata: number;
 		video_metadata: number;
 		sap_image: number;
+		new_game: number;
 	};
 	ranks: {
 		rank: string;
@@ -573,6 +575,7 @@ export function fetchMetadataPendingKeys(gameId: string): Promise<string[]> {
 export function createMetadataSubmission(body: {
 	game_id?: string;
 	system_id?: string;
+	kind?: "edit" | "new_game";
 	payload: Record<string, unknown>;
 	files?: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number }[];
 }): Promise<MetadataSubmission> {

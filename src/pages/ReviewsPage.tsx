@@ -185,6 +185,7 @@ export default function ReviewsPage() {
 										<p className="font-semibold truncate text-sm">{r.title}</p>
 										{r.systemName ? <span className="badge badge-ghost badge-sm shrink-0">{r.systemName}</span> : null}
 										<span className="badge badge-ghost badge-sm shrink-0">{t(r.kind === "metadata" ? "reviews.metadata" : "reviews.sap")}</span>
+										{r.newGame ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
 									</div>
 									{(r.changeKinds || []).length > 0 ? (
 										<div className="flex flex-wrap gap-1 mt-1">

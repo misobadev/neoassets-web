@@ -29,6 +29,7 @@ export default function GuidePage() {
 		{ value: cfg.points.image_metadata, labelKey: "guide.earn.imageMetadata.label", noteKey: "guide.earn.imageMetadata.note" },
 		{ value: cfg.points.video_metadata, labelKey: "guide.earn.videoMetadata.label", noteKey: "guide.earn.videoMetadata.note" },
 		{ value: cfg.points.sap_image, labelKey: "guide.earn.sapImage.label", noteKey: "guide.earn.sapImage.note" },
+		{ value: cfg.points.new_game, labelKey: "guide.earn.newGame.label", noteKey: "guide.earn.newGame.note" },
 	];
 
 	return (

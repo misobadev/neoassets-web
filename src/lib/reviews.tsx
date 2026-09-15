@@ -12,6 +12,7 @@ export interface ReviewItem {
 	key: string;
 	id: string;
 	kind: "metadata" | "sap";
+	newGame?: boolean;
 	status: ReviewStatus;
 	title: string;
 	systemName?: string;
@@ -60,6 +61,7 @@ async function loadReviews(): Promise<ReviewItem[]> {
 			key: `metadata:${m.id}:${m.status}`,
 			id: m.id,
 			kind: "metadata",
+			newGame: m.kind === "new_game",
 			status: m.status,
 			title: m.game_name || m.system_name || (m.game_id ? "Game" : "System"),
 			systemName: m.system_name,

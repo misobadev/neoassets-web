@@ -180,6 +180,10 @@
 		"title": "Panduan Hadiah & Scraping",
 		"subtitle": "Cara mendapatkan poin, membuka lebih banyak thread, dan melakukan scraping dengan NeoAssets.",
 		"earn": {
+			"newGame": {
+				"label": "Bonus game baru",
+				"note": "XP tambahan di atas kolom dan media saat game baru disetujui."
+			},
 			"title": "Dapatkan poin",
 			"introPrefix": "Anda mendapatkan poin setiap kali kontribusi yang Anda buat",
 			"introApproved": "disetujui",
@@ -360,7 +364,28 @@
 		"rejected": "Perlu perubahan"
 	},
 	"metadata": {
-		"title": "Metadata",
+		"title": "Metadata game",
+		"newGame": {
+			"addButton": "Tambah Game",
+			"title": "Tambah game",
+			"subtitle": "Tambahkan game baru ke katalog. Ditinjau sebelum dipublikasikan.",
+			"system": "Sistem",
+			"systemPlaceholder": "Pilih sistem",
+			"namePlaceholder": "Mulai ketik nama game...",
+			"nameSearchHint": "Ketik untuk memeriksa apakah game sudah ada di sistem ini.",
+			"existingTitle": "Game ini sudah ada",
+			"existingBody": "Game dengan nama ini sudah ada di sistem ini. Buka dan kontribusi di sana alih-alih membuat duplikat.",
+			"openGame": "Buka game",
+			"fieldsTitle": "Detail",
+			"mediaTitle": "Media",
+			"submit": "Tambah game",
+			"submitted": "Dikirim untuk ditinjau. Terima kasih!",
+			"submittedTitle": "Game dikirim",
+			"submittedBody": "Game baru kamu sedang ditinjau. Kamu bisa melacaknya di Tinjauan saya.",
+			"addAnother": "Tambah game lain",
+			"needSystem": "Pilih sistem.",
+			"needName": "Masukkan nama game."
+		},
 		"browse": {
 			"subtitle": "Jelajahi sistem dan game-nya. Filter berdasarkan tipe dan cari."
 		},
@@ -454,6 +479,7 @@
 		}
 	},
 	"metadataAdmin": {
+		"newGame": "Game baru",
 		"subtitle": "Setujui atau tolak kiriman metadata/media dari kontributor.",
 		"noSubmissions": "Tidak ada kiriman dalam status ini.",
 		"gameContribution": "Kontribusi game",

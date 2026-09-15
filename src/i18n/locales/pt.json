@@ -180,6 +180,10 @@
 		"title": "Guia de Recompensas e Scraping",
 		"subtitle": "Como ganhar pontos, desbloquear mais threads e fazer scraping com o NeoAssets.",
 		"earn": {
+			"newGame": {
+				"label": "Bônus de jogo novo",
+				"note": "XP extra além dos campos e mídias quando um jogo novo é aprovado."
+			},
 			"title": "Ganhar pontos",
 			"introPrefix": "Você ganha pontos toda vez que uma contribuição sua é",
 			"introApproved": "aprovada",
@@ -360,7 +364,28 @@
 		"rejected": "Precisa de alterações"
 	},
 	"metadata": {
-		"title": "Metadados",
+		"title": "Metadados do jogo",
+		"newGame": {
+			"addButton": "Adicionar um jogo",
+			"title": "Adicionar um jogo",
+			"subtitle": "Adicione um novo jogo ao catálogo. Ele é revisado antes de ser publicado.",
+			"system": "Sistema",
+			"systemPlaceholder": "Selecione um sistema",
+			"namePlaceholder": "Comece a digitar o nome do jogo...",
+			"nameSearchHint": "Digite para verificar se o jogo já existe neste sistema.",
+			"existingTitle": "Este jogo já existe",
+			"existingBody": "Já existe um jogo com este nome neste sistema. Abra-o e contribua lá em vez de criar um duplicado.",
+			"openGame": "Abrir jogo",
+			"fieldsTitle": "Detalhes",
+			"mediaTitle": "Mídia",
+			"submit": "Adicionar jogo",
+			"submitted": "Enviado para revisão. Obrigado!",
+			"submittedTitle": "Jogo enviado",
+			"submittedBody": "Seu novo jogo está em revisão. Você pode acompanhá-lo em Minhas revisões.",
+			"addAnother": "Adicionar outro jogo",
+			"needSystem": "Selecione um sistema.",
+			"needName": "Digite o nome do jogo."
+		},
 		"browse": {
 			"subtitle": "Navegue pelos sistemas e seus jogos. Filtre por tipo e pesquise."
 		},
@@ -454,6 +479,7 @@
 		}
 	},
 	"metadataAdmin": {
+		"newGame": "Jogo novo",
 		"subtitle": "Aprove ou rejeite envios de metadados/mídia de colaboradores.",
 		"noSubmissions": "Nenhum envio neste estado.",
 		"gameContribution": "Contribuição de jogo",

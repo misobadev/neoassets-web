@@ -180,6 +180,10 @@
 		"title": "報酬とスクレイピングのガイド",
 		"subtitle": "ポイントの獲得方法、スレッドの追加解放、NeoAssetsでのスクレイピング方法。",
 		"earn": {
+			"newGame": {
+				"label": "新規ゲームボーナス",
+				"note": "新しいゲームが承認されたときに、フィールドとメディアに加えて得られる追加XP。"
+			},
 			"title": "ポイントを獲得",
 			"introPrefix": "あなたが行った投稿が",
 			"introApproved": "承認",
@@ -360,7 +364,28 @@
 		"rejected": "修正が必要"
 	},
 	"metadata": {
-		"title": "メタデータ",
+		"title": "ゲームメタデータ",
+		"newGame": {
+			"addButton": "ゲームを追加",
+			"title": "ゲームを追加",
+			"subtitle": "カタログに新しいゲームを追加します。公開前にレビューされます。",
+			"system": "システム",
+			"systemPlaceholder": "システムを選択",
+			"namePlaceholder": "ゲーム名を入力...",
+			"nameSearchHint": "入力して、このシステムにゲームが既に存在するか確認します。",
+			"existingTitle": "このゲームは既に存在します",
+			"existingBody": "この名前のゲームは既にこのシステムにあります。重複を作成せず、それを開いて投稿してください。",
+			"openGame": "ゲームを開く",
+			"fieldsTitle": "詳細",
+			"mediaTitle": "メディア",
+			"submit": "ゲームを追加",
+			"submitted": "レビューに提出しました。ありがとう！",
+			"submittedTitle": "ゲームを送信しました",
+			"submittedBody": "新しいゲームはレビュー中です。マイレビューで確認できます。",
+			"addAnother": "別のゲームを追加",
+			"needSystem": "システムを選択してください。",
+			"needName": "ゲーム名を入力してください。"
+		},
 		"browse": {
 			"subtitle": "システムとそのゲームを閲覧できます。種類で絞り込み、検索できます。"
 		},
@@ -454,6 +479,7 @@
 		}
 	},
 	"metadataAdmin": {
+		"newGame": "新しいゲーム",
 		"subtitle": "投稿者のメタデータ/メディア投稿を承認または却下します。",
 		"noSubmissions": "この状態の投稿はありません。",
 		"gameContribution": "ゲームの投稿",

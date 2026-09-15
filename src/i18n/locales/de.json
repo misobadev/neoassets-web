@@ -180,6 +180,10 @@
 		"title": "Belohnungen & Scraping-Leitfaden",
 		"subtitle": "Wie du Punkte verdienst, mehr Threads freischaltest und mit NeoAssets scrapst.",
 		"earn": {
+			"newGame": {
+				"label": "Bonus für neues Spiel",
+				"note": "Zusätzliche XP zusätzlich zu Feldern und Medien, wenn ein neues Spiel genehmigt wird."
+			},
 			"title": "Punkte verdienen",
 			"introPrefix": "Du erhältst Punkte, jedes Mal, wenn ein Beitrag von dir",
 			"introApproved": "genehmigt",
@@ -360,7 +364,28 @@
 		"rejected": "Änderungen erforderlich"
 	},
 	"metadata": {
-		"title": "Metadaten",
+		"title": "Spiel-Metadaten",
+		"newGame": {
+			"addButton": "Spiel hinzufügen",
+			"title": "Spiel hinzufügen",
+			"subtitle": "Füge dem Katalog ein neues Spiel hinzu. Es wird vor der Veröffentlichung geprüft.",
+			"system": "System",
+			"systemPlaceholder": "System auswählen",
+			"namePlaceholder": "Spielnamen eingeben...",
+			"nameSearchHint": "Tippe, um zu prüfen, ob das Spiel in diesem System bereits existiert.",
+			"existingTitle": "Dieses Spiel existiert bereits",
+			"existingBody": "Ein Spiel mit diesem Namen ist bereits in diesem System. Öffne es und trage dort bei, statt ein Duplikat zu erstellen.",
+			"openGame": "Spiel öffnen",
+			"fieldsTitle": "Details",
+			"mediaTitle": "Medien",
+			"submit": "Spiel hinzufügen",
+			"submitted": "Zur Prüfung eingereicht. Danke!",
+			"submittedTitle": "Spiel eingereicht",
+			"submittedBody": "Dein neues Spiel ist in Prüfung. Du kannst es unter Meine Prüfungen verfolgen.",
+			"addAnother": "Weiteres Spiel hinzufügen",
+			"needSystem": "Wähle ein System.",
+			"needName": "Gib den Spielnamen ein."
+		},
 		"browse": {
 			"subtitle": "Durchsuche Systeme und ihre Spiele. Nach Typ filtern und suchen."
 		},
@@ -454,6 +479,7 @@
 		}
 	},
 	"metadataAdmin": {
+		"newGame": "Neues Spiel",
 		"subtitle": "Metadaten-/Medien-Einreichungen von Beitragenden genehmigen oder ablehnen.",
 		"noSubmissions": "Keine Einreichungen in diesem Status.",
 		"gameContribution": "Spiel-Beitrag",

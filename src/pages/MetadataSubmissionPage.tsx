@@ -16,6 +16,7 @@ import {
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import { uploadWithProgress } from "../lib/upload";
+import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo, toWebp } from "../lib/media";
 
 const TEXT_TYPES = [
 	{ key: "name", label: "metadataSubmit.textTypes.name" },
@@ -44,87 +45,9 @@ const MEDIA_LABEL: Record<MediaKind, string> = {
 const IMAGE_KINDS: MediaKind[] = ["cover", "screenshot", "logo", "fanart"];
 const VIDEO_KIND: MediaKind = "video";
 
-const IMAGE_ACCEPT = ".webp,.png,.jpg,.jpeg,.gif";
-const VIDEO_ACCEPT = ".webm,.mp4,.mov,.mkv,.avi,.m4v,.mpg,.mpeg,.ts,.ogv,.wmv,.flv";
-
-const VIDEO_MIN_SECONDS = 30;
-const VIDEO_MAX_SECONDS = 45;
-const VIDEO_FPS = 60;
-// English descriptions are translated sentence by sentence by the worker; this
-// is the maximum the worker accepts (and what the backend enforces).
-const MAX_DESCRIPTION_LENGTH = 1500;
-// The requirement shown to users is 60 fps, but we accept a small tolerance
-// range internally so encoders that report 59.94/60.x are not rejected.
-const VIDEO_FPS_MIN = 50;
-const VIDEO_FPS_MAX = 70;
-
-// Common retro/console aspect ratios the video should match.
-const ACCEPTED_ASPECTS: { label: string; ratio: number }[] = [
-	{ label: "4:3", ratio: 4 / 3 },
-	{ label: "3:2", ratio: 3 / 2 },
-	{ label: "16:9", ratio: 16 / 9 },
-	{ label: "1:1", ratio: 1 },
-];
-
 function mediaUrl(m: { object_key: string; created_at?: string }): string {
 	const url = cdnUrl(m.object_key);
 	return m.created_at ? `${url}?v=${encodeURIComponent(m.created_at)}` : url;
-}
-
-function aspectLabel(w: number, h: number): string {
-	const ratio = w / h;
-	let best = `${Math.round(w)}x${Math.round(h)}`;
-	let bestDiff = Number.POSITIVE_INFINITY;
-	for (const a of ACCEPTED_ASPECTS) {
-		const diff = Math.abs(a.ratio - ratio);
-		if (diff < bestDiff) {
-			bestDiff = diff;
-			best = `${Math.round(w)}x${Math.round(h)} (${a.label})`;
-		}
-	}
-	return best;
-}
-
-// toWebp converts any picked image to WebP. With `target` the image is
-// cover-cropped to that aspect ratio and scaled to exactly that size (fanart:
-// 1920x1080 16:9). With `maxSize` the image is only downscaled so its longest
-// side fits that size, preserving the aspect ratio (logo/cover: max 1024px).
-async function toWebp(file: File, target?: { w: number; h: number }, maxSize?: number): Promise<File> {
-	const bitmap = await createImageBitmap(file);
-	let sx = 0;
-	let sy = 0;
-	let sw = bitmap.width;
-	let sh = bitmap.height;
-	let outW = bitmap.width;
-	let outH = bitmap.height;
-	if (target) {
-		const targetRatio = target.w / target.h;
-		const srcRatio = bitmap.width / bitmap.height;
-		if (srcRatio > targetRatio) {
-			sw = Math.round(bitmap.height * targetRatio);
-			sx = Math.round((bitmap.width - sw) / 2);
-		} else {
-			sh = Math.round(bitmap.width / targetRatio);
-			sy = Math.round((bitmap.height - sh) / 2);
-		}
-		outW = target.w;
-		outH = target.h;
-	} else if (maxSize && (bitmap.width > maxSize || bitmap.height > maxSize)) {
-		const scale = maxSize / Math.max(bitmap.width, bitmap.height);
-		outW = Math.round(bitmap.width * scale);
-		outH = Math.round(bitmap.height * scale);
-	}
-	const canvas = document.createElement("canvas");
-	canvas.width = outW;
-	canvas.height = outH;
-	const ctx = canvas.getContext("2d");
-	if (!ctx) throw new Error("canvas is not supported in this browser");
-	ctx.drawImage(bitmap, sx, sy, sw, sh, 0, 0, outW, outH);
-	const blob: Blob = await new Promise((resolve, reject) =>
-		canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("could not encode WebP"))), "image/webp", 0.92),
-	);
-	const name = file.name.replace(/\.[^.]+$/, "") + ".webp";
-	return new File([blob], name, { type: "image/webp" });
 }
 
 interface Draft {
@@ -216,76 +139,41 @@ export default function MetadataSubmissionPage() {
 		// Load the video to validate format / duration / fps / aspect ratio
 		// before upload. FPS is measured by sampling frames over a short muted
 		// playback (browsers do not expose it directly).
-		const url = URL.createObjectURL(file);
-		const video = document.createElement("video");
-		video.preload = "auto";
-		video.muted = true;
-		video.playsInline = true;
-		video.src = url;
 		let cancelled = false;
-
-		const finish = (fps: number) => {
-			if (cancelled) return;
-			const duration = video.duration;
-			const width = video.videoWidth;
-			const height = video.videoHeight;
-			const errors: string[] = [];
-			const allowed = [".webm", ".mp4", ".mov", ".mkv", ".avi", ".m4v", ".mpg", ".mpeg", ".ts", ".ogv", ".wmv", ".flv"];
-			if (!allowed.some((e) => file.name.toLowerCase().endsWith(e))) {
-				errors.push(t("metadataSubmit.errors.format"));
-			}
-			if (duration < VIDEO_MIN_SECONDS - 0.5) {
-				errors.push(t("metadataSubmit.errors.durationMin", { min: VIDEO_MIN_SECONDS, current: duration.toFixed(1) }));
-			}
-			if (duration > VIDEO_MAX_SECONDS + 0.5) {
-				errors.push(t("metadataSubmit.errors.durationMax", { max: VIDEO_MAX_SECONDS, current: duration.toFixed(1) }));
-			}
-			if (width <= 0 || height <= 0) {
-				errors.push(t("metadataSubmit.errors.dimensions"));
-			}
-			const ratio = width / height;
-			const aspectOk = ACCEPTED_ASPECTS.some((a) => Math.abs(a.ratio - ratio) < 0.03);
-			if (width > 0 && height > 0 && !aspectOk) {
-				errors.push(t("metadataSubmit.errors.aspect", { ratio: (width / height).toFixed(2) }));
-			}
-			if (fps > 0 && (fps < VIDEO_FPS_MIN || fps > VIDEO_FPS_MAX)) {
-				errors.push(t("metadataSubmit.errors.frameRate", { fps: VIDEO_FPS, detected: fps }));
-			}
-			setVideoMeta({ duration, width, height, fps, aspect: aspectLabel(width, height) });
-			setFileError(errors.length ? errors.join(" ") : null);
-		};
-
-		video.onloadedmetadata = () => {
-			if (!video.requestVideoFrameCallback) {
-				finish(0);
-				return;
-			}
-			let frames = 0;
-			let first = -1;
-			const onFrame = (_now: number, meta: { mediaTime: number }) => {
+		measureVideo(file)
+			.then(({ duration, width, height, fps }) => {
 				if (cancelled) return;
-				if (first < 0) first = meta.mediaTime;
-				frames++;
-				const elapsed = meta.mediaTime - first;
-				if (elapsed >= 0.6) {
-					video.pause();
-					finish(Math.round(frames / elapsed));
-				} else {
-					video.requestVideoFrameCallback(onFrame);
+				const errors: string[] = [];
+				if (!VIDEO_ACCEPT.split(",").some((e) => file.name.toLowerCase().endsWith(e))) {
+					errors.push(t("metadataSubmit.errors.format"));
 				}
-			};
-			video.requestVideoFrameCallback(onFrame);
-			video.play().catch(() => finish(0));
-		};
-		video.onerror = () => {
-			if (cancelled) return;
-			setFileError(t("metadataSubmit.errors.readVideo"));
-			setVideoMeta(null);
-		};
+				if (duration < VIDEO_MIN_SECONDS - 0.5) {
+					errors.push(t("metadataSubmit.errors.durationMin", { min: VIDEO_MIN_SECONDS, current: duration.toFixed(1) }));
+				}
+				if (duration > VIDEO_MAX_SECONDS + 0.5) {
+					errors.push(t("metadataSubmit.errors.durationMax", { max: VIDEO_MAX_SECONDS, current: duration.toFixed(1) }));
+				}
+				if (width <= 0 || height <= 0) {
+					errors.push(t("metadataSubmit.errors.dimensions"));
+				}
+				const ratio = width / height;
+				const aspectOk = ACCEPTED_ASPECTS.some((a) => Math.abs(a.ratio - ratio) < 0.03);
+				if (width > 0 && height > 0 && !aspectOk) {
+					errors.push(t("metadataSubmit.errors.aspect", { ratio: (width / height).toFixed(2) }));
+				}
+				if (fps > 0 && (fps < VIDEO_FPS_MIN || fps > VIDEO_FPS_MAX)) {
+					errors.push(t("metadataSubmit.errors.frameRate", { fps: VIDEO_FPS, detected: fps }));
+				}
+				setVideoMeta({ duration, width, height, fps, aspect: aspectLabel(width, height) });
+				setFileError(errors.length ? errors.join(" ") : null);
+			})
+			.catch(() => {
+				if (cancelled) return;
+				setFileError(t("metadataSubmit.errors.readVideo"));
+				setVideoMeta(null);
+			});
 		return () => {
 			cancelled = true;
-			video.pause();
-			URL.revokeObjectURL(url);
 		};
 	}, [isVideo, file]);
 

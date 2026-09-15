@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChevronDown, Clapperboard, Download, FileText, Globe, Image, ImagePlus, Images, Languages, Search, Server, Tag } from "lucide-react";
+import { ChevronDown, Clapperboard, Download, FileText, Globe, Image, ImagePlus, Images, Languages, Plus, Search, Server, Tag } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import { cdnUrl, fetchMetadataGamesBySystem, fetchMetadataSystems, searchMetadataGames, type GameSummary, type MetadataSystem } from "../lib/api";
@@ -378,11 +378,17 @@ export default function MetadataBrowse() {
 
 	return (
 		<div className="space-y-6">
-			<div>
-				<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("metadata.title")}</h1>
-				<p className="text-[var(--color-base-content)]/60 text-sm pt-2">
-					{t("metadata.browse.subtitle")}
-				</p>
+			<div className="flex items-start justify-between gap-3">
+				<div>
+					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("metadata.title")}</h1>
+					<p className="text-[var(--color-base-content)]/60 text-sm pt-2">
+						{t("metadata.browse.subtitle")}
+					</p>
+				</div>
+				<Link to={systemId ? `/app/metadata/${systemId}/new` : "/app/metadata/new"} className="btn btn-primary btn-sm shrink-0">
+					<Plus className="w-4 h-4" />
+					{t("metadata.newGame.addButton")}
+				</Link>
 			</div>
 
 			{/* System selector (flyout with stats) */}

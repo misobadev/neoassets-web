@@ -15,6 +15,7 @@ import AdminMenu from "./pages/AdminMenu";
 import MetadataBrowse from "./pages/MetadataBrowse";
 import MetadataGameDetail from "./pages/MetadataGameDetail";
 import MetadataSubmissionPage from "./pages/MetadataSubmissionPage";
+import NewGamePage from "./pages/NewGamePage";
 import MetadataAdminView from "./pages/MetadataAdminView";
 import DashboardsPage from "./pages/DashboardPage";
 import AdminUsersView from "./pages/AdminUsersView";
@@ -57,7 +58,9 @@ createRoot(document.getElementById("root")!).render(
 						<Route path="admin/metadata" element={<RequireAuth><MetadataAdminView /></RequireAuth>} />
 						<Route path="admin/users" element={<RequireAuth><AdminUsersView /></RequireAuth>} />
 						<Route path="metadata" element={<MetadataBrowse />} />
+						<Route path="metadata/new" element={<RequireAuth><NewGamePage /></RequireAuth>} />
 						<Route path="metadata/:systemId" element={<MetadataBrowse />} />
+						<Route path="metadata/:systemId/new" element={<RequireAuth><NewGamePage /></RequireAuth>} />
 						<Route path="metadata/:systemId/game/:gameId" element={<MetadataGameDetail />} />
 						<Route path="metadata/:systemId/game/:gameId/submit" element={<RequireAuth><MetadataSubmissionPage /></RequireAuth>} />
 						<Route path="metadata/admin" element={<Navigate to="/app/admin/metadata" replace />} />
