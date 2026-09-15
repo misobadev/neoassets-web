@@ -268,7 +268,7 @@ export default function ProfilePage() {
 							<input ref={avatarInputRef} type="file" accept=".webp,.gif,.png,.jpg,.jpeg" className="hidden" onChange={onAvatarSelected} />
 						</div>
 					</div>
-					<span className={`badge ${me.role === "admin" ? "badge-primary" : me.role === "reviewer" ? "badge-warning" : "badge-outline"} !px-2 ml-2`}>
+					<span className={`badge ${me.role === "admin" ? "badge-rose" : me.role === "reviewer" ? "badge-purple" : "badge-outline"} !px-2 ml-2`}>
 						<ShieldCheck className="w-3.5 h-3.5 mr-1" />
 						{t("role." + me.role, { defaultValue: me.role })}
 					</span>

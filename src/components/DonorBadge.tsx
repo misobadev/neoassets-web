@@ -7,7 +7,7 @@ export default function DonorBadge({ status, className = "" }: { status?: string
 	if (status !== "supporter" && status !== "monthly_supporter") return null;
 	const monthly = status === "monthly_supporter";
 	return (
-		<span className={`badge ${monthly ? "badge-warning" : "badge-info"} gap-1 ${className}`} title={t("donor." + status)}>
+		<span className={`badge ${monthly ? "badge-lime" : "badge-green"} gap-1 ${className}`} title={t("donor." + status)}>
 			{monthly ? <Sparkles className="w-3.5 h-3.5" /> : <HeartHandshake className="w-3.5 h-3.5" />}
 			{t("donor." + status)}
 		</span>

@@ -94,7 +94,7 @@ export default function PublicProfilePage() {
 					<div className="min-w-0 flex-1">
 						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{profile.username}</h1>
 						<p className="text-sm text-[var(--color-base-content)]/60 flex items-center gap-2 flex-wrap">
-							<span className={`badge ${profile.role === "admin" ? "badge-primary" : profile.role === "reviewer" ? "badge-warning" : "badge-outline"} !px-2`}>{t("role." + profile.role, { defaultValue: profile.role })}</span>
+							<span className={`badge ${profile.role === "admin" ? "badge-rose" : profile.role === "reviewer" ? "badge-purple" : "badge-outline"} !px-2`}>{t("role." + profile.role, { defaultValue: profile.role })}</span>
 							<DonorBadge status={profile.donor_status} />
 							<span>{t("publicProfile.joined", { date: formatDate(profile.created_at) })}</span>
 						</p>
