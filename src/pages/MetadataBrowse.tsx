@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChevronDown, ChevronLeft, ChevronRight, Clapperboard, Download, FileText, Globe, Image, ImagePlus, Images, Languages, Search, Server, Tag } from "lucide-react";
+import { ChevronDown, Clapperboard, Download, FileText, Globe, Image, ImagePlus, Images, Languages, Search, Server, Tag } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import { cdnUrl, fetchMetadataGamesBySystem, fetchMetadataSystems, searchMetadataGames, type GameSummary, type MetadataSystem } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
+import Pagination from "../components/Pagination";
 import { usePageTitle } from "../lib/seo";
 
 // LIMIT is a multiple of 3 so the 3-column grid always fills its last row.
@@ -265,23 +266,6 @@ function GameCard({ g }: { g: GameSummary }) {
 
 // Pagination renders the prev/next controls. It is shown both above and below
 // the games grid so the user does not have to scroll back to the top.
-function Pagination({ page, totalPages, loading, onChange }: { page: number; totalPages: number; loading: boolean; onChange: (page: number) => void }) {
-	const { t } = useTranslation();
-	return (
-		<div className="flex items-center justify-between gap-3">
-			<button className="btn btn-outline btn-sm" disabled={page <= 1 || loading} onClick={() => onChange(page - 1)}>
-				<ChevronLeft className="w-4 h-4" />
-				{t("metadata.prev")}
-			</button>
-			<p className="text-sm text-[var(--color-base-content)]/50">{t("metadata.pageOf", { page, totalPages })}</p>
-			<button className="btn btn-outline btn-sm" disabled={page >= totalPages || loading} onClick={() => onChange(page + 1)}>
-				{t("metadata.next")}
-				<ChevronRight className="w-4 h-4" />
-			</button>
-		</div>
-	);
-}
-
 export default function MetadataBrowse() {
 	const { t } = useTranslation();
 	usePageTitle(t("metadata.title"));
@@ -518,7 +502,7 @@ export default function MetadataBrowse() {
 			</div>
 
 			{/* Pagination (top) */}
-			<Pagination page={page} totalPages={totalPages} loading={loading} onChange={goPage} />
+			<Pagination page={page} totalPages={totalPages} disabled={loading} onChange={goPage} />
 
 			{error ? (
 				<p className="text-sm text-[var(--color-error)] py-6 text-center">{error}</p>
@@ -534,7 +518,7 @@ export default function MetadataBrowse() {
 						))}
 					</div>
 					{/* Pagination (bottom) */}
-					<Pagination page={page} totalPages={totalPages} loading={loading} onChange={goPage} />
+					<Pagination page={page} totalPages={totalPages} disabled={loading} onChange={goPage} />
 				</>
 			) : null}
 		</div>

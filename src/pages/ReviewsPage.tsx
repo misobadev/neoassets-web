@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, X } from "lucide-react";
 import { cdnUrl, fetchMetadataGameDetail, fetchPackDetail, type MediaKind, type MetadataMedia, type PackDetail } from "../lib/api";
 import { formatDate } from "../lib/format";
+import Pagination from "../components/Pagination";
 import { useReviews, type ReviewItem, type ReviewStatus } from "../lib/reviews";
+
+const PER_PAGE = 20;
 
 const STATUS_BADGE: Record<ReviewStatus, string> = {
 	pending: "badge-warning",
@@ -42,9 +45,14 @@ export default function ReviewsPage() {
 	const { t } = useTranslation();
 	const { items, totalXP, loading, markAllSeen, refresh } = useReviews();
 	const [statusFilter, setStatusFilter] = useState<ReviewStatus | "">("");
+	const [page, setPage] = useState(1);
 	const [selected, setSelected] = useState<ReviewItem | null>(null);
 	const [gameMedia, setGameMedia] = useState<MetadataMedia[]>([]);
 	const [pack, setPack] = useState<PackDetail | null>(null);
+
+	const visible = items.filter((i) => !statusFilter || i.status === statusFilter);
+	const totalPages = Math.max(1, Math.ceil(visible.length / PER_PAGE));
+	const pageItems = visible.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
 	// Refetch when the page opens so a review approved elsewhere (e.g. from the
 	// admin view in the same session) is not shown as still pending.
@@ -55,6 +63,16 @@ export default function ReviewsPage() {
 	useEffect(() => {
 		markAllSeen();
 	}, [markAllSeen]);
+
+	// Reset to the first page when the filter changes.
+	useEffect(() => {
+		setPage(1);
+	}, [statusFilter]);
+
+	// Keep the page in range when the list shrinks (e.g. after a refetch).
+	useEffect(() => {
+		if (page > totalPages) setPage(totalPages);
+	}, [page, totalPages]);
 
 	// Approved metadata media lives on the game; approved SAP art lives on the
 	// pack. Fetch the target so the review detail can show what was published.
@@ -96,7 +114,6 @@ export default function ReviewsPage() {
 		return v === undefined || v === null ? "" : String(v);
 	}
 
-	const visible = items.filter((i) => !statusFilter || i.status === statusFilter);
 	const filters: { label: string; value: ReviewStatus | "" }[] = [
 		{ label: t("common.all"), value: "" },
 		{ label: t("metadataStatus.pending"), value: "pending" },
@@ -146,8 +163,9 @@ export default function ReviewsPage() {
 			) : visible.length === 0 ? (
 				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("reviews.empty")}</p>
 			) : (
-				<div className="space-y-3">
-					{visible.map((r) => (
+				<>
+					<div className="space-y-3">
+						{pageItems.map((r) => (
 						<div key={r.key} className="card card-hover p-4 cursor-pointer" onClick={() => setSelected(r)}>
 							<div className="flex items-center gap-3">
 								{r.cover ? (
@@ -184,7 +202,9 @@ export default function ReviewsPage() {
 							</div>
 						</div>
 					))}
-				</div>
+					</div>
+					{totalPages > 1 ? <Pagination page={page} totalPages={totalPages} onChange={setPage} /> : null}
+				</>
 			)}
 
 			{selected ? (
