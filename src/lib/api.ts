@@ -739,6 +739,24 @@ export function setDonorStatus(id: string, status: string): Promise<User> {
 	return api<User>(`/api/v1/admin/users/${id}/donor`, { method: "PUT", token: adminToken(), body: { status } });
 }
 
+// DonationImportItem is one normalized supporter row for the historical import.
+export interface DonationImportItem {
+	email: string;
+	from_name?: string;
+	kind: "subscription" | "one_time";
+	amount_cents: number;
+	currency?: string;
+	occurred_at?: string;
+	external_id?: string;
+	tier_name?: string;
+}
+
+// importDonations backfills historical donations (admin only). Idempotent by
+// external_id, so re-importing the same export does not duplicate events.
+export function importDonations(donations: DonationImportItem[]): Promise<{ imported: number; linked: number; skipped: number }> {
+	return api("/api/v1/admin/donations/import", { method: "POST", token: adminToken(), body: { donations } });
+}
+
 // ---------------------------------------------------------------------------
 // Scraping API credentials (developer apps + personal API keys)
 // ---------------------------------------------------------------------------

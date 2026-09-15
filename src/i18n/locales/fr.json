@@ -659,6 +659,7 @@
 		}
 	},
 	"nav": {
+		"donations": "Dons",
 		"myReviews": "Ma liste de révisions",
 		"notifications": "Notifications",
 		"menu": "Menu",
@@ -902,6 +903,22 @@
 		"viewGame": "Voir le jeu",
 		"viewPack": "Voir le pack"
 	},
+	"adminDonations": {
+		"title": "Dons",
+		"subtitle": "Importer les dons historiques et actualiser les statuts de donateur.",
+		"hint": "Collez l'export des supporters Ko-fi (séparé par tabulations ou virgules). Les transactions existantes sont mises à jour, pas dupliquées.",
+		"placeholder": "Nom\tE-mail\tOneOff\tMonthly\t...",
+		"parsed": "{{count}} lignes détectées",
+		"import": "Importer",
+		"importing": "Importation...",
+		"preview": "Aperçu",
+		"kind": "Type",
+		"date": "Dernier soutien",
+		"amount": "Total",
+		"monthly": "Mensuel",
+		"oneTime": "Unique",
+		"result": "{{imported}} événements importés, {{linked}} utilisateurs reliés, {{skipped}} ignorés."
+	},
 	"apiDocs": {
 		"title": "API de scraping",
 		"subtitle": "API publique avec identifiants pour les métadonnées et médias de jeux.",
@@ -1020,6 +1037,7 @@
 		"delete": "Supprimer"
 	},
 	"adminMenu": {
+		"donationsBody": "Importer des dons Ko-fi historiques.",
 		"metadataBody": "Examiner les contributions de métadonnées et de médias de jeux.",
 		"sapBody": "Examiner, approuver ou rejeter les soumissions de packs d'art système.",
 		"subtitle": "Outils de modération et d'administration.",

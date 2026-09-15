@@ -138,6 +138,7 @@
 		"prev": "Anterior"
 	},
 	"adminMenu": {
+		"donationsBody": "Importa donaciones históricas de Ko-fi.",
 		"subtitle": "Herramientas de moderación y administración.",
 		"sapBody": "Revisa, aprueba o rechaza envíos de paquetes de arte de sistemas.",
 		"metadataBody": "Revisa contribuciones de metadatos y medios de juegos.",
@@ -640,6 +641,7 @@
 		}
 	},
 	"nav": {
+		"donations": "Donaciones",
 		"myReviews": "Mi lista de revisiones",
 		"notifications": "Notificaciones",
 		"menu": "Menú",
@@ -898,6 +900,22 @@
 		"noComment": "Sin comentario.",
 		"viewGame": "Ver juego",
 		"viewPack": "Ver pack"
+	},
+	"adminDonations": {
+		"title": "Donaciones",
+		"subtitle": "Importa donaciones históricas y actualiza los estados de donante.",
+		"hint": "Pega el export de supporters de Ko-fi (separado por tabulaciones o comas). Las transacciones existentes se actualizan, no se duplican.",
+		"placeholder": "Nombre\tEmail\tOneOff\tMonthly\t...",
+		"parsed": "{{count}} filas detectadas",
+		"import": "Importar",
+		"importing": "Importando...",
+		"preview": "Vista previa",
+		"kind": "Tipo",
+		"date": "Último aporte",
+		"amount": "Total",
+		"monthly": "Mensual",
+		"oneTime": "Único",
+		"result": "Importados {{imported}} eventos, enlazados {{linked}} usuarios, omitidos {{skipped}}."
 	},
 	"apiDocs": {
 		"title": "API de Scraping",

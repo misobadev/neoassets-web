@@ -19,6 +19,7 @@ import NewGamePage from "./pages/NewGamePage";
 import MetadataAdminView from "./pages/MetadataAdminView";
 import DashboardsPage from "./pages/DashboardPage";
 import AdminUsersView from "./pages/AdminUsersView";
+import AdminDonationsView from "./pages/AdminDonationsView";
 import ProfilePage from "./pages/ProfilePage";
 import GuidePage from "./pages/GuidePage";
 import PublicProfilePage from "./pages/PublicProfilePage";
@@ -57,6 +58,7 @@ createRoot(document.getElementById("root")!).render(
 						<Route path="admin/sap/:id" element={<RequireAuth><AdminSubmissionReview /></RequireAuth>} />
 						<Route path="admin/metadata" element={<RequireAuth><MetadataAdminView /></RequireAuth>} />
 						<Route path="admin/users" element={<RequireAuth><AdminUsersView /></RequireAuth>} />
+						<Route path="admin/donations" element={<RequireAuth><AdminDonationsView /></RequireAuth>} />
 						<Route path="metadata" element={<MetadataBrowse />} />
 						<Route path="metadata/new" element={<RequireAuth><NewGamePage /></RequireAuth>} />
 						<Route path="metadata/:systemId" element={<MetadataBrowse />} />

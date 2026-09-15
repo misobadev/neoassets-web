@@ -659,6 +659,7 @@
 		}
 	},
 	"nav": {
+		"donations": "Donasi",
 		"myReviews": "Daftar tinjauan saya",
 		"notifications": "Notifikasi",
 		"menu": "Menu",
@@ -902,6 +903,22 @@
 		"viewGame": "Lihat game",
 		"viewPack": "Lihat pack"
 	},
+	"adminDonations": {
+		"title": "Donasi",
+		"subtitle": "Impor donasi historis dan segarkan status donatur.",
+		"hint": "Tempel ekspor supporter Ko-fi (dipisah tab atau koma). Transaksi yang ada diperbarui, bukan diduplikasi.",
+		"placeholder": "Nama\tEmail\tOneOff\tMonthly\t...",
+		"parsed": "{{count}} baris terdeteksi",
+		"import": "Impor",
+		"importing": "Mengimpor...",
+		"preview": "Pratinjau",
+		"kind": "Jenis",
+		"date": "Terakhir mendukung",
+		"amount": "Total",
+		"monthly": "Bulanan",
+		"oneTime": "Sekali",
+		"result": "Mengimpor {{imported}} peristiwa, menautkan {{linked}} pengguna, melewati {{skipped}}."
+	},
 	"apiDocs": {
 		"title": "API Scraping",
 		"subtitle": "API publik dengan kredensial untuk metadata dan media game.",
@@ -1020,6 +1037,7 @@
 		"delete": "Hapus"
 	},
 	"adminMenu": {
+		"donationsBody": "Impor donasi Ko-fi historis.",
 		"metadataBody": "Tinjau kontribusi metadata dan media game.",
 		"sapBody": "Tinjau, setujui, atau tolak kiriman System Art Pack.",
 		"subtitle": "Alat moderasi dan administrasi.",

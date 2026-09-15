@@ -138,6 +138,7 @@
 		"prev": "Prev"
 	},
 	"adminMenu": {
+		"donationsBody": "Import historical Ko-fi donations.",
 		"subtitle": "Moderation and administration tools.",
 		"sapBody": "Review, approve or reject System Art Pack submissions.",
 		"metadataBody": "Review game metadata and media contributions.",
@@ -640,6 +641,7 @@
 		}
 	},
 	"nav": {
+		"donations": "Donations",
 		"myReviews": "My review list",
 		"notifications": "Notifications",
 		"menu": "Menu",
@@ -898,6 +900,22 @@
 		"noComment": "No comment.",
 		"viewGame": "View game",
 		"viewPack": "View pack"
+	},
+	"adminDonations": {
+		"title": "Donations",
+		"subtitle": "Backfill historical donations and refresh donor statuses.",
+		"hint": "Paste the Ko-fi supporters export (tab or comma separated). Existing transactions are updated, not duplicated.",
+		"placeholder": "Name\tEmail\tOneOff\tMonthly\t...",
+		"parsed": "{{count}} rows parsed",
+		"import": "Import",
+		"importing": "Importing...",
+		"preview": "Preview",
+		"kind": "Type",
+		"date": "Last supported",
+		"amount": "Total",
+		"monthly": "Monthly",
+		"oneTime": "One-time",
+		"result": "Imported {{imported}} events, relinked {{linked}} users, skipped {{skipped}}."
 	},
 	"apiDocs": {
 		"title": "Scraping API",

@@ -659,6 +659,7 @@
 		}
 	},
 	"nav": {
+		"donations": "寄付",
 		"myReviews": "マイレビュー一覧",
 		"notifications": "通知",
 		"menu": "メニュー",
@@ -902,6 +903,22 @@
 		"viewGame": "ゲームを見る",
 		"viewPack": "パックを見る"
 	},
+	"adminDonations": {
+		"title": "寄付",
+		"subtitle": "過去の寄付を取り込み、支援者のステータスを更新します。",
+		"hint": "Ko-fiのサポーターエクスポート（タブまたはカンマ区切り）を貼り付けてください。既存の取引は更新され、重複しません。",
+		"placeholder": "名前\tメール\tOneOff\tMonthly\t...",
+		"parsed": "{{count}} 行を検出",
+		"import": "インポート",
+		"importing": "インポート中...",
+		"preview": "プレビュー",
+		"kind": "種類",
+		"date": "最終支援",
+		"amount": "合計",
+		"monthly": "月額",
+		"oneTime": "単発",
+		"result": "{{imported}} 件をインポート、{{linked}} ユーザーを紐付け、{{skipped}} 件をスキップしました。"
+	},
 	"apiDocs": {
 		"title": "スクレイピングAPI",
 		"subtitle": "ゲームのメタデータとメディア用の、認証が必要な公開APIです。",
@@ -1020,6 +1037,7 @@
 		"delete": "削除"
 	},
 	"adminMenu": {
+		"donationsBody": "過去のKo-fi寄付をインポートします。",
 		"metadataBody": "ゲームのメタデータとメディアの投稿を審査します。",
 		"sapBody": "System Art Pack の投稿を審査・承認・却下します。",
 		"subtitle": "モデレーションと管理のツール。",

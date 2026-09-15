@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { LayoutGrid, ShieldCheck, Tag } from "lucide-react";
+import { LayoutGrid, ShieldCheck, Tag, HeartHandshake } from "lucide-react";
 import { isAdmin } from "../lib/api";
 
 // AdminMenu is the /app/admin landing: cards that link to the review sections.
@@ -9,6 +9,7 @@ export default function AdminMenu() {
 	const admin = isAdmin();
 	const items = [
 		...(admin ? [{ to: "/app/admin/users", icon: <Tag className="w-5 h-5" />, titleKey: "nav.users", bodyKey: "adminMenu.usersBody" }] : []),
+		...(admin ? [{ to: "/app/admin/donations", icon: <HeartHandshake className="w-5 h-5" />, titleKey: "nav.donations", bodyKey: "adminMenu.donationsBody" }] : []),
 		{ to: "/app/admin/metadata", icon: <ShieldCheck className="w-5 h-5" />, titleKey: "nav.metadataReview", bodyKey: "adminMenu.metadataBody" },
 		{ to: "/app/admin/sap", icon: <ShieldCheck className="w-5 h-5" />, titleKey: "nav.sapReview", bodyKey: "adminMenu.sapBody" },
 	];

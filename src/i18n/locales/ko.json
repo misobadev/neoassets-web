@@ -659,6 +659,7 @@
 		}
 	},
 	"nav": {
+		"donations": "후원",
 		"myReviews": "내 검토 목록",
 		"notifications": "알림",
 		"menu": "메뉴",
@@ -902,6 +903,22 @@
 		"viewGame": "게임 보기",
 		"viewPack": "팩 보기"
 	},
+	"adminDonations": {
+		"title": "후원",
+		"subtitle": "과거 후원을 가져오고 후원자 상태를 갱신합니다.",
+		"hint": "Ko-fi 서포터 내보내기(탭 또는 쉼표 구분)를 붙여넣으세요. 기존 거래는 업데이트되며 중복되지 않습니다.",
+		"placeholder": "이름\t이메일\tOneOff\tMonthly\t...",
+		"parsed": "{{count}}개 행 감지",
+		"import": "가져오기",
+		"importing": "가져오는 중...",
+		"preview": "미리보기",
+		"kind": "유형",
+		"date": "마지막 후원",
+		"amount": "합계",
+		"monthly": "월간",
+		"oneTime": "일회성",
+		"result": "{{imported}}건 가져옴, {{linked}}명 연결, {{skipped}}건 건너뜀."
+	},
 	"apiDocs": {
 		"title": "스크래핑 API",
 		"subtitle": "게임 메타데이터와 미디어를 위한 자격 증명 기반 공개 API입니다.",
@@ -1020,6 +1037,7 @@
 		"delete": "삭제"
 	},
 	"adminMenu": {
+		"donationsBody": "과거 Ko-fi 후원을 가져옵니다.",
 		"metadataBody": "게임 메타데이터와 미디어 기여를 검토합니다.",
 		"sapBody": "System Art Pack 제출물을 검토, 승인 또는 거부합니다.",
 		"subtitle": "모데레이션 및 관리 도구.",

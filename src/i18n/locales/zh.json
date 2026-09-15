@@ -659,6 +659,7 @@
 		}
 	},
 	"nav": {
+		"donations": "捐赠",
 		"myReviews": "我的审核列表",
 		"notifications": "通知",
 		"menu": "菜单",
@@ -902,6 +903,22 @@
 		"viewGame": "查看游戏",
 		"viewPack": "查看包"
 	},
+	"adminDonations": {
+		"title": "捐赠",
+		"subtitle": "导入历史捐赠并刷新捐赠者状态。",
+		"hint": "粘贴 Ko-fi 支持者导出（制表符或逗号分隔）。现有交易会被更新，而不会重复。",
+		"placeholder": "姓名\t邮箱\tOneOff\tMonthly\t...",
+		"parsed": "已识别 {{count}} 行",
+		"import": "导入",
+		"importing": "导入中……",
+		"preview": "预览",
+		"kind": "类型",
+		"date": "最后支持",
+		"amount": "总计",
+		"monthly": "月度",
+		"oneTime": "一次性",
+		"result": "已导入 {{imported}} 条，关联 {{linked}} 位用户，跳过 {{skipped}} 条。"
+	},
 	"apiDocs": {
 		"title": "抓取 API",
 		"subtitle": "用于游戏元数据和媒体的、需要凭证的公开 API。",
@@ -1020,6 +1037,7 @@
 		"delete": "删除"
 	},
 	"adminMenu": {
+		"donationsBody": "导入历史 Ko-fi 捐赠。",
 		"metadataBody": "审核游戏元数据和媒体贡献。",
 		"sapBody": "审核、批准或拒绝 System Art Pack 提交。",
 		"subtitle": "审核与管理工具。",

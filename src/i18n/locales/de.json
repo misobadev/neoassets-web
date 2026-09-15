@@ -659,6 +659,7 @@
 		}
 	},
 	"nav": {
+		"donations": "Spenden",
 		"myReviews": "Meine Prüfliste",
 		"notifications": "Benachrichtigungen",
 		"menu": "Menü",
@@ -902,6 +903,22 @@
 		"viewGame": "Spiel ansehen",
 		"viewPack": "Pack ansehen"
 	},
+	"adminDonations": {
+		"title": "Spenden",
+		"subtitle": "Historische Spenden importieren und Spenderstatus aktualisieren.",
+		"hint": "Füge den Ko-fi-Supporter-Export ein (tab- oder kommagetrennt). Vorhandene Transaktionen werden aktualisiert, nicht dupliziert.",
+		"placeholder": "Name\tE-Mail\tOneOff\tMonthly\t...",
+		"parsed": "{{count}} Zeilen erkannt",
+		"import": "Importieren",
+		"importing": "Wird importiert...",
+		"preview": "Vorschau",
+		"kind": "Typ",
+		"date": "Zuletzt unterstützt",
+		"amount": "Gesamt",
+		"monthly": "Monatlich",
+		"oneTime": "Einmalig",
+		"result": "{{imported}} Ereignisse importiert, {{linked}} Nutzer verknüpft, {{skipped}} übersprungen."
+	},
 	"apiDocs": {
 		"title": "Scraping-API",
 		"subtitle": "Öffentliche API mit Anmeldedaten für Spiel-Metadaten und Medien.",
@@ -1020,6 +1037,7 @@
 		"delete": "Löschen"
 	},
 	"adminMenu": {
+		"donationsBody": "Historische Ko-fi-Spenden importieren.",
 		"metadataBody": "Spiel-Metadaten und Medien-Beiträge prüfen.",
 		"sapBody": "System-Art-Pack-Einreichungen prüfen, genehmigen oder ablehnen.",
 		"subtitle": "Moderations- und Verwaltungswerkzeuge.",
