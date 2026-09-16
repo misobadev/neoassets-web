@@ -636,7 +636,7 @@
 			"chooseVideo": "Escolher vídeo",
 			"chooseImage": "Escolher imagem",
 			"imageHint": "Qualquer formato de imagem é aceito; ele é convertido para WebP automaticamente.",
-			"screenshotHint": "Qualquer resolução é aceita desde que respeite a proporção real (DAR - Display Aspect Ratio) do arcade ou da TV original, não necessariamente a resolução interna (alguns sistemas são esticados). Queremos a captura como aparecia em um arcade ou televisor; uma resolução mais alta (ex. 1280x920) é ainda melhor. Não deve ter shaders, caso contrário será rejeitada.",
+			"screenshotHint": "Deve ser uma captura em jogo (gameplay), não da tela de título ou inicial. Qualquer resolução é aceita desde que respeite a proporção real (DAR - Display Aspect Ratio) do arcade ou da TV original, não necessariamente a resolução interna (alguns sistemas são esticados). Queremos a captura como aparecia em um arcade ou televisor; uma resolução mais alta (ex. 1280x920) é ainda melhor. Não deve ter shaders, caso contrário será rejeitada.",
 			"fanartHint": "O fanart é recortado para 1920x1080 (16:9).",
 			"logoHint": "O logo é redimensionado para no máximo 1024px.",
 			"resolution": "Resolução: {{width}}×{{height}} ({{aspect}})",

@@ -636,7 +636,7 @@
 			"chooseVideo": "选择视频",
 			"chooseImage": "选择图片",
 			"imageHint": "接受任何图片格式；会自动转换为 WebP。",
-			"screenshotHint": "只要符合原始街机或电视的真实宽高比（DAR - Display Aspect Ratio），任何分辨率都可以，不一定是内部分辨率（有些系统被拉伸）。我们想要的是街机或电视上看到的那种截图；更高的分辨率（例如 1280x920）更好。不得使用着色器，否则将被拒绝。",
+			"screenshotHint": "必须是游戏进行中的截图（gameplay），而不是标题或开始画面。只要符合原始街机或电视的真实宽高比（DAR - Display Aspect Ratio），任何分辨率都可以，不一定是内部分辨率（有些系统被拉伸）。我们想要的是街机或电视上看到的那种截图；更高的分辨率（例如 1280x920）更好。不得使用着色器，否则将被拒绝。",
 			"fanartHint": "同人图将裁剪为 1920x1080（16:9）。",
 			"logoHint": "标志将缩放至最大 1024px。",
 			"resolution": "分辨率：{{width}}×{{height}}（{{aspect}}）",

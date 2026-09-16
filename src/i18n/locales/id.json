@@ -636,7 +636,7 @@
 			"chooseVideo": "Pilih video",
 			"chooseImage": "Pilih gambar",
 			"imageHint": "Format gambar apa pun diterima; otomatis dikonversi ke WebP.",
-			"screenshotHint": "Resolusi apa pun diterima selama sesuai dengan rasio aspek sebenarnya (DAR - Display Aspect Ratio) dari arcade atau TV asli, tidak harus resolusi internal (beberapa sistem ditarik). Kami ingin screenshot seperti yang terlihat di arcade atau TV; resolusi lebih tinggi (mis. 1280x920) lebih baik. Tidak boleh menggunakan shader, jika tidak akan ditolak.",
+			"screenshotHint": "Harus berupa tangkapan layar saat bermain (gameplay), bukan layar judul atau awal. Resolusi apa pun diterima selama sesuai dengan rasio aspek sebenarnya (DAR - Display Aspect Ratio) dari arcade atau TV asli, tidak harus resolusi internal (beberapa sistem ditarik). Kami ingin screenshot seperti yang terlihat di arcade atau TV; resolusi lebih tinggi (mis. 1280x920) lebih baik. Tidak boleh menggunakan shader, jika tidak akan ditolak.",
 			"fanartHint": "Fanart dipotong menjadi 1920x1080 (16:9).",
 			"logoHint": "Logo diskalakan hingga maks 1024px.",
 			"resolution": "Resolusi: {{width}}×{{height}} ({{aspect}})",

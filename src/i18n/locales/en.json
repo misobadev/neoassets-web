@@ -618,7 +618,7 @@
 			"chooseVideo": "Choose video",
 			"chooseImage": "Choose image",
 			"imageHint": "Any image format is accepted; it is converted to WebP automatically.",
-			"screenshotHint": "Any resolution is accepted as long as it matches the real aspect ratio (DAR - Display Aspect Ratio) of the original arcade board or TV, not necessarily the internal resolution (some systems are stretched). We want the screenshot as it looked on an arcade monitor or TV; a higher resolution (e.g. 1280x920) is even better. It must be captured without shaders, otherwise it will be rejected.",
+			"screenshotHint": "It must be an in-game (gameplay) screenshot, not the title or start screen. Any resolution is accepted as long as it matches the real aspect ratio (DAR - Display Aspect Ratio) of the original arcade board or TV, not necessarily the internal resolution (some systems are stretched). We want the screenshot as it looked on an arcade monitor or TV; a higher resolution (e.g. 1280x920) is even better. It must be captured without shaders, otherwise it will be rejected.",
 			"fanartHint": "Fanart is cropped to 1920x1080 (16:9).",
 			"logoHint": "Logo is scaled to max 1024px.",
 			"resolution": "Resolution: {{width}}×{{height}} ({{aspect}})",
