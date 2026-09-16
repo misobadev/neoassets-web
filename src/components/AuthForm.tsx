@@ -46,6 +46,11 @@ export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed
 			if (data.is_admin && data.admin_token) {
 				localStorage.setItem(ADMIN_TOKEN_KEY, data.admin_token);
 				localStorage.setItem(ADMIN_EMAIL_KEY, data.user.email);
+			} else {
+				// A previous admin session must not leak into this one: a reviewer
+				// (or plain user) logging in clears any stale admin token.
+				localStorage.removeItem(ADMIN_TOKEN_KEY);
+				localStorage.removeItem(ADMIN_EMAIL_KEY);
 			}
 			setAuthMsg(null);
 			onAuthed?.();

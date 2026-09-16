@@ -4,7 +4,7 @@ import { Bell, Gamepad2, HelpCircle, Home, KeyRound, LayoutDashboard, LayoutGrid
 import { useTranslation } from "react-i18next";
 import LanguageSelect from "../components/LanguageSelect";
 import { useReviews } from "../lib/reviews";
-import { userUsername, userRole, userToken, isAdmin, isReviewer, USER_TOKEN_KEY, USER_EMAIL_KEY, USER_NAME_KEY, USER_ROLE_KEY, ADMIN_TOKEN_KEY, ADMIN_EMAIL_KEY } from "../lib/api";
+import { userUsername, userRole, userToken, isAdmin, isReviewer, fetchMe, USER_TOKEN_KEY, USER_EMAIL_KEY, USER_NAME_KEY, USER_ROLE_KEY, ADMIN_TOKEN_KEY, ADMIN_EMAIL_KEY } from "../lib/api";
 
 const THEME_KEY = "ns-theme";
 const SIDEBAR_KEY = "ns-sidebar-collapsed";
@@ -77,6 +77,25 @@ export default function AppPage() {
 	useEffect(() => {
 		setAuthed(!!userToken());
 	}, [location.pathname]);
+
+	// Refresh the stored role from the server so a promotion to reviewer/admin
+	// (or a demotion) takes effect without logging out and back in. Reviewers
+	// get the admin overview menu; users/donations stay admin-only.
+	const [, setRoleTick] = useState(0);
+	useEffect(() => {
+		if (!authed) return;
+		let cancelled = false;
+		fetchMe()
+			.then((u) => {
+				if (cancelled || !u.role || userRole() === u.role) return;
+				localStorage.setItem(USER_ROLE_KEY, u.role);
+				setRoleTick((n) => n + 1);
+			})
+			.catch(() => {});
+		return () => {
+			cancelled = true;
+		};
+	}, [authed]);
 
 	// Simple dark/light toggle: the theme class on <html> flips instantly and
 	// Tailwind's color variables repaint the whole app.
