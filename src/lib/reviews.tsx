@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { fetchMyMetadataSubmissions, fetchMySubmissions, userToken } from "./api";
+import { fetchMyMetadataSubmissions, fetchMySubmissions, userToken, type MetadataSubmission, type SubmissionDetail } from "./api";
 
 // A review item is one of the current user's contributions (metadata or system
 // art pack) with its review state. There is no notifications table: the list is
@@ -50,12 +50,15 @@ function saveSeen(ids: string[]) {
 	} catch {}
 }
 
-async function loadReviews(): Promise<ReviewItem[]> {
-	const [meta, sap] = await Promise.all([
-		fetchMyMetadataSubmissions().catch(() => []),
-		fetchMySubmissions().catch(() => []),
-	]);
+// REVIEW_PAGE is how many items each source contributes to the review feed. The
+// badge only needs the newest page; the Reviews page grows it per page.
+export const REVIEW_PAGE = 20;
+// STALE_MS bounds how often the badge refetches when the tab regains focus.
+const STALE_MS = 60_000;
 
+// buildReviewItems merges the user's metadata and system art pack submissions
+// into the combined, date-sorted review feed.
+export function buildReviewItems(meta: MetadataSubmission[], sap: SubmissionDetail[]): ReviewItem[] {
 	const items: ReviewItem[] = [];
 	for (const m of meta) {
 		if (m.status === "created") continue;
@@ -102,6 +105,27 @@ async function loadReviews(): Promise<ReviewItem[]> {
 	return items.sort((a, b) => (a.at < b.at ? 1 : -1));
 }
 
+export interface ReviewsData {
+	items: ReviewItem[];
+	total: number;
+	totalXP: number;
+}
+
+// loadReviews fetches the newest `limit` review items from each source (the top
+// N of the merged feed is contained in the union of the top N of both) and
+// builds the combined list. status filters by review state.
+export async function loadReviews(limit: number, status = ""): Promise<ReviewsData> {
+	const [meta, sap] = await Promise.all([
+		fetchMyMetadataSubmissions({ limit, status }).catch(() => ({ items: [], total: 0, totalXP: 0 })),
+		fetchMySubmissions({ limit, status }).catch(() => ({ items: [], total: 0, totalXP: 0 })),
+	]);
+	return {
+		items: buildReviewItems(meta.items, sap.items),
+		total: meta.total + sap.total,
+		totalXP: meta.totalXP + sap.totalXP,
+	};
+}
+
 interface ReviewsContextValue {
 	items: ReviewItem[];
 	unread: number;
@@ -116,17 +140,22 @@ const ReviewsContext = createContext<ReviewsContextValue | null>(null);
 export function ReviewsProvider({ children }: { children: ReactNode }) {
 	const [items, setItems] = useState<ReviewItem[]>([]);
 	const [seen, setSeen] = useState<string[]>(() => loadSeen() ?? []);
+	const [totalXP, setTotalXP] = useState(0);
 	const [loading, setLoading] = useState(false);
 	// On the very first run (no persisted state) the current reviews are marked
 	// as already seen, so only reviews that arrive afterwards raise the badge.
 	const initialized = useRef(loadSeen() !== null);
+	// lastFetch gates the focus refresh so the badge is not refetched on every
+	// tab switch.
+	const lastFetch = useRef(0);
 
 	const refresh = useCallback(() => {
 		if (!userToken()) return;
 		setLoading(true);
-		loadReviews()
-			.then((list) => {
+		loadReviews(REVIEW_PAGE)
+			.then(({ items: list, totalXP: xp }) => {
 				setItems(list);
+				setTotalXP(xp);
 				if (!initialized.current) {
 					const keys = list.map((i) => i.key);
 					setSeen(keys);
@@ -134,7 +163,10 @@ export function ReviewsProvider({ children }: { children: ReactNode }) {
 					initialized.current = true;
 				}
 			})
-			.finally(() => setLoading(false));
+			.finally(() => {
+				setLoading(false);
+				lastFetch.current = Date.now();
+			});
 	}, []);
 
 	useEffect(() => {
@@ -150,12 +182,18 @@ export function ReviewsProvider({ children }: { children: ReactNode }) {
 		if (tok === tokenRef.current) return;
 		tokenRef.current = tok;
 		if (tok) refresh();
-		else setItems([]);
+		else {
+			setItems([]);
+			setTotalXP(0);
+		}
 	});
 
-	// Keep the badge fresh when the user comes back to the tab.
+	// Keep the badge fresh when the user comes back to the tab, but not more
+	// often than STALE_MS.
 	useEffect(() => {
-		const onFocus = () => refresh();
+		const onFocus = () => {
+			if (Date.now() - lastFetch.current > STALE_MS) refresh();
+		};
 		window.addEventListener("focus", onFocus);
 		return () => window.removeEventListener("focus", onFocus);
 	}, [refresh]);
@@ -167,7 +205,6 @@ export function ReviewsProvider({ children }: { children: ReactNode }) {
 	}, [items]);
 
 	const unread = useMemo(() => items.filter((i) => i.status !== "pending" && !seen.includes(i.key)).length, [items, seen]);
-	const totalXP = useMemo(() => items.reduce((sum, i) => sum + (i.status === "approved" ? i.xp : 0), 0), [items]);
 
 	return <ReviewsContext.Provider value={{ items, unread, totalXP, loading, refresh, markAllSeen }}>{children}</ReviewsContext.Provider>;
 }

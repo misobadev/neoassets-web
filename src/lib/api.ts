@@ -603,14 +603,35 @@ export function submitMetadataSubmission(id: string): Promise<MetadataSubmission
 	return api<MetadataSubmission>(`/api/v1/metadata/submissions/${id}/submit`, { method: "POST", token: userToken() });
 }
 
-export function fetchMyMetadataSubmissions(): Promise<MetadataSubmission[]> {
-	return api<{ submissions: MetadataSubmission[] }>("/api/v1/auth/metadata/submissions", { token: userToken() }).then((d) => d.submissions || []);
+export interface PagedList<T> {
+	items: T[];
+	total: number;
+	totalXP: number;
+}
+
+function pagedQuery(opts?: { limit?: number; offset?: number; status?: string }): string {
+	const p = new URLSearchParams();
+	if (opts?.limit) p.set("limit", String(opts.limit));
+	if (opts?.offset) p.set("offset", String(opts.offset));
+	if (opts?.status) p.set("status", opts.status);
+	const q = p.toString();
+	return q ? `?${q}` : "";
+}
+
+export function fetchMyMetadataSubmissions(opts?: { limit?: number; offset?: number; status?: string }): Promise<PagedList<MetadataSubmission>> {
+	return api<{ submissions: MetadataSubmission[]; total: number; total_xp: number }>(
+		`/api/v1/auth/metadata/submissions${pagedQuery(opts)}`,
+		{ token: userToken() },
+	).then((d) => ({ items: d.submissions || [], total: d.total || 0, totalXP: d.total_xp || 0 }));
 }
 
 // fetchMySubmissions returns the current user's system art pack submissions
 // (including their files and review logs).
-export function fetchMySubmissions(): Promise<SubmissionDetail[]> {
-	return api<{ submissions: SubmissionDetail[] }>("/api/v1/auth/submissions", { token: userToken() }).then((d) => d.submissions || []);
+export function fetchMySubmissions(opts?: { limit?: number; offset?: number; status?: string }): Promise<PagedList<SubmissionDetail>> {
+	return api<{ submissions: SubmissionDetail[]; total: number; total_xp: number }>(
+		`/api/v1/auth/submissions${pagedQuery(opts)}`,
+		{ token: userToken() },
+	).then((d) => ({ items: d.submissions || [], total: d.total || 0, totalXP: d.total_xp || 0 }));
 }
 
 // Admin

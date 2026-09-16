@@ -5,7 +5,7 @@ import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, X, Zap } from 
 import { cdnUrl, fetchMetadataGameDetail, fetchPackDetail, type MediaKind, type MetadataMedia, type PackDetail } from "../lib/api";
 import { formatDate } from "../lib/format";
 import Pagination from "../components/Pagination";
-import { useReviews, type ReviewItem, type ReviewStatus } from "../lib/reviews";
+import { useReviews, loadReviews, type ReviewItem, type ReviewStatus } from "../lib/reviews";
 
 const PER_PAGE = 20;
 
@@ -43,22 +43,41 @@ function mediaUrl(objectKey: string, v?: string): string {
 
 export default function ReviewsPage() {
 	const { t } = useTranslation();
-	const { items, totalXP, loading, markAllSeen, refresh } = useReviews();
+	const { markAllSeen } = useReviews();
 	const [statusFilter, setStatusFilter] = useState<ReviewStatus | "">("");
 	const [page, setPage] = useState(1);
+	const [items, setItems] = useState<ReviewItem[]>([]);
+	const [total, setTotal] = useState(0);
+	const [totalXP, setTotalXP] = useState(0);
+	const [loading, setLoading] = useState(false);
 	const [selected, setSelected] = useState<ReviewItem | null>(null);
 	const [gameMedia, setGameMedia] = useState<MetadataMedia[]>([]);
 	const [pack, setPack] = useState<PackDetail | null>(null);
 
-	const visible = items.filter((i) => !statusFilter || i.status === statusFilter);
-	const totalPages = Math.max(1, Math.ceil(visible.length / PER_PAGE));
-	const pageItems = visible.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+	const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+	const pageItems = items.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
-	// Refetch when the page opens so a review approved elsewhere (e.g. from the
-	// admin view in the same session) is not shown as still pending.
+	// The feed is paginated server-side: each page fetches the newest
+	// page*PER_PAGE items of the merged review list (the top N of the merge is
+	// contained in the union of the top N of both sources), so we never load the
+	// whole history at once.
 	useEffect(() => {
-		refresh();
-	}, [refresh]);
+		let cancelled = false;
+		setLoading(true);
+		loadReviews(page * PER_PAGE, statusFilter === "" ? "review" : statusFilter)
+			.then(({ items: list, total: t, totalXP: xp }) => {
+				if (cancelled) return;
+				setItems(list);
+				setTotal(t);
+				setTotalXP(xp);
+			})
+			.finally(() => {
+				if (!cancelled) setLoading(false);
+			});
+		return () => {
+			cancelled = true;
+		};
+	}, [page, statusFilter]);
 
 	useEffect(() => {
 		markAllSeen();
@@ -160,7 +179,7 @@ export default function ReviewsPage() {
 
 			{loading && items.length === 0 ? (
 				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("common.loading")}</p>
-			) : visible.length === 0 ? (
+			) : items.length === 0 ? (
 				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("reviews.empty")}</p>
 			) : (
 				<>
