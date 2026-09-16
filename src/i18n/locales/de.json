@@ -585,7 +585,7 @@
 			"durationMax": "Die Dauer darf höchstens {{max}} Sekunden betragen (aktuell: {{current}}s).",
 			"dimensions": "Die Videoabmessungen konnten nicht gelesen werden.",
 			"aspect": "Das Seitenverhältnis {{ratio}} muss zum Spiel passen (4:3, 3:2, 16:9 oder 1:1).",
-			"frameRate": "Die Bildrate muss {{fps}} fps betragen (erkannt ~{{detected}} fps).",
+			"frameRate": "Die Bildrate muss mindestens {{fpsMin}} fps betragen ({{fps}} empfohlen), erkannt ~{{detected}} fps.",
 			"readVideo": "Die Videodatei konnte nicht gelesen werden.",
 			"convertImage": "Das Bild konnte nicht in WebP konvertiert werden: {{message}}"
 		},
@@ -616,7 +616,7 @@
 		"textFields": "Textfelder",
 		"images": "Bilder",
 		"video": "Video",
-		"videoHint": "Jedes gängige Format (WebM, MP4, MOV, MKV, AVI...). Zwischen {{min}} und {{max}} Sekunden, maximal {{fps}} fps, passend zum Seitenverhältnis des Spiels. Bei Genehmigung in AV1 (WebM) konvertiert.",
+		"videoHint": "Jedes gängige Format (WebM, MP4, MOV, MKV, AVI...). Zwischen {{min}} und {{max}} Sekunden, mindestens {{fpsMin}} fps ({{fps}} empfohlen), passend zum Seitenverhältnis des Spiels. Bei Genehmigung in HEVC (MP4) konvertiert, begrenzt auf {{fps}} fps.",
 		"videoAspectHint": "Jede Auflösung ist akzeptabel, solange sie dem echten Seitenverhältnis (DAR - Display Aspect Ratio) des Original-Arcade-Boards oder Fernsehers entspricht, nicht unbedingt der internen Auflösung (manche Systeme sind gestreckt). Wir wollen das Video so, wie es im Arcade-Automaten oder Fernseher aussah; eine höhere Auflösung ist sogar besser. Es muss ohne Shader aufgenommen sein, sonst wird es abgelehnt.",
 		"detailsTitle": "2. Details",
 		"form": {
@@ -644,7 +644,7 @@
 			"durationRange": "(muss {{min}}-{{max}}s sein)",
 			"frameRate": "Bildrate: {{fps}}",
 			"frameRateUnknown": "unbekannt",
-			"frameRateRange": "(muss {{fps}} fps sein)",
+			"frameRateRange": "(muss mindestens {{fpsMin}} fps betragen)",
 			"videoOk": "Das Video kann so eingereicht werden.",
 			"whyLabel": "Warum (kurze Notiz, optional)",
 			"whyPlaceholder": "Kurzer Grund, Quelle oder was korrigiert wird...",

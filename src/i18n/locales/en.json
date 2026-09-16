@@ -567,7 +567,7 @@
 			"durationMax": "Duration must be {{max}} seconds or less (current: {{current}}s).",
 			"dimensions": "Could not read video dimensions.",
 			"aspect": "Aspect ratio {{ratio}} must match the game (4:3, 3:2, 16:9 or 1:1).",
-			"frameRate": "Frame rate must be {{fps}} fps (detected ~{{detected}} fps).",
+			"frameRate": "Frame rate must be at least {{fpsMin}} fps ({{fps}} recommended), detected ~{{detected}} fps.",
 			"readVideo": "Could not read the video file.",
 			"convertImage": "Could not convert image to WebP: {{message}}"
 		},
@@ -598,7 +598,7 @@
 		"textFields": "Text fields",
 		"images": "Images",
 		"video": "Video",
-		"videoHint": "Any common format (WebM, MP4, MOV, MKV, AVI...). Between {{min}} and {{max}} seconds, max {{fps}} fps, matching the game's aspect ratio. Converted to AV1 (WebM) on approval.",
+		"videoHint": "Any common format (WebM, MP4, MOV, MKV, AVI...). Between {{min}} and {{max}} seconds, at least {{fpsMin}} fps ({{fps}} recommended), matching the game's aspect ratio. Converted to HEVC (MP4), capped at {{fps}} fps, on approval.",
 		"videoAspectHint": "Any resolution is accepted as long as it matches the real aspect ratio (DAR - Display Aspect Ratio) of the original arcade board or TV, not necessarily the internal resolution (some systems are stretched). We want the video as it looked on an arcade monitor or TV; a higher resolution is even better. It must be recorded without shaders, otherwise it will be rejected.",
 		"detailsTitle": "2. Details",
 		"form": {
@@ -626,7 +626,7 @@
 			"durationRange": "(must be {{min}}-{{max}}s)",
 			"frameRate": "Frame rate: {{fps}}",
 			"frameRateUnknown": "unknown",
-			"frameRateRange": "(must be {{fps}} fps)",
+			"frameRateRange": "(must be at least {{fpsMin}} fps)",
 			"videoOk": "Video looks good to submit.",
 			"whyLabel": "Why (brief note, optional)",
 			"whyPlaceholder": "Brief reason, source, or what is being corrected...",

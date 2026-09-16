@@ -567,7 +567,7 @@
 			"durationMax": "La duración debe ser de {{max}} segundos o menos (actual: {{current}}s).",
 			"dimensions": "No se pudieron leer las dimensiones del vídeo.",
 			"aspect": "La relación de aspecto {{ratio}} debe coincidir con la del juego (4:3, 3:2, 16:9 o 1:1).",
-			"frameRate": "La tasa de fotogramas debe ser {{fps}} fps (detectada ~{{detected}} fps).",
+			"frameRate": "La tasa de fotogramas debe ser de al menos {{fpsMin}} fps ({{fps}} recomendado), detectada ~{{detected}} fps.",
 			"readVideo": "No se pudo leer el archivo de vídeo.",
 			"convertImage": "No se pudo convertir la imagen a WebP: {{message}}"
 		},
@@ -598,7 +598,7 @@
 		"textFields": "Campos de texto",
 		"images": "Imágenes",
 		"video": "Vídeo",
-		"videoHint": "Cualquier formato común (WebM, MP4, MOV, MKV, AVI...). Entre {{min}} y {{max}} segundos, máx. {{fps}} fps, coincidiendo con la relación de aspecto del juego. Se convierte a AV1 (WebM) al aprobarse.",
+		"videoHint": "Cualquier formato común (WebM, MP4, MOV, MKV, AVI...). Entre {{min}} y {{max}} segundos, al menos {{fpsMin}} fps ({{fps}} recomendado), coincidiendo con la relación de aspecto del juego. Se convierte a HEVC (MP4), limitado a {{fps}} fps, al aprobarse.",
 		"videoAspectHint": "Se acepta cualquier resolución siempre que respete la relación de aspecto real (DAR - Display Aspect Ratio) de la placa arcade o el televisor original, no necesariamente la resolución interna (algunos sistemas están estirados). Queremos el video tal como se veía en las arcades o televisores; una resolución más alta es aún mejor. Debe grabarse sin shaders, de lo contrario se rechazará.",
 		"detailsTitle": "2. Detalles",
 		"form": {
@@ -626,7 +626,7 @@
 			"durationRange": "(debe ser {{min}}-{{max}}s)",
 			"frameRate": "Tasa de fotogramas: {{fps}}",
 			"frameRateUnknown": "desconocida",
-			"frameRateRange": "(debe ser {{fps}} fps)",
+			"frameRateRange": "(debe ser de al menos {{fpsMin}} fps)",
 			"videoOk": "El vídeo se ve bien para enviar.",
 			"whyLabel": "Por qué (nota breve, opcional)",
 			"whyPlaceholder": "Motivo breve, fuente o qué se está corrigiendo...",

@@ -7,10 +7,11 @@ export const VIDEO_ACCEPT = ".webm,.mp4,.mov,.mkv,.avi,.m4v,.mpg,.mpeg,.ts,.ogv,
 export const VIDEO_MIN_SECONDS = 30;
 export const VIDEO_MAX_SECONDS = 45;
 export const VIDEO_FPS = 60;
-// The requirement shown to users is 60 fps, but a small tolerance range is
-// accepted so encoders reporting 59.94/60.x are not rejected.
-export const VIDEO_FPS_MIN = 50;
-export const VIDEO_FPS_MAX = 70;
+// 60 fps is recommended. Videos below the minimum are rejected; the source
+// frame rate is preserved on re-encode, except videos above the maximum, which
+// are capped down to 60 fps.
+export const VIDEO_FPS_MIN = 23;
+export const VIDEO_FPS_MAX = 60;
 
 // English descriptions are translated sentence by sentence by the worker; this
 // is the maximum the worker accepts (and what the backend enforces).

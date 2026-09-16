@@ -585,7 +585,7 @@
 			"durationMax": "A duração deve ser de no máximo {{max}} segundos (atual: {{current}}s).",
 			"dimensions": "Não foi possível ler as dimensões do vídeo.",
 			"aspect": "A proporção {{ratio}} deve corresponder ao jogo (4:3, 3:2, 16:9 ou 1:1).",
-			"frameRate": "A taxa de quadros deve ser {{fps}} fps (detectado ~{{detected}} fps).",
+			"frameRate": "A taxa de quadros deve ser de pelo menos {{fpsMin}} fps ({{fps}} recomendado), detectado ~{{detected}} fps.",
 			"readVideo": "Não foi possível ler o arquivo de vídeo.",
 			"convertImage": "Não foi possível converter a imagem para WebP: {{message}}"
 		},
@@ -616,7 +616,7 @@
 		"textFields": "Campos de texto",
 		"images": "Imagens",
 		"video": "Vídeo",
-		"videoHint": "Qualquer formato comum (WebM, MP4, MOV, MKV, AVI...). Entre {{min}} e {{max}} segundos, no máximo {{fps}} fps, correspondendo à proporção do jogo. Convertido para AV1 (WebM) na aprovação.",
+		"videoHint": "Qualquer formato comum (WebM, MP4, MOV, MKV, AVI...). Entre {{min}} e {{max}} segundos, pelo menos {{fpsMin}} fps ({{fps}} recomendado), correspondendo à proporção do jogo. Convertido para HEVC (MP4), limitado a {{fps}} fps, na aprovação.",
 		"videoAspectHint": "Qualquer resolução é aceita desde que respeite a proporção real (DAR - Display Aspect Ratio) do arcade ou da TV original, não necessariamente a resolução interna (alguns sistemas são esticados). Queremos o vídeo como aparecia em um arcade ou televisor; uma resolução mais alta é ainda melhor. Deve ser gravado sem shaders, caso contrário será rejeitado.",
 		"detailsTitle": "2. Detalhes",
 		"form": {
@@ -644,7 +644,7 @@
 			"durationRange": "(deve ser {{min}}-{{max}}s)",
 			"frameRate": "Taxa de quadros: {{fps}}",
 			"frameRateUnknown": "desconhecida",
-			"frameRateRange": "(deve ser {{fps}} fps)",
+			"frameRateRange": "(deve ser de pelo menos {{fpsMin}} fps)",
 			"videoOk": "O vídeo parece bom para enviar.",
 			"whyLabel": "Por quê (nota breve, opcional)",
 			"whyPlaceholder": "Motivo breve, fonte ou o que está sendo corrigido...",

@@ -133,8 +133,8 @@ export default function NewGamePage() {
 				if (width > 0 && height > 0 && !ACCEPTED_ASPECTS.some((a) => Math.abs(a.ratio - ratio) < 0.03)) {
 					errors.push(t("metadataSubmit.errors.aspect", { ratio: ratio.toFixed(2) }));
 				}
-				if (fps > 0 && (fps < VIDEO_FPS_MIN || fps > VIDEO_FPS_MAX)) {
-					errors.push(t("metadataSubmit.errors.frameRate", { fps: VIDEO_FPS, detected: fps }));
+				if (fps > 0 && fps < VIDEO_FPS_MIN) {
+					errors.push(t("metadataSubmit.errors.frameRate", { fpsMin: VIDEO_FPS_MIN, fps: VIDEO_FPS, detected: fps }));
 				}
 				setVideoMeta({ duration, width, height, fps, aspect: aspectLabel(width, height) });
 				setVideoError(errors.length ? errors.join(" ") : null);
@@ -406,7 +406,7 @@ export default function NewGamePage() {
 							<input type="file" accept={VIDEO_ACCEPT} className="hidden" disabled={busy} onChange={(e) => { const f = e.target.files?.[0] || null; if (f) setFiles((prev) => ({ ...prev, [VIDEO_KIND]: f })); e.target.value = ""; }} />
 						</label>
 					)}
-					<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.videoHint", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS, fps: VIDEO_FPS })}</p>
+					<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.videoHint", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS, fpsMin: VIDEO_FPS_MIN, fpsMax: VIDEO_FPS_MAX, fps: VIDEO_FPS })}</p>
 					{files[VIDEO_KIND] && videoMeta ? (
 						<div className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1 text-xs text-[var(--color-base-content)]/60">
 							<p>{t("metadataSubmit.form.resolution", { width: videoMeta.width, height: videoMeta.height, aspect: videoMeta.aspect })}</p>

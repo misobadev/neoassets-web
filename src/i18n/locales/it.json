@@ -585,7 +585,7 @@
 			"durationMax": "La durata deve essere di {{max}} secondi o meno (attuale: {{current}}s).",
 			"dimensions": "Impossibile leggere le dimensioni del video.",
 			"aspect": "Le proporzioni {{ratio}} devono corrispondere al gioco (4:3, 3:2, 16:9 o 1:1).",
-			"frameRate": "La frequenza dei fotogrammi deve essere {{fps}} fps (rilevata ~{{detected}} fps).",
+			"frameRate": "La frequenza dei fotogrammi deve essere di almeno {{fpsMin}} fps ({{fps}} consigliato), rilevata ~{{detected}} fps.",
 			"readVideo": "Impossibile leggere il file video.",
 			"convertImage": "Impossibile convertire l'immagine in WebP: {{message}}"
 		},
@@ -616,7 +616,7 @@
 		"textFields": "Campi di testo",
 		"images": "Immagini",
 		"video": "Video",
-		"videoHint": "Qualsiasi formato comune (WebM, MP4, MOV, MKV, AVI...). Tra {{min}} e {{max}} secondi, max {{fps}} fps, con le proporzioni del gioco. Convertito in AV1 (WebM) all'approvazione.",
+		"videoHint": "Qualsiasi formato comune (WebM, MP4, MOV, MKV, AVI...). Tra {{min}} e {{max}} secondi, almeno {{fpsMin}} fps ({{fps}} consigliato), con le proporzioni del gioco. Convertito in HEVC (MP4), limitato a {{fps}} fps, all'approvazione.",
 		"videoAspectHint": "Qualsiasi risoluzione è accettata purché rispetti le proporzioni reali (DAR - Display Aspect Ratio) della scheda arcade o del televisore originale, non necessariamente la risoluzione interna (alcuni sistemi sono allungati). Vogliamo il video come appariva su un cabinato arcade o un televisore; una risoluzione più alta è ancora meglio. Deve essere registrato senza shader, altrimenti sarà rifiutato.",
 		"detailsTitle": "2. Dettagli",
 		"form": {
@@ -644,7 +644,7 @@
 			"durationRange": "(deve essere {{min}}-{{max}}s)",
 			"frameRate": "Frequenza fotogrammi: {{fps}}",
 			"frameRateUnknown": "sconosciuta",
-			"frameRateRange": "(deve essere {{fps}} fps)",
+			"frameRateRange": "(deve essere di almeno {{fpsMin}} fps)",
 			"videoOk": "Il video è pronto per l'invio.",
 			"whyLabel": "Perché (breve nota, facoltativo)",
 			"whyPlaceholder": "Breve motivo, fonte o cosa viene corretto...",

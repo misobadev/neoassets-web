@@ -585,7 +585,7 @@
 			"durationMax": "时长必须不超过 {{max}} 秒（当前：{{current}} 秒）。",
 			"dimensions": "无法读取视频尺寸。",
 			"aspect": "宽高比 {{ratio}} 必须与游戏匹配（4:3、3:2、16:9 或 1:1）。",
-			"frameRate": "帧率必须为 {{fps}} fps（检测到约 {{detected}} fps）。",
+			"frameRate": "帧率必须至少为 {{fpsMin}} fps（建议 {{fps}}），检测到约 {{detected}} fps。",
 			"readVideo": "无法读取视频文件。",
 			"convertImage": "无法将图片转换为 WebP：{{message}}"
 		},
@@ -616,7 +616,7 @@
 		"textFields": "文本字段",
 		"images": "图片",
 		"video": "视频",
-		"videoHint": "任何常见格式（WebM、MP4、MOV、MKV、AVI……）。时长在 {{min}} 到 {{max}} 秒之间，最高 {{fps}} fps，且与游戏的宽高比匹配。批准后转换为 AV1（WebM）。",
+		"videoHint": "任何常见格式（WebM、MP4、MOV、MKV、AVI……）。时长在 {{min}} 到 {{max}} 秒之间，至少 {{fpsMin}} fps（建议 {{fps}}），且与游戏的宽高比匹配。批准后转换为 HEVC（MP4），上限为 {{fps}} fps。",
 		"videoAspectHint": "只要符合原始街机或电视的真实宽高比（DAR - Display Aspect Ratio），任何分辨率都可以，不一定是内部分辨率（有些系统被拉伸）。我们想要的是街机或电视上看到的那种视频；更高的分辨率更好。必须在不使用着色器的情况下录制，否则将被拒绝。",
 		"detailsTitle": "2. 详情",
 		"form": {
@@ -644,7 +644,7 @@
 			"durationRange": "（必须为 {{min}}-{{max}} 秒）",
 			"frameRate": "帧率：{{fps}}",
 			"frameRateUnknown": "未知",
-			"frameRateRange": "（必须为 {{fps}} fps）",
+			"frameRateRange": "（必须至少为 {{fpsMin}} fps）",
 			"videoOk": "视频可以提交。",
 			"whyLabel": "原因（简要说明，可选）",
 			"whyPlaceholder": "简要原因、来源或正在更正的内容……",

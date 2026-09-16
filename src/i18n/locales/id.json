@@ -585,7 +585,7 @@
 			"durationMax": "Durasi harus {{max}} detik atau kurang (saat ini: {{current}}dtk).",
 			"dimensions": "Tidak dapat membaca dimensi video.",
 			"aspect": "Rasio aspek {{ratio}} harus sesuai dengan game (4:3, 3:2, 16:9, atau 1:1).",
-			"frameRate": "Frame rate harus {{fps}} fps (terdeteksi ~{{detected}} fps).",
+			"frameRate": "Frame rate harus minimal {{fpsMin}} fps ({{fps}} disarankan), terdeteksi ~{{detected}} fps.",
 			"readVideo": "Tidak dapat membaca berkas video.",
 			"convertImage": "Tidak dapat mengonversi gambar ke WebP: {{message}}"
 		},
@@ -616,7 +616,7 @@
 		"textFields": "Kolom teks",
 		"images": "Gambar",
 		"video": "Video",
-		"videoHint": "Format umum apa pun (WebM, MP4, MOV, MKV, AVI...). Antara {{min}} dan {{max}} detik, maks {{fps}} fps, sesuai rasio aspek game. Dikonversi ke AV1 (WebM) saat disetujui.",
+		"videoHint": "Format umum apa pun (WebM, MP4, MOV, MKV, AVI...). Antara {{min}} dan {{max}} detik, minimal {{fpsMin}} fps ({{fps}} disarankan), sesuai rasio aspek game. Dikonversi ke HEVC (MP4), dibatasi {{fps}} fps, saat disetujui.",
 		"videoAspectHint": "Resolusi apa pun diterima selama sesuai dengan rasio aspek sebenarnya (DAR - Display Aspect Ratio) dari arcade atau TV asli, tidak harus resolusi internal (beberapa sistem ditarik). Kami ingin video seperti yang terlihat di arcade atau TV; resolusi lebih tinggi lebih baik. Harus direkam tanpa shader, jika tidak akan ditolak.",
 		"detailsTitle": "2. Detail",
 		"form": {
@@ -644,7 +644,7 @@
 			"durationRange": "(harus {{min}}-{{max}}dtk)",
 			"frameRate": "Frame rate: {{fps}}",
 			"frameRateUnknown": "tidak diketahui",
-			"frameRateRange": "(harus {{fps}} fps)",
+			"frameRateRange": "(harus minimal {{fpsMin}} fps)",
 			"videoOk": "Video tampak siap untuk dikirim.",
 			"whyLabel": "Alasan (catatan singkat, opsional)",
 			"whyPlaceholder": "Alasan singkat, sumber, atau apa yang dikoreksi...",

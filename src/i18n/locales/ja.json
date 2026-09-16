@@ -585,7 +585,7 @@
 			"durationMax": "長さは {{max}} 秒以下である必要があります（現在: {{current}} 秒）。",
 			"dimensions": "動画の解像度を読み取れませんでした。",
 			"aspect": "アスペクト比 {{ratio}} はゲームと一致する必要があります（4:3、3:2、16:9、または 1:1）。",
-			"frameRate": "フレームレートは {{fps}} fps である必要があります（検出値 ~{{detected}} fps）。",
+			"frameRate": "フレームレートは最低 {{fpsMin}} fps である必要があります（{{fps}} 推奨、検出値 ~{{detected}} fps）。",
 			"readVideo": "動画ファイルを読み取れませんでした。",
 			"convertImage": "画像をWebPに変換できませんでした: {{message}}"
 		},
@@ -616,7 +616,7 @@
 		"textFields": "テキスト項目",
 		"images": "画像",
 		"video": "動画",
-		"videoHint": "一般的な形式（WebM、MP4、MOV、MKV、AVI...）。{{min}}〜{{max}} 秒、最大 {{fps}} fps、ゲームのアスペクト比に一致。承認時にAV1（WebM）へ変換されます。",
+		"videoHint": "一般的な形式（WebM、MP4、MOV、MKV、AVI...）。{{min}}〜{{max}} 秒、最低 {{fpsMin}} fps（{{fps}} 推奨）、ゲームのアスペクト比に一致。承認時にHEVC（MP4）へ変換され、最大 {{fps}} fps に制限されます。",
 		"videoAspectHint": "解像度は、元のアーケード基板やテレビの実際のアスペクト比（DAR - Display Aspect Ratio）に合っていればどのようなものでも構いません（内部解像度である必要はありません。一部のシステムは引き伸ばされています）。アーケードやテレビで見たままの動画を求めています。高解像度ならなお良いです。シェーダーなしで録画する必要があり、そうでなければ却下されます。",
 		"detailsTitle": "2. 詳細",
 		"form": {
@@ -644,7 +644,7 @@
 			"durationRange": "（{{min}}〜{{max}} 秒である必要があります）",
 			"frameRate": "フレームレート: {{fps}}",
 			"frameRateUnknown": "不明",
-			"frameRateRange": "（{{fps}} fps である必要があります）",
+			"frameRateRange": "（最低 {{fpsMin}} fps である必要があります）",
 			"videoOk": "動画は送信可能です。",
 			"whyLabel": "理由（簡単なメモ、任意）",
 			"whyPlaceholder": "簡単な理由、出典、または修正内容...",

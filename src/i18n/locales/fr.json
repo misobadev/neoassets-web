@@ -585,7 +585,7 @@
 			"durationMax": "La durée doit être de {{max}} secondes ou moins (actuelle : {{current}}s).",
 			"dimensions": "Impossible de lire les dimensions de la vidéo.",
 			"aspect": "Le rapport d'aspect {{ratio}} doit correspondre au jeu (4:3, 3:2, 16:9 ou 1:1).",
-			"frameRate": "La fréquence d'images doit être de {{fps}} fps (détectée ~{{detected}} fps).",
+			"frameRate": "La fréquence d'images doit être d'au moins {{fpsMin}} fps ({{fps}} recommandé), détectée ~{{detected}} fps.",
 			"readVideo": "Impossible de lire le fichier vidéo.",
 			"convertImage": "Impossible de convertir l'image en WebP : {{message}}"
 		},
@@ -616,7 +616,7 @@
 		"textFields": "Champs textuels",
 		"images": "Images",
 		"video": "Vidéo",
-		"videoHint": "Tout format courant (WebM, MP4, MOV, MKV, AVI...). Entre {{min}} et {{max}} secondes, max {{fps}} fps, correspondant au rapport d'aspect du jeu. Converti en AV1 (WebM) à l'approbation.",
+		"videoHint": "Tout format courant (WebM, MP4, MOV, MKV, AVI...). Entre {{min}} et {{max}} secondes, au moins {{fpsMin}} fps ({{fps}} recommandé), correspondant au rapport d'aspect du jeu. Converti en HEVC (MP4), plafonné à {{fps}} fps, à l'approbation.",
 		"videoAspectHint": "Toute résolution est acceptée tant qu'elle respecte le rapport d'aspect réel (DAR - Display Aspect Ratio) de la carte arcade ou du téléviseur d'origine, pas nécessairement la résolution interne (certains systèmes sont étirés). Nous voulons la vidéo telle qu'elle apparaissait sur une borne d'arcade ou un téléviseur ; une résolution plus élevée est encore mieux. Elle doit être enregistrée sans shaders, sinon elle sera refusée.",
 		"detailsTitle": "2. Détails",
 		"form": {
@@ -644,7 +644,7 @@
 			"durationRange": "(doit être {{min}}-{{max}}s)",
 			"frameRate": "Fréquence d'images : {{fps}}",
 			"frameRateUnknown": "inconnue",
-			"frameRateRange": "(doit être {{fps}} fps)",
+			"frameRateRange": "(doit être d'au moins {{fpsMin}} fps)",
 			"videoOk": "La vidéo semble bonne à soumettre.",
 			"whyLabel": "Pourquoi (brève note, facultatif)",
 			"whyPlaceholder": "Brève raison, source, ou ce qui est corrigé...",

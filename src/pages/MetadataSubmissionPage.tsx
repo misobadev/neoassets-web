@@ -161,8 +161,8 @@ export default function MetadataSubmissionPage() {
 				if (width > 0 && height > 0 && !aspectOk) {
 					errors.push(t("metadataSubmit.errors.aspect", { ratio: (width / height).toFixed(2) }));
 				}
-				if (fps > 0 && (fps < VIDEO_FPS_MIN || fps > VIDEO_FPS_MAX)) {
-					errors.push(t("metadataSubmit.errors.frameRate", { fps: VIDEO_FPS, detected: fps }));
+				if (fps > 0 && fps < VIDEO_FPS_MIN) {
+					errors.push(t("metadataSubmit.errors.frameRate", { fpsMin: VIDEO_FPS_MIN, fps: VIDEO_FPS, detected: fps }));
 				}
 				setVideoMeta({ duration, width, height, fps, aspect: aspectLabel(width, height) });
 				setFileError(errors.length ? errors.join(" ") : null);
@@ -191,7 +191,7 @@ export default function MetadataSubmissionPage() {
 
 	// Every picked image is converted to WebP before upload; fanart is
 	// additionally cropped/scaled to 1920x1080 (16:9). Videos are uploaded
-	// as-is (the backend re-encodes them to WebM on approval).
+	// as-is (the backend re-encodes them to MP4/HEVC on approval).
 	async function onPickFile(f: File | null) {
 		setFileError(null);
 		if (!f) {
@@ -475,7 +475,7 @@ export default function MetadataSubmissionPage() {
 						{typeButton(VIDEO_KIND, t(MEDIA_LABEL[VIDEO_KIND]))}
 					</div>
 					<p className="text-xs text-[var(--color-base-content)]/50 mt-1.5">
-						{t("metadataSubmit.videoHint", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS, fps: VIDEO_FPS })}
+						{t("metadataSubmit.videoHint", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS, fpsMin: VIDEO_FPS_MIN, fpsMax: VIDEO_FPS_MAX, fps: VIDEO_FPS })}
 					</p>
 				</div>
 			</section>
@@ -595,7 +595,7 @@ export default function MetadataSubmissionPage() {
 									<div className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1 bg-[var(--color-base-300)]/30">
 										<p>{t("metadataSubmit.form.resolution", { width: videoMeta.width, height: videoMeta.height, aspect: videoMeta.aspect })}</p>
 										<p>{t("metadataSubmit.form.duration", { duration: videoMeta.duration.toFixed(1) })} {videoMeta.duration < VIDEO_MIN_SECONDS || videoMeta.duration > VIDEO_MAX_SECONDS ? <span className="text-[var(--color-error)]">{t("metadataSubmit.form.durationRange", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS })}</span> : null}</p>
-										<p>{t("metadataSubmit.form.frameRate", { fps: videoMeta.fps > 0 ? `${videoMeta.fps} fps` : t("metadataSubmit.form.frameRateUnknown") })} {videoMeta.fps > 0 && (videoMeta.fps < VIDEO_FPS_MIN || videoMeta.fps > VIDEO_FPS_MAX) ? <span className="text-[var(--color-error)]">{t("metadataSubmit.form.frameRateRange", { fps: VIDEO_FPS })}</span> : null}</p>
+										<p>{t("metadataSubmit.form.frameRate", { fps: videoMeta.fps > 0 ? `${videoMeta.fps} fps` : t("metadataSubmit.form.frameRateUnknown") })} {videoMeta.fps > 0 && videoMeta.fps < VIDEO_FPS_MIN ? <span className="text-[var(--color-error)]">				{t("metadataSubmit.form.frameRateRange", { fpsMin: VIDEO_FPS_MIN })}</span> : null}</p>
 									</div>
 									<video ref={videoRef} src={URL.createObjectURL(file)} controls className="w-full max-h-64 rounded-lg border border-[var(--color-base-300)] bg-black" muted />
 									{fileError ? <p className="text-[var(--color-error)]">{fileError}</p> : <p className="text-[var(--color-success)]">{t("metadataSubmit.form.videoOk")}</p>}
