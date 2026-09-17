@@ -285,6 +285,7 @@
 		"title": "Trage zum",
 		"titleHighlight": "NeoAssets-Ökosystem bei",
 		"subtitle": "Reiche System-Art-Packs, Spiel-Metadaten und System-Metadaten ein, alles an einem Ort. Geprüft und mit jedem NeoAssets-Benutzer geteilt.",
+		"about": "NeoAssets ist ein schneller, einfacher Weg, Metadaten für Emulations-Frontends zu scrapen. Wir sind keine Preservation-Datenbank (dafür gibt es bereits gute Alternativen): Wir behalten nur das Wesentliche jedes Spiels, damit das Projekt schnell, schlank und günstig im Unterhalt bleibt.",
 		"free": "Kostenlos",
 		"noRateLimits": "Keine Ratenlimits",
 		"noThreadCaps": "Keine Thread-Obergrenzen",

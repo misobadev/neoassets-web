@@ -270,6 +270,7 @@
 		"title": "Contribuye a la",
 		"titleHighlight": "base de datos de NeoAssets.",
 		"subtitle": "Envía paquetes de arte de sistemas, metadatos de juegos y metadatos de sistemas, todo en un solo lugar. Revisado y compartido con cada usuario de NeoAssets.",
+		"about": "NeoAssets es una alternativa rápida y simple para facilitar el scraping a los frontends de emulación. No somos una base de datos de preservación (para eso ya existen buenas alternativas): solo guardamos lo esencial de cada juego, para que el proyecto sea rápido, liviano y de bajo costo de mantenimiento.",
 		"free": "Gratis",
 		"noSubmissionsLimit": "Sin límite de envíos",
 		"fasterScraper": "Un scraper mucho más rápido",

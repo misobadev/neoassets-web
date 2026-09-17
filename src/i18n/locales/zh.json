@@ -285,6 +285,7 @@
 		"title": "为",
 		"titleHighlight": "NeoAssets 生态做贡献",
 		"subtitle": "在一个地方提交系统美术资源包、游戏元数据和系统元数据。经过审核并与每位 NeoAssets 用户共享。",
+		"about": "NeoAssets 是一种快速、简单的方式，为模拟前端抓取元数据。我们不是保存数据库（已有很好的替代方案）：我们只保留每个游戏的必要信息，让项目保持快速、轻量和低维护成本。",
 		"free": "免费",
 		"noRateLimits": "无速率限制",
 		"noThreadCaps": "无线程上限",

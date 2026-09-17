@@ -285,6 +285,7 @@
 		"title": "Berkontribusi untuk",
 		"titleHighlight": "ekosistem NeoAssets",
 		"subtitle": "Kirim paket seni sistem, metadata game, dan metadata sistem, semuanya di satu tempat. Ditinjau dan dibagikan ke setiap pengguna NeoAssets.",
+		"about": "NeoAssets adalah cara cepat dan sederhana untuk melakukan scraping metadata bagi frontend emulasi. Kami bukan basis data pelestarian (sudah ada alternatif bagus untuk itu): kami hanya menyimpan hal-hal penting dari setiap game, agar proyek tetap cepat, ringan, dan murah untuk dirawat.",
 		"free": "Gratis",
 		"noRateLimits": "Tanpa batas laju",
 		"noThreadCaps": "Tanpa batas thread",

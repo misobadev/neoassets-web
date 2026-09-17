@@ -270,6 +270,7 @@
 		"title": "Contribute to the",
 		"titleHighlight": "NeoAssets database.",
 		"subtitle": "Submit system art packs, game metadata and system metadata, all in one place. Reviewed and shared with every NeoAssets user.",
+		"about": "NeoAssets is a fast, simple way to scrape metadata for emulation frontends. We are not a preservation database (good alternatives already exist for that): we only keep the essentials of each game, so the project stays fast, lightweight and cheap to run.",
 		"free": "Free",
 		"noSubmissionsLimit": "No submissions limit",
 		"fasterScraper": "A much faster scraper",

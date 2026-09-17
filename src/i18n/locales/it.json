@@ -285,6 +285,7 @@
 		"title": "Contribuisci all'",
 		"titleHighlight": "ecosistema NeoAssets",
 		"subtitle": "Invia pacchetti artistici di sistema, metadati di giochi e metadati di sistema, tutto in un unico posto. Revisionati e condivisi con ogni utente di NeoAssets.",
+		"about": "NeoAssets è un modo rapido e semplice per fare scraping di metadati per i frontend di emulazione. Non siamo un database di preservazione (esistono già buone alternative): conserviamo solo l'essenziale di ogni gioco, così il progetto resta veloce, leggero ed economico da mantenere.",
 		"free": "Gratuito",
 		"noRateLimits": "Nessun limite di frequenza",
 		"noThreadCaps": "Nessun limite di thread",

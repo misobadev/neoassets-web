@@ -261,7 +261,7 @@ export default function AppPage() {
 						</p>
 						<div className="flex items-center gap-4 text-xs text-base-content/60">
 							<a href="https://neostation.dev" target="_blank" rel="noopener noreferrer" className="hover:text-base-content">
-								NeoAssets
+								NeoStation Frontend
 							</a>
 							<a href="https://discord.gg/xE2kgKsRVq" target="_blank" rel="noopener noreferrer" className="hover:text-base-content">
 								Discord

@@ -20,6 +20,9 @@ export default function HomeView() {
 				<p className="text-lg md:text-xl text-[var(--color-base-content)]/60 max-w-2xl mx-auto mb-6 animate-fade-up">
 					{t("home.subtitle")}
 				</p>
+				<p className="text-sm md:text-base text-[var(--color-base-content)]/60 max-w-2xl mx-auto mb-6 animate-fade-up">
+					{t("home.about")}
+				</p>
 				<p className="text-sm md:text-base text-[var(--color-base-content)]/60 max-w-2xl mx-auto mb-2 animate-fade-up flex flex-wrap items-center justify-center gap-2">
 					<span className="badge badge-ghost badge-sm">{t("home.free")}</span>
 					<span className="badge badge-ghost badge-sm">{t("home.noSubmissionsLimit")}</span>
