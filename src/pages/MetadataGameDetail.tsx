@@ -61,7 +61,7 @@ export default function MetadataGameDetail() {
 	const [error, setError] = useState<string | null>(null);
 	const [holoMx, setHoloMx] = useState(0);
 	const [holoMy, setHoloMy] = useState(0);
-	usePageTitle(game ? `${game.name} — NeoAssets` : "NeoAssets — Game Metadata");
+	usePageTitle(game ? `${game.name} - NeoAssets` : "NeoAssets - Game Metadata");
 
 	useEffect(() => {
 		if (!gameId) return;

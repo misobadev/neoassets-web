@@ -112,7 +112,7 @@ function ParamTable({ params }: { params: Param[] }) {
 
 export default function ApiDocsPage() {
 	const { t } = useTranslation();
-	usePageTitle("NeoAssets — API Docs");
+	usePageTitle("NeoAssets - API Docs");
 
 	const gameParams: Param[] = [
 		{ name: "system_id", type: "string", required: false, description: t("apiDocs.pSystemId") },

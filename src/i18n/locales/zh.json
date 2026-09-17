@@ -28,7 +28,7 @@
 		"versionAuto": "版本号自动分配（1.0、1.1……）。",
 		"reviewedMsg": "此投稿已审核。",
 		"statusHistory": "状态历史",
-		"comparison": "{{label}} — 对比",
+		"comparison": "{{label}} - 对比",
 		"reason": "原因：",
 		"old": "旧",
 		"new": "新",

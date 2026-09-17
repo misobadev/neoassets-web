@@ -57,7 +57,7 @@ export default function DeveloperPage() {
 			setAppDesc("");
 			setAppHome("");
 			setRevealed({
-				title: `${app.name} — ${t("developer.clientSecret")}`,
+				title: `${app.name} - ${t("developer.clientSecret")}`,
 				value: app.client_secret,
 				extra: app.debug_password ? `${t("developer.debugPassword")}: ${app.debug_password}` : undefined,
 			});
@@ -82,7 +82,7 @@ export default function DeveloperPage() {
 		try {
 			const rotated = await rotateDeveloperApp(app.id);
 			setRevealed({
-				title: `${rotated.name} — ${t("developer.clientSecret")}`,
+				title: `${rotated.name} - ${t("developer.clientSecret")}`,
 				value: rotated.client_secret,
 				extra: rotated.debug_password ? `${t("developer.debugPassword")}: ${rotated.debug_password}` : undefined,
 			});

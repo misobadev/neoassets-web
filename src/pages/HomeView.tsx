@@ -9,7 +9,7 @@ import { usePageTitle } from "../lib/seo";
 export default function HomeView() {
 	const signedIn = !!userToken();
 	const { t } = useTranslation();
-	usePageTitle("NeoAssets — System Art Packs & Game Metadata");
+	usePageTitle("NeoAssets - System Art Packs & Game Metadata");
 
 	return (
 		<div className="relative overflow-hidden">

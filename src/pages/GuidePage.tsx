@@ -7,7 +7,7 @@ import { usePageTitle } from "../lib/seo";
 
 export default function GuidePage() {
 	const { t } = useTranslation();
-	usePageTitle("NeoAssets — Guide");
+	usePageTitle("NeoAssets - Guide");
 	const [cfg, setCfg] = useState<PublicConfig | null>(null);
 
 	useEffect(() => {

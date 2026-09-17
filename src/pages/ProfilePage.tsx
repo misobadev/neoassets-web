@@ -176,7 +176,7 @@ export default function ProfilePage() {
 		try {
 			const key = await createAPIKey({ name: keyName.trim() });
 			setKeyName("");
-			setRevealed({ title: `${key.name} — ${t("apiKeys.key")}`, value: key.key });
+			setRevealed({ title: `${key.name} - ${t("apiKeys.key")}`, value: key.key });
 			await loadKeys();
 		} catch (e) {
 			setKeyMsg((e as Error).message);

@@ -6,7 +6,7 @@ export function usePageTitle(title: string) {
 	useEffect(() => {
 		document.title = title;
 		return () => {
-			document.title = "NeoAssets — System Art Packs & Game Metadata";
+			document.title = "NeoAssets - System Art Packs & Game Metadata";
 		};
 	}, [title]);
 }
