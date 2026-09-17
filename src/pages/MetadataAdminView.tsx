@@ -11,6 +11,7 @@ import {
 	fetchMetadataSubmissionDetail,
 	fetchMetadataSubmissions,
 	type MediaKind,
+	type MetadataMedia,
 	type MetadataSubmission,
 	type MetadataSubmissionDetail,
 	type MetadataSubmissionFile,
@@ -139,11 +140,29 @@ export default function MetadataAdminView() {
 	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month");
 	const textKeys = [...TEXT_ORDER.filter((k) => payloadKeys.includes(k)), ...payloadKeys.filter((k) => !TEXT_ORDER.includes(k))];
 
-	// currentValue resolves the target's currently published value for a payload
-	// key so it can be compared against the proposed one.
+	// old_payload / old_media snapshot the target's published state at approval
+	// time, so an approved submission still shows the correct "old" side (the
+	// target itself already holds the new values).
+	const oldPayload = (detail?.submission.old_payload || {}) as Record<string, unknown>;
+	const hasOldPayload = Object.keys(oldPayload).length > 0;
+	const oldMedia = (detail?.submission.old_media || []) as MetadataMedia[];
+
+	// currentValue resolves the target's value for a payload key so it can be
+	// compared against the proposed one. For an approved submission the target
+	// already holds the new value, so the old snapshot is used instead.
 	function currentValue(key: string): string {
 		// A new game has no current value to compare against.
 		if (detail?.submission.kind === "new_game") return "";
+		if (hasOldPayload) {
+			if (key === "release_year") {
+				const y = oldPayload.release_year;
+				if (y === undefined || y === null || y === "") return "";
+				const m = oldPayload.release_month;
+				return `${y}${m ? `-${String(m).padStart(2, "0")}` : ""}`;
+			}
+			const v = oldPayload[key];
+			return v === undefined || v === null ? "" : String(v);
+		}
 		const g = detail?.game;
 		const sys = detail?.system;
 		if (key === "release_year") {
@@ -366,7 +385,9 @@ export default function MetadataAdminView() {
 								<p className="label-text mb-2">{t("metadataAdmin.mediaChanges")}</p>
 								<div className="space-y-4">
 									{detail.files.map((f) => {
-										const current = detail.media.find((m) => m.kind === f.kind);
+										// For an approved submission the target media already holds the
+										// new asset, so the old snapshot is used for the "old" side.
+										const current = (oldMedia.length > 0 ? oldMedia : detail.media).find((m) => m.kind === f.kind);
 										const isVideo = f.kind === "video";
 										return (
 											<div key={f.id} className="space-y-2">

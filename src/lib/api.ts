@@ -280,6 +280,10 @@ export interface MetadataSubmission {
 	status: MetadataStatus;
 	kind?: "edit" | "new_game";
 	payload: Record<string, unknown>;
+	// Snapshot of the target's published text and media at approval time, so the
+	// review detail can show the "old" side after the target was updated.
+	old_payload?: Record<string, unknown>;
+	old_media?: MetadataMedia[];
 	review_comment: string;
 	created_at: string;
 	reviewed_at?: string | null;
