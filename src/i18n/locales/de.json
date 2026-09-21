@@ -651,7 +651,11 @@
 			"fixVideo": "Behebe die Videoprobleme, bevor du einreichst.",
 			"creating": "Einreichung wird erstellt...",
 			"submitted": "Zur Prüfung eingereicht. Danke!",
-			"descriptionTooLong": "Die Beschreibung darf höchstens {{max}} Zeichen lang sein."
+			"descriptionTooLong": "Die Beschreibung darf höchstens {{max}} Zeichen lang sein.",
+			"pickMoveRegion": "Wähle eine neue Region für das Bild",
+			"deleteReason": "Beim Löschen ist eine Begründung erforderlich",
+			"pickDelete": "Markiere das zu löschende Bild",
+			"pickDeleteRegion": "Wähle die Region, deren Wert gelöscht werden soll"
 		},
 		"uploadingVideo": "Video wird hochgeladen...",
 		"uploadingImage": "Bild wird hochgeladen...",
@@ -704,7 +708,12 @@
 			"existingByRegion": "Vorhanden nach Region",
 			"moveFromRegion": "Aus Region verschieben",
 			"moveHint": "Region ändern, um den Wert dorthin zu verschieben",
-			"none": "Keine"
+			"none": "Keine",
+			"addNewImage": "Neues Bild hinzufügen",
+			"changeRegion": "Region eines vorhandenen ändern",
+			"deleteRegion": "Pro Region löschen",
+			"deleteByRegion": "Nach Region löschen",
+			"deleteHint": "Markiere die zu entfernenden; eine Begründung ist erforderlich"
 		},
 		"working": "Wird verarbeitet...",
 		"submitForReview": "Zur Prüfung einreichen",

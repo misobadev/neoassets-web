@@ -633,7 +633,11 @@
 			"fixVideo": "Corrige los problemas del vídeo antes de enviar.",
 			"creating": "Creando envío...",
 			"submitted": "Enviado para revisión. ¡Gracias!",
-			"descriptionTooLong": "La descripción debe tener como máximo {{max}} caracteres."
+			"descriptionTooLong": "La descripción debe tener como máximo {{max}} caracteres.",
+			"pickMoveRegion": "Elige una nueva región para la imagen que quieres mover",
+			"deleteReason": "El motivo es obligatorio al eliminar",
+			"pickDelete": "Marca la imagen que quieres eliminar",
+			"pickDeleteRegion": "Elige la región cuyo valor quieres eliminar"
 		},
 		"uploadingVideo": "Subiendo vídeo...",
 		"uploadingImage": "Subiendo imagen...",
@@ -686,7 +690,12 @@
 			"existingByRegion": "Existentes por región",
 			"moveFromRegion": "Mover desde región",
 			"moveHint": "Cambia la región para mover ese valor",
-			"none": "Ninguno"
+			"none": "Ninguno",
+			"addNewImage": "Agregar una imagen nueva",
+			"changeRegion": "Cambiar la región de una existente",
+			"deleteRegion": "Eliminar por región",
+			"deleteByRegion": "Eliminar por región",
+			"deleteHint": "Marca los que quieres eliminar; el motivo es obligatorio"
 		},
 		"working": "Procesando...",
 		"submitForReview": "Enviar para revisión",

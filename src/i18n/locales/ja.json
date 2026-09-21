@@ -651,7 +651,11 @@
 			"fixVideo": "送信前に動画の問題を修正してください。",
 			"creating": "投稿を作成中...",
 			"submitted": "レビューに提出しました。ありがとうございます！",
-			"descriptionTooLong": "説明は最大{{max}}文字までです。"
+			"descriptionTooLong": "説明は最大{{max}}文字までです。",
+			"pickMoveRegion": "移動する画像の新しい地域を選択してください",
+			"deleteReason": "削除時は理由が必須です",
+			"pickDelete": "削除する画像を選択してください",
+			"pickDeleteRegion": "削除する値の地域を選択してください"
 		},
 		"uploadingVideo": "動画をアップロード中...",
 		"uploadingImage": "画像をアップロード中...",
@@ -704,7 +708,12 @@
 			"existingByRegion": "地域別の既存",
 			"moveFromRegion": "地域から移動",
 			"moveHint": "地域を変更するとその値が移動します",
-			"none": "なし"
+			"none": "なし",
+			"addNewImage": "新しい画像を追加",
+			"changeRegion": "既存の地域を変更",
+			"deleteRegion": "地域ごとに削除",
+			"deleteByRegion": "地域別に削除",
+			"deleteHint": "削除するものを選択してください（理由は必須です）"
 		},
 		"working": "処理中...",
 		"submitForReview": "レビューに提出",

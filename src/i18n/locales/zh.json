@@ -651,7 +651,11 @@
 			"fixVideo": "请在提交前修复视频问题。",
 			"creating": "正在创建投稿……",
 			"submitted": "已提交审核。谢谢！",
-			"descriptionTooLong": "描述最多 {{max}} 个字符。"
+			"descriptionTooLong": "描述最多 {{max}} 个字符。",
+			"pickMoveRegion": "请为要移动的图片选择新地区",
+			"deleteReason": "删除时必须填写原因",
+			"pickDelete": "请勾选要删除的图片",
+			"pickDeleteRegion": "请选择要删除其值的地区"
 		},
 		"uploadingVideo": "正在上传视频……",
 		"uploadingImage": "正在上传图片……",
@@ -704,7 +708,12 @@
 			"existingByRegion": "按地区现有",
 			"moveFromRegion": "从地区移动",
 			"moveHint": "更改地区以将该值移动过去",
-			"none": "无"
+			"none": "无",
+			"addNewImage": "添加新图片",
+			"changeRegion": "更改现有图片的地区",
+			"deleteRegion": "按地区删除",
+			"deleteByRegion": "按地区删除",
+			"deleteHint": "勾选要删除的项；必须填写原因"
 		},
 		"working": "正在处理……",
 		"submitForReview": "提交审核",

@@ -633,7 +633,11 @@
 			"fixVideo": "Fix the video issues before submitting.",
 			"creating": "Creating submission...",
 			"submitted": "Submitted for review. Thanks!",
-			"descriptionTooLong": "Description must be at most {{max}} characters."
+			"descriptionTooLong": "Description must be at most {{max}} characters.",
+			"pickMoveRegion": "Pick a new region for the image you want to move",
+			"deleteReason": "A reason is required when deleting",
+			"pickDelete": "Check the image you want to delete",
+			"pickDeleteRegion": "Pick the region whose value you want to delete"
 		},
 		"uploadingVideo": "Uploading video...",
 		"uploadingImage": "Uploading image...",
@@ -686,7 +690,12 @@
 			"existingByRegion": "Existing by region",
 			"moveFromRegion": "Move from region",
 			"moveHint": "Change the region to move that value to it",
-			"none": "None"
+			"none": "None",
+			"addNewImage": "Add a new image",
+			"changeRegion": "Change region of an existing one",
+			"deleteRegion": "Delete per region",
+			"deleteByRegion": "Delete by region",
+			"deleteHint": "Check the ones to remove; a reason is required"
 		},
 		"working": "Working...",
 		"submitForReview": "Submit for review",

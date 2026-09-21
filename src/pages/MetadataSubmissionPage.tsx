@@ -83,7 +83,10 @@ export default function MetadataSubmissionPage() {
 	// Region corrections: existing media to move (object_key -> new region) and
 	// the source region when moving an existing name/release.
 	const [mediaMoves, setMediaMoves] = useState<Record<string, string>>({});
+	const [mediaDeletes, setMediaDeletes] = useState<Record<string, boolean>>({});
+	const [mediaMode, setMediaMode] = useState<"new" | "move" | "delete">("new");
 	const [textMoveFrom, setTextMoveFrom] = useState("");
+	const [textDelete, setTextDelete] = useState(false);
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -327,44 +330,66 @@ export default function MetadataSubmissionPage() {
 			setStatus({ text: t("metadataSubmit.status.pickType"), tone: "error" });
 			return;
 		}
-		if (isText && !textValue.trim()) {
-			setStatus({ text: t("metadataSubmit.status.enterValue"), tone: "error" });
+		const hasMediaMoves = Object.keys(mediaMoves).length > 0;
+		const hasMediaDeletes = Object.keys(mediaDeletes).length > 0;
+		const deleting = textDelete || hasMediaDeletes;
+		// Removing content must always explain why.
+		if (deleting && !note.trim()) {
+			setStatus({ text: t("metadataSubmit.status.deleteReason"), tone: "error" });
 			return;
 		}
-		if (isText && textType?.key === "release_year") {
-			const [ys, ms] = textValue.trim().split("-");
-			const y = Number(ys);
-			if (!Number.isInteger(y) || y < 0 || y > 10000) {
-				setStatus({ text: t("metadataSubmit.status.invalidYear"), tone: "error" });
+		if (isText && textDelete) {
+			if (!region) {
+				setStatus({ text: t("metadataSubmit.status.pickDeleteRegion"), tone: "error" });
 				return;
 			}
-			if (ms !== undefined && ms !== "") {
-				const m = Number(ms);
-				if (!Number.isInteger(m) || m < 1 || m > 12) {
-					setStatus({ text: t("metadataSubmit.status.invalidMonth"), tone: "error" });
+		} else if (isText) {
+			if (!textValue.trim()) {
+				setStatus({ text: t("metadataSubmit.status.enterValue"), tone: "error" });
+				return;
+			}
+			if (textType?.key === "release_year") {
+				const [ys, ms] = textValue.trim().split("-");
+				const y = Number(ys);
+				if (!Number.isInteger(y) || y < 0 || y > 10000) {
+					setStatus({ text: t("metadataSubmit.status.invalidYear"), tone: "error" });
+					return;
+				}
+				if (ms !== undefined && ms !== "") {
+					const m = Number(ms);
+					if (!Number.isInteger(m) || m < 1 || m > 12) {
+						setStatus({ text: t("metadataSubmit.status.invalidMonth"), tone: "error" });
+						return;
+					}
+				}
+			}
+			if (textType?.key === "rating") {
+				const r = Number(textValue.trim());
+				if (!Number.isInteger(r) || r < 1 || r > 10) {
+					setStatus({ text: t("metadataSubmit.status.invalidRating"), tone: "error" });
 					return;
 				}
 			}
-		}
-		if (isText && textType?.key === "rating") {
-			const r = Number(textValue.trim());
-			if (!Number.isInteger(r) || r < 1 || r > 10) {
-				setStatus({ text: t("metadataSubmit.status.invalidRating"), tone: "error" });
+			if (textType?.key === "type") {
+				if (!(GAME_TYPES as readonly string[]).includes(textValue.trim())) {
+					setStatus({ text: t("metadataSubmit.status.invalidGameType"), tone: "error" });
+					return;
+				}
+			}
+			if (textType?.key === "description" && textValue.trim().length > MAX_DESCRIPTION_LENGTH) {
+				setStatus({ text: t("metadataSubmit.status.descriptionTooLong", { max: MAX_DESCRIPTION_LENGTH }), tone: "error" });
 				return;
 			}
 		}
-		if (isText && textType?.key === "type") {
-			if (!(GAME_TYPES as readonly string[]).includes(textValue.trim())) {
-				setStatus({ text: t("metadataSubmit.status.invalidGameType"), tone: "error" });
-				return;
-			}
-		}
-		if (isText && textType?.key === "description" && textValue.trim().length > MAX_DESCRIPTION_LENGTH) {
-			setStatus({ text: t("metadataSubmit.status.descriptionTooLong", { max: MAX_DESCRIPTION_LENGTH }), tone: "error" });
+		if (isRegionalKind && mediaMode === "move" && !hasMediaMoves) {
+			setStatus({ text: t("metadataSubmit.status.pickMoveRegion"), tone: "error" });
 			return;
 		}
-		const hasMediaMoves = Object.keys(mediaMoves).length > 0;
-		if (!isText && !file && !hasMediaMoves) {
+		if (isRegionalKind && mediaMode === "delete" && !hasMediaDeletes) {
+			setStatus({ text: t("metadataSubmit.status.pickDelete"), tone: "error" });
+			return;
+		}
+		if (!isText && !file && !hasMediaMoves && !hasMediaDeletes) {
 			setStatus({ text: isVideo ? t("metadataSubmit.status.pickVideo") : t("metadataSubmit.status.pickImage"), tone: "error" });
 			return;
 		}
@@ -378,27 +403,41 @@ export default function MetadataSubmissionPage() {
 			const payload: Record<string, unknown> = {};
 			if (note.trim()) payload.note = note.trim();
 			if (isText && textType) {
-				if (textType.key === "release_year") {
-					const [ys, ms] = textValue.trim().split("-");
-					payload.release_year = Number(ys);
-					if (ms) payload.release_month = Number(ms);
-				} else if (textType.key === "rating") {
-					payload.rating = Number(textValue.trim());
-				} else {
-					payload[textType.key] = textValue.trim();
-				}
-				// The name and release date are region-specific. region_from moves
-				// an existing value from another region.
-				if ((textType.key === "name" || textType.key === "release_year") && region) {
+				if (textDelete) {
+					// Remove the name/release of a region.
+					payload.delete = true;
 					payload.region = region;
-					if (textMoveFrom && textMoveFrom !== region) payload.region_from = textMoveFrom;
+					payload.field = textType.key === "name" ? "name" : "release";
+				} else {
+					if (textType.key === "release_year") {
+						const [ys, ms] = textValue.trim().split("-");
+						payload.release_year = Number(ys);
+						if (ms) payload.release_month = Number(ms);
+					} else if (textType.key === "rating") {
+						payload.rating = Number(textValue.trim());
+					} else {
+						payload[textType.key] = textValue.trim();
+					}
+					// The name and release date are region-specific. region_from
+					// moves an existing value from another region.
+					if ((textType.key === "name" || textType.key === "release_year") && region) {
+						payload.region = region;
+						if (textMoveFrom && textMoveFrom !== region) payload.region_from = textMoveFrom;
+					}
 				}
 			}
 
 			if (isText) {
 				await createMetadataSubmission({ game_id: game.id, payload });
 			} else {
-				const files: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region: string }[] = [];
+				const files: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region: string; delete?: boolean }[] = [];
+				// Existing cover/logo deleted from a region.
+				for (const m of existingMedia) {
+					if (mediaDeletes[m.object_key]) {
+						const fileName = m.object_key.split("/").pop() || m.object_key;
+						files.push({ kind: m.kind, object_key: m.object_key, file_name: fileName, mime_type: m.mime, size: m.size, region: m.region || "", delete: true });
+					}
+				}
 				// Existing cover/logo moved to another region (no new upload).
 				for (const m of existingMedia) {
 					const target = mediaMoves[m.object_key];
@@ -560,7 +599,13 @@ export default function MetadataSubmissionPage() {
 									</select>
 								</div>
 							) : null}
-							{existingText.length > 0 ? (
+							{type === "name" || type === "release_year" ? (
+								<label className="flex items-center gap-2 cursor-pointer">
+									<input type="checkbox" className="checkbox checkbox-sm checkbox-error" checked={textDelete} onChange={(e) => setTextDelete(e.target.checked)} />
+									<span className="text-sm">{t("metadataSubmit.form.deleteRegion")}</span>
+								</label>
+							) : null}
+							{!textDelete && existingText.length > 0 ? (
 								<div>
 									<label className="label-text">{t("metadataSubmit.form.moveFromRegion")}</label>
 									<select
@@ -592,6 +637,7 @@ export default function MetadataSubmissionPage() {
 									) : null}
 								</p>
 							</div>
+							{!textDelete ? (
 							<div>
 								<label className="label-text">{t("metadataSubmit.form.newField", { field: textLabel.toLowerCase() })}</label>
 								{type === "description" ? (
@@ -636,9 +682,75 @@ export default function MetadataSubmissionPage() {
 									<input className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder={t("metadataSubmit.form.newFieldPlaceholder", { field: textLabel.toLowerCase() })} />
 								)}
 							</div>
+							) : null}
 						</div>
 					) : (
 						<div className="space-y-3">
+							{isRegionalKind ? (
+								<div className="flex gap-2 flex-wrap">
+									<button type="button" className={mediaMode === "new" ? "btn btn-primary btn-sm" : "btn btn-outline btn-sm"} onClick={() => setMediaMode("new")}>
+										{t("metadataSubmit.form.addNewImage")}
+									</button>
+									<button type="button" className={mediaMode === "move" ? "btn btn-primary btn-sm" : "btn btn-outline btn-sm"} onClick={() => setMediaMode("move")} disabled={existingMedia.length === 0}>
+										{t("metadataSubmit.form.changeRegion")}
+									</button>
+									<button type="button" className={mediaMode === "delete" ? "btn btn-error btn-sm" : "btn btn-outline btn-sm"} onClick={() => setMediaMode("delete")} disabled={existingMedia.length === 0}>
+										{t("metadataSubmit.form.deleteRegion")}
+									</button>
+								</div>
+							) : null}
+							{isRegionalKind && (mediaMode === "move" || mediaMode === "delete") ? (
+								<div>
+									<p className="label-text mb-1">{mediaMode === "delete" ? t("metadataSubmit.form.deleteByRegion") : t("metadataSubmit.form.existingByRegion")}</p>
+									<div className="space-y-2">
+										{existingMedia.map((m) => {
+											const currentReg = m.region || "";
+											const target = mediaMoves[m.object_key] ?? currentReg;
+											return (
+												<div key={m.id} className="flex items-center gap-2">
+													<img src={mediaUrl(m)} alt="" className="w-12 h-12 object-contain rounded border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30" onError={(e) => (e.currentTarget.style.display = "none")} />
+													{mediaMode === "delete" ? (
+														<label className="flex items-center gap-2 cursor-pointer flex-1">
+															<input
+																type="checkbox"
+																className="checkbox checkbox-sm checkbox-error"
+																checked={!!mediaDeletes[m.object_key]}
+																onChange={(e) =>
+																	setMediaDeletes((prev) => {
+																		const next = { ...prev };
+																		if (e.target.checked) next[m.object_key] = true;
+																		else delete next[m.object_key];
+																		return next;
+																	})
+																}
+															/>
+															<span className="text-sm">{regionLabel(t, currentReg)}</span>
+														</label>
+													) : (
+														<select
+															className="select select-sm flex-1"
+															value={target}
+															onChange={(e) => {
+																const v = e.target.value;
+																setMediaMoves((prev) => {
+																	const next = { ...prev };
+																	if (v === currentReg) delete next[m.object_key];
+																	else next[m.object_key] = v;
+																	return next;
+																});
+															}}
+														>
+															{regions.map((r) => <option key={r.id} value={r.name}>{regionLabel(t, r.name)}</option>)}
+														</select>
+													)}
+												</div>
+											);
+										})}
+									</div>
+									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{mediaMode === "delete" ? t("metadataSubmit.form.deleteHint") : t("metadataSubmit.form.moveHint")}</p>
+								</div>
+							) : (
+								<>
 							{isRegionalKind ? (
 								<div>
 									<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
@@ -648,38 +760,6 @@ export default function MetadataSubmissionPage() {
 											<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
 										))}
 									</select>
-								</div>
-							) : null}
-							{isRegionalKind && existingMedia.length > 0 ? (
-								<div>
-									<p className="label-text mb-1">{t("metadataSubmit.form.existingByRegion")}</p>
-									<div className="space-y-2">
-										{existingMedia.map((m) => {
-											const currentReg = m.region || "";
-											const target = mediaMoves[m.object_key] ?? currentReg;
-											return (
-												<div key={m.id} className="flex items-center gap-2">
-													<img src={mediaUrl(m)} alt="" className="w-12 h-12 object-contain rounded border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30" onError={(e) => (e.currentTarget.style.display = "none")} />
-													<select
-														className="select select-sm flex-1"
-														value={target}
-														onChange={(e) => {
-															const v = e.target.value;
-															setMediaMoves((prev) => {
-																const next = { ...prev };
-																if (v === currentReg) delete next[m.object_key];
-																else next[m.object_key] = v;
-																return next;
-															});
-														}}
-													>
-														{regions.map((r) => <option key={r.id} value={r.name}>{regionLabel(t, r.name)}</option>)}
-													</select>
-												</div>
-											);
-										})}
-									</div>
-									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.moveHint")}</p>
 								</div>
 							) : null}
 							{!isVideo && file && previewUrl ? (
@@ -759,6 +839,8 @@ export default function MetadataSubmissionPage() {
 									{fileError ? <p className="text-[var(--color-error)]">{fileError}</p> : <p className="text-[var(--color-success)]">{t("metadataSubmit.form.videoOk")}</p>}
 								</div>
 							) : null}
+								</>
+							)}
 						</div>
 					)}
 

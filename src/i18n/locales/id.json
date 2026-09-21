@@ -651,7 +651,11 @@
 			"fixVideo": "Perbaiki masalah video sebelum mengirim.",
 			"creating": "Membuat kiriman...",
 			"submitted": "Dikirim untuk ditinjau. Terima kasih!",
-			"descriptionTooLong": "Deskripsi maksimal {{max}} karakter."
+			"descriptionTooLong": "Deskripsi maksimal {{max}} karakter.",
+			"pickMoveRegion": "Pilih wilayah baru untuk gambar yang ingin dipindahkan",
+			"deleteReason": "Alasan wajib diisi saat menghapus",
+			"pickDelete": "Centang gambar yang ingin dihapus",
+			"pickDeleteRegion": "Pilih wilayah yang nilainya ingin dihapus"
 		},
 		"uploadingVideo": "Mengunggah video...",
 		"uploadingImage": "Mengunggah gambar...",
@@ -704,7 +708,12 @@
 			"existingByRegion": "Ada per wilayah",
 			"moveFromRegion": "Pindahkan dari wilayah",
 			"moveHint": "Ubah wilayah untuk memindahkan nilai itu",
-			"none": "Tidak ada"
+			"none": "Tidak ada",
+			"addNewImage": "Tambah gambar baru",
+			"changeRegion": "Ubah wilayah yang ada",
+			"deleteRegion": "Hapus per wilayah",
+			"deleteByRegion": "Hapus menurut wilayah",
+			"deleteHint": "Centang yang ingin dihapus; alasan wajib diisi"
 		},
 		"working": "Bekerja...",
 		"submitForReview": "Kirim untuk ditinjau",
