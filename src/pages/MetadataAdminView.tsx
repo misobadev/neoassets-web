@@ -397,7 +397,7 @@ export default function MetadataAdminView() {
 								<div className="flex items-center gap-2 flex-wrap">
 									<h2 className="text-xl font-bold truncate">{gameName || t("metadataAdmin.submissionTitle")}</h2>
 									{systemName ? <span className="badge badge-ghost badge-sm shrink-0">{systemName}</span> : null}
-									{subRegion ? <span className="badge badge-ghost badge-sm shrink-0"><RegionLabel region={subRegion} /></span> : null}
+									{subRegion ? <span className="badge badge-secondary badge-sm shrink-0"><RegionLabel region={subRegion} /></span> : null}
 									{detail.submission.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
 								</div>
 								{gameID && systemID ? (
@@ -480,7 +480,7 @@ export default function MetadataAdminView() {
 											<div key={f.id} className="space-y-2">
 												<p className="font-medium text-sm flex items-center gap-2">
 													{t(MEDIA_LABEL[f.kind])}
-													{f.region ? <span className="badge badge-ghost badge-xs"><RegionLabel region={f.region} /></span> : null}
+													{f.region ? <span className="badge badge-secondary badge-xs"><RegionLabel region={f.region} /></span> : null}
 												</p>
 												<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 													{isVideo ? (
