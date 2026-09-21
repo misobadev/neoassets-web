@@ -145,7 +145,7 @@ export default function MetadataAdminView() {
 
 	const payload = (detail?.submission.payload || {}) as Record<string, unknown>;
 	const note = typeof payload.note === "string" ? payload.note : "";
-	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month");
+	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month" && k !== "region");
 	const textKeys = [...TEXT_ORDER.filter((k) => payloadKeys.includes(k)), ...payloadKeys.filter((k) => !TEXT_ORDER.includes(k))];
 
 	// Header data for the detail modal: the target game/system and a link to
@@ -442,7 +442,10 @@ export default function MetadataAdminView() {
 								<div className="space-y-3">
 									{textKeys.map((k) => (
 										<div key={k} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-2">
-											<p className="font-medium text-sm">{textLabel(k)}</p>
+											<p className="font-medium text-sm">
+												{textLabel(k)}
+												{(k === "name" || k === "release_year") && subRegion ? ` (${regionLabel(t, subRegion)})` : ""}
+											</p>
 											<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 												<div className="min-w-0">
 													<span className="inline-block badge badge-ghost badge-sm mb-1">{t("admin.old")}</span>
