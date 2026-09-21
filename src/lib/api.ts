@@ -676,15 +676,6 @@ export function rejectMetadataSubmission(id: string, comment = ""): Promise<Meta
 // Dashboard
 // ---------------------------------------------------------------------------
 
-export interface DashUserStat {
-	id: string;
-	username: string;
-	avatar_key?: string;
-	approved: number;
-	rejected: number;
-	total: number;
-}
-
 export interface DashUserCount {
 	id: string;
 	username: string;
@@ -730,17 +721,23 @@ export interface DashGame {
 	last_scraped_at?: string | null;
 }
 
+export interface DashSystem {
+	system_id: string;
+	name: string;
+	scrapes: number;
+}
+
 export interface DashboardData {
 	total_games: number;
 	total_packs: number;
 	total_systems: number;
 	total_users: number;
 	total_contributions: number;
-	top_reviewers: DashUserStat[];
 	top_contributions: DashUserCount[];
 	top_approved_week: DashUserCount[];
 	top_levels: DashLevel[];
 	top_games: DashGame[];
+	top_systems: DashSystem[];
 	recent_packs: DashRecentPack[];
 	recent_metadata: DashRecentMetadata[];
 }

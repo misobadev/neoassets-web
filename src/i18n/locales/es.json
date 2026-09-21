@@ -157,6 +157,8 @@
 		"noLevels": "Aún no hay usuarios con nivel.",
 		"levelShort": "Nv {{level}} · {{xp}} XP",
 		"topGames": "Juegos más scrapeados",
+		"topSystems": "Sistemas más scrapeados",
+		"noSystems": "Aún no hay sistemas scrapeados.",
 		"noGames": "Aún no hay juegos scrapeados.",
 		"scrapes": "{{count}} scrapes",
 		"mediaStorage": "Almacenamiento multimedia",

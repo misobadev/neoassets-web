@@ -170,6 +170,8 @@
 		"noLevels": "まだランク付けされたユーザーはいません。",
 		"scrapes": "{{count}} 回スクレイプ",
 		"topGames": "最もスクレイプされたゲーム",
+		"topSystems": "最もスクレイプされたシステム",
+		"noSystems": "まだスクレイプされたシステムはありません。",
 		"topLevels": "トップレベル",
 		"totalContributions": "投稿",
 		"totalGames": "カタログ内のゲーム",

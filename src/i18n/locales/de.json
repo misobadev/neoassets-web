@@ -170,6 +170,8 @@
 		"noLevels": "Noch keine rangierten Nutzer.",
 		"scrapes": "{{count}} Scrapes",
 		"topGames": "Meistgescrapte Spiele",
+		"topSystems": "Meistgescrapte Systeme",
+		"noSystems": "Noch keine gescrapten Systeme.",
 		"topLevels": "Top-Level",
 		"totalContributions": "Beiträge",
 		"totalGames": "Spiele im Katalog",

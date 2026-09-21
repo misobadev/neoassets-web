@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Award, Check, Clock, Crown, Database, Download, Flame, Gamepad2, HardDrive, Layers, ListChecks, Package, ShieldCheck, Users, X } from "lucide-react";
+import { Award, Clock, Crown, Database, Download, Flame, Gamepad2, HardDrive, Layers, ListChecks, Package, Server, Users } from "lucide-react";
 import { api, cdnUrl, CDN_BASE, fetchDashboard, fetchStorageUsage, type DashboardData, type Pack, type StorageUsage } from "../lib/api";
 import { formatDate } from "../lib/format";
 import UserLink from "../components/UserLink";
@@ -106,17 +106,16 @@ export default function DashboardPage() {
 			</div>
 
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-				<LeaderCard title={t("dashboard.topReviewers")} icon={<ShieldCheck className="w-4 h-4" />} empty={t("dashboard.noReviews")}>
-					{(data.top_reviewers || []).map((u) => (
+				<LeaderCard title={t("dashboard.topLevels")} icon={<Crown className="w-4 h-4" />} empty={t("dashboard.noLevels")}>
+					{(data.top_levels || []).map((u, i) => (
 						<div key={u.id} className="flex items-center justify-between gap-2">
-							<span className="flex items-center gap-2 min-w-0">
+							<span className="flex items-center gap-2 truncate">
+								<RankIcon i={i} />
 								<Avatar name={u.username} avatarKey={u.avatar_key} size={28} />
 								<UserLink>{u.username}</UserLink>
+								<span className="badge badge-ghost badge-sm">{t("guide.ranks." + u.rank, { defaultValue: u.rank })}</span>
 							</span>
-							<span className="flex items-center gap-2 text-xs">
-								<span className="inline-flex items-center gap-1 text-[var(--color-success)]"><Check className="w-3.5 h-3.5" />{u.approved}</span>
-								<span className="inline-flex items-center gap-1 text-[var(--color-error)]"><X className="w-3.5 h-3.5" />{u.rejected}</span>
-							</span>
+							<span className="text-xs text-[var(--color-base-content)]/60 shrink-0">{t("dashboard.levelOnly", { level: u.level })}</span>
 						</div>
 					))}
 				</LeaderCard>
@@ -149,20 +148,6 @@ export default function DashboardPage() {
 			</div>
 
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-				<LeaderCard title={t("dashboard.topLevels")} icon={<Crown className="w-4 h-4" />} empty={t("dashboard.noLevels")}>
-					{(data.top_levels || []).map((u, i) => (
-						<div key={u.id} className="flex items-center justify-between gap-2">
-							<span className="flex items-center gap-2 truncate">
-								<RankIcon i={i} />
-								<Avatar name={u.username} avatarKey={u.avatar_key} size={28} />
-								<UserLink>{u.username}</UserLink>
-								<span className="badge badge-ghost badge-sm">{t("guide.ranks." + u.rank, { defaultValue: u.rank })}</span>
-							</span>
-							<span className="text-xs text-[var(--color-base-content)]/60 shrink-0">{t("dashboard.levelOnly", { level: u.level })}</span>
-						</div>
-					))}
-				</LeaderCard>
-
 				<LeaderCard title={t("dashboard.topGames")} icon={<Flame className="w-4 h-4" />} empty={t("dashboard.noGames")}>
 					{(data.top_games || []).map((g, i) => (
 						<Link key={g.id} to={`/app/metadata/${g.system_id}/game/${g.id}`} className="flex items-center justify-between gap-2 hover:bg-base-300 rounded-md -mx-2 px-2 py-0.5">
@@ -172,6 +157,19 @@ export default function DashboardPage() {
 								<span className="text-[11px] text-[var(--color-base-content)]/40 shrink-0 font-mono">{g.system_id}</span>
 							</span>
 							<span className="badge badge-primary badge-sm shrink-0">{t("dashboard.scrapes", { count: g.scrapes })}</span>
+						</Link>
+					))}
+				</LeaderCard>
+
+				<LeaderCard title={t("dashboard.topSystems")} icon={<Server className="w-4 h-4" />} empty={t("dashboard.noSystems")}>
+					{(data.top_systems || []).map((s, i) => (
+						<Link key={s.system_id} to={`/app/metadata/${s.system_id}`} className="flex items-center justify-between gap-2 hover:bg-base-300 rounded-md -mx-2 px-2 py-0.5">
+							<span className="flex items-center gap-2 truncate">
+								<RankIcon i={i} />
+								<span className="truncate">{s.name}</span>
+								<span className="text-[11px] text-[var(--color-base-content)]/40 shrink-0 font-mono">{s.system_id}</span>
+							</span>
+							<span className="badge badge-primary badge-sm shrink-0">{t("dashboard.scrapes", { count: s.scrapes })}</span>
 						</Link>
 					))}
 				</LeaderCard>

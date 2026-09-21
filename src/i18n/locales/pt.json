@@ -170,6 +170,8 @@
 		"noLevels": "Ainda sem utilizadores classificados.",
 		"scrapes": "{{count}} scrapes",
 		"topGames": "Jogos mais scraped",
+		"topSystems": "Sistemas mais scraped",
+		"noSystems": "Ainda sem sistemas scraped.",
 		"topLevels": "Melhores níveis",
 		"totalContributions": "Contribuições",
 		"totalGames": "Jogos no catálogo",

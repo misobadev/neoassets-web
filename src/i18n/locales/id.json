@@ -170,6 +170,8 @@
 		"noLevels": "Belum ada pengguna berperingkat.",
 		"scrapes": "{{count}} scrape",
 		"topGames": "Game paling banyak di-scrape",
+		"topSystems": "Sistem paling banyak di-scrape",
+		"noSystems": "Belum ada sistem yang di-scrape.",
 		"topLevels": "Level teratas",
 		"totalContributions": "Kontribusi",
 		"totalGames": "Game di katalog",

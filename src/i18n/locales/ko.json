@@ -170,6 +170,8 @@
 		"noLevels": "아직 순위가 매겨진 사용자가 없습니다.",
 		"scrapes": "{{count}}회 스크레이프",
 		"topGames": "가장 많이 스크레이프된 게임",
+		"topSystems": "가장 많이 스크레이프된 시스템",
+		"noSystems": "아직 스크레이프된 시스템이 없습니다.",
 		"topLevels": "최고 레벨",
 		"totalContributions": "기여",
 		"totalGames": "카탈로그의 게임",

@@ -170,6 +170,8 @@
 		"noLevels": "还没有已排名的用户。",
 		"scrapes": "{{count}} 次抓取",
 		"topGames": "抓取最多的游戏",
+		"topSystems": "抓取最多的系统",
+		"noSystems": "还没有已抓取的系统。",
 		"topLevels": "最高等级",
 		"totalContributions": "贡献",
 		"totalGames": "目录中的游戏",
