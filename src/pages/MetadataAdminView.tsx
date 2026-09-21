@@ -19,6 +19,7 @@ import {
 	type MetadataStatus,
 } from "../lib/api";
 import { formatDate } from "../lib/format";
+import { regionLabel } from "../lib/regions";
 
 const BADGE: Record<MetadataStatus, string> = {
 	created: "badge-info",
@@ -37,8 +38,9 @@ const MEDIA_LABEL: Record<MediaKind, string> = {
 	video: "metadataSubmit.mediaKind.video",
 };
 
-// Text payload fields, in the order they are shown in the comparison.
-const TEXT_ORDER = ["name", "description", "region", "genre", "developer", "publisher", "release_year", "rating", "type"];
+// Text payload fields, in the order they are shown in the comparison. The
+// region is shown as a badge, not as a text change.
+const TEXT_ORDER = ["name", "description", "genre", "developer", "publisher", "release_year", "rating", "type"];
 const TEXT_LABEL: Record<string, string> = {
 	name: "metadataSubmit.textTypes.name",
 	description: "metadataSubmit.textTypes.description",
@@ -161,6 +163,9 @@ export default function MetadataAdminView() {
 	const hasOldPayload = Object.keys(oldPayload).length > 0;
 	const oldMedia = (detail?.submission.old_media || []) as MetadataMedia[];
 
+	// Region the submission targets (name/release/logo/cover), if any.
+	const subRegion = typeof payload.region === "string" ? payload.region : "";
+
 	// currentValue resolves the target's value for a payload key so it can be
 	// compared against the proposed one. For an approved submission the target
 	// already holds the new value, so the old snapshot is used instead.
@@ -179,6 +184,14 @@ export default function MetadataAdminView() {
 		}
 		const g = detail?.game;
 		const sys = detail?.system;
+		// The name/release belong to the submission's region, so compare against
+		// that region's value (never another region's).
+		if (subRegion && (key === "name" || key === "release_year")) {
+			const gr = g?.regions?.find((r) => r.region === subRegion);
+			if (key === "name") return gr?.name || "";
+			const y = gr?.release_year;
+			return y ? `${y}${gr?.release_month ? `-${String(gr.release_month).padStart(2, "0")}` : ""}` : "";
+		}
 		if (key === "release_year") {
 			if (!g?.release_year) return "";
 			return `${g.release_year}${g.release_month ? `-${String(g.release_month).padStart(2, "0")}` : ""}`;
@@ -383,6 +396,7 @@ export default function MetadataAdminView() {
 								<div className="flex items-center gap-2 flex-wrap">
 									<h2 className="text-xl font-bold truncate">{gameName || t("metadataAdmin.submissionTitle")}</h2>
 									{systemName ? <span className="badge badge-ghost badge-sm shrink-0">{systemName}</span> : null}
+									{subRegion ? <span className="badge badge-ghost badge-sm shrink-0">{regionLabel(t, subRegion)}</span> : null}
 									{detail.submission.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
 								</div>
 								{gameID && systemID ? (
@@ -456,11 +470,14 @@ export default function MetadataAdminView() {
 									{detail.files.map((f) => {
 										// For an approved submission the target media already holds the
 										// new asset, so the old snapshot is used for the "old" side.
-										const current = (oldMedia.length > 0 ? oldMedia : detail.media).find((m) => m.kind === f.kind);
+										const current = (oldMedia.length > 0 ? oldMedia : detail.media).find((m) => m.kind === f.kind && (m.region || "") === (f.region || ""));
 										const isVideo = f.kind === "video";
 										return (
 											<div key={f.id} className="space-y-2">
-												<p className="font-medium text-sm">{t(MEDIA_LABEL[f.kind])}</p>
+												<p className="font-medium text-sm flex items-center gap-2">
+													{t(MEDIA_LABEL[f.kind])}
+													{f.region ? <span className="badge badge-ghost badge-xs">{regionLabel(t, f.region)}</span> : null}
+												</p>
 												<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 													{isVideo ? (
 														current ? (

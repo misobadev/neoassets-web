@@ -323,6 +323,7 @@ export interface MetadataSubmissionFile {
 	file_name: string;
 	mime: string;
 	size: number;
+	region?: string;
 	created_at?: string;
 	video_format?: string;
 	video_codec?: string;
