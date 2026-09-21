@@ -838,6 +838,8 @@
 			"removing": "Removing...",
 			"removed": "Submission removed.",
 			"trashFailed": "Trash failed: {{message}}",
+			"fileRemoved": "Image removed from the draft.",
+			"removeFailed": "Could not remove the image: {{message}}",
 			"deletingPermanent": "Deleting submission permanently...",
 			"deleted": "Submission deleted.",
 			"deleteFailed": "Delete failed: {{message}}"

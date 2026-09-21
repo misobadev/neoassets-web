@@ -838,6 +838,8 @@
 			"removing": "Eliminando...",
 			"removed": "Envío eliminado.",
 			"trashFailed": "Error al mover a la papelera: {{message}}",
+			"fileRemoved": "Imagen quitada del borrador.",
+			"removeFailed": "No se pudo quitar la imagen: {{message}}",
 			"deletingPermanent": "Eliminando el envío permanentemente...",
 			"deleted": "Envío eliminado.",
 			"deleteFailed": "Error al eliminar: {{message}}"

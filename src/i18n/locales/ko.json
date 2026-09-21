@@ -823,6 +823,8 @@
 			"removing": "제거 중...",
 			"removed": "제출물이 제거되었습니다.",
 			"trashFailed": "휴지통 이동 실패: {{message}}",
+			"fileRemoved": "초안에서 이미지를 제거했습니다.",
+			"removeFailed": "이미지를 제거할 수 없습니다: {{message}}",
 			"deletingPermanent": "제출물을 영구적으로 삭제하는 중...",
 			"deleted": "제출물이 삭제되었습니다.",
 			"deleteFailed": "삭제 실패: {{message}}",

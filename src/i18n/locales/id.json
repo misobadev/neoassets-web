@@ -823,6 +823,8 @@
 			"removing": "Menghapus...",
 			"removed": "Kiriman dihapus.",
 			"trashFailed": "Gagal memindahkan ke tempat sampah: {{message}}",
+			"fileRemoved": "Gambar dihapus dari draf.",
+			"removeFailed": "Gagal menghapus gambar: {{message}}",
 			"deletingPermanent": "Menghapus kiriman secara permanen...",
 			"deleted": "Kiriman dihapus.",
 			"deleteFailed": "Gagal menghapus: {{message}}",

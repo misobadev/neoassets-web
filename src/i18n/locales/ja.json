@@ -823,6 +823,8 @@
 			"removing": "削除中...",
 			"removed": "投稿を削除しました。",
 			"trashFailed": "ゴミ箱への移動に失敗しました: {{message}}",
+			"fileRemoved": "画像を下書きから削除しました。",
+			"removeFailed": "画像を削除できませんでした: {{message}}",
 			"deletingPermanent": "投稿を完全に削除中...",
 			"deleted": "投稿を削除しました。",
 			"deleteFailed": "削除に失敗しました: {{message}}",

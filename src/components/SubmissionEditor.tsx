@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { AlertTriangle, ChevronLeft, Loader2, Trash2 } from "lucide-react";
+import { AlertTriangle, ChevronLeft, Loader2, Trash2, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { api, cdnUrl, isAdmin, type PackDetail, type SubmissionDetail, type Submission, type SubmissionLog, type SubmissionStatus, userToken } from "../lib/api";
 import { formatDate } from "../lib/format";
@@ -33,6 +33,15 @@ const STATUS_BADGE: Record<string, string> = {
 
 // GIFs are stored as-is (animation preserved) and must not exceed 5 MB.
 const MAX_GIF_BYTES = 5 * 1024 * 1024;
+
+// isStagedObjectKey reports whether an object key is a staged submission upload
+// (review/uploads) or a preserved rejected file, i.e. one this draft owns and
+// can remove. Canonical published objects (backgrounds/, logos/, preview,
+// theme) are never removed from the live pack.
+function isStagedObjectKey(objectKey?: string): boolean {
+	if (!objectKey) return false;
+	return objectKey.includes("/review/") || objectKey.includes("/uploads/") || objectKey.startsWith("rejected/");
+}
 
 const statusColor = (tone: string) =>
 	({ info: "text-[var(--color-info)]", success: "text-[var(--color-success)]", error: "text-[var(--color-error)]", warning: "text-[var(--color-warning)]" })[tone] || "text-[var(--color-info)]";
@@ -257,6 +266,24 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 			{ fileName, kind: "background", systemId, size: out.size, mimeType, blob: out, isNew: true },
 		]);
 		setStatus({ text: t("submissions.editor.addedDraft", { name: fileName }), tone: "info" });
+	}
+
+	// A staged server object must be removed server-side so it does not linger
+	// on the submission; a local-only image is dropped from the draft.
+	async function removeFile(file: EditorFile) {
+		if (subId && file.objectKey) {
+			try {
+				await api(`/api/v1/submissions/${subId}/files?object_key=${encodeURIComponent(file.objectKey)}`, {
+					method: "DELETE",
+					token: userToken(),
+				});
+			} catch (e) {
+				setStatus({ text: t("submissions.editor.removeFailed", { message: (e as Error).message }), tone: "error" });
+				return;
+			}
+		}
+		setFiles((prev) => prev.filter((f) => !(f.kind === file.kind && f.systemId === file.systemId)));
+		setStatus({ text: t("submissions.editor.fileRemoved"), tone: "success" });
 	}
 
 	function confirmReplace() {
@@ -603,39 +630,55 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 							<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
 								{systems.map((s) => {
 									const file = files.find((f) => f.kind === "background" && f.systemId === s.id);
+									// Only files that belong to this draft can be removed:
+									// a local blob or a staged (review/rejected) upload. The
+									// pack's already-published images are shown for reference.
+									const removable = Boolean(file && (file.blob || isStagedObjectKey(file.objectKey)));
 									return (
-										<button
-											type="button"
-											key={s.id}
-											disabled={!editable}
-											onClick={() => {
-												addToSystemRef.current = s.id;
-												addFileInputRef.current?.click();
-											}}
-											className="card card-border hover:card-hover p-2.5 flex flex-col items-center gap-1.5 text-center disabled:opacity-50"
-										>
-											{file ? (
-												<FileThumb blob={file.blob} src={file.objectKey ? cdnUrl(file.objectKey) + (file.createdAt ? `?v=${encodeURIComponent(file.createdAt)}` : "") : ""} />
-											) : (
-												<div className="w-full aspect-square rounded-lg bg-[var(--color-base-300)] flex items-center justify-center text-xl font-bold text-[var(--color-base-content)]/25">
-													{(s.short_name || s.name).slice(0, 2).toUpperCase()}
-												</div>
-											)}
-											<span className="font-medium text-xs line-clamp-2">{s.name}</span>
-											<span className="text-[0.65rem] text-[var(--color-base-content)]/50 font-mono">{s.id}</span>
-											{file ? (
-												<>
-													{file.isNew ? (
-														<span className="badge badge-info badge-xs">{t("status.created")}</span>
-													) : (
-														<span className="badge badge-success badge-xs">{t("submissions.backgrounds.badgeUploaded")}</span>
-													)}
-													<span className="text-[0.65rem] text-[var(--color-base-content)]/50 font-mono">{(file.size / 1024).toFixed(0)} KB</span>
-												</>
-											) : (
-												<span className="badge badge-ghost badge-xs">{t("common.add")}</span>
-											)}
-										</button>
+										<div key={s.id} className="relative card card-border hover:card-hover p-2.5">
+											<button
+												type="button"
+												disabled={!editable}
+												onClick={() => {
+													addToSystemRef.current = s.id;
+													addFileInputRef.current?.click();
+												}}
+												className="w-full flex flex-col items-center gap-1.5 text-center disabled:opacity-50"
+											>
+												{file ? (
+													<FileThumb blob={file.blob} src={file.objectKey ? cdnUrl(file.objectKey) + (file.createdAt ? `?v=${encodeURIComponent(file.createdAt)}` : "") : ""} />
+												) : (
+													<div className="w-full aspect-square rounded-lg bg-[var(--color-base-300)] flex items-center justify-center text-xl font-bold text-[var(--color-base-content)]/25">
+														{(s.short_name || s.name).slice(0, 2).toUpperCase()}
+													</div>
+												)}
+												<span className="font-medium text-xs line-clamp-2">{s.name}</span>
+												<span className="text-[0.65rem] text-[var(--color-base-content)]/50 font-mono">{s.id}</span>
+												{file ? (
+													<>
+														{file.isNew ? (
+															<span className="badge badge-info badge-xs">{t("status.created")}</span>
+														) : (
+															<span className="badge badge-success badge-xs">{t("submissions.backgrounds.badgeUploaded")}</span>
+														)}
+														<span className="text-[0.65rem] text-[var(--color-base-content)]/50 font-mono">{(file.size / 1024).toFixed(0)} KB</span>
+													</>
+												) : (
+													<span className="badge badge-ghost badge-xs">{t("common.add")}</span>
+												)}
+											</button>
+											{editable && removable && file ? (
+												<button
+													type="button"
+													onClick={() => removeFile(file)}
+													className="btn btn-xs btn-circle btn-error absolute top-1 right-1"
+													aria-label={t("common.delete")}
+													title={t("common.delete")}
+												>
+													<X className="w-3 h-3" />
+												</button>
+											) : null}
+										</div>
 									);
 								})}
 							</div>

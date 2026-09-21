@@ -823,6 +823,8 @@
 			"removing": "Wird entfernt...",
 			"removed": "Einreichung entfernt.",
 			"trashFailed": "Verschieben in den Papierkorb fehlgeschlagen: {{message}}",
+			"fileRemoved": "Bild aus dem Entwurf entfernt.",
+			"removeFailed": "Bild konnte nicht entfernt werden: {{message}}",
 			"deletingPermanent": "Einreichung wird dauerhaft gelöscht...",
 			"deleted": "Einreichung gelöscht.",
 			"deleteFailed": "Löschen fehlgeschlagen: {{message}}",

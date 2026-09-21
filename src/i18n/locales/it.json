@@ -823,6 +823,8 @@
 			"removing": "Rimozione...",
 			"removed": "Proposta rimossa.",
 			"trashFailed": "Spostamento nel cestino non riuscito: {{message}}",
+			"fileRemoved": "Immagine rimossa dalla bozza.",
+			"removeFailed": "Impossibile rimuovere l'immagine: {{message}}",
 			"deletingPermanent": "Eliminazione definitiva della proposta...",
 			"deleted": "Proposta eliminata.",
 			"deleteFailed": "Eliminazione non riuscita: {{message}}",

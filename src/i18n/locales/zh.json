@@ -823,6 +823,8 @@
 			"removing": "正在移除……",
 			"removed": "投稿已移除。",
 			"trashFailed": "移至回收站失败：{{message}}",
+			"fileRemoved": "图片已从草稿中移除。",
+			"removeFailed": "无法移除图片：{{message}}",
 			"deletingPermanent": "正在永久删除投稿……",
 			"deleted": "投稿已删除。",
 			"deleteFailed": "删除失败：{{message}}",

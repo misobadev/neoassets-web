@@ -823,6 +823,8 @@
 			"removing": "Suppression...",
 			"removed": "Soumission supprimée.",
 			"trashFailed": "Échec de la mise à la corbeille : {{message}}",
+			"fileRemoved": "Image retirée du brouillon.",
+			"removeFailed": "Impossible de retirer l'image : {{message}}",
 			"deletingPermanent": "Suppression définitive de la soumission...",
 			"deleted": "Soumission supprimée.",
 			"deleteFailed": "Échec de la suppression : {{message}}",

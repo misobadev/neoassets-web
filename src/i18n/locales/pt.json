@@ -823,6 +823,8 @@
 			"removing": "Removendo...",
 			"removed": "Envio removido.",
 			"trashFailed": "Falha ao mover para a lixeira: {{message}}",
+			"fileRemoved": "Imagem removida do rascunho.",
+			"removeFailed": "Não foi possível remover a imagem: {{message}}",
 			"deletingPermanent": "Excluindo envio permanentemente...",
 			"deleted": "Envio excluído.",
 			"deleteFailed": "Falha ao excluir: {{message}}",
