@@ -594,7 +594,8 @@
 		"romDumpsTitle_one": "Dump ROM ({{count}})",
 		"romDumpsTitle_other": "Dump ROM ({{count}})",
 		"noDumps": "Tidak ada dump.",
-		"regionsTitle": "Wilayah"
+		"regionsTitle": "Wilayah",
+		"regionalNames": "Nama regional"
 	},
 	"metadataStatus": {
 		"created": "Draf",
@@ -699,7 +700,11 @@
 			"charCount": "{{count}}/{{max}} karakter",
 			"genrePlaceholder": "Pilih genre",
 			"regionLabel": "Wilayah",
-			"regionPlaceholder": "Pilih wilayah"
+			"regionPlaceholder": "Pilih wilayah",
+			"existingByRegion": "Ada per wilayah",
+			"moveFromRegion": "Pindahkan dari wilayah",
+			"moveHint": "Ubah wilayah untuk memindahkan nilai itu",
+			"none": "Tidak ada"
 		},
 		"working": "Bekerja...",
 		"submitForReview": "Kirim untuk ditinjau",

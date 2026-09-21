@@ -594,7 +594,8 @@
 		"romDumpsTitle_one": "ROMダンプ（{{count}}）",
 		"romDumpsTitle_other": "ROMダンプ（{{count}}）",
 		"noDumps": "ダンプがありません。",
-		"regionsTitle": "地域"
+		"regionsTitle": "地域",
+		"regionalNames": "地域別の名前"
 	},
 	"metadataStatus": {
 		"created": "下書き",
@@ -699,7 +700,11 @@
 			"charCount": "{{count}}/{{max}} 文字",
 			"genrePlaceholder": "ジャンルを選択",
 			"regionLabel": "地域",
-			"regionPlaceholder": "地域を選択"
+			"regionPlaceholder": "地域を選択",
+			"existingByRegion": "地域別の既存",
+			"moveFromRegion": "地域から移動",
+			"moveHint": "地域を変更するとその値が移動します",
+			"none": "なし"
 		},
 		"working": "処理中...",
 		"submitForReview": "レビューに提出",

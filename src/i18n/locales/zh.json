@@ -594,7 +594,8 @@
 		"romDumpsTitle_one": "ROM 转储（{{count}}）",
 		"romDumpsTitle_other": "ROM 转储（{{count}}）",
 		"noDumps": "无转储。",
-		"regionsTitle": "地区"
+		"regionsTitle": "地区",
+		"regionalNames": "地区名称"
 	},
 	"metadataStatus": {
 		"created": "草稿",
@@ -699,7 +700,11 @@
 			"charCount": "{{count}}/{{max}} 字符",
 			"genrePlaceholder": "选择类型",
 			"regionLabel": "地区",
-			"regionPlaceholder": "选择地区"
+			"regionPlaceholder": "选择地区",
+			"existingByRegion": "按地区现有",
+			"moveFromRegion": "从地区移动",
+			"moveHint": "更改地区以将该值移动过去",
+			"none": "无"
 		},
 		"working": "正在处理……",
 		"submitForReview": "提交审核",

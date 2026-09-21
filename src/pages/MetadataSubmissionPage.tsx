@@ -12,6 +12,7 @@ import {
 	requestMetadataUploadUrl,
 	userToken,
 	type GameDetail,
+	type GameRegion,
 	type Genre,
 	type Language,
 	type MediaKind,
@@ -79,6 +80,10 @@ export default function MetadataSubmissionPage() {
 	const [genres, setGenres] = useState<Genre[]>([]);
 	const [regions, setRegions] = useState<Region[]>([]);
 	const [region, setRegion] = useState("");
+	// Region corrections: existing media to move (object_key -> new region) and
+	// the source region when moving an existing name/release.
+	const [mediaMoves, setMediaMoves] = useState<Record<string, string>>({});
+	const [textMoveFrom, setTextMoveFrom] = useState("");
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -266,6 +271,21 @@ export default function MetadataSubmissionPage() {
 		return false;
 	}
 
+	// Existing cover/logo of the current kind across every region, so one can be
+	// moved to a different region without uploading it again.
+	const existingMedia = isRegionalKind
+		? (game.regions || []).flatMap((r) => (r.media || []).filter((m) => m.kind === currentKind))
+		: [];
+	// Existing regional names/releases, so one can be moved to another region.
+	const existingText =
+		type === "name"
+			? (game.regions || []).filter((r) => r.name)
+			: type === "release_year"
+				? (game.regions || []).filter((r) => r.release_year)
+				: [];
+	const textValueOf = (r: GameRegion): string =>
+		type === "name" ? r.name || "" : r.release_year ? `${r.release_year}${r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}` : "";
+
 	const textType = TEXT_TYPES.find((t) => t.key === type);
 	const textLabel = textType ? t(textType.label) : "";
 	const pendingLabels = pendingKeys.map((k) => {
@@ -343,7 +363,8 @@ export default function MetadataSubmissionPage() {
 			setStatus({ text: t("metadataSubmit.status.descriptionTooLong", { max: MAX_DESCRIPTION_LENGTH }), tone: "error" });
 			return;
 		}
-		if (!isText && !file) {
+		const hasMediaMoves = Object.keys(mediaMoves).length > 0;
+		if (!isText && !file && !hasMediaMoves) {
 			setStatus({ text: isVideo ? t("metadataSubmit.status.pickVideo") : t("metadataSubmit.status.pickImage"), tone: "error" });
 			return;
 		}
@@ -366,34 +387,44 @@ export default function MetadataSubmissionPage() {
 				} else {
 					payload[textType.key] = textValue.trim();
 				}
-				// The name and release date are region-specific.
+				// The name and release date are region-specific. region_from moves
+				// an existing value from another region.
 				if ((textType.key === "name" || textType.key === "release_year") && region) {
 					payload.region = region;
+					if (textMoveFrom && textMoveFrom !== region) payload.region_from = textMoveFrom;
 				}
 			}
 
 			if (isText) {
 				await createMetadataSubmission({ game_id: game.id, payload });
 			} else {
-				// Presign to the canonical key, upload with progress, then record.
-				const mime = file!.type || "application/octet-stream";
-				const regionForFile = currentKind === "logo" || currentKind === "cover" ? region : "";
-				setStatus({ text: isVideo ? t("metadataSubmit.uploadingVideo") : t("metadataSubmit.uploadingImage"), tone: "info" });
-				const resp = await requestMetadataUploadUrl({
-					game_id: game.id,
-					kind: currentKind,
-					file_name: file!.name,
-					mime_type: mime,
-					size: file!.size,
-					region: regionForFile,
-				});
-				await uploadWithProgress(resp.upload_url, file!, mime, (p) => setProgress(Math.round(p * 100)));
-				setProgress(100);
-				await createMetadataSubmission({
-					game_id: game.id,
-					payload,
-					files: [{ kind: currentKind, object_key: resp.object_key, file_name: file!.name, mime_type: mime, size: file!.size, region: regionForFile }],
-				});
+				const files: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region: string }[] = [];
+				// Existing cover/logo moved to another region (no new upload).
+				for (const m of existingMedia) {
+					const target = mediaMoves[m.object_key];
+					if (target && target !== (m.region || "")) {
+						const fileName = m.object_key.split("/").pop() || m.object_key;
+						files.push({ kind: m.kind, object_key: m.object_key, file_name: fileName, mime_type: m.mime, size: m.size, region: target });
+					}
+				}
+				// A newly picked file (optional when only moving).
+				if (file) {
+					const mime = file.type || "application/octet-stream";
+					const regionForFile = isRegionalKind ? region : "";
+					setStatus({ text: isVideo ? t("metadataSubmit.uploadingVideo") : t("metadataSubmit.uploadingImage"), tone: "info" });
+					const resp = await requestMetadataUploadUrl({
+						game_id: game.id,
+						kind: currentKind,
+						file_name: file.name,
+						mime_type: mime,
+						size: file.size,
+						region: regionForFile,
+					});
+					await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(Math.round(p * 100)));
+					setProgress(100);
+					files.push({ kind: currentKind, object_key: resp.object_key, file_name: file.name, mime_type: mime, size: file.size, region: regionForFile });
+				}
+				await createMetadataSubmission({ game_id: game.id, payload, files });
 			}
 
 			try {
@@ -529,6 +560,29 @@ export default function MetadataSubmissionPage() {
 									</select>
 								</div>
 							) : null}
+							{existingText.length > 0 ? (
+								<div>
+									<label className="label-text">{t("metadataSubmit.form.moveFromRegion")}</label>
+									<select
+										className="select w-full"
+										value={textMoveFrom}
+										onChange={(e) => {
+											const src = e.target.value;
+											setTextMoveFrom(src);
+											if (src) {
+												const gr = (game.regions || []).find((x) => x.region === src);
+												if (gr) setTextValue(textValueOf(gr));
+											}
+										}}
+									>
+										<option value="">{t("metadataSubmit.form.none")}</option>
+										{existingText.map((r) => (
+											<option key={r.region} value={r.region}>{regionLabel(t, r.region)} — {textValueOf(r)}</option>
+										))}
+									</select>
+									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.moveHint")}</p>
+								</div>
+							) : null}
 							<div>
 								<p className="label-text">{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}</p>
 								<p className="text-sm text-[var(--color-base-content)]/70">
@@ -594,6 +648,38 @@ export default function MetadataSubmissionPage() {
 											<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
 										))}
 									</select>
+								</div>
+							) : null}
+							{isRegionalKind && existingMedia.length > 0 ? (
+								<div>
+									<p className="label-text mb-1">{t("metadataSubmit.form.existingByRegion")}</p>
+									<div className="space-y-2">
+										{existingMedia.map((m) => {
+											const currentReg = m.region || "";
+											const target = mediaMoves[m.object_key] ?? currentReg;
+											return (
+												<div key={m.id} className="flex items-center gap-2">
+													<img src={mediaUrl(m)} alt="" className="w-12 h-12 object-contain rounded border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30" onError={(e) => (e.currentTarget.style.display = "none")} />
+													<select
+														className="select select-sm flex-1"
+														value={target}
+														onChange={(e) => {
+															const v = e.target.value;
+															setMediaMoves((prev) => {
+																const next = { ...prev };
+																if (v === currentReg) delete next[m.object_key];
+																else next[m.object_key] = v;
+																return next;
+															});
+														}}
+													>
+														{regions.map((r) => <option key={r.id} value={r.name}>{regionLabel(t, r.name)}</option>)}
+													</select>
+												</div>
+											);
+										})}
+									</div>
+									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.moveHint")}</p>
 								</div>
 							) : null}
 							{!isVideo && file && previewUrl ? (

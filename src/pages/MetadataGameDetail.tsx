@@ -170,17 +170,28 @@ export default function MetadataGameDetail() {
 					<div className="flex-1 min-w-0 space-y-4 text-sm">
 						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 							<div><p className="label-text">{t("metadataGame.fields.ratings")}</p><RatingBadge rating={game.rating} /></div>
-							<div>
-								<p className="label-text">{t("metadataGame.fields.release")}</p>
-								<div className="flex items-center gap-2">
-									<FieldValue gameId={game.id} systemId={systemId || game.system_id} type="release_year" label={t("metadataGame.fields.release")} value={game.release_year ? `${game.release_year}${game.release_month ? `-${String(game.release_month).padStart(2, "0")}` : ""}` : ""} />
-									{game.release_year && game.region ? <span className="badge badge-ghost badge-xs">{regionLabel(t, game.region)}</span> : null}
-								</div>
-							</div>
 							<div><p className="label-text">{t("metadataGame.fields.publisher")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="publisher" label={t("metadataGame.fields.publisher")} value={game.publisher} /></div>
 							<div><p className="label-text">{t("metadataGame.fields.developer")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="developer" label={t("metadataGame.fields.developer")} value={game.developer} /></div>
+							<div><p className="label-text">{t("metadataGame.fields.genre")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="genre" label={t("metadataGame.fields.genre")} value={genreLabel(t, game.genre)} /></div>
 						</div>
-						<div><p className="label-text">{t("metadataGame.fields.genre")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="genre" label={t("metadataGame.fields.genre")} value={genreLabel(t, game.genre)} /></div>
+						{regions.length > 0 ? (
+							<div>
+								<p className="label-text mb-1">{t("metadataGame.regionalNames")}</p>
+								<div className="space-y-1">
+									{regions.map((r) => (
+										<p key={r.region} className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap">
+											<span className="badge badge-ghost badge-xs">{regionLabel(t, r.region)}</span>
+											<span>{r.name || <span className="italic opacity-60">{t("metadataAdmin.none")}</span>}</span>
+											{r.release_year ? (
+												<span className="text-xs text-[var(--color-base-content)]/50">
+													{r.release_year}{r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}
+												</span>
+											) : null}
+										</p>
+									))}
+								</div>
+							</div>
+						) : null}
 						{game.description ? (
 							<div>
 								<div className="flex items-center justify-between gap-3 mb-1">
@@ -219,34 +230,24 @@ export default function MetadataGameDetail() {
 				})()}
 			</section>
 
-			{regions.length > 0 ? (
+			{regions.some((r) => (r.media || []).length > 0) ? (
 				<section className="card p-6">
 					<h2 className="font-semibold mb-3">{t("metadataGame.regionsTitle")}</h2>
 					<div className="space-y-3">
-						{regions.map((r) => (
+						{regions.filter((r) => (r.media || []).length > 0).map((r) => (
 							<div key={r.region} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-2">
-								<div className="flex items-center gap-2 flex-wrap">
-									<span className="badge badge-ghost badge-sm">{regionLabel(t, r.region)}</span>
-									{r.name ? <span className="text-sm font-medium">{r.name}</span> : null}
-									{r.release_year ? (
-										<span className="text-xs text-[var(--color-base-content)]/50">
-											{r.release_year}{r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}
-										</span>
-									) : null}
+								<span className="badge badge-ghost badge-sm">{regionLabel(t, r.region)}</span>
+								<div className="flex flex-wrap gap-2">
+									{(r.media || []).map((m) => (
+										<img
+											key={m.id}
+											src={mediaUrl(m)}
+											alt={t(KIND_LABEL[m.kind] || m.kind)}
+											className="w-24 h-24 object-contain rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30"
+											onError={(e) => (e.currentTarget.style.display = "none")}
+										/>
+									))}
 								</div>
-								{r.media && r.media.length > 0 ? (
-									<div className="flex flex-wrap gap-2">
-										{r.media.map((m) => (
-											<img
-												key={m.id}
-												src={mediaUrl(m)}
-												alt={t(KIND_LABEL[m.kind] || m.kind)}
-												className="w-24 h-24 object-contain rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30"
-												onError={(e) => (e.currentTarget.style.display = "none")}
-											/>
-										))}
-									</div>
-								) : null}
 							</div>
 						))}
 					</div>

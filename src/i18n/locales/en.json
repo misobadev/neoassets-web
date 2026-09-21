@@ -576,7 +576,8 @@
 		"romDumpsTitle_one": "ROM dumps ({{count}})",
 		"romDumpsTitle_other": "ROM dumps ({{count}})",
 		"noDumps": "No dumps.",
-		"regionsTitle": "Regions"
+		"regionsTitle": "Regions",
+		"regionalNames": "Regional names"
 	},
 	"metadataStatus": {
 		"created": "Draft",
@@ -681,7 +682,11 @@
 			"charCount": "{{count}}/{{max}} characters",
 			"genrePlaceholder": "Select a genre",
 			"regionLabel": "Region",
-			"regionPlaceholder": "Select a region"
+			"regionPlaceholder": "Select a region",
+			"existingByRegion": "Existing by region",
+			"moveFromRegion": "Move from region",
+			"moveHint": "Change the region to move that value to it",
+			"none": "None"
 		},
 		"working": "Working...",
 		"submitForReview": "Submit for review",

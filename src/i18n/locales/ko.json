@@ -594,7 +594,8 @@
 		"romDumpsTitle_one": "ROM 덤프 ({{count}})",
 		"romDumpsTitle_other": "ROM 덤프 ({{count}})",
 		"noDumps": "덤프가 없습니다.",
-		"regionsTitle": "지역"
+		"regionsTitle": "지역",
+		"regionalNames": "지역별 이름"
 	},
 	"metadataStatus": {
 		"created": "초안",
@@ -699,7 +700,11 @@
 			"charCount": "{{count}}/{{max}}자",
 			"genrePlaceholder": "장르 선택",
 			"regionLabel": "지역",
-			"regionPlaceholder": "지역 선택"
+			"regionPlaceholder": "지역 선택",
+			"existingByRegion": "지역별 기존",
+			"moveFromRegion": "지역에서 이동",
+			"moveHint": "지역을 변경하면 해당 값이 이동합니다",
+			"none": "없음"
 		},
 		"working": "작업 중...",
 		"submitForReview": "검토를 위해 제출",

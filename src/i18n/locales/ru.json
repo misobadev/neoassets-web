@@ -610,7 +610,8 @@
 		"romDumpsTitle_many": "Дампы ROM ({{count}})",
 		"romDumpsTitle_other": "Дампы ROM ({{count}})",
 		"noDumps": "Нет дампов.",
-		"regionsTitle": "Регионы"
+		"regionsTitle": "Регионы",
+		"regionalNames": "Региональные названия"
 	},
 	"metadataStatus": {
 		"created": "Черновик",
@@ -719,7 +720,11 @@
 			"charCount": "{{count}}/{{max}} символов",
 			"genrePlaceholder": "Выберите жанр",
 			"regionLabel": "Регион",
-			"regionPlaceholder": "Выберите регион"
+			"regionPlaceholder": "Выберите регион",
+			"existingByRegion": "Существующие по регионам",
+			"moveFromRegion": "Переместить из региона",
+			"moveHint": "Смените регион, чтобы переместить значение",
+			"none": "Нет"
 		},
 		"working": "Обработка...",
 		"submitForReview": "Отправить на проверку",

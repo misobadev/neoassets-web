@@ -594,7 +594,8 @@
 		"romDumpsTitle_one": "Dumps de ROM ({{count}})",
 		"romDumpsTitle_other": "Dumps de ROM ({{count}})",
 		"noDumps": "Nenhum dump.",
-		"regionsTitle": "Regiões"
+		"regionsTitle": "Regiões",
+		"regionalNames": "Nomes regionais"
 	},
 	"metadataStatus": {
 		"created": "Rascunho",
@@ -699,7 +700,11 @@
 			"charCount": "{{count}}/{{max}} caracteres",
 			"genrePlaceholder": "Selecione um gênero",
 			"regionLabel": "Região",
-			"regionPlaceholder": "Selecione uma região"
+			"regionPlaceholder": "Selecione uma região",
+			"existingByRegion": "Existentes por região",
+			"moveFromRegion": "Mover da região",
+			"moveHint": "Mude a região para mover esse valor",
+			"none": "Nenhum"
 		},
 		"working": "Processando...",
 		"submitForReview": "Enviar para revisão",

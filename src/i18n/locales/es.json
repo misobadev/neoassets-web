@@ -576,7 +576,8 @@
 		"romDumpsTitle_one": "Volcados de ROM ({{count}})",
 		"romDumpsTitle_other": "Volcados de ROM ({{count}})",
 		"noDumps": "Sin volcados.",
-		"regionsTitle": "Regiones"
+		"regionsTitle": "Regiones",
+		"regionalNames": "Nombres por región"
 	},
 	"metadataStatus": {
 		"created": "Borrador",
@@ -681,7 +682,11 @@
 			"charCount": "{{count}}/{{max}} caracteres",
 			"genrePlaceholder": "Selecciona un género",
 			"regionLabel": "Región",
-			"regionPlaceholder": "Selecciona una región"
+			"regionPlaceholder": "Selecciona una región",
+			"existingByRegion": "Existentes por región",
+			"moveFromRegion": "Mover desde región",
+			"moveHint": "Cambia la región para mover ese valor",
+			"none": "Ninguno"
 		},
 		"working": "Procesando...",
 		"submitForReview": "Enviar para revisión",

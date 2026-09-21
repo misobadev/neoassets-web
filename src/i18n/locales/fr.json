@@ -594,7 +594,8 @@
 		"romDumpsTitle_one": "Dumps ROM ({{count}})",
 		"romDumpsTitle_other": "Dumps ROM ({{count}})",
 		"noDumps": "Aucun dump.",
-		"regionsTitle": "Régions"
+		"regionsTitle": "Régions",
+		"regionalNames": "Noms régionaux"
 	},
 	"metadataStatus": {
 		"created": "Brouillon",
@@ -699,7 +700,11 @@
 			"charCount": "{{count}}/{{max}} caractères",
 			"genrePlaceholder": "Choisir un genre",
 			"regionLabel": "Région",
-			"regionPlaceholder": "Choisir une région"
+			"regionPlaceholder": "Choisir une région",
+			"existingByRegion": "Existants par région",
+			"moveFromRegion": "Déplacer depuis la région",
+			"moveHint": "Changez la région pour y déplacer cette valeur",
+			"none": "Aucun"
 		},
 		"working": "Traitement...",
 		"submitForReview": "Soumettre pour révision",
