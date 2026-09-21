@@ -130,6 +130,7 @@ export default function MetadataGameDetail() {
 					>
 						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{game.name}</h1>
 						<span className={`badge badge-lg shrink-0 ${game.type === "hack" ? "badge-warning" : game.type === "homebrew" ? "badge-info" : "badge-ghost"}`}>{game.type || "base"}</span>
+						{game.region ? <span className="badge badge-lg badge-ghost shrink-0">{regionLabel(t, game.region)}</span> : null}
 						{complete ? <span className="holo-badge inline-flex items-center rounded-full border border-black/15 px-3 py-0.5 text-xs font-bold shadow-sm shrink-0">{t("metadataGame.completed")}</span> : null}
 					</div>
 					<p className="text-sm text-[var(--color-base-content)]/60">{game.system_name}</p>
@@ -157,7 +158,10 @@ export default function MetadataGameDetail() {
 						{(() => {
 							const cover = game.media.find((m) => m.kind === "cover");
 							return cover ? (
-								<img src={mediaUrl(cover)} alt="" className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+								<div className="relative w-full h-full flex items-start justify-center">
+									<img src={mediaUrl(cover)} alt="" className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+									{cover.region ? <span className="badge badge-ghost badge-sm absolute bottom-1 right-1">{regionLabel(t, cover.region)}</span> : null}
+								</div>
 							) : (
 								<div className="w-full h-full rounded-lg bg-[var(--color-base-300)]" />
 							);
@@ -166,7 +170,13 @@ export default function MetadataGameDetail() {
 					<div className="flex-1 min-w-0 space-y-4 text-sm">
 						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 							<div><p className="label-text">{t("metadataGame.fields.ratings")}</p><RatingBadge rating={game.rating} /></div>
-							<div><p className="label-text">{t("metadataGame.fields.release")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="release_year" label={t("metadataGame.fields.release")} value={game.release_year ? `${game.release_year}${game.release_month ? `-${String(game.release_month).padStart(2, "0")}` : ""}` : ""} /></div>
+							<div>
+								<p className="label-text">{t("metadataGame.fields.release")}</p>
+								<div className="flex items-center gap-2">
+									<FieldValue gameId={game.id} systemId={systemId || game.system_id} type="release_year" label={t("metadataGame.fields.release")} value={game.release_year ? `${game.release_year}${game.release_month ? `-${String(game.release_month).padStart(2, "0")}` : ""}` : ""} />
+									{game.release_year && game.region ? <span className="badge badge-ghost badge-xs">{regionLabel(t, game.region)}</span> : null}
+								</div>
+							</div>
 							<div><p className="label-text">{t("metadataGame.fields.publisher")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="publisher" label={t("metadataGame.fields.publisher")} value={game.publisher} /></div>
 							<div><p className="label-text">{t("metadataGame.fields.developer")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="developer" label={t("metadataGame.fields.developer")} value={game.developer} /></div>
 						</div>

@@ -20,6 +20,7 @@ import {
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import { genreLabel } from "../lib/genres";
+import { regionLabel } from "../lib/regions";
 import { uploadWithProgress } from "../lib/upload";
 import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
 
@@ -486,7 +487,12 @@ export default function MetadataSubmissionPage() {
 						<div className="space-y-3">
 							<div>
 								<p className="label-text">{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}</p>
-								<p className="text-sm text-[var(--color-base-content)]/70">{currentText || "—"}</p>
+								<p className="text-sm text-[var(--color-base-content)]/70">
+									{currentText || "—"}
+									{(type === "name" || type === "release_year") && game.region ? (
+										<span className="ml-2 badge badge-ghost badge-xs align-middle">{regionLabel(t, game.region)}</span>
+									) : null}
+								</p>
 							</div>
 							<div>
 								<label className="label-text">{t("metadataSubmit.form.newField", { field: textLabel.toLowerCase() })}</label>
@@ -551,7 +557,10 @@ export default function MetadataSubmissionPage() {
 									<div>
 										<p className="label-text mb-2">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
 										{currentMedia.length > 0 ? (
-											<img src={mediaUrl(currentMedia[0])} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+											<div className="relative">
+												<img src={mediaUrl(currentMedia[0])} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+												{currentMedia[0].region ? <span className="badge badge-ghost badge-sm absolute bottom-1 right-1">{regionLabel(t, currentMedia[0].region)}</span> : null}
+											</div>
 										) : (
 											<div className="w-full h-44 flex items-center justify-center rounded-lg border border-dashed border-[var(--color-base-300)] bg-[var(--color-base-300)]/30 px-2">
 												<p className="text-sm text-[var(--color-base-content)]/50 text-center">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
@@ -568,13 +577,16 @@ export default function MetadataSubmissionPage() {
 									<p className="label-text">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
 									{currentMedia.length > 0 ? (
 										<div className="grid grid-cols-2 gap-3 mt-2">
-											{currentMedia.map((m) =>
-												isVideo ? (
-													<video key={m.id} src={mediaUrl(m)} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-black" controls muted />
-												) : (
-													<img key={m.id} src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-												),
-											)}
+											{currentMedia.map((m) => (
+												<div key={m.id} className="relative">
+													{isVideo ? (
+														<video src={mediaUrl(m)} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-black" controls muted />
+													) : (
+														<img src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+													)}
+													{m.region ? <span className="badge badge-ghost badge-sm absolute bottom-1 right-1">{regionLabel(t, m.region)}</span> : null}
+												</div>
+											))}
 										</div>
 									) : (
 										<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>

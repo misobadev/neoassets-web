@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { MediaKind, MetadataMedia } from "../lib/api";
+import { regionLabel } from "../lib/regions";
 
 // Preferred 2x2 arrangement: row 1 = logo + fanart, row 2 = screenshot +
 // video. Kinds outside this list (e.g. boxfront/boxback) are appended after.
@@ -59,7 +60,10 @@ export default function MediaGrid({
 							/>
 						)}
 						<div className="px-3 py-2 text-center border-t border-[var(--color-base-300)]">
-							<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/50">{kindLabel}</p>
+							<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/50">
+								{kindLabel}
+								{m.region ? <span className="ml-1 badge badge-ghost badge-xs align-middle">{regionLabel(t, m.region)}</span> : null}
+							</p>
 							{showMeta ? (
 								<p className="text-[10px] text-[var(--color-base-content)]/40">
 									{d ? `${d.w}×${d.h} · ` : ""}
