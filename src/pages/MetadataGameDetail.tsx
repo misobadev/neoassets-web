@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, PenSquare, PlusCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, PenSquare, PlusCircle } from "lucide-react";
 import { cdnUrl, fetchMetadataGameDetail, userToken, type GameDetail, type Language, type MediaKind, type MetadataMedia } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
@@ -64,6 +64,7 @@ export default function MetadataGameDetail() {
 	const [error, setError] = useState<string | null>(null);
 	const [holoMx, setHoloMx] = useState(0);
 	const [holoMy, setHoloMy] = useState(0);
+	const [coverIdx, setCoverIdx] = useState(0);
 	usePageTitle(game ? `${game.name} - NeoAssets` : "NeoAssets - Game Metadata");
 
 	useEffect(() => {
@@ -129,7 +130,7 @@ export default function MetadataGameDetail() {
 						style={{ "--mx": holoMx, "--my": holoMy } as React.CSSProperties}
 					>
 						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{game.name}</h1>
-						<span className={`badge badge-lg shrink-0 uppercase ${game.type === "hack" ? "badge-warning" : game.type === "homebrew" ? "badge-info" : "badge-primary"}`}>{game.type || "base"}</span>
+						<span className={`badge badge-lg shrink-0 uppercase ${game.type === "hack" ? "badge-solid-warning" : game.type === "homebrew" ? "badge-solid-info" : "badge-solid-primary"}`}>{game.type || "base"}</span>
 						{game.region ? <span className="badge badge-lg badge-secondary shrink-0"><RegionLabel region={game.region} /></span> : null}
 						{complete ? <span className="holo-badge inline-flex items-center rounded-full border border-black/15 px-3 py-0.5 text-xs font-bold shadow-sm shrink-0">{t("metadataGame.completed")}</span> : null}
 					</div>
@@ -154,16 +155,32 @@ export default function MetadataGameDetail() {
 
 			<div className="card p-6">
 				<div className="flex flex-col sm:flex-row gap-6">
-					<div className="w-full sm:w-56 shrink-0 h-72 flex items-start justify-center">
+					<div className="w-full sm:w-56 shrink-0 flex flex-col items-center gap-2">
 						{(() => {
-							const cover = game.media.find((m) => m.kind === "cover");
-							return cover ? (
-								<div className="relative w-full h-full flex items-start justify-center">
-									<img src={mediaUrl(cover)} alt="" className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-									{cover.region ? <span className="badge badge-secondary badge-sm absolute bottom-1 right-1"><RegionLabel region={cover.region} /></span> : null}
-								</div>
-							) : (
-								<div className="w-full h-full rounded-lg bg-[var(--color-base-300)]" />
+							const covers = game.media.filter((m) => m.kind === "cover");
+							if (covers.length === 0) {
+								return <div className="w-full h-72 rounded-lg bg-[var(--color-base-300)]" />;
+							}
+							const idx = Math.min(coverIdx, covers.length - 1);
+							const cover = covers[idx];
+							return (
+								<>
+									<div className="relative w-full h-72 flex items-start justify-center">
+										<img src={mediaUrl(cover)} alt="" className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+										{covers.length > 1 ? (
+											<>
+												<button type="button" onClick={() => setCoverIdx((idx - 1 + covers.length) % covers.length)} aria-label={t("metadata.prev")} className="btn btn-circle btn-xs absolute left-1 top-1/2 -translate-y-1/2 bg-black/50 border-0 text-white hover:bg-black/70">
+													<ChevronLeft className="w-4 h-4" />
+												</button>
+												<button type="button" onClick={() => setCoverIdx((idx + 1) % covers.length)} aria-label={t("metadata.next")} className="btn btn-circle btn-xs absolute right-1 top-1/2 -translate-y-1/2 bg-black/50 border-0 text-white hover:bg-black/70">
+													<ChevronRight className="w-4 h-4" />
+												</button>
+												<span className="badge badge-sm absolute top-2 right-2 bg-black/50 border-0 text-white">{idx + 1}/{covers.length}</span>
+											</>
+										) : null}
+									</div>
+									{cover.region ? <span className="badge badge-solid-secondary badge-sm"><RegionLabel region={cover.region} /></span> : null}
+								</>
 							);
 						})()}
 					</div>
@@ -180,7 +197,7 @@ export default function MetadataGameDetail() {
 								<div className="space-y-1">
 									{regions.map((r) => (
 										<p key={r.region} className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap">
-											<span className="badge badge-secondary badge-xs"><RegionLabel region={r.region} /></span>
+											<span className="badge badge-solid-secondary badge-xs"><RegionLabel region={r.region} /></span>
 											<span>{r.name || <span className="italic opacity-60">{t("metadataAdmin.none")}</span>}</span>
 											{r.release_year ? (
 												<span className="text-xs text-[var(--color-base-content)]/50">
@@ -236,7 +253,7 @@ export default function MetadataGameDetail() {
 					<div className="space-y-3">
 						{regions.filter((r) => (r.media || []).length > 0).map((r) => (
 							<div key={r.region} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-2">
-								<span className="badge badge-secondary badge-sm"><RegionLabel region={r.region} /></span>
+								<span className="badge badge-solid-secondary badge-sm"><RegionLabel region={r.region} /></span>
 								<div className="flex flex-wrap gap-2">
 									{(r.media || []).map((m) => (
 										<img

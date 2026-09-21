@@ -538,7 +538,7 @@ export default function MetadataSubmissionPage() {
 					<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{t("metadataSubmit.submitChanges")}</h1>
 					<p className="text-sm text-[var(--color-base-content)]/60 flex items-center gap-2">
 						<span className="truncate">{game.name} · {game.system_name}</span>
-						<span className={`badge badge-sm shrink-0 uppercase ${game.type === "hack" ? "badge-warning" : game.type === "homebrew" ? "badge-info" : "badge-primary"}`}>{game.type || "base"}</span>
+						<span className={`badge badge-sm shrink-0 uppercase ${game.type === "hack" ? "badge-solid-warning" : game.type === "homebrew" ? "badge-solid-info" : "badge-solid-primary"}`}>{game.type || "base"}</span>
 					</p>
 				</div>
 			</div>
@@ -666,7 +666,7 @@ export default function MetadataSubmissionPage() {
 											<p className="text-sm text-[var(--color-base-content)]/70">
 												{currentText || "—"}
 												{currentText && currentRegion ? (
-													<span className="ml-2 badge badge-secondary badge-xs align-middle"><RegionLabel region={currentRegion} /></span>
+													<span className="ml-2 badge badge-solid-secondary badge-xs align-middle"><RegionLabel region={currentRegion} /></span>
 												) : null}
 											</p>
 										</div>
@@ -684,7 +684,7 @@ export default function MetadataSubmissionPage() {
 												const target = textMoveFrom === source ? region : source;
 												return (
 													<div key={source} className="flex items-center gap-2">
-														<span className="badge badge-secondary badge-sm shrink-0"><RegionLabel region={source} /></span>
+														<span className="badge badge-solid-secondary badge-sm shrink-0"><RegionLabel region={source} /></span>
 														<span className="text-[var(--color-base-content)]/40 shrink-0">→</span>
 														<select
 															className="select select-sm flex-1"
@@ -736,7 +736,7 @@ export default function MetadataSubmissionPage() {
 									<p className="text-sm text-[var(--color-base-content)]/70">
 										{currentText || "—"}
 										{currentText && currentRegion ? (
-											<span className="ml-2 badge badge-secondary badge-xs align-middle"><RegionLabel region={currentRegion} /></span>
+											<span className="ml-2 badge badge-solid-secondary badge-xs align-middle"><RegionLabel region={currentRegion} /></span>
 										) : null}
 									</p>
 								</div>
@@ -790,7 +790,7 @@ export default function MetadataSubmissionPage() {
 														</label>
 													) : (
 														<>
-															<span className="badge badge-secondary badge-sm shrink-0"><RegionLabel region={currentReg} /></span>
+															<span className="badge badge-solid-secondary badge-sm shrink-0"><RegionLabel region={currentReg} /></span>
 															<span className="text-[var(--color-base-content)]/40 shrink-0">→</span>
 															<select
 																className="select select-sm flex-1"
@@ -835,7 +835,7 @@ export default function MetadataSubmissionPage() {
 										{currentMedia.length > 0 ? (
 											<div className="relative">
 												<img src={mediaUrl(currentMedia[0])} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-												{currentMedia[0].region ? <span className="badge badge-secondary badge-sm absolute bottom-1 right-1"><RegionLabel region={currentMedia[0].region} /></span> : null}
+												{currentMedia[0].region ? <span className="badge badge-solid-secondary badge-sm absolute bottom-1 right-1"><RegionLabel region={currentMedia[0].region} /></span> : null}
 											</div>
 										) : (
 											<div className="w-full h-44 flex items-center justify-center rounded-lg border border-dashed border-[var(--color-base-300)] bg-[var(--color-base-300)]/30 px-2">
@@ -860,7 +860,7 @@ export default function MetadataSubmissionPage() {
 													) : (
 														<img src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
 													)}
-													{m.region ? <span className="badge badge-secondary badge-sm absolute bottom-1 right-1"><RegionLabel region={m.region} /></span> : null}
+													{m.region ? <span className="badge badge-solid-secondary badge-sm absolute bottom-1 right-1"><RegionLabel region={m.region} /></span> : null}
 												</div>
 											))}
 										</div>

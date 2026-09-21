@@ -397,6 +397,32 @@ body {
 	color: color-mix(in oklab, var(--color-base-content) 70%, transparent);
 }
 
+/* Solid (opaque) variants used for the type and region tags so they always read
+   with a filled background instead of a translucent one. */
+@utility badge-solid-primary {
+	border-color: var(--color-primary);
+	background-color: var(--color-primary);
+	color: var(--color-base-100);
+}
+
+@utility badge-solid-secondary {
+	border-color: var(--color-secondary);
+	background-color: var(--color-secondary);
+	color: var(--color-base-100);
+}
+
+@utility badge-solid-info {
+	border-color: var(--color-info);
+	background-color: var(--color-info);
+	color: var(--color-base-100);
+}
+
+@utility badge-solid-warning {
+	border-color: var(--color-warning);
+	background-color: var(--color-warning);
+	color: var(--color-base-100);
+}
+
 /* Supporter tiers and roles use distinct hues so they read apart at a glance. */
 @utility badge-lime {
 	border-color: color-mix(in oklab, #a3e635 45%, transparent);
