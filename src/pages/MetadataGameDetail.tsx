@@ -130,7 +130,7 @@ export default function MetadataGameDetail() {
 						style={{ "--mx": holoMx, "--my": holoMy } as React.CSSProperties}
 					>
 						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{game.name}</h1>
-						<span className={`badge badge-lg shrink-0 uppercase ${game.type === "hack" ? "badge-solid-warning" : game.type === "homebrew" ? "badge-solid-info" : "badge-solid-primary"}`}>{game.type || "base"}</span>
+						<span className={`badge badge-lg shrink-0 uppercase ${game.type === "hack" ? "badge-solid-warning" : game.type === "homebrew" ? "badge-solid-info" : "badge-solid-neutral"}`}>{game.type || "base"}</span>
 						{game.region ? <span className="badge badge-lg badge-solid-neutral shrink-0"><RegionLabel region={game.region} /></span> : null}
 						{complete ? <span className="holo-badge inline-flex items-center rounded-full border border-black/15 px-3 py-0.5 text-xs font-bold shadow-sm shrink-0">{t("metadataGame.completed")}</span> : null}
 					</div>
