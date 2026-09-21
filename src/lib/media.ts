@@ -1,5 +1,6 @@
-// Shared media helpers for metadata contributions: image conversion to WebP and
-// video probing. Used by the per-field submission page and the new game form.
+// Shared media helpers for metadata contributions: accepted formats and video
+// probing. Images are uploaded as picked; the backend normalizes them to WebP
+// (crop, scale, quality) on approval, so no client-side conversion is trusted.
 
 export const IMAGE_ACCEPT = ".webp,.png,.jpg,.jpeg,.gif";
 export const VIDEO_ACCEPT = ".webm,.mp4,.mov,.mkv,.avi,.m4v,.mpg,.mpeg,.ts,.ogv,.wmv,.flv";
@@ -37,48 +38,6 @@ export function aspectLabel(w: number, h: number): string {
 		}
 	}
 	return best;
-}
-
-// toWebp converts any picked image to WebP. With `target` the image is
-// cover-cropped to that aspect ratio and scaled to exactly that size (fanart:
-// 1920x1080 16:9). With `maxSize` the image is only downscaled so its longest
-// side fits that size, preserving the aspect ratio (logo/cover: max 1024px).
-export async function toWebp(file: File, target?: { w: number; h: number }, maxSize?: number): Promise<File> {
-	const bitmap = await createImageBitmap(file);
-	let sx = 0;
-	let sy = 0;
-	let sw = bitmap.width;
-	let sh = bitmap.height;
-	let outW = bitmap.width;
-	let outH = bitmap.height;
-	if (target) {
-		const targetRatio = target.w / target.h;
-		const srcRatio = bitmap.width / bitmap.height;
-		if (srcRatio > targetRatio) {
-			sw = Math.round(bitmap.height * targetRatio);
-			sx = Math.round((bitmap.width - sw) / 2);
-		} else {
-			sh = Math.round(bitmap.width / targetRatio);
-			sy = Math.round((bitmap.height - sh) / 2);
-		}
-		outW = target.w;
-		outH = target.h;
-	} else if (maxSize && (bitmap.width > maxSize || bitmap.height > maxSize)) {
-		const scale = maxSize / Math.max(bitmap.width, bitmap.height);
-		outW = Math.round(bitmap.width * scale);
-		outH = Math.round(bitmap.height * scale);
-	}
-	const canvas = document.createElement("canvas");
-	canvas.width = outW;
-	canvas.height = outH;
-	const ctx = canvas.getContext("2d");
-	if (!ctx) throw new Error("canvas is not supported in this browser");
-	ctx.drawImage(bitmap, sx, sy, sw, sh, 0, 0, outW, outH);
-	const blob: Blob = await new Promise((resolve, reject) =>
-		canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("could not encode WebP"))), "image/webp", 0.92),
-	);
-	const name = file.name.replace(/\.[^.]+$/, "") + ".webp";
-	return new File([blob], name, { type: "image/webp" });
 }
 
 export interface VideoMeasurement {

@@ -4,7 +4,6 @@ import { AlertTriangle, ChevronLeft, Loader2, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { api, cdnUrl, isAdmin, type PackDetail, type SubmissionDetail, type Submission, type SubmissionLog, type SubmissionStatus, userToken } from "../lib/api";
 import { formatDate } from "../lib/format";
-import { toSafeBackground } from "../lib/image";
 import { useSystems } from "../lib/systems";
 import { uploadWithProgress } from "../lib/upload";
 import { clearPackDraft, loadPackDraft, savePackDraft } from "../lib/draft";
@@ -224,28 +223,17 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 		}
 
 		// GIFs keep their animation, so they are uploaded as-is (not re-encoded)
-		// and capped at 5 MB. Raster images are cropped to a 1024² WebP.
+		// and capped at 5 MB. Every other image is uploaded in its original
+		// format: the backend normalizes it to WebP on approval.
 		const isGif = ext === "gif";
 		if (isGif && file.size > MAX_GIF_BYTES) {
 			setStatus({ text: t("submissions.editor.errGifTooLarge", { mb: MAX_GIF_BYTES / 1024 / 1024 }), tone: "error" });
 			return;
 		}
 
-		let out: File = file;
-		if (!isGif) {
-			setProgress({ active: true, label: t("submissions.editor.cropping", { name: file.name }), percent: null });
-			try {
-				out = await toSafeBackground(file);
-			} catch (e) {
-				setProgress({ active: false, label: "", percent: null });
-				setStatus({ text: e instanceof Error ? e.message : t("submissions.editor.convertFailed"), tone: "error" });
-				return;
-			}
-			setProgress({ active: false, label: "", percent: null });
-		}
-
-		const fileName = isGif ? `${systemId}.gif` : `${systemId}.webp`;
-		const mimeType = isGif ? "image/gif" : "image/webp";
+		const out: File = file;
+		const fileName = `${systemId}.${ext}`;
+		const mimeType = file.type || "application/octet-stream";
 		const existing = files.find((f) => f.kind === "background" && f.systemId === systemId);
 		if (existing) {
 			// If the submission is still a draft, or the image being replaced is
@@ -274,9 +262,9 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 	function confirmReplace() {
 		if (!replaceDraft) return;
 		const { out, systemId } = replaceDraft;
-		const isGif = out.type === "image/gif";
-		const fileName = isGif ? `${systemId}.gif` : `${systemId}.webp`;
-		const mimeType = isGif ? "image/gif" : "image/webp";
+		const ext = (out.name.split(".").pop() || "").toLowerCase();
+		const fileName = `${systemId}.${ext}`;
+		const mimeType = out.type || "application/octet-stream";
 		setFiles((prev) => [
 			...prev.filter((f) => !(f.kind === "background" && f.systemId === systemId)),
 			{ fileName, kind: "background", systemId, size: out.size, mimeType, reason: replaceReason.trim() || undefined, blob: out, isNew: true },

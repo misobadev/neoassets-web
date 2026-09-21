@@ -42,10 +42,14 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
                            in `localStorage` under `ns-language`.
 - `src/i18n/locales/*.json` all UI strings (en, de, es, fr, id, it, ja, ko, pt, ru, zh).
 - `src/components/LanguageSelect.tsx`  language dropdown in the sidebar footer.
-- `src/lib/image.ts`       `toWebp()` in-browser conversion (png/jpg -> webp).
+- `src/lib/image.ts`       `toSafeBackground()` for avatars (center-crops to a
+                           square WebP in the browser).
 - `src/lib/upload.ts`      `uploadWithProgress()` PUT via XHR to the presigned URL.
-- `src/lib/media.ts`       metadata media helpers: `toWebp()`, `measureVideo()`,
-                           accepted aspect ratios and video limits.
+- `src/lib/media.ts`       metadata media helpers: accepted formats,
+                           `measureVideo()`, accepted aspect ratios and video
+                           limits. Submission images are uploaded as picked; the
+                           backend normalizes them to WebP (crop/scale/quality)
+                           on approval.
 - `src/pages/NewGamePage.tsx`  create a brand-new game (system + type + name with
                            an existing-game search, all fields and media) as a
                            `kind=new_game` metadata submission (route

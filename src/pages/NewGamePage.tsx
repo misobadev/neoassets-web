@@ -11,7 +11,7 @@ import {
 	type MediaKind,
 	type MetadataSystem,
 } from "../lib/api";
-import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo, toWebp } from "../lib/media";
+import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
 import { uploadWithProgress } from "../lib/upload";
 
 const GAME_TYPES = ["base", "homebrew", "hack"] as const;
@@ -74,7 +74,6 @@ export default function NewGamePage() {
 	const [note, setNote] = useState("");
 
 	const [files, setFiles] = useState<Partial<Record<MediaKind, File>>>({});
-	const [converting, setConverting] = useState(false);
 	const [videoMeta, setVideoMeta] = useState<{ duration: number; width: number; height: number; fps: number; aspect: string } | null>(null);
 	const [videoError, setVideoError] = useState<string | null>(null);
 
@@ -149,20 +148,11 @@ export default function NewGamePage() {
 		};
 	}, [files, t]);
 
-	async function onPickImage(kind: MediaKind, f: File | null) {
-		if (!f) {
-			setFiles((prev) => ({ ...prev, [kind]: undefined }));
-			return;
-		}
-		try {
-			setConverting(true);
-			const converted = kind === "fanart" ? await toWebp(f, { w: 1920, h: 1080 }) : kind === "logo" || kind === "cover" ? await toWebp(f, undefined, 1024) : await toWebp(f);
-			setFiles((prev) => ({ ...prev, [kind]: converted }));
-		} catch (e) {
-			setStatus({ text: t("metadataSubmit.errors.convertImage", { message: (e as Error).message }), tone: "error" });
-		} finally {
-			setConverting(false);
-		}
+	// Images are uploaded in their original format: the backend normalizes them
+	// to WebP (crop/scale/quality) on approval, so client-side conversion is no
+	// longer trusted.
+	function onPickImage(kind: MediaKind, f: File | null) {
+		setFiles((prev) => ({ ...prev, [kind]: f || undefined }));
 	}
 
 	function buildPayload(): Record<string, unknown> {
@@ -198,7 +188,7 @@ export default function NewGamePage() {
 			const uploaded: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number }[] = [];
 			for (const [kind, file] of Object.entries(files) as [MediaKind, File][]) {
 				if (!file) continue;
-				const mime = file.type || (kind === "video" ? "video/webm" : "image/webp");
+				const mime = file.type || "application/octet-stream";
 				const resp = await requestMetadataUploadUrl({ system_id: systemId, kind, file_name: file.name, mime_type: mime, size: file.size });
 				await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(Math.round(p * 100)));
 				setProgress(100);
@@ -378,7 +368,7 @@ export default function NewGamePage() {
 							<label className="btn btn-outline cursor-pointer">
 								<Upload className="w-4 h-4" />
 								{t("metadataSubmit.form.chooseImage")}
-								<input type="file" accept={IMAGE_ACCEPT} className="hidden" disabled={busy || converting} onChange={(e) => { void onPickImage(kind, e.target.files?.[0] || null); e.target.value = ""; }} />
+								<input type="file" accept={IMAGE_ACCEPT} className="hidden" disabled={busy} onChange={(e) => { onPickImage(kind, e.target.files?.[0] || null); e.target.value = ""; }} />
 							</label>
 						)}
 						<p className="text-xs text-[var(--color-base-content)]/50">
@@ -442,7 +432,7 @@ export default function NewGamePage() {
 
 			<div className="flex justify-end gap-2">
 				<button className="btn btn-ghost" onClick={() => navigate(systemId ? `/app/metadata/${systemId}` : "/app/metadata")} disabled={busy}>{t("common.cancel")}</button>
-				<button className="btn btn-primary" onClick={() => setConfirmSubmit(true)} disabled={busy || converting || !!existing || !systemId || !name.trim()}>
+				<button className="btn btn-primary" onClick={() => setConfirmSubmit(true)} disabled={busy || !!existing || !systemId || !name.trim()}>
 					<Plus className="w-4 h-4" />
 					{t("metadata.newGame.submit")}
 				</button>

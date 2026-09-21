@@ -16,7 +16,7 @@ import {
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import { uploadWithProgress } from "../lib/upload";
-import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo, toWebp } from "../lib/media";
+import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
 
 const TEXT_TYPES = [
 	{ key: "name", label: "metadataSubmit.textTypes.name" },
@@ -74,7 +74,6 @@ export default function MetadataSubmissionPage() {
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-	const [converting, setConverting] = useState(false);
 	const [videoMeta, setVideoMeta] = useState<{ duration: number; width: number; height: number; fps: number; aspect: string } | null>(null);
 	const [fileError, setFileError] = useState<string | null>(null);
 	const [status, setStatus] = useState<{ text: string; tone: string } | null>(null);
@@ -189,29 +188,13 @@ export default function MetadataSubmissionPage() {
 		return () => URL.revokeObjectURL(url);
 	}, [file, isVideo]);
 
-	// Every picked image is converted to WebP before upload; fanart is
-	// additionally cropped/scaled to 1920x1080 (16:9). Videos are uploaded
-	// as-is (the backend re-encodes them to MP4/HEVC on approval).
-	async function onPickFile(f: File | null) {
+	// Images are uploaded in their original format: the backend normalizes them
+	// to WebP (crop/scale/quality) on approval, so client-side conversion is no
+	// longer trusted. Videos are validated here for fast feedback and re-encoded
+	// to MP4/HEVC by the backend on approval.
+	function onPickFile(f: File | null) {
 		setFileError(null);
-		if (!f) {
-			setFile(null);
-			return;
-		}
-		if (isVideo) {
-			setFile(f);
-			return;
-		}
-		try {
-			setConverting(true);
-			const converted = type === "fanart" ? await toWebp(f, { w: 1920, h: 1080 }) : type === "logo" || type === "cover" ? await toWebp(f, undefined, 1024) : await toWebp(f);
-			setFile(converted);
-		} catch (e) {
-			setFile(null);
-			setFileError(t("metadataSubmit.errors.convertImage", { message: (e as Error).message }));
-		} finally {
-			setConverting(false);
-		}
+		setFile(f);
 	}
 
 	if (error) return <p className="text-sm text-[var(--color-error)] text-center py-10">{error}</p>;
@@ -345,7 +328,7 @@ export default function MetadataSubmissionPage() {
 				await createMetadataSubmission({ game_id: game.id, payload });
 			} else {
 				// Presign to the canonical key, upload with progress, then record.
-				const mime = file!.type || (isVideo ? "video/webm" : "image/*");
+				const mime = file!.type || "application/octet-stream";
 				setStatus({ text: isVideo ? t("metadataSubmit.uploadingVideo") : t("metadataSubmit.uploadingImage"), tone: "info" });
 				const resp = await requestMetadataUploadUrl({
 					game_id: game.id,
@@ -569,13 +552,13 @@ export default function MetadataSubmissionPage() {
 
 							<label className="btn btn-outline cursor-pointer">
 								{isVideo ? <Clapperboard className="w-4 h-4" /> : <Upload className="w-4 h-4" />}
-								{converting ? t("metadataSubmit.form.converting") : file ? file.name : isVideo ? t("metadataSubmit.form.chooseVideo") : t("metadataSubmit.form.chooseImage")}
+								{file ? file.name : isVideo ? t("metadataSubmit.form.chooseVideo") : t("metadataSubmit.form.chooseImage")}
 								<input
 									type="file"
 									accept={isVideo ? VIDEO_ACCEPT : IMAGE_ACCEPT}
 									className="hidden"
-									disabled={busy || converting}
-									onChange={(e) => { void onPickFile(e.target.files?.[0] || null); }}
+									disabled={busy}
+									onChange={(e) => onPickFile(e.target.files?.[0] || null)}
 								/>
 							</label>
 							{!isVideo ? (
@@ -629,7 +612,7 @@ export default function MetadataSubmissionPage() {
 
 			<div className="flex justify-end gap-2">
 				<button className="btn btn-ghost" onClick={() => navigate(`/app/metadata/${game.system_id}/game/${game.id}`)} disabled={busy}>{t("common.cancel")}</button>
-				<button className="btn btn-primary" onClick={() => setConfirmSubmit(true)} disabled={busy || converting || (isVideo && !!fileError)}>
+				<button className="btn btn-primary" onClick={() => setConfirmSubmit(true)} disabled={busy || (isVideo && !!fileError)}>
 					{busy ? t("metadataSubmit.working") : <><Check className="w-4 h-4" /> {t("metadataSubmit.submitForReview")}</>}
 				</button>
 			</div>
