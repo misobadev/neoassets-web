@@ -411,6 +411,12 @@ body {
 	color: var(--color-base-100);
 }
 
+@utility badge-solid-neutral {
+	border-color: var(--color-base-300);
+	background-color: var(--color-base-300);
+	color: var(--color-base-content);
+}
+
 @utility badge-solid-info {
 	border-color: var(--color-info);
 	background-color: var(--color-info);

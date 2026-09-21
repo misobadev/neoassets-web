@@ -101,7 +101,7 @@ export default function MediaGrid({
 						<div className="px-3 py-2 text-center border-t border-[var(--color-base-300)]">
 							<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/50">
 								{label(m.kind)}
-								{m.region ? <span className="ml-1 badge badge-solid-secondary badge-xs align-middle"><RegionLabel region={m.region} /></span> : null}
+								{m.region ? <span className="ml-1 badge badge-solid-neutral badge-xs align-middle"><RegionLabel region={m.region} /></span> : null}
 							</p>
 							{showMeta ? (
 								<p className="text-[10px] text-[var(--color-base-content)]/40">
