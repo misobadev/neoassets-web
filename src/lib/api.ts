@@ -334,6 +334,9 @@ interface ApiOptions {
 	method?: string;
 	body?: unknown;
 	token?: string | null;
+	// signal aborts the request (e.g. when a search query changes before the
+	// previous response arrives).
+	signal?: AbortSignal;
 }
 
 export async function api<T = unknown>(path: string, opts: ApiOptions = {}): Promise<T> {
@@ -344,6 +347,7 @@ export async function api<T = unknown>(path: string, opts: ApiOptions = {}): Pro
 		headers,
 		cache: "no-store",
 		body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
+		signal: opts.signal,
 	});
 	if (!res.ok) {
 		let detail = res.statusText;
@@ -550,19 +554,19 @@ export function fetchMetadataSystems(): Promise<MetadataSystem[]> {
 	return api<{ systems: MetadataSystem[] }>("/api/v1/metadata/systems").then((d) => d.systems || []);
 }
 
-export function fetchMetadataGamesBySystem(systemId: string, limit = 48, offset = 0, type = "", sort = ""): Promise<{ games: GameSummary[]; total: number }> {
+export function fetchMetadataGamesBySystem(systemId: string, limit = 48, offset = 0, type = "", sort = "", signal?: AbortSignal): Promise<{ games: GameSummary[]; total: number }> {
 	const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
 	if (type) params.set("type", type);
 	if (sort) params.set("sort", sort);
-	return api<{ games: GameSummary[]; total: number }>(`/api/v1/metadata/systems/${systemId}/games?${params.toString()}`);
+	return api<{ games: GameSummary[]; total: number }>(`/api/v1/metadata/systems/${systemId}/games?${params.toString()}`, { signal });
 }
 
-export function searchMetadataGames(q: string, systemId = "", limit = 48, offset = 0, type = "", sort = ""): Promise<{ games: GameSummary[]; total: number }> {
+export function searchMetadataGames(q: string, systemId = "", limit = 48, offset = 0, type = "", sort = "", signal?: AbortSignal): Promise<{ games: GameSummary[]; total: number }> {
 	const params = new URLSearchParams({ q, limit: String(limit), offset: String(offset) });
 	if (systemId) params.set("system_id", systemId);
 	if (type) params.set("type", type);
 	if (sort) params.set("sort", sort);
-	return api<{ games: GameSummary[]; total: number }>(`/api/v1/metadata/games?${params.toString()}`);
+	return api<{ games: GameSummary[]; total: number }>(`/api/v1/metadata/games?${params.toString()}`, { signal });
 }
 
 export function lookupMetadataGames(hashes: { crc?: string; md5?: string; sha1?: string; sha256?: string }): Promise<GameSummary[]> {

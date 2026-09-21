@@ -278,6 +278,10 @@ export default function MetadataBrowse() {
 	const [games, setGames] = useState<GameSummary[] | null>(null);
 	const [total, setTotal] = useState(0);
 	const [query, setQuery] = useState("");
+	// debouncedQuery is the value actually sent to the API. Keeping the raw
+	// `query` for the input makes typing responsive while a single request is
+	// issued only after the user pauses (see the effect below).
+	const [debouncedQuery, setDebouncedQuery] = useState("");
 	const [typeFilter, setTypeFilter] = useState<TypeFilter>("");
 	const [sort, setSort] = useState("scrapes");
 	const [page, setPage] = useState(1);
@@ -334,9 +338,21 @@ export default function MetadataBrowse() {
 	useEffect(() => {
 		setPage(1);
 		setQuery("");
+		setDebouncedQuery("");
 		setTypeFilter("");
 		setSort("scrapes");
 	}, [systemId]);
+
+	// Debounce the search box: the request is only issued after the user stops
+	// typing for a moment, instead of on every keystroke. Resetting the page in
+	// the same update keeps the debounced query and page in sync (one request).
+	useEffect(() => {
+		const handle = setTimeout(() => {
+			setDebouncedQuery(query);
+			setPage(1);
+		}, 350);
+		return () => clearTimeout(handle);
+	}, [query]);
 
 	// Close the flyout when clicking outside.
 	useEffect(() => {
@@ -347,22 +363,33 @@ export default function MetadataBrowse() {
 		return () => document.removeEventListener("mousedown", onDoc);
 	}, []);
 
+	// Fetch the page of games. The AbortController cancels the in-flight request
+	// when the query/filters/page change so stale responses never overwrite
+	// newer ones and the backend is not hit for outdated searches.
 	useEffect(() => {
+		const controller = new AbortController();
 		setLoading(true);
 		setError(null);
 		const offset = (page - 1) * LIMIT;
+		const q = debouncedQuery.trim();
 		const req = systemId
-			? query.trim()
-				? searchMetadataGames(query.trim(), systemId, LIMIT, offset, typeFilter, sort)
-				: fetchMetadataGamesBySystem(systemId, LIMIT, offset, typeFilter, sort)
-			: searchMetadataGames(query.trim(), "", LIMIT, offset, typeFilter, sort);
+			? q
+				? searchMetadataGames(q, systemId, LIMIT, offset, typeFilter, sort, controller.signal)
+				: fetchMetadataGamesBySystem(systemId, LIMIT, offset, typeFilter, sort, controller.signal)
+			: searchMetadataGames(q, "", LIMIT, offset, typeFilter, sort, controller.signal);
 		req.then((data) => {
 			setGames(data.games);
 			setTotal(data.total);
 		})
-			.catch((e: Error) => setError(e.message))
-			.finally(() => setLoading(false));
-	}, [systemId, query, page, typeFilter, sort]);
+			.catch((e: Error) => {
+				if (e.name === "AbortError") return;
+				setError(e.message);
+			})
+			.finally(() => {
+				if (!controller.signal.aborted) setLoading(false);
+			});
+		return () => controller.abort();
+	}, [systemId, debouncedQuery, page, typeFilter, sort]);
 
 	const totalPages = Math.max(1, Math.ceil(total / LIMIT));
 
@@ -476,7 +503,7 @@ export default function MetadataBrowse() {
 						className="input pl-9 w-full"
 						placeholder={selected ? t("metadata.searchSystemGames", { name: selected.name }) : t("metadata.searchAllGames")}
 						value={query}
-						onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+						onChange={(e) => setQuery(e.target.value)}
 					/>
 				</div>
 				<select
