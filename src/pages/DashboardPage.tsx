@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Award, Check, Clock, Crown, Database, Download, Flame, Gamepad2, HardDrive, Layers, ListChecks, Package, ShieldCheck, Star, Users } from "lucide-react";
+import { Award, Check, Clock, Crown, Database, Download, Flame, Gamepad2, HardDrive, Layers, ListChecks, Package, ShieldCheck, Users, X } from "lucide-react";
 import { api, cdnUrl, CDN_BASE, fetchDashboard, fetchStorageUsage, type DashboardData, type Pack, type StorageUsage } from "../lib/api";
 import { formatDate } from "../lib/format";
 import UserLink from "../components/UserLink";
@@ -115,28 +115,27 @@ export default function DashboardPage() {
 							</span>
 							<span className="flex items-center gap-2 text-xs">
 								<span className="inline-flex items-center gap-1 text-[var(--color-success)]"><Check className="w-3.5 h-3.5" />{u.approved}</span>
-								<span className="inline-flex items-center gap-1 text-[var(--color-error)]"><Star className="w-3.5 h-3.5" />{u.rejected}</span>
-								<span className="badge badge-ghost badge-sm">{t("dashboard.total", { count: u.total })}</span>
+								<span className="inline-flex items-center gap-1 text-[var(--color-error)]"><X className="w-3.5 h-3.5" />{u.rejected}</span>
 							</span>
 						</div>
 					))}
 				</LeaderCard>
 
 				<LeaderCard title={t("dashboard.topContributors")} icon={<ListChecks className="w-4 h-4" />} empty={t("dashboard.noSubmissions")}>
-					{(data.top_submitters || []).map((u, i) => (
+					{(data.top_contributions || []).map((u, i) => (
 						<div key={u.id} className="flex items-center justify-between gap-2">
 							<span className="flex items-center gap-2 truncate">
 								<RankIcon i={i} />
 								<Avatar name={u.username} avatarKey={u.avatar_key} size={28} />
 								<UserLink>{u.username}</UserLink>
 							</span>
-							<span className="badge badge-primary badge-sm">{t("dashboard.subs", { count: u.count })}</span>
+							<span className="badge badge-primary badge-sm">{t("dashboard.contributions", { count: u.count })}</span>
 						</div>
 					))}
 				</LeaderCard>
 
-				<LeaderCard title={t("dashboard.topApproved")} icon={<Award className="w-4 h-4" />} empty={t("dashboard.noApprovedPacks")}>
-					{(data.top_approved || []).map((u, i) => (
+				<LeaderCard title={t("dashboard.topApprovedWeek")} icon={<Award className="w-4 h-4" />} empty={t("dashboard.noApprovedWeek")}>
+					{(data.top_approved_week || []).map((u, i) => (
 						<div key={u.id} className="flex items-center justify-between gap-2">
 							<span className="flex items-center gap-2 truncate">
 								<RankIcon i={i} />
@@ -159,7 +158,7 @@ export default function DashboardPage() {
 								<UserLink>{u.username}</UserLink>
 								<span className="badge badge-ghost badge-sm">{t("guide.ranks." + u.rank, { defaultValue: u.rank })}</span>
 							</span>
-							<span className="text-xs text-[var(--color-base-content)]/60 shrink-0">{t("dashboard.levelShort", { level: u.level, xp: u.xp.toLocaleString() })}</span>
+							<span className="text-xs text-[var(--color-base-content)]/60 shrink-0">{t("dashboard.levelOnly", { level: u.level })}</span>
 						</div>
 					))}
 				</LeaderCard>

@@ -729,8 +729,8 @@ export interface DashboardData {
 	total_users: number;
 	total_contributions: number;
 	top_reviewers: DashUserStat[];
-	top_submitters: DashUserCount[];
-	top_approved: DashUserCount[];
+	top_contributions: DashUserCount[];
+	top_approved_week: DashUserCount[];
 	top_levels: DashLevel[];
 	top_games: DashGame[];
 	recent_packs: DashRecentPack[];

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { AlertTriangle, ChevronLeft, Image as ImageIcon, ShieldCheck, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import Pagination from "../components/Pagination";
 import UserLink from "../components/UserLink";
 import { useReviews } from "../lib/reviews";
 import {
@@ -50,6 +51,9 @@ const TEXT_LABEL: Record<string, string> = {
 	type: "metadataSubmit.textTypes.type",
 };
 
+// PAGE_SIZE is the number of submissions shown per page in the review list.
+const PAGE_SIZE = 20;
+
 function fmtSize(bytes?: number): string {
 	if (!bytes) return "—";
 	if (bytes < 1024) return `${bytes} B`;
@@ -66,7 +70,9 @@ export default function MetadataAdminView() {
 	const { refresh: refreshReviews } = useReviews();
 	const [status, setStatus] = useState<MetadataStatus | "">("pending");
 	const [kindFilter, setKindFilter] = useState("");
+	const [userFilter, setUserFilter] = useState("");
 	const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+	const [page, setPage] = useState(1);
 	const [submissions, setSubmissions] = useState<MetadataSubmission[] | null>(null);
 	const [detail, setDetail] = useState<MetadataSubmissionDetail | null>(null);
 	const [lightbox, setLightbox] = useState<{ url: string; label: string } | null>(null);
@@ -215,9 +221,32 @@ export default function MetadataAdminView() {
 	}
 
 	const allKinds = [...new Set((submissions || []).flatMap((s) => s.change_kinds || []))].sort();
+
+	// userOptions lists every contributor present in the current result set so
+	// the review list can be filtered by author.
+	const userOptions = useMemo(() => {
+		const map = new Map<string, string>();
+		for (const s of submissions || []) {
+			if (!map.has(s.user_id)) map.set(s.user_id, s.submitted_by_name || s.user_id);
+		}
+		return [...map.entries()]
+			.map(([id, name]) => ({ id, name }))
+			.sort((a, b) => a.name.localeCompare(b.name));
+	}, [submissions]);
+
+	// Reset to the first page whenever a filter or the status tab changes.
+	useEffect(() => {
+		setPage(1);
+	}, [status, kindFilter, userFilter, sortDir]);
+
 	const visible = [...(submissions || [])]
 		.filter((s) => !kindFilter || (s.change_kinds || []).includes(kindFilter))
+		.filter((s) => !userFilter || s.user_id === userFilter)
 		.sort((a, b) => (sortDir === "asc" ? (a.created_at > b.created_at ? 1 : -1) : a.created_at < b.created_at ? 1 : -1));
+
+	const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+	const currentPage = Math.min(page, totalPages);
+	const pageItems = visible.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
 	return (
 		<div className="space-y-6">
@@ -260,64 +289,80 @@ export default function MetadataAdminView() {
 				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-6">{listMsg || t("metadataAdmin.noSubmissions")}</p>
 			) : (
 				<>
-					<div className="flex flex-wrap items-center gap-2">
-						<span className="text-xs text-[var(--color-base-content)]/50">{t("metadataAdmin.filterBy")}</span>
-						<button type="button" className={kindFilter === "" ? "btn btn-xs btn-primary" : "btn btn-xs btn-ghost"} onClick={() => setKindFilter("")}>
-							{t("common.all")}
-						</button>
-						{allKinds.map((k) => (
-							<button key={k} type="button" className={kindFilter === k ? "btn btn-xs btn-primary" : "btn btn-xs btn-ghost"} onClick={() => setKindFilter(k)}>
-								{kindLabel(k)}
-							</button>
-						))}
-						<select className="select select-sm ml-auto" value={sortDir} onChange={(e) => setSortDir(e.target.value as "asc" | "desc")} aria-label={t("metadataAdmin.sortBy")}>
-							<option value="desc">{t("metadataAdmin.newestFirst")}</option>
-							<option value="asc">{t("metadataAdmin.oldestFirst")}</option>
-						</select>
+					<div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+						<label className="w-full">
+							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">{t("metadataAdmin.filterBy")}</span>
+							<select className="select select-sm w-full" value={kindFilter} onChange={(e) => setKindFilter(e.target.value)} aria-label={t("metadataAdmin.filterBy")}>
+								<option value="">{t("common.all")}</option>
+								{allKinds.map((k) => (
+									<option key={k} value={k}>{kindLabel(k)}</option>
+								))}
+							</select>
+						</label>
+						<label className="w-full">
+							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">{t("metadataAdmin.filterUser")}</span>
+							<select className="select select-sm w-full" value={userFilter} onChange={(e) => setUserFilter(e.target.value)} aria-label={t("metadataAdmin.filterUser")}>
+								<option value="">{t("metadataAdmin.allUsers")}</option>
+								{userOptions.map((u) => (
+									<option key={u.id} value={u.id}>{u.name}</option>
+								))}
+							</select>
+						</label>
+						<label className="w-full">
+							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">{t("metadataAdmin.sortBy")}</span>
+							<select className="select select-sm w-full" value={sortDir} onChange={(e) => setSortDir(e.target.value as "asc" | "desc")} aria-label={t("metadataAdmin.sortBy")}>
+								<option value="desc">{t("metadataAdmin.newestFirst")}</option>
+								<option value="asc">{t("metadataAdmin.oldestFirst")}</option>
+							</select>
+						</label>
 					</div>
 
 					{visible.length === 0 ? (
 						<p className="text-sm text-[var(--color-base-content)]/50 text-center py-6">{t("metadataAdmin.noSubmissions")}</p>
 					) : (
-						<div className="space-y-3">
-							{visible.map((s) => (
-								<div key={s.id} className="card card-hover p-4 cursor-pointer" onClick={() => open(s.id)}>
-									<div className="flex items-center gap-3">
-										{s.cover ? (
-											<img
-												src={cdnUrl(s.cover) + (s.cover_updated ? `?v=${encodeURIComponent(s.cover_updated)}` : "")}
-												alt=""
-												className="w-14 h-14 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
-												onError={(e) => (e.currentTarget.style.display = "none")}
-											/>
-										) : (
-											<div className="w-14 h-14 rounded-lg bg-[var(--color-base-300)] grid place-items-center shrink-0 text-[var(--color-base-content)]/30">
-												<ImageIcon className="w-6 h-6" />
-											</div>
-										)}
-										<div className="min-w-0 flex-1">
-											<div className="flex items-center gap-2 flex-wrap">
-												<p className="font-semibold truncate text-sm">
-													{s.game_name || (s.game_id ? t("metadataAdmin.gameContribution") : t("metadataAdmin.systemContribution"))}
+						<>
+							<Pagination page={currentPage} totalPages={totalPages} onChange={setPage} />
+							<div className="space-y-3">
+								{pageItems.map((s) => (
+									<div key={s.id} className="card card-hover p-4 cursor-pointer" onClick={() => open(s.id)}>
+										<div className="flex items-center gap-3">
+											{s.cover ? (
+												<img
+													src={cdnUrl(s.cover) + (s.cover_updated ? `?v=${encodeURIComponent(s.cover_updated)}` : "")}
+													alt=""
+													className="w-14 h-14 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
+													onError={(e) => (e.currentTarget.style.display = "none")}
+												/>
+											) : (
+												<div className="w-14 h-14 rounded-lg bg-[var(--color-base-300)] grid place-items-center shrink-0 text-[var(--color-base-content)]/30">
+													<ImageIcon className="w-6 h-6" />
+												</div>
+											)}
+											<div className="min-w-0 flex-1">
+												<div className="flex items-center gap-2 flex-wrap">
+													<p className="font-semibold truncate text-sm">
+														{s.game_name || (s.game_id ? t("metadataAdmin.gameContribution") : t("metadataAdmin.systemContribution"))}
+													</p>
+													{s.system_name ? <span className="badge badge-ghost badge-sm shrink-0">{s.system_name}</span> : null}
+													{s.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
+												</div>
+												<div className="flex flex-wrap gap-1 mt-1">
+													{(s.change_kinds || []).map((k) => (
+														<span key={k} className="badge badge-outline badge-xs">{kindLabel(k)}</span>
+													))}
+												</div>
+												<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
+													{t("metadataAdmin.by")} <UserLink>{s.submitted_by_name}</UserLink> · {formatDate(s.created_at)}
+													{s.reviewed_by_name ? <span> · {t("metadataAdmin.reviewedBy")} <UserLink>{s.reviewed_by_name}</UserLink></span> : null}
 												</p>
-												{s.system_name ? <span className="badge badge-ghost badge-sm shrink-0">{s.system_name}</span> : null}
-												{s.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
 											</div>
-											<div className="flex flex-wrap gap-1 mt-1">
-												{(s.change_kinds || []).map((k) => (
-													<span key={k} className="badge badge-outline badge-xs">{kindLabel(k)}</span>
-												))}
-											</div>
-											<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
-												{t("metadataAdmin.by")} <UserLink>{s.submitted_by_name}</UserLink> · {formatDate(s.created_at)}
-												{s.reviewed_by_name ? <span> · {t("metadataAdmin.reviewedBy")} <UserLink>{s.reviewed_by_name}</UserLink></span> : null}
-											</p>
+											<span className={`badge ${BADGE[s.status]} shrink-0`}>{t("metadataStatus." + s.status, { defaultValue: s.status })}</span>
 										</div>
-										<span className={`badge ${BADGE[s.status]} shrink-0`}>{t("metadataStatus." + s.status, { defaultValue: s.status })}</span>
 									</div>
-								</div>
-							))}
-						</div>
+								))}
+							</div>
+							<Pagination page={currentPage} totalPages={totalPages} onChange={setPage} />
+						</>
 					)}
 				</>
 			)}
