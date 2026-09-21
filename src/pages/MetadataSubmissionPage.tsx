@@ -289,6 +289,9 @@ export default function MetadataSubmissionPage() {
 	const textValueOf = (r: GameRegion): string =>
 		type === "name" ? r.name || "" : r.release_year ? `${r.release_year}${r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}` : "";
 
+	// Deleting requires a reason, so the "why" is mandatory in that case.
+	const deleting = textDelete || Object.keys(mediaDeletes).length > 0;
+
 	const textType = TEXT_TYPES.find((t) => t.key === type);
 	const textLabel = textType ? t(textType.label) : "";
 	const pendingLabels = pendingKeys.map((k) => {
@@ -332,7 +335,6 @@ export default function MetadataSubmissionPage() {
 		}
 		const hasMediaMoves = Object.keys(mediaMoves).length > 0;
 		const hasMediaDeletes = Object.keys(mediaDeletes).length > 0;
-		const deleting = textDelete || hasMediaDeletes;
 		// Removing content must always explain why.
 		if (deleting && !note.trim()) {
 			setStatus({ text: t("metadataSubmit.status.deleteReason"), tone: "error" });
@@ -727,21 +729,25 @@ export default function MetadataSubmissionPage() {
 															<span className="text-sm">{regionLabel(t, currentReg)}</span>
 														</label>
 													) : (
-														<select
-															className="select select-sm flex-1"
-															value={target}
-															onChange={(e) => {
-																const v = e.target.value;
-																setMediaMoves((prev) => {
-																	const next = { ...prev };
-																	if (v === currentReg) delete next[m.object_key];
-																	else next[m.object_key] = v;
-																	return next;
-																});
-															}}
-														>
-															{regions.map((r) => <option key={r.id} value={r.name}>{regionLabel(t, r.name)}</option>)}
-														</select>
+														<>
+															<span className="badge badge-ghost badge-sm shrink-0">{regionLabel(t, currentReg)}</span>
+															<span className="text-[var(--color-base-content)]/40 shrink-0">→</span>
+															<select
+																className="select select-sm flex-1"
+																value={target}
+																onChange={(e) => {
+																	const v = e.target.value;
+																	setMediaMoves((prev) => {
+																		const next = { ...prev };
+																		if (v === currentReg) delete next[m.object_key];
+																		else next[m.object_key] = v;
+																		return next;
+																	});
+																}}
+															>
+																{regions.map((r) => <option key={r.id} value={r.name}>{regionLabel(t, r.name)}</option>)}
+															</select>
+														</>
 													)}
 												</div>
 											);
@@ -845,7 +851,10 @@ export default function MetadataSubmissionPage() {
 					)}
 
 					<div>
-						<label className="label-text">{t("metadataSubmit.form.whyLabel")}</label>
+						<label className="label-text">
+							{deleting ? t("metadataSubmit.form.whyLabelRequired") : t("metadataSubmit.form.whyLabel")}
+							{deleting ? <span className="text-[var(--color-error)]"> *</span> : null}
+						</label>
 						<textarea className="input w-full min-h-20" value={note} onChange={(e) => setNote(e.target.value)} placeholder={t("metadataSubmit.form.whyPlaceholder")} disabled={busy} />
 					</div>
 				</section>

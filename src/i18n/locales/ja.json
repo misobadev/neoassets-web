@@ -713,7 +713,8 @@
 			"changeRegion": "既存の地域を変更",
 			"deleteRegion": "地域ごとに削除",
 			"deleteByRegion": "地域別に削除",
-			"deleteHint": "削除するものを選択してください（理由は必須です）"
+			"deleteHint": "削除するものを選択してください（理由は必須です）",
+			"whyLabelRequired": "理由（必須）"
 		},
 		"working": "処理中...",
 		"submitForReview": "レビューに提出",

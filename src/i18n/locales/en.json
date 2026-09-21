@@ -695,7 +695,8 @@
 			"changeRegion": "Change region of an existing one",
 			"deleteRegion": "Delete per region",
 			"deleteByRegion": "Delete by region",
-			"deleteHint": "Check the ones to remove; a reason is required"
+			"deleteHint": "Check the ones to remove; a reason is required",
+			"whyLabelRequired": "Why (required)"
 		},
 		"working": "Working...",
 		"submitForReview": "Submit for review",

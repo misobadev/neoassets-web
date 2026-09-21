@@ -713,7 +713,8 @@
 			"changeRegion": "기존 항목의 지역 변경",
 			"deleteRegion": "지역별 삭제",
 			"deleteByRegion": "지역별 삭제",
-			"deleteHint": "삭제할 항목을 선택하세요 (사유 필수)"
+			"deleteHint": "삭제할 항목을 선택하세요 (사유 필수)",
+			"whyLabelRequired": "이유 (필수)"
 		},
 		"working": "작업 중...",
 		"submitForReview": "검토를 위해 제출",

@@ -713,7 +713,8 @@
 			"changeRegion": "Changer la région d'une existante",
 			"deleteRegion": "Supprimer par région",
 			"deleteByRegion": "Supprimer par région",
-			"deleteHint": "Cochez ceux à supprimer ; un motif est requis"
+			"deleteHint": "Cochez ceux à supprimer ; un motif est requis",
+			"whyLabelRequired": "Pourquoi (obligatoire)"
 		},
 		"working": "Traitement...",
 		"submitForReview": "Soumettre pour révision",

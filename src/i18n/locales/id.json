@@ -713,7 +713,8 @@
 			"changeRegion": "Ubah wilayah yang ada",
 			"deleteRegion": "Hapus per wilayah",
 			"deleteByRegion": "Hapus menurut wilayah",
-			"deleteHint": "Centang yang ingin dihapus; alasan wajib diisi"
+			"deleteHint": "Centang yang ingin dihapus; alasan wajib diisi",
+			"whyLabelRequired": "Alasan (wajib)"
 		},
 		"working": "Bekerja...",
 		"submitForReview": "Kirim untuk ditinjau",

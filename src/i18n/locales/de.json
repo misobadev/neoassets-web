@@ -713,7 +713,8 @@
 			"changeRegion": "Region eines vorhandenen ändern",
 			"deleteRegion": "Pro Region löschen",
 			"deleteByRegion": "Nach Region löschen",
-			"deleteHint": "Markiere die zu entfernenden; eine Begründung ist erforderlich"
+			"deleteHint": "Markiere die zu entfernenden; eine Begründung ist erforderlich",
+			"whyLabelRequired": "Warum (erforderlich)"
 		},
 		"working": "Wird verarbeitet...",
 		"submitForReview": "Zur Prüfung einreichen",

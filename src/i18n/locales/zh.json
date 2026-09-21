@@ -713,7 +713,8 @@
 			"changeRegion": "更改现有图片的地区",
 			"deleteRegion": "按地区删除",
 			"deleteByRegion": "按地区删除",
-			"deleteHint": "勾选要删除的项；必须填写原因"
+			"deleteHint": "勾选要删除的项；必须填写原因",
+			"whyLabelRequired": "原因（必填）"
 		},
 		"working": "正在处理……",
 		"submitForReview": "提交审核",
