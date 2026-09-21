@@ -554,6 +554,7 @@
 		"mediaBy": "作者 {{name}}",
 		"mediaSystem": "系统",
 		"noMedia": "暂无媒体。",
+		"contributors": "贡献者",
 		"romDumpsTitle_one": "ROM 转储（{{count}}）",
 		"romDumpsTitle_other": "ROM 转储（{{count}}）",
 		"noDumps": "无转储。"

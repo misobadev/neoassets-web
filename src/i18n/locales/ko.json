@@ -554,6 +554,7 @@
 		"mediaBy": "{{name}} 작성",
 		"mediaSystem": "시스템",
 		"noMedia": "아직 미디어가 없습니다.",
+		"contributors": "기여자",
 		"romDumpsTitle_one": "ROM 덤프 ({{count}})",
 		"romDumpsTitle_other": "ROM 덤프 ({{count}})",
 		"noDumps": "덤프가 없습니다."

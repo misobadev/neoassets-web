@@ -536,6 +536,7 @@
 		"mediaBy": "by {{name}}",
 		"mediaSystem": "System",
 		"noMedia": "No media yet.",
+		"contributors": "Contributors",
 		"romDumpsTitle_one": "ROM dumps ({{count}})",
 		"romDumpsTitle_other": "ROM dumps ({{count}})",
 		"noDumps": "No dumps."

@@ -554,6 +554,7 @@
 		"mediaBy": "{{name}} 作",
 		"mediaSystem": "システム",
 		"noMedia": "メディアはまだありません。",
+		"contributors": "貢献者",
 		"romDumpsTitle_one": "ROMダンプ（{{count}}）",
 		"romDumpsTitle_other": "ROMダンプ（{{count}}）",
 		"noDumps": "ダンプがありません。"

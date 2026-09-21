@@ -554,6 +554,7 @@
 		"mediaBy": "par {{name}}",
 		"mediaSystem": "Système",
 		"noMedia": "Aucun média pour le moment.",
+		"contributors": "Contributeurs",
 		"romDumpsTitle_one": "Dumps ROM ({{count}})",
 		"romDumpsTitle_other": "Dumps ROM ({{count}})",
 		"noDumps": "Aucun dump."

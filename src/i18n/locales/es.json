@@ -536,6 +536,7 @@
 		"mediaBy": "por {{name}}",
 		"mediaSystem": "Sistema",
 		"noMedia": "Aún no hay multimedia.",
+		"contributors": "Colaboradores",
 		"romDumpsTitle_one": "Volcados de ROM ({{count}})",
 		"romDumpsTitle_other": "Volcados de ROM ({{count}})",
 		"noDumps": "Sin volcados."

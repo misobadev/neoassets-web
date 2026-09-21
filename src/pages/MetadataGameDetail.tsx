@@ -5,6 +5,7 @@ import { ChevronLeft, PenSquare, PlusCircle } from "lucide-react";
 import { cdnUrl, fetchMetadataGameDetail, userToken, type GameDetail, type Language, type MediaKind, type MetadataMedia } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
+import UserLink from "../components/UserLink";
 import { usePageTitle } from "../lib/seo";
 
 // FieldValue renders a metadata value, or a "Data needed" link to the submit
@@ -67,7 +68,7 @@ export default function MetadataGameDetail() {
 		if (!gameId) return;
 		fetchMetadataGameDetail(gameId, lang === "en" ? "" : lang)
 			.then((g) => {
-				setGame({ ...g, roms: g.roms || [], media: g.media || [] });
+				setGame({ ...g, roms: g.roms || [], media: g.media || [], contributors: g.contributors || [] });
 				setError(null);
 			})
 			.catch((e: Error) => setError(e.message));
@@ -102,6 +103,7 @@ export default function MetadataGameDetail() {
 	if (!game) return <p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("metadataGame.loadingGame")}</p>;
 
 	const complete = isGameComplete(game);
+	const contributors = game.contributors || [];
 
 	return (
 		<div className="space-y-6">
@@ -204,6 +206,20 @@ export default function MetadataGameDetail() {
 					return <MediaGrid items={list} url={mediaUrl} label={(k) => t(KIND_LABEL[k] || k)} showMeta />;
 				})()}
 			</section>
+
+			{contributors.length > 0 ? (
+				<section className="card p-6">
+					<h2 className="font-semibold mb-3">{t("metadataGame.contributors")}</h2>
+					<p className="text-sm text-[var(--color-base-content)]/70 break-words">
+						{contributors.map((c, i) => (
+							<span key={c.id}>
+								{i > 0 ? ", " : ""}
+								<UserLink>{c.username}</UserLink>({c.count})
+							</span>
+						))}
+					</p>
+				</section>
+			) : null}
 
 			<section className="card p-6">
 				<h2 className="font-semibold mb-3">{t("metadataGame.romDumpsTitle", { count: game.roms.length })}</h2>

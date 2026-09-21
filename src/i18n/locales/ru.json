@@ -568,6 +568,7 @@
 		"mediaBy": "от {{name}}",
 		"mediaSystem": "Система",
 		"noMedia": "Пока нет медиа.",
+		"contributors": "Авторы",
 		"romDumpsTitle_one": "Дампы ROM ({{count}})",
 		"romDumpsTitle_few": "Дампы ROM ({{count}})",
 		"romDumpsTitle_many": "Дампы ROM ({{count}})",

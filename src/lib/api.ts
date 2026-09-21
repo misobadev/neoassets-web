@@ -265,11 +265,19 @@ export interface MetadataMedia {
 	submitted_by_name?: string;
 }
 
+export interface GameContributor {
+	id: string;
+	username: string;
+	avatar_key?: string;
+	count: number;
+}
+
 export interface GameDetail extends GameSummary {
 	roms: Rom[];
 	media: MetadataMedia[];
 	lang?: string;
 	translations?: Language[];
+	contributors?: GameContributor[];
 }
 
 export interface MetadataSubmission {
