@@ -734,7 +734,8 @@
 			"deleteRegion": "Удалить по региону",
 			"deleteByRegion": "Удалить по региону",
 			"deleteHint": "Отметьте удаляемые; причина обязательна",
-			"whyLabelRequired": "Почему (обязательно)"
+			"whyLabelRequired": "Почему (обязательно)",
+			"addNewValue": "Добавить новое значение"
 		},
 		"working": "Обработка...",
 		"submitForReview": "Отправить на проверку",

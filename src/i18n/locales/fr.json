@@ -714,7 +714,8 @@
 			"deleteRegion": "Supprimer par région",
 			"deleteByRegion": "Supprimer par région",
 			"deleteHint": "Cochez ceux à supprimer ; un motif est requis",
-			"whyLabelRequired": "Pourquoi (obligatoire)"
+			"whyLabelRequired": "Pourquoi (obligatoire)",
+			"addNewValue": "Ajouter une nouvelle valeur"
 		},
 		"working": "Traitement...",
 		"submitForReview": "Soumettre pour révision",

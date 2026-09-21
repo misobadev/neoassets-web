@@ -85,8 +85,8 @@ export default function MetadataSubmissionPage() {
 	const [mediaMoves, setMediaMoves] = useState<Record<string, string>>({});
 	const [mediaDeletes, setMediaDeletes] = useState<Record<string, boolean>>({});
 	const [mediaMode, setMediaMode] = useState<"new" | "move" | "delete">("new");
+	const [textMode, setTextMode] = useState<"new" | "move" | "delete">("new");
 	const [textMoveFrom, setTextMoveFrom] = useState("");
-	const [textDelete, setTextDelete] = useState(false);
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -290,7 +290,7 @@ export default function MetadataSubmissionPage() {
 		type === "name" ? r.name || "" : r.release_year ? `${r.release_year}${r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}` : "";
 
 	// Deleting requires a reason, so the "why" is mandatory in that case.
-	const deleting = textDelete || Object.keys(mediaDeletes).length > 0;
+	const deleting = (textMode === "delete" && textMoveFrom !== "") || Object.keys(mediaDeletes).length > 0;
 
 	const textType = TEXT_TYPES.find((t) => t.key === type);
 	const textLabel = textType ? t(textType.label) : "";
@@ -326,6 +326,53 @@ export default function MetadataSubmissionPage() {
 		);
 	};
 
+	// renderTextInput renders the editor for the picked text field.
+	const renderTextInput = () => (
+		<>
+			{type === "description" ? (
+				<>
+					<textarea className="input w-full min-h-32" maxLength={MAX_DESCRIPTION_LENGTH} value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder={t("metadataSubmit.form.newDescriptionPlaceholder")} />
+					<div className="flex items-center justify-between gap-2 mt-1">
+						<p className="text-xs text-[var(--color-base-content)]/50">
+							{t("metadataSubmit.form.descriptionNote", { max: MAX_DESCRIPTION_LENGTH })}
+						</p>
+						<span className={`text-xs shrink-0 ${textValue.length >= MAX_DESCRIPTION_LENGTH ? "text-[var(--color-error)]" : "text-[var(--color-base-content)]/50"}`}>
+							{t("metadataSubmit.form.charCount", { count: textValue.length, max: MAX_DESCRIPTION_LENGTH })}
+						</span>
+					</div>
+				</>
+			) : type === "release_year" ? (
+				<>
+					<input type="month" min="1950-01" max="2100-12" className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} />
+					<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.releaseHint")}</p>
+				</>
+			) : type === "rating" ? (
+				<>
+					<input type="number" min={1} max={10} step={1} className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder="1-10" />
+					<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.ratingHint")}</p>
+				</>
+			) : type === "type" ? (
+				<>
+					<select className="select w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)}>
+						{GAME_TYPES.map((g) => (
+							<option key={g} value={g}>{g}</option>
+						))}
+					</select>
+					<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.typeHint")}</p>
+				</>
+			) : type === "genre" ? (
+				<select className="select w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)}>
+					<option value="">{t("metadataSubmit.form.genrePlaceholder")}</option>
+					{genres.map((g) => (
+						<option key={g.id} value={g.name}>{t("metadata.genres." + g.id, { defaultValue: g.name })}</option>
+					))}
+				</select>
+			) : (
+				<input className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder={t("metadataSubmit.form.newFieldPlaceholder", { field: textLabel.toLowerCase() })} />
+			)}
+		</>
+	);
+
 	async function submit() {
 		setConfirmSubmit(false);
 		if (!game) return;
@@ -340,8 +387,8 @@ export default function MetadataSubmissionPage() {
 			setStatus({ text: t("metadataSubmit.status.deleteReason"), tone: "error" });
 			return;
 		}
-		if (isText && textDelete) {
-			if (!region) {
+		if (isText && textMode === "delete") {
+			if (!textMoveFrom) {
 				setStatus({ text: t("metadataSubmit.status.pickDeleteRegion"), tone: "error" });
 				return;
 			}
@@ -405,10 +452,10 @@ export default function MetadataSubmissionPage() {
 			const payload: Record<string, unknown> = {};
 			if (note.trim()) payload.note = note.trim();
 			if (isText && textType) {
-				if (textDelete) {
+				if (textMode === "delete") {
 					// Remove the name/release of a region.
 					payload.delete = true;
-					payload.region = region;
+					payload.region = textMoveFrom;
 					payload.field = textType.key === "name" ? "name" : "release";
 				} else {
 					if (textType.key === "release_year") {
@@ -589,103 +636,115 @@ export default function MetadataSubmissionPage() {
 					<h2 className="font-semibold">{t("metadataSubmit.detailsTitle")}</h2>
 
 					{isText ? (
-						<div className="space-y-3">
-							{type === "name" || type === "release_year" ? (
-								<div>
-									<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
-									<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
-										<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
-										{regions.map((r) => (
-											<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
-										))}
-									</select>
+						type === "name" || type === "release_year" ? (
+							<div className="space-y-3">
+								<div className="flex gap-2 flex-wrap">
+									<button type="button" className={textMode === "new" ? "btn btn-primary btn-sm" : "btn btn-outline btn-sm"} onClick={() => { setTextMode("new"); setTextMoveFrom(""); }}>
+										{t("metadataSubmit.form.addNewValue")}
+									</button>
+									<button type="button" className={textMode === "move" ? "btn btn-primary btn-sm" : "btn btn-outline btn-sm"} onClick={() => { setTextMode("move"); setTextMoveFrom(""); }} disabled={existingText.length === 0}>
+										{t("metadataSubmit.form.changeRegion")}
+									</button>
+									<button type="button" className={textMode === "delete" ? "btn btn-error btn-sm" : "btn btn-outline btn-sm"} onClick={() => { setTextMode("delete"); setTextMoveFrom(""); }} disabled={existingText.length === 0}>
+										{t("metadataSubmit.form.deleteRegion")}
+									</button>
 								</div>
-							) : null}
-							{type === "name" || type === "release_year" ? (
-								<label className="flex items-center gap-2 cursor-pointer">
-									<input type="checkbox" className="checkbox checkbox-sm checkbox-error" checked={textDelete} onChange={(e) => setTextDelete(e.target.checked)} />
-									<span className="text-sm">{t("metadataSubmit.form.deleteRegion")}</span>
-								</label>
-							) : null}
-							{!textDelete && existingText.length > 0 ? (
-								<div>
-									<label className="label-text">{t("metadataSubmit.form.moveFromRegion")}</label>
-									<select
-										className="select w-full"
-										value={textMoveFrom}
-										onChange={(e) => {
-											const src = e.target.value;
-											setTextMoveFrom(src);
-											if (src) {
-												const gr = (game.regions || []).find((x) => x.region === src);
-												if (gr) setTextValue(textValueOf(gr));
-											}
-										}}
-									>
-										<option value="">{t("metadataSubmit.form.none")}</option>
-										{existingText.map((r) => (
-											<option key={r.region} value={r.region}>{regionLabel(t, r.region)} — {textValueOf(r)}</option>
-										))}
-									</select>
-									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.moveHint")}</p>
-								</div>
-							) : null}
-							<div>
-								<p className="label-text">{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}</p>
-								<p className="text-sm text-[var(--color-base-content)]/70">
-									{currentText || "—"}
-									{currentText && currentRegion ? (
-										<span className="ml-2 badge badge-ghost badge-xs align-middle">{regionLabel(t, currentRegion)}</span>
-									) : null}
-								</p>
-							</div>
-							{!textDelete ? (
-							<div>
-								<label className="label-text">{t("metadataSubmit.form.newField", { field: textLabel.toLowerCase() })}</label>
-								{type === "description" ? (
+								{textMode === "new" ? (
 									<>
-										<textarea className="input w-full min-h-32" maxLength={MAX_DESCRIPTION_LENGTH} value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder={t("metadataSubmit.form.newDescriptionPlaceholder")} />
-										<div className="flex items-center justify-between gap-2 mt-1">
-											<p className="text-xs text-[var(--color-base-content)]/50">
-												{t("metadataSubmit.form.descriptionNote", { max: MAX_DESCRIPTION_LENGTH })}
+										<div>
+											<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
+											<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
+												<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
+												{regions.map((r) => (
+													<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
+												))}
+											</select>
+										</div>
+										<div>
+											<p className="label-text">{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}</p>
+											<p className="text-sm text-[var(--color-base-content)]/70">
+												{currentText || "—"}
+												{currentText && currentRegion ? (
+													<span className="ml-2 badge badge-ghost badge-xs align-middle">{regionLabel(t, currentRegion)}</span>
+												) : null}
 											</p>
-											<span className={`text-xs shrink-0 ${textValue.length >= MAX_DESCRIPTION_LENGTH ? "text-[var(--color-error)]" : "text-[var(--color-base-content)]/50"}`}>
-												{t("metadataSubmit.form.charCount", { count: textValue.length, max: MAX_DESCRIPTION_LENGTH })}
-											</span>
+										</div>
+										<div>
+											<label className="label-text">{t("metadataSubmit.form.newField", { field: textLabel.toLowerCase() })}</label>
+											{renderTextInput()}
 										</div>
 									</>
-								) : type === "release_year" ? (
-									<>
-										<input type="month" min="1950-01" max="2100-12" className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} />
-										<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.releaseHint")}</p>
-									</>
-								) : type === "rating" ? (
-									<>
-										<input type="number" min={1} max={10} step={1} className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder="1-10" />
-										<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.ratingHint")}</p>
-									</>
-								) : type === "type" ? (
-									<>
-										<select className="select w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)}>
-											{GAME_TYPES.map((t) => (
-												<option key={t} value={t}>{t}</option>
-											))}
-										</select>
-										<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.typeHint")}</p>
-									</>
-								) : type === "genre" ? (
-									<select className="select w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)}>
-										<option value="">{t("metadataSubmit.form.genrePlaceholder")}</option>
-										{genres.map((g) => (
-											<option key={g.id} value={g.name}>{t("metadata.genres." + g.id, { defaultValue: g.name })}</option>
-										))}
-									</select>
+								) : textMode === "move" ? (
+									<div>
+										<p className="label-text mb-1">{t("metadataSubmit.form.existingByRegion")}</p>
+										<div className="space-y-2">
+											{existingText.map((r) => {
+												const source = r.region;
+												const target = textMoveFrom === source ? region : source;
+												return (
+													<div key={source} className="flex items-center gap-2">
+														<span className="badge badge-ghost badge-sm shrink-0">{regionLabel(t, source)}</span>
+														<span className="text-[var(--color-base-content)]/40 shrink-0">→</span>
+														<select
+															className="select select-sm flex-1"
+															value={target}
+															onChange={(e) => {
+																const v = e.target.value;
+																if (v === source) {
+																	setTextMoveFrom("");
+																	setRegion("");
+																} else {
+																	setTextMoveFrom(source);
+																	setRegion(v);
+																	setTextValue(textValueOf(r));
+																}
+															}}
+														>
+															{regions.map((rr) => <option key={rr.id} value={rr.name}>{regionLabel(t, rr.name)}</option>)}
+														</select>
+													</div>
+												);
+											})}
+										</div>
+										<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.moveHint")}</p>
+									</div>
 								) : (
-									<input className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder={t("metadataSubmit.form.newFieldPlaceholder", { field: textLabel.toLowerCase() })} />
+									<div>
+										<p className="label-text mb-1">{t("metadataSubmit.form.deleteByRegion")}</p>
+										<div className="space-y-2">
+											{existingText.map((r) => (
+												<label key={r.region} className="flex items-center gap-2 cursor-pointer">
+													<input
+														type="checkbox"
+														className="checkbox checkbox-sm checkbox-error"
+														checked={textMoveFrom === r.region}
+														onChange={(e) => setTextMoveFrom(e.target.checked ? r.region : "")}
+													/>
+													<span className="text-sm">{regionLabel(t, r.region)} — {textValueOf(r)}</span>
+												</label>
+											))}
+										</div>
+										<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.deleteHint")}</p>
+									</div>
 								)}
 							</div>
-							) : null}
-						</div>
+						) : (
+							<div className="space-y-3">
+								<div>
+									<p className="label-text">{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}</p>
+									<p className="text-sm text-[var(--color-base-content)]/70">
+										{currentText || "—"}
+										{currentText && currentRegion ? (
+											<span className="ml-2 badge badge-ghost badge-xs align-middle">{regionLabel(t, currentRegion)}</span>
+										) : null}
+									</p>
+								</div>
+								<div>
+									<label className="label-text">{t("metadataSubmit.form.newField", { field: textLabel.toLowerCase() })}</label>
+									{renderTextInput()}
+								</div>
+							</div>
+						)
 					) : (
 						<div className="space-y-3">
 							{isRegionalKind ? (

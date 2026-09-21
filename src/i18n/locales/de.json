@@ -714,7 +714,8 @@
 			"deleteRegion": "Pro Region löschen",
 			"deleteByRegion": "Nach Region löschen",
 			"deleteHint": "Markiere die zu entfernenden; eine Begründung ist erforderlich",
-			"whyLabelRequired": "Warum (erforderlich)"
+			"whyLabelRequired": "Warum (erforderlich)",
+			"addNewValue": "Neuen Wert hinzufügen"
 		},
 		"working": "Wird verarbeitet...",
 		"submitForReview": "Zur Prüfung einreichen",
