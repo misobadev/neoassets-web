@@ -215,27 +215,30 @@ function GameCard({ g }: { g: GameSummary }) {
 				) : (
 					<div className="w-16 h-16 rounded-lg bg-[var(--color-base-300)] shrink-0" />
 				)}
-				<div className="min-w-0 flex-1">
-					<span className="group/name relative block">
-						<h3 ref={nameRef} className="font-semibold truncate">{g.name}</h3>
-						{nameClipped ? (
-							<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 w-max max-w-[18rem] break-words rounded-md bg-[var(--color-base-200)] px-2 py-1 text-[11px] font-normal leading-snug text-[var(--color-base-content)] opacity-0 shadow-lg transition-opacity duration-150 group-hover/name:opacity-100">
-								{g.name}
-							</span>
-						) : null}
-					</span>
-					<p className="text-xs text-[var(--color-base-content)]/50 mt-0.5 truncate">
-						{g.system_id ? `${g.system_id.toUpperCase()}` : ""}
-						{g.release_year ? ` · ${g.release_year}` : ""}
-					</p>
-					<div className="flex items-center gap-2.5 mt-2 flex-wrap">
-						<MetaIcon label={textMetaTitle(t, g)} tone={textMetaTone(g)}><FileText className="w-3.5 h-3.5" /></MetaIcon>
-						<MetaIcon label={g.has_translations ? t("metadata.hasTranslations") : t("metadata.englishOnly")} tone={g.has_translations ? "ok" : "none"}><Languages className="w-3.5 h-3.5" /></MetaIcon>
-						<MetaIcon label={g.has_logo ? t("metadata.hasLogo") : t("metadata.noLogo")} tone={g.has_logo ? "ok" : "none"}><ImagePlus className="w-3.5 h-3.5" /></MetaIcon>
-						<MetaIcon label={g.has_screenshot ? t("metadata.hasScreenshot") : t("metadata.noScreenshot")} tone={g.has_screenshot ? "ok" : "none"}><Image className="w-3.5 h-3.5" /></MetaIcon>
-						<MetaIcon label={g.has_fanart ? t("metadata.hasFanart") : t("metadata.noFanart")} tone={g.has_fanart ? "ok" : "none"}><Images className="w-3.5 h-3.5" /></MetaIcon>
-						<MetaIcon label={g.has_video ? t("metadata.hasVideo") : t("metadata.noVideo")} tone={g.has_video ? "ok" : "none"}><Clapperboard className="w-3.5 h-3.5" /></MetaIcon>
+				<div className="min-w-0 flex-1 flex items-center gap-2">
+					<div className="min-w-0 flex-1">
+						<span className="group/name relative block">
+							<h3 ref={nameRef} className="font-semibold truncate">{g.name}</h3>
+							{nameClipped ? (
+								<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 w-max max-w-[18rem] break-words rounded-md bg-[var(--color-base-200)] px-2 py-1 text-[11px] font-normal leading-snug text-[var(--color-base-content)] opacity-0 shadow-lg transition-opacity duration-150 group-hover/name:opacity-100">
+									{g.name}
+								</span>
+							) : null}
+						</span>
+						<p className="text-xs text-[var(--color-base-content)]/50 mt-0.5 truncate">
+							{g.system_id ? `${g.system_id.toUpperCase()}` : ""}
+							{g.release_year ? ` · ${g.release_year}` : ""}
+						</p>
+						<div className="flex items-center gap-2.5 mt-2 flex-wrap">
+							<MetaIcon label={textMetaTitle(t, g)} tone={textMetaTone(g)}><FileText className="w-3.5 h-3.5" /></MetaIcon>
+							<MetaIcon label={g.has_translations ? t("metadata.hasTranslations") : t("metadata.englishOnly")} tone={g.has_translations ? "ok" : "none"}><Languages className="w-3.5 h-3.5" /></MetaIcon>
+							<MetaIcon label={g.has_logo ? t("metadata.hasLogo") : t("metadata.noLogo")} tone={g.has_logo ? "ok" : "none"}><ImagePlus className="w-3.5 h-3.5" /></MetaIcon>
+							<MetaIcon label={g.has_screenshot ? t("metadata.hasScreenshot") : t("metadata.noScreenshot")} tone={g.has_screenshot ? "ok" : "none"}><Image className="w-3.5 h-3.5" /></MetaIcon>
+							<MetaIcon label={g.has_fanart ? t("metadata.hasFanart") : t("metadata.noFanart")} tone={g.has_fanart ? "ok" : "none"}><Images className="w-3.5 h-3.5" /></MetaIcon>
+							<MetaIcon label={g.has_video ? t("metadata.hasVideo") : t("metadata.noVideo")} tone={g.has_video ? "ok" : "none"}><Clapperboard className="w-3.5 h-3.5" /></MetaIcon>
+						</div>
 					</div>
+					<RatingBadge rating={g.rating} />
 				</div>
 			</div>
 			<div className="flex items-center justify-between gap-2 border-t border-[var(--color-base-300)] pt-2 relative z-[1]">
@@ -250,7 +253,6 @@ function GameCard({ g }: { g: GameSummary }) {
 					) : null}
 				</div>
 				<div className="flex items-center gap-2 shrink-0">
-					<RatingBadge rating={g.rating} />
 					<span
 						className="inline-flex items-center gap-1 text-[11px] font-medium text-[var(--color-base-content)]/50"
 						title={t("metadata.scrapedTimes", { n: (g.scrapes ?? 0).toLocaleString() })}
