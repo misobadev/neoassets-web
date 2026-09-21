@@ -213,26 +213,59 @@ export default function MetadataSubmissionPage() {
 	if (error) return <p className="text-sm text-[var(--color-error)] text-center py-10">{error}</p>;
 	if (!game) return <p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("metadataSubmit.loadingGame")}</p>;
 
-	const currentText = type.startsWith("name")
-		? game.name
-		: type === "description"
-			? game.description
-			: type === "genre"
-				? genreLabel(t, game.genre)
-				: type === "developer"
+	const currentKind = type as MediaKind;
+	const isRegionalKind = currentKind === "logo" || currentKind === "cover";
+	// Per-region data, so the "current" value always matches the selected region.
+	const regionMap = new Map((game.regions || []).map((r) => [r.region, r]));
+	const selectedRegion = region ? regionMap.get(region) : undefined;
+
+	function regionRelease(gr?: { release_year?: number | null; release_month?: number | null }): string {
+		if (!gr?.release_year) return "";
+		return `${gr.release_year}${gr.release_month ? `-${String(gr.release_month).padStart(2, "0")}` : ""}`;
+	}
+
+	const currentText =
+		type === "name"
+			? (region ? selectedRegion?.name || "" : game.name)
+			: type === "description"
+				? game.description
+				: type === "genre"
+					? genreLabel(t, game.genre)
+					: type === "developer"
 						? game.developer
 						: type === "publisher"
 							? game.publisher
 							: type === "release_year"
-								? game.release_year ? `${game.release_year}${game.release_month ? `-${String(game.release_month).padStart(2, "0")}` : ""}` : ""
+								? (region ? regionRelease(selectedRegion) : regionRelease(game))
 								: type === "rating"
 									? game.rating ? String(game.rating) : ""
 									: type === "type"
 										? game.type || ""
 										: "";
 
-	const currentMedia = isText ? [] : game.media.filter((m) => m.kind === type);
-	const currentKind = type as MediaKind;
+	// For regional media, only the selected region's asset is the "current" one;
+	// for the rest, the region does not apply.
+	const currentMedia = isText
+		? []
+		: isRegionalKind && region
+			? (selectedRegion?.media || []).filter((m) => m.kind === currentKind)
+			: game.media.filter((m) => m.kind === currentKind);
+
+	// Region the "current" value belongs to: the selected one, or the game's
+	// resolved primary when no region has been picked yet.
+	const currentRegion = region || game.region || "";
+
+	// Which region already holds data for the field/kind being submitted, so the
+	// select can flag it.
+	function regionHasData(r: Region): boolean {
+		const gr = regionMap.get(r.name);
+		if (!gr) return false;
+		if (type === "name") return Boolean(gr.name);
+		if (type === "release_year") return Boolean(gr.release_year);
+		if (isRegionalKind) return (gr.media || []).some((m) => m.kind === currentKind);
+		return false;
+	}
+
 	const textType = TEXT_TYPES.find((t) => t.key === type);
 	const textLabel = textType ? t(textType.label) : "";
 	const pendingLabels = pendingKeys.map((k) => {
@@ -485,12 +518,23 @@ export default function MetadataSubmissionPage() {
 
 					{isText ? (
 						<div className="space-y-3">
+							{type === "name" || type === "release_year" ? (
+								<div>
+									<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
+									<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
+										<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
+										{regions.map((r) => (
+											<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
+										))}
+									</select>
+								</div>
+							) : null}
 							<div>
 								<p className="label-text">{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}</p>
 								<p className="text-sm text-[var(--color-base-content)]/70">
 									{currentText || "—"}
-									{(type === "name" || type === "release_year") && game.region ? (
-										<span className="ml-2 badge badge-ghost badge-xs align-middle">{regionLabel(t, game.region)}</span>
+									{currentText && currentRegion ? (
+										<span className="ml-2 badge badge-ghost badge-xs align-middle">{regionLabel(t, currentRegion)}</span>
 									) : null}
 								</p>
 							</div>
@@ -538,20 +582,20 @@ export default function MetadataSubmissionPage() {
 									<input className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder={t("metadataSubmit.form.newFieldPlaceholder", { field: textLabel.toLowerCase() })} />
 								)}
 							</div>
-							{type === "name" || type === "release_year" ? (
+						</div>
+					) : (
+						<div className="space-y-3">
+							{isRegionalKind ? (
 								<div>
 									<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
 									<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
 										<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
 										{regions.map((r) => (
-											<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
+											<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
 										))}
 									</select>
 								</div>
 							) : null}
-						</div>
-					) : (
-						<div className="space-y-3">
 							{!isVideo && file && previewUrl ? (
 								<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 									<div>
@@ -594,18 +638,6 @@ export default function MetadataSubmissionPage() {
 								</div>
 							)}
 							<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.replaceMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
-
-							{currentKind === "logo" || currentKind === "cover" ? (
-								<div>
-									<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
-									<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
-										<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
-										{regions.map((r) => (
-											<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
-										))}
-									</select>
-								</div>
-							) : null}
 
 							<label className="btn btn-outline cursor-pointer">
 								{isVideo ? <Clapperboard className="w-4 h-4" /> : <Upload className="w-4 h-4" />}
