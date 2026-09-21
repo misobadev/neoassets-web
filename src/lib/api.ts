@@ -559,8 +559,35 @@ export interface Genre {
 	name: string;
 }
 
+// GENRE_FALLBACK mirrors the backend catalog and is only used when the genres
+// endpoint is unavailable, so the metadata forms never render an empty select.
+export const GENRE_FALLBACK: Genre[] = [
+	{ id: "action", name: "Action" },
+	{ id: "adventure", name: "Adventure" },
+	{ id: "beat-em-up", name: "Beat 'em Up" },
+	{ id: "fighting", name: "Fighting" },
+	{ id: "platformer", name: "Platformer" },
+	{ id: "puzzle", name: "Puzzle" },
+	{ id: "racing", name: "Racing" },
+	{ id: "rpg", name: "Role-Playing (RPG)" },
+	{ id: "shooter", name: "Shooter" },
+	{ id: "shoot-em-up", name: "Shoot 'em Up" },
+	{ id: "simulation", name: "Simulation" },
+	{ id: "sports", name: "Sports" },
+	{ id: "strategy", name: "Strategy" },
+	{ id: "music", name: "Music & Rhythm" },
+	{ id: "board-card", name: "Board & Card" },
+	{ id: "pinball", name: "Pinball" },
+	{ id: "educational", name: "Educational" },
+	{ id: "quiz", name: "Quiz" },
+	{ id: "compilation", name: "Compilation" },
+	{ id: "miscellaneous", name: "Miscellaneous" },
+];
+
 export function fetchGenres(): Promise<Genre[]> {
-	return api<{ genres: Genre[] }>("/api/v1/metadata/genres").then((d) => d.genres || []);
+	return api<{ genres: Genre[] }>("/api/v1/metadata/genres")
+		.then((d) => (d.genres && d.genres.length > 0 ? d.genres : GENRE_FALLBACK))
+		.catch(() => GENRE_FALLBACK);
 }
 
 export function fetchMetadataGamesBySystem(systemId: string, limit = 48, offset = 0, type = "", sort = "", signal?: AbortSignal): Promise<{ games: GameSummary[]; total: number }> {
