@@ -505,6 +505,18 @@
 			"quiz": "クイズ",
 			"compilation": "コンピレーション",
 			"miscellaneous": "その他"
+		},
+		"regions": {
+			"world": "ワールド",
+			"usa": "USA",
+			"europe": "ヨーロッパ",
+			"japan": "日本",
+			"spain": "スペイン",
+			"france": "フランス",
+			"germany": "ドイツ",
+			"italy": "イタリア",
+			"korea": "韓国",
+			"china": "中国"
 		}
 	},
 	"metadataAdmin": {
@@ -581,7 +593,8 @@
 		"contributors": "貢献者",
 		"romDumpsTitle_one": "ROMダンプ（{{count}}）",
 		"romDumpsTitle_other": "ROMダンプ（{{count}}）",
-		"noDumps": "ダンプがありません。"
+		"noDumps": "ダンプがありません。",
+		"regionsTitle": "地域"
 	},
 	"metadataStatus": {
 		"created": "下書き",
@@ -684,7 +697,9 @@
 			"whyPlaceholder": "簡単な理由、出典、または修正内容...",
 			"coverHint": "カバーは最大1024pxに縮小されます。",
 			"charCount": "{{count}}/{{max}} 文字",
-			"genrePlaceholder": "ジャンルを選択"
+			"genrePlaceholder": "ジャンルを選択",
+			"regionLabel": "地域",
+			"regionPlaceholder": "地域を選択"
 		},
 		"working": "処理中...",
 		"submitForReview": "レビューに提出",

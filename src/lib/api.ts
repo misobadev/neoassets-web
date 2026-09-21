@@ -223,7 +223,6 @@ export interface GameSummary {
 	system_id: string;
 	name: string;
 	description: string;
-	region: string;
 	release_year?: number | null;
 	release_month?: number | null;
 	publisher: string;
@@ -260,6 +259,7 @@ export interface MetadataMedia {
 	object_key: string;
 	mime: string;
 	size: number;
+	region?: string;
 	created_at?: string;
 	submitted_by?: string;
 	submitted_by_name?: string;
@@ -272,9 +272,19 @@ export interface GameContributor {
 	count: number;
 }
 
+export interface GameRegion {
+	region: string;
+	name?: string;
+	release_year?: number | null;
+	release_month?: number | null;
+	media?: MetadataMedia[];
+}
+
 export interface GameDetail extends GameSummary {
 	roms: Rom[];
 	media: MetadataMedia[];
+	regions?: GameRegion[];
+	region?: string;
 	lang?: string;
 	translations?: Language[];
 	contributors?: GameContributor[];
@@ -590,6 +600,32 @@ export function fetchGenres(): Promise<Genre[]> {
 		.catch(() => GENRE_FALLBACK);
 }
 
+export interface Region {
+	id: string;
+	name: string;
+}
+
+// REGION_FALLBACK mirrors the backend catalog (priority/display order) and is
+// only used when the regions endpoint is unavailable.
+export const REGION_FALLBACK: Region[] = [
+	{ id: "world", name: "World" },
+	{ id: "usa", name: "USA" },
+	{ id: "europe", name: "Europe" },
+	{ id: "japan", name: "Japan" },
+	{ id: "spain", name: "Spain" },
+	{ id: "france", name: "France" },
+	{ id: "germany", name: "Germany" },
+	{ id: "italy", name: "Italy" },
+	{ id: "korea", name: "Korea" },
+	{ id: "china", name: "China" },
+];
+
+export function fetchRegions(): Promise<Region[]> {
+	return api<{ regions: Region[] }>("/api/v1/metadata/regions")
+		.then((d) => (d.regions && d.regions.length > 0 ? d.regions : REGION_FALLBACK))
+		.catch(() => REGION_FALLBACK);
+}
+
 export function fetchMetadataGamesBySystem(systemId: string, limit = 48, offset = 0, type = "", sort = "", signal?: AbortSignal): Promise<{ games: GameSummary[]; total: number }> {
 	const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
 	if (type) params.set("type", type);
@@ -631,7 +667,7 @@ export function createMetadataSubmission(body: {
 	system_id?: string;
 	kind?: "edit" | "new_game";
 	payload: Record<string, unknown>;
-	files?: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number }[];
+	files?: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region?: string }[];
 }): Promise<MetadataSubmission> {
 	return api<MetadataSubmission>("/api/v1/metadata/submissions", { method: "POST", token: userToken(), body });
 }
@@ -643,6 +679,7 @@ export function requestMetadataUploadUrl(body: {
 	file_name: string;
 	mime_type: string;
 	size: number;
+	region?: string;
 }): Promise<UploadResponse> {
 	return api<UploadResponse>("/api/v1/metadata/submissions/upload-url", { method: "POST", token: userToken(), body });
 }

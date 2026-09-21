@@ -505,6 +505,18 @@
 			"quiz": "问答",
 			"compilation": "合集",
 			"miscellaneous": "其他"
+		},
+		"regions": {
+			"world": "世界",
+			"usa": "美国",
+			"europe": "欧洲",
+			"japan": "日本",
+			"spain": "西班牙",
+			"france": "法国",
+			"germany": "德国",
+			"italy": "意大利",
+			"korea": "韩国",
+			"china": "中国"
 		}
 	},
 	"metadataAdmin": {
@@ -581,7 +593,8 @@
 		"contributors": "贡献者",
 		"romDumpsTitle_one": "ROM 转储（{{count}}）",
 		"romDumpsTitle_other": "ROM 转储（{{count}}）",
-		"noDumps": "无转储。"
+		"noDumps": "无转储。",
+		"regionsTitle": "地区"
 	},
 	"metadataStatus": {
 		"created": "草稿",
@@ -684,7 +697,9 @@
 			"whyPlaceholder": "简要原因、来源或正在更正的内容……",
 			"coverHint": "封面将缩放至最大 1024px。",
 			"charCount": "{{count}}/{{max}} 字符",
-			"genrePlaceholder": "选择类型"
+			"genrePlaceholder": "选择类型",
+			"regionLabel": "地区",
+			"regionPlaceholder": "选择地区"
 		},
 		"working": "正在处理……",
 		"submitForReview": "提交审核",

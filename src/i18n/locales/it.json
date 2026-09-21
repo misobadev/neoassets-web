@@ -505,6 +505,18 @@
 			"quiz": "Quiz",
 			"compilation": "Raccolta",
 			"miscellaneous": "Vari"
+		},
+		"regions": {
+			"world": "Mondo",
+			"usa": "USA",
+			"europe": "Europa",
+			"japan": "Giappone",
+			"spain": "Spagna",
+			"france": "Francia",
+			"germany": "Germania",
+			"italy": "Italia",
+			"korea": "Corea",
+			"china": "Cina"
 		}
 	},
 	"metadataAdmin": {
@@ -581,7 +593,8 @@
 		"contributors": "Collaboratori",
 		"romDumpsTitle_one": "Dump ROM ({{count}})",
 		"romDumpsTitle_other": "Dump ROM ({{count}})",
-		"noDumps": "Nessun dump."
+		"noDumps": "Nessun dump.",
+		"regionsTitle": "Regioni"
 	},
 	"metadataStatus": {
 		"created": "Bozza",
@@ -684,7 +697,9 @@
 			"whyPlaceholder": "Breve motivo, fonte o cosa viene corretto...",
 			"coverHint": "La copertina viene ridimensionata a max 1024px.",
 			"charCount": "{{count}}/{{max}} caratteri",
-			"genrePlaceholder": "Seleziona un genere"
+			"genrePlaceholder": "Seleziona un genere",
+			"regionLabel": "Regione",
+			"regionPlaceholder": "Seleziona una regione"
 		},
 		"working": "Elaborazione...",
 		"submitForReview": "Invia per la revisione",

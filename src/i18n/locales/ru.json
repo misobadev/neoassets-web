@@ -515,6 +515,18 @@
 			"quiz": "Викторина",
 			"compilation": "Сборник",
 			"miscellaneous": "Разное"
+		},
+		"regions": {
+			"world": "Мир",
+			"usa": "США",
+			"europe": "Европа",
+			"japan": "Япония",
+			"spain": "Испания",
+			"france": "Франция",
+			"germany": "Германия",
+			"italy": "Италия",
+			"korea": "Корея",
+			"china": "Китай"
 		}
 	},
 	"metadataAdmin": {
@@ -597,7 +609,8 @@
 		"romDumpsTitle_few": "Дампы ROM ({{count}})",
 		"romDumpsTitle_many": "Дампы ROM ({{count}})",
 		"romDumpsTitle_other": "Дампы ROM ({{count}})",
-		"noDumps": "Нет дампов."
+		"noDumps": "Нет дампов.",
+		"regionsTitle": "Регионы"
 	},
 	"metadataStatus": {
 		"created": "Черновик",
@@ -704,7 +717,9 @@
 			"whyPlaceholder": "Краткая причина, источник или что исправляется...",
 			"coverHint": "Обложка масштабируется до максимум 1024px.",
 			"charCount": "{{count}}/{{max}} символов",
-			"genrePlaceholder": "Выберите жанр"
+			"genrePlaceholder": "Выберите жанр",
+			"regionLabel": "Регион",
+			"regionPlaceholder": "Выберите регион"
 		},
 		"working": "Обработка...",
 		"submitForReview": "Отправить на проверку",

@@ -225,8 +225,8 @@ function GameCard({ g }: { g: GameSummary }) {
 						) : null}
 					</span>
 					<p className="text-xs text-[var(--color-base-content)]/50 mt-0.5 truncate">
-						{g.system_id ? `${g.system_id.toUpperCase()} · ` : ""}
-						{g.region || t("metadata.na")} {g.release_year ? `· ${g.release_year}` : ""}
+						{g.system_id ? `${g.system_id.toUpperCase()}` : ""}
+						{g.release_year ? ` · ${g.release_year}` : ""}
 					</p>
 					<div className="flex items-center gap-2.5 mt-2 flex-wrap">
 						<MetaIcon label={textMetaTitle(t, g)} tone={textMetaTone(g)}><FileText className="w-3.5 h-3.5" /></MetaIcon>

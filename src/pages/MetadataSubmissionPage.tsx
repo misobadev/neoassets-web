@@ -8,12 +8,14 @@ import {
 	fetchGenres,
 	fetchMetadataGameDetail,
 	fetchMetadataPendingKeys,
+	fetchRegions,
 	requestMetadataUploadUrl,
 	userToken,
 	type GameDetail,
 	type Genre,
 	type Language,
 	type MediaKind,
+	type Region,
 } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
@@ -24,7 +26,6 @@ import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, V
 const TEXT_TYPES = [
 	{ key: "name", label: "metadataSubmit.textTypes.name" },
 	{ key: "description", label: "metadataSubmit.textTypes.description" },
-	{ key: "region", label: "metadataSubmit.textTypes.region" },
 	{ key: "genre", label: "metadataSubmit.textTypes.genre" },
 	{ key: "developer", label: "metadataSubmit.textTypes.developer" },
 	{ key: "publisher", label: "metadataSubmit.textTypes.publisher" },
@@ -75,6 +76,8 @@ export default function MetadataSubmissionPage() {
 	});
 	const [textValue, setTextValue] = useState("");
 	const [genres, setGenres] = useState<Genre[]>([]);
+	const [regions, setRegions] = useState<Region[]>([]);
+	const [region, setRegion] = useState("");
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -106,6 +109,7 @@ export default function MetadataSubmissionPage() {
 
 	useEffect(() => {
 		fetchGenres().then(setGenres).catch(() => {});
+		fetchRegions().then(setRegions).catch(() => {});
 	}, []);
 
 	// Restore a client-side draft once (drafts never hit the DB).
@@ -212,11 +216,9 @@ export default function MetadataSubmissionPage() {
 		? game.name
 		: type === "description"
 			? game.description
-			: type === "region"
-				? game.region
-				: type === "genre"
-					? genreLabel(t, game.genre)
-					: type === "developer"
+			: type === "genre"
+				? genreLabel(t, game.genre)
+				: type === "developer"
 						? game.developer
 						: type === "publisher"
 							? game.publisher
@@ -330,6 +332,10 @@ export default function MetadataSubmissionPage() {
 				} else {
 					payload[textType.key] = textValue.trim();
 				}
+				// The name and release date are region-specific.
+				if ((textType.key === "name" || textType.key === "release_year") && region) {
+					payload.region = region;
+				}
 			}
 
 			if (isText) {
@@ -337,6 +343,7 @@ export default function MetadataSubmissionPage() {
 			} else {
 				// Presign to the canonical key, upload with progress, then record.
 				const mime = file!.type || "application/octet-stream";
+				const regionForFile = currentKind === "logo" || currentKind === "cover" ? region : "";
 				setStatus({ text: isVideo ? t("metadataSubmit.uploadingVideo") : t("metadataSubmit.uploadingImage"), tone: "info" });
 				const resp = await requestMetadataUploadUrl({
 					game_id: game.id,
@@ -344,13 +351,14 @@ export default function MetadataSubmissionPage() {
 					file_name: file!.name,
 					mime_type: mime,
 					size: file!.size,
+					region: regionForFile,
 				});
 				await uploadWithProgress(resp.upload_url, file!, mime, (p) => setProgress(Math.round(p * 100)));
 				setProgress(100);
 				await createMetadataSubmission({
 					game_id: game.id,
 					payload,
-					files: [{ kind: currentKind, object_key: resp.object_key, file_name: file!.name, mime_type: mime, size: file!.size }],
+					files: [{ kind: currentKind, object_key: resp.object_key, file_name: file!.name, mime_type: mime, size: file!.size, region: regionForFile }],
 				});
 			}
 
@@ -394,10 +402,9 @@ export default function MetadataSubmissionPage() {
 						})()}
 					</div>
 					<div className="flex-1 min-w-0 space-y-4 text-sm">
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 							<div><p className="label-text">{t("metadataGame.fields.ratings")}</p><RatingBadge rating={game.rating} /></div>
 							<div><p className="label-text">{t("metadataGame.fields.release")}</p><p>{game.release_year ? `${game.release_year}${game.release_month ? `-${String(game.release_month).padStart(2, "0")}` : ""}` : "—"}</p></div>
-							<div><p className="label-text">{t("metadataGame.fields.region")}</p><p>{game.region || "—"}</p></div>
 							<div><p className="label-text">{t("metadataGame.fields.publisher")}</p><p>{game.publisher || "—"}</p></div>
 							<div><p className="label-text">{t("metadataGame.fields.developer")}</p><p>{game.developer || "—"}</p></div>
 						</div>
@@ -525,6 +532,17 @@ export default function MetadataSubmissionPage() {
 									<input className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder={t("metadataSubmit.form.newFieldPlaceholder", { field: textLabel.toLowerCase() })} />
 								)}
 							</div>
+							{type === "name" || type === "release_year" ? (
+								<div>
+									<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
+									<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
+										<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
+										{regions.map((r) => (
+											<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
+										))}
+									</select>
+								</div>
+							) : null}
 						</div>
 					) : (
 						<div className="space-y-3">
@@ -564,6 +582,18 @@ export default function MetadataSubmissionPage() {
 								</div>
 							)}
 							<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.replaceMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+
+							{currentKind === "logo" || currentKind === "cover" ? (
+								<div>
+									<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
+									<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
+										<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
+										{regions.map((r) => (
+											<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
+										))}
+									</select>
+								</div>
+							) : null}
 
 							<label className="btn btn-outline cursor-pointer">
 								{isVideo ? <Clapperboard className="w-4 h-4" /> : <Upload className="w-4 h-4" />}

@@ -101,7 +101,7 @@ export default function MetadataGamesView() {
 							<div className="min-w-0 flex-1">
 								<h3 className="font-semibold truncate">{g.name}</h3>
 								<p className="text-xs text-[var(--color-base-content)]/50 mt-0.5">
-									{g.region || t("metadata.na")} {g.release_year ? `· ${g.release_year}` : ""}
+									{g.release_year ? `${g.release_year}` : t("metadata.na")}
 								</p>
 							</div>
 							<div className="flex items-center gap-2 shrink-0">

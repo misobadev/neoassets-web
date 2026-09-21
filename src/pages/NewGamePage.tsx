@@ -6,12 +6,14 @@ import {
 	createMetadataSubmission,
 	fetchGenres,
 	fetchMetadataSystems,
+	fetchRegions,
 	requestMetadataUploadUrl,
 	searchMetadataGames,
 	type GameSummary,
 	type Genre,
 	type MediaKind,
 	type MetadataSystem,
+	type Region,
 } from "../lib/api";
 import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
 import { uploadWithProgress } from "../lib/upload";
@@ -68,6 +70,7 @@ export default function NewGamePage() {
 
 	const [description, setDescription] = useState("");
 	const [region, setRegion] = useState("");
+	const [regions, setRegions] = useState<Region[]>([]);
 	const [genre, setGenre] = useState("");
 	const [genres, setGenres] = useState<Genre[]>([]);
 	const [developer, setDeveloper] = useState("");
@@ -92,6 +95,9 @@ export default function NewGamePage() {
 			.catch((e: Error) => setStatus({ text: e.message, tone: "error" }));
 		fetchGenres()
 			.then(setGenres)
+			.catch(() => {});
+		fetchRegions()
+			.then(setRegions)
 			.catch(() => {});
 	}, []);
 
@@ -293,7 +299,7 @@ export default function NewGamePage() {
 									}}
 								>
 									<p className="text-sm font-medium truncate">{g.name}</p>
-									<p className="text-xs text-[var(--color-base-content)]/50">{g.region || t("metadata.na")}{g.release_year ? ` · ${g.release_year}` : ""}</p>
+									<p className="text-xs text-[var(--color-base-content)]/50">{g.release_year ? `${g.release_year}` : t("metadata.na")}</p>
 								</button>
 							))}
 						</div>
@@ -330,7 +336,12 @@ export default function NewGamePage() {
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<div>
 						<label className="label-text" htmlFor="ng-region">{t("metadataSubmit.textTypes.region")}</label>
-						<input id="ng-region" className="input w-full" value={region} onChange={(e) => setRegion(e.target.value)} disabled={busy} />
+						<select id="ng-region" className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)} disabled={busy}>
+							<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
+							{regions.map((r) => (
+								<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
+							))}
+						</select>
 					</div>
 					<div>
 						<label className="label-text" htmlFor="ng-genre">{t("metadataSubmit.textTypes.genre")}</label>

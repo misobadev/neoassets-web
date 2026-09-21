@@ -487,6 +487,18 @@
 			"quiz": "Quiz",
 			"compilation": "Compilation",
 			"miscellaneous": "Miscellaneous"
+		},
+		"regions": {
+			"world": "World",
+			"usa": "USA",
+			"europe": "Europe",
+			"japan": "Japan",
+			"spain": "Spain",
+			"france": "France",
+			"germany": "Germany",
+			"italy": "Italy",
+			"korea": "Korea",
+			"china": "China"
 		}
 	},
 	"metadataAdmin": {
@@ -563,7 +575,8 @@
 		"contributors": "Contributors",
 		"romDumpsTitle_one": "ROM dumps ({{count}})",
 		"romDumpsTitle_other": "ROM dumps ({{count}})",
-		"noDumps": "No dumps."
+		"noDumps": "No dumps.",
+		"regionsTitle": "Regions"
 	},
 	"metadataStatus": {
 		"created": "Draft",
@@ -666,7 +679,9 @@
 			"whyPlaceholder": "Brief reason, source, or what is being corrected...",
 			"coverHint": "Cover is scaled to max 1024px.",
 			"charCount": "{{count}}/{{max}} characters",
-			"genrePlaceholder": "Select a genre"
+			"genrePlaceholder": "Select a genre",
+			"regionLabel": "Region",
+			"regionPlaceholder": "Select a region"
 		},
 		"working": "Working...",
 		"submitForReview": "Submit for review",

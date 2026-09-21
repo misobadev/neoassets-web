@@ -487,6 +487,18 @@
 			"quiz": "Preguntas",
 			"compilation": "Recopilatorio",
 			"miscellaneous": "Varios"
+		},
+		"regions": {
+			"world": "Mundo",
+			"usa": "USA",
+			"europe": "Europa",
+			"japan": "Japón",
+			"spain": "España",
+			"france": "Francia",
+			"germany": "Alemania",
+			"italy": "Italia",
+			"korea": "Corea",
+			"china": "China"
 		}
 	},
 	"metadataAdmin": {
@@ -563,7 +575,8 @@
 		"contributors": "Colaboradores",
 		"romDumpsTitle_one": "Volcados de ROM ({{count}})",
 		"romDumpsTitle_other": "Volcados de ROM ({{count}})",
-		"noDumps": "Sin volcados."
+		"noDumps": "Sin volcados.",
+		"regionsTitle": "Regiones"
 	},
 	"metadataStatus": {
 		"created": "Borrador",
@@ -666,7 +679,9 @@
 			"whyPlaceholder": "Motivo breve, fuente o qué se está corrigiendo...",
 			"coverHint": "La portada se escala a un máximo de 1024px.",
 			"charCount": "{{count}}/{{max}} caracteres",
-			"genrePlaceholder": "Selecciona un género"
+			"genrePlaceholder": "Selecciona un género",
+			"regionLabel": "Región",
+			"regionPlaceholder": "Selecciona una región"
 		},
 		"working": "Procesando...",
 		"submitForReview": "Enviar para revisión",

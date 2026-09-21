@@ -109,7 +109,7 @@ export default function MetadataSearchView() {
 								<RatingBadge rating={g.rating} />
 							</div>
 							<p className="text-xs text-[var(--color-base-content)]/50 mt-0.5">
-								{g.system_name} {g.region ? `· ${g.region}` : ""}
+								{g.system_name}
 							</p>
 						</Link>
 					))}
