@@ -668,7 +668,7 @@ export function createMetadataSubmission(body: {
 	system_id?: string;
 	kind?: "edit" | "new_game";
 	payload: Record<string, unknown>;
-	files?: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region?: string; delete?: boolean }[];
+	files?: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region?: string; delete?: boolean; move?: boolean }[];
 }): Promise<MetadataSubmission> {
 	return api<MetadataSubmission>("/api/v1/metadata/submissions", { method: "POST", token: userToken(), body });
 }

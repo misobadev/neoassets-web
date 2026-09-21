@@ -432,7 +432,7 @@ export default function MetadataSubmissionPage() {
 			if (isText) {
 				await createMetadataSubmission({ game_id: game.id, payload });
 			} else {
-				const files: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region: string; delete?: boolean }[] = [];
+				const files: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region: string; delete?: boolean; move?: boolean }[] = [];
 				// Existing cover/logo deleted from a region.
 				for (const m of existingMedia) {
 					if (mediaDeletes[m.object_key]) {
@@ -445,7 +445,7 @@ export default function MetadataSubmissionPage() {
 					const target = mediaMoves[m.object_key];
 					if (target && target !== (m.region || "")) {
 						const fileName = m.object_key.split("/").pop() || m.object_key;
-						files.push({ kind: m.kind, object_key: m.object_key, file_name: fileName, mime_type: m.mime, size: m.size, region: target });
+						files.push({ kind: m.kind, object_key: m.object_key, file_name: fileName, mime_type: m.mime, size: m.size, region: target, move: true });
 					}
 				}
 				// A newly picked file (optional when only moving).
