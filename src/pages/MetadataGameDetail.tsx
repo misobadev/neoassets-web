@@ -6,6 +6,7 @@ import { cdnUrl, fetchMetadataGameDetail, userToken, type GameDetail, type Langu
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import UserLink from "../components/UserLink";
+import { genreLabel } from "../lib/genres";
 import { usePageTitle } from "../lib/seo";
 
 // FieldValue renders a metadata value, or a "Data needed" link to the submit
@@ -168,7 +169,7 @@ export default function MetadataGameDetail() {
 							<div><p className="label-text">{t("metadataGame.fields.publisher")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="publisher" label={t("metadataGame.fields.publisher")} value={game.publisher} /></div>
 							<div><p className="label-text">{t("metadataGame.fields.developer")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="developer" label={t("metadataGame.fields.developer")} value={game.developer} /></div>
 						</div>
-						<div><p className="label-text">{t("metadataGame.fields.genre")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="genre" label={t("metadataGame.fields.genre")} value={game.genre} /></div>
+						<div><p className="label-text">{t("metadataGame.fields.genre")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="genre" label={t("metadataGame.fields.genre")} value={genreLabel(t, game.genre)} /></div>
 						{game.description ? (
 							<div>
 								<div className="flex items-center justify-between gap-3 mb-1">

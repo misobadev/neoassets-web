@@ -17,6 +17,7 @@ import {
 } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
+import { genreLabel } from "../lib/genres";
 import { uploadWithProgress } from "../lib/upload";
 import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
 
@@ -214,7 +215,7 @@ export default function MetadataSubmissionPage() {
 			: type === "region"
 				? game.region
 				: type === "genre"
-					? game.genre
+					? genreLabel(t, game.genre)
 					: type === "developer"
 						? game.developer
 						: type === "publisher"
@@ -400,7 +401,7 @@ export default function MetadataSubmissionPage() {
 							<div><p className="label-text">{t("metadataGame.fields.publisher")}</p><p>{game.publisher || "—"}</p></div>
 							<div><p className="label-text">{t("metadataGame.fields.developer")}</p><p>{game.developer || "—"}</p></div>
 						</div>
-						<div><p className="label-text">{t("metadataGame.fields.genre")}</p><p className="text-[var(--color-base-content)]/70">{game.genre || "—"}</p></div>
+						<div><p className="label-text">{t("metadataGame.fields.genre")}</p><p className="text-[var(--color-base-content)]/70">{game.genre ? genreLabel(t, game.genre) : "—"}</p></div>
 						<div>
 							<div className="flex items-center justify-between gap-3 mb-1">
 								<p className="label-text">{t("common.description")}</p>
