@@ -7,7 +7,7 @@ import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import UserLink from "../components/UserLink";
 import { genreLabel } from "../lib/genres";
-import { regionLabel } from "../lib/regions";
+import RegionLabel from "../components/RegionLabel";
 import { usePageTitle } from "../lib/seo";
 
 // FieldValue renders a metadata value, or a "Data needed" link to the submit
@@ -130,7 +130,7 @@ export default function MetadataGameDetail() {
 					>
 						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{game.name}</h1>
 						<span className={`badge badge-lg shrink-0 ${game.type === "hack" ? "badge-warning" : game.type === "homebrew" ? "badge-info" : "badge-ghost"}`}>{game.type || "base"}</span>
-						{game.region ? <span className="badge badge-lg badge-ghost shrink-0">{regionLabel(t, game.region)}</span> : null}
+						{game.region ? <span className="badge badge-lg badge-ghost shrink-0"><RegionLabel region={game.region} /></span> : null}
 						{complete ? <span className="holo-badge inline-flex items-center rounded-full border border-black/15 px-3 py-0.5 text-xs font-bold shadow-sm shrink-0">{t("metadataGame.completed")}</span> : null}
 					</div>
 					<p className="text-sm text-[var(--color-base-content)]/60">{game.system_name}</p>
@@ -160,7 +160,7 @@ export default function MetadataGameDetail() {
 							return cover ? (
 								<div className="relative w-full h-full flex items-start justify-center">
 									<img src={mediaUrl(cover)} alt="" className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-									{cover.region ? <span className="badge badge-ghost badge-sm absolute bottom-1 right-1">{regionLabel(t, cover.region)}</span> : null}
+									{cover.region ? <span className="badge badge-ghost badge-sm absolute bottom-1 right-1"><RegionLabel region={cover.region} /></span> : null}
 								</div>
 							) : (
 								<div className="w-full h-full rounded-lg bg-[var(--color-base-300)]" />
@@ -180,7 +180,7 @@ export default function MetadataGameDetail() {
 								<div className="space-y-1">
 									{regions.map((r) => (
 										<p key={r.region} className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap">
-											<span className="badge badge-ghost badge-xs">{regionLabel(t, r.region)}</span>
+											<span className="badge badge-ghost badge-xs"><RegionLabel region={r.region} /></span>
 											<span>{r.name || <span className="italic opacity-60">{t("metadataAdmin.none")}</span>}</span>
 											{r.release_year ? (
 												<span className="text-xs text-[var(--color-base-content)]/50">
@@ -236,7 +236,7 @@ export default function MetadataGameDetail() {
 					<div className="space-y-3">
 						{regions.filter((r) => (r.media || []).length > 0).map((r) => (
 							<div key={r.region} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-2">
-								<span className="badge badge-ghost badge-sm">{regionLabel(t, r.region)}</span>
+								<span className="badge badge-ghost badge-sm"><RegionLabel region={r.region} /></span>
 								<div className="flex flex-wrap gap-2">
 									{(r.media || []).map((m) => (
 										<img

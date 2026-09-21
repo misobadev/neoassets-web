@@ -22,3 +22,25 @@ export function regionLabel(t: TFunction, name: string): string {
 	const slug = REGION_SLUGS[name];
 	return slug ? t("metadata.regions." + slug, { defaultValue: name }) : name;
 }
+
+// REGION_FLAGS maps a canonical region name to its flag-icons country code.
+// World uses the United Nations flag.
+const REGION_FLAGS: Record<string, string> = {
+	"World": "un",
+	"USA": "us",
+	"Europe": "eu",
+	"Japan": "jp",
+	"Spain": "es",
+	"France": "fr",
+	"Germany": "de",
+	"Italy": "it",
+	"Korea": "kr",
+	"China": "cn",
+};
+
+// regionFlagClass returns the flag-icons class for a region (empty when the
+// region has no flag).
+export function regionFlagClass(name: string): string {
+	const code = REGION_FLAGS[name];
+	return code ? `fi fi-${code}` : "";
+}

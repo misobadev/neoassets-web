@@ -17,6 +17,7 @@ import {
 } from "../lib/api";
 import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
 import { uploadWithProgress } from "../lib/upload";
+import { RegionFlag } from "../components/RegionLabel";
 
 const GAME_TYPES = ["base", "homebrew", "hack"] as const;
 const IMAGE_KINDS: MediaKind[] = ["cover", "screenshot", "fanart", "logo"];
@@ -335,7 +336,7 @@ export default function NewGamePage() {
 				</div>
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<div>
-						<label className="label-text" htmlFor="ng-region">{t("metadataSubmit.textTypes.region")}</label>
+						<label className="label-text flex items-center gap-1.5" htmlFor="ng-region">{t("metadataSubmit.textTypes.region")}{region ? <RegionFlag region={region} /> : null}</label>
 						<select id="ng-region" className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)} disabled={busy}>
 							<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
 							{regions.map((r) => (

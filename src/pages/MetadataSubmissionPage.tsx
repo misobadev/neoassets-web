@@ -22,6 +22,7 @@ import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import { genreLabel } from "../lib/genres";
 import { regionLabel } from "../lib/regions";
+import RegionLabel, { RegionFlag } from "../components/RegionLabel";
 import { uploadWithProgress } from "../lib/upload";
 import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
 
@@ -652,7 +653,7 @@ export default function MetadataSubmissionPage() {
 								{textMode === "new" ? (
 									<>
 										<div>
-											<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
+											<label className="label-text flex items-center gap-1.5">{t("metadataSubmit.form.regionLabel")}{region ? <RegionFlag region={region} /> : null}</label>
 											<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
 												<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
 												{regions.map((r) => (
@@ -665,7 +666,7 @@ export default function MetadataSubmissionPage() {
 											<p className="text-sm text-[var(--color-base-content)]/70">
 												{currentText || "—"}
 												{currentText && currentRegion ? (
-													<span className="ml-2 badge badge-ghost badge-xs align-middle">{regionLabel(t, currentRegion)}</span>
+													<span className="ml-2 badge badge-ghost badge-xs align-middle"><RegionLabel region={currentRegion} /></span>
 												) : null}
 											</p>
 										</div>
@@ -683,7 +684,7 @@ export default function MetadataSubmissionPage() {
 												const target = textMoveFrom === source ? region : source;
 												return (
 													<div key={source} className="flex items-center gap-2">
-														<span className="badge badge-ghost badge-sm shrink-0">{regionLabel(t, source)}</span>
+														<span className="badge badge-ghost badge-sm shrink-0"><RegionLabel region={source} /></span>
 														<span className="text-[var(--color-base-content)]/40 shrink-0">→</span>
 														<select
 															className="select select-sm flex-1"
@@ -720,7 +721,7 @@ export default function MetadataSubmissionPage() {
 														checked={textMoveFrom === r.region}
 														onChange={(e) => setTextMoveFrom(e.target.checked ? r.region : "")}
 													/>
-													<span className="text-sm">{regionLabel(t, r.region)} — {textValueOf(r)}</span>
+													<span className="text-sm"><RegionLabel region={r.region} /> — {textValueOf(r)}</span>
 												</label>
 											))}
 										</div>
@@ -735,7 +736,7 @@ export default function MetadataSubmissionPage() {
 									<p className="text-sm text-[var(--color-base-content)]/70">
 										{currentText || "—"}
 										{currentText && currentRegion ? (
-											<span className="ml-2 badge badge-ghost badge-xs align-middle">{regionLabel(t, currentRegion)}</span>
+											<span className="ml-2 badge badge-ghost badge-xs align-middle"><RegionLabel region={currentRegion} /></span>
 										) : null}
 									</p>
 								</div>
@@ -785,11 +786,11 @@ export default function MetadataSubmissionPage() {
 																	})
 																}
 															/>
-															<span className="text-sm">{regionLabel(t, currentReg)}</span>
+															<span className="text-sm"><RegionLabel region={currentReg} /></span>
 														</label>
 													) : (
 														<>
-															<span className="badge badge-ghost badge-sm shrink-0">{regionLabel(t, currentReg)}</span>
+															<span className="badge badge-ghost badge-sm shrink-0"><RegionLabel region={currentReg} /></span>
 															<span className="text-[var(--color-base-content)]/40 shrink-0">→</span>
 															<select
 																className="select select-sm flex-1"
@@ -818,7 +819,7 @@ export default function MetadataSubmissionPage() {
 								<>
 							{isRegionalKind ? (
 								<div>
-									<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
+									<label className="label-text flex items-center gap-1.5">{t("metadataSubmit.form.regionLabel")}{region ? <RegionFlag region={region} /> : null}</label>
 									<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
 										<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
 										{regions.map((r) => (
@@ -834,7 +835,7 @@ export default function MetadataSubmissionPage() {
 										{currentMedia.length > 0 ? (
 											<div className="relative">
 												<img src={mediaUrl(currentMedia[0])} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-												{currentMedia[0].region ? <span className="badge badge-ghost badge-sm absolute bottom-1 right-1">{regionLabel(t, currentMedia[0].region)}</span> : null}
+												{currentMedia[0].region ? <span className="badge badge-ghost badge-sm absolute bottom-1 right-1"><RegionLabel region={currentMedia[0].region} /></span> : null}
 											</div>
 										) : (
 											<div className="w-full h-44 flex items-center justify-center rounded-lg border border-dashed border-[var(--color-base-300)] bg-[var(--color-base-300)]/30 px-2">
@@ -859,7 +860,7 @@ export default function MetadataSubmissionPage() {
 													) : (
 														<img src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
 													)}
-													{m.region ? <span className="badge badge-ghost badge-sm absolute bottom-1 right-1">{regionLabel(t, m.region)}</span> : null}
+													{m.region ? <span className="badge badge-ghost badge-sm absolute bottom-1 right-1"><RegionLabel region={m.region} /></span> : null}
 												</div>
 											))}
 										</div>

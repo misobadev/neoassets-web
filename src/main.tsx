@@ -29,6 +29,7 @@ import ReviewsPage from "./pages/ReviewsPage";
 import { ReviewsProvider } from "./lib/reviews";
 import "./i18n";
 import "./index.css";
+import "flag-icons/css/flag-icons.min.css";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
