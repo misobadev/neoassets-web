@@ -491,6 +491,8 @@
 		"systemContribution": "系统贡献",
 		"by": "作者",
 		"reviewedBy": "审核人",
+		"submittedBy": "提交者",
+		"openGame": "打开游戏",
 		"submissionTitle": "元数据投稿",
 		"payload": "数据内容",
 		"note": "备注",

@@ -491,6 +491,8 @@
 		"systemContribution": "시스템 기여",
 		"by": "작성자",
 		"reviewedBy": "검토자",
+		"submittedBy": "제출자",
+		"openGame": "게임 열기",
 		"submissionTitle": "메타데이터 제출",
 		"payload": "페이로드",
 		"note": "메모",

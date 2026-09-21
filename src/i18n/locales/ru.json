@@ -501,6 +501,8 @@
 		"systemContribution": "Вклад по системе",
 		"by": "от",
 		"reviewedBy": "Проверил",
+		"submittedBy": "Отправил",
+		"openGame": "Открыть игру",
 		"submissionTitle": "Заявка на метаданные",
 		"payload": "Содержимое",
 		"note": "Примечание",

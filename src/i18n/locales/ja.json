@@ -491,6 +491,8 @@
 		"systemContribution": "システムの投稿",
 		"by": "作成者",
 		"reviewedBy": "レビュー担当",
+		"submittedBy": "投稿者",
+		"openGame": "ゲームを開く",
 		"submissionTitle": "メタデータ投稿",
 		"payload": "ペイロード",
 		"note": "メモ",

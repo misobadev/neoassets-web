@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { AlertTriangle, ChevronLeft, Image as ImageIcon, ShieldCheck, X } from "lucide-react";
+import { AlertTriangle, ChevronLeft, ExternalLink, Image as ImageIcon, ShieldCheck, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Pagination from "../components/Pagination";
 import UserLink from "../components/UserLink";
@@ -145,6 +145,14 @@ export default function MetadataAdminView() {
 	const note = typeof payload.note === "string" ? payload.note : "";
 	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month");
 	const textKeys = [...TEXT_ORDER.filter((k) => payloadKeys.includes(k)), ...payloadKeys.filter((k) => !TEXT_ORDER.includes(k))];
+
+	// Header data for the detail modal: the target game/system and a link to
+	// open the game in a new tab. A brand-new game has no row (and no link)
+	// until it is approved, so its name falls back to the payload.
+	const gameID = detail?.submission.game_id || detail?.game?.id || "";
+	const systemID = detail?.game?.system_id || detail?.submission.system_id || "";
+	const systemName = detail?.game?.system_name || detail?.submission.system_name || detail?.system?.name || "";
+	const gameName = detail?.game?.name || detail?.submission.game_name || (typeof payload.name === "string" ? payload.name : "");
 
 	// old_payload / old_media snapshot the target's published state at approval
 	// time, so an approved submission still shows the correct "old" side (the
@@ -370,12 +378,26 @@ export default function MetadataAdminView() {
 			{detail ? (
 				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4" onClick={(e) => e.target === e.currentTarget && setDetail(null)}>
 					<div className="card w-full max-w-5xl my-8 p-6 space-y-4">
-						<div className="flex items-center justify-between">
-							<div className="flex items-center gap-2 min-w-0">
-								<h2 className="text-xl font-bold">{t("metadataAdmin.submissionTitle")}</h2>
-								{detail.submission.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
+						<div className="flex items-start justify-between gap-3">
+							<div className="min-w-0">
+								<div className="flex items-center gap-2 flex-wrap">
+									<h2 className="text-xl font-bold truncate">{gameName || t("metadataAdmin.submissionTitle")}</h2>
+									{systemName ? <span className="badge badge-ghost badge-sm shrink-0">{systemName}</span> : null}
+									{detail.submission.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
+								</div>
+								{gameID && systemID ? (
+									<Link
+										to={`/app/metadata/${systemID}/game/${gameID}`}
+										target="_blank"
+										rel="noreferrer"
+										className="link link-primary text-sm inline-flex items-center gap-1 mt-1"
+									>
+										<ExternalLink className="w-3.5 h-3.5" />
+										{t("metadataAdmin.openGame")}
+									</Link>
+								) : null}
 							</div>
-							<button className="btn btn-ghost !p-2" onClick={() => setDetail(null)} aria-label={t("common.close")}>
+							<button className="btn btn-ghost !p-2 shrink-0" onClick={() => setDetail(null)} aria-label={t("common.close")}>
 								<X className="w-5 h-5" />
 							</button>
 						</div>
@@ -384,6 +406,8 @@ export default function MetadataAdminView() {
 							<div>
 								<p className="label-text">{t("common.status")}</p>
 								<span className={`badge ${BADGE[detail.submission.status]}`}>{t("metadataStatus." + detail.submission.status, { defaultValue: detail.submission.status })}</span>
+								<p className="label-text mt-3">{t("metadataAdmin.submittedBy")}</p>
+								<p><UserLink>{detail.submission.submitted_by_name}</UserLink></p>
 							</div>
 							<div>
 								<p className="label-text">{t("log.created")}</p>

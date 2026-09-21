@@ -491,6 +491,8 @@
 		"systemContribution": "System-Beitrag",
 		"by": "von",
 		"reviewedBy": "Geprüft von",
+		"submittedBy": "Eingereicht von",
+		"openGame": "Spiel öffnen",
 		"submissionTitle": "Metadaten-Einreichung",
 		"payload": "Payload",
 		"note": "Notiz",

@@ -473,6 +473,8 @@
 		"systemContribution": "System contribution",
 		"by": "by",
 		"reviewedBy": "Reviewed by",
+		"submittedBy": "Submitted by",
+		"openGame": "Open game",
 		"submissionTitle": "Metadata submission",
 		"payload": "Payload",
 		"note": "Note",
