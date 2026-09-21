@@ -483,6 +483,28 @@
 			"other": "其他",
 			"supermodel": "Supermodel",
 			"virtual": "虚拟"
+		},
+		"genres": {
+			"action": "动作",
+			"adventure": "冒险",
+			"beat-em-up": "清版动作",
+			"fighting": "格斗",
+			"platformer": "平台",
+			"puzzle": "益智",
+			"racing": "竞速",
+			"rpg": "角色扮演 (RPG)",
+			"shooter": "射击",
+			"shoot-em-up": "弹幕射击",
+			"simulation": "模拟",
+			"sports": "体育",
+			"strategy": "策略",
+			"music": "音乐与节奏",
+			"board-card": "桌面与卡牌",
+			"pinball": "弹珠",
+			"educational": "教育",
+			"quiz": "问答",
+			"compilation": "合集",
+			"miscellaneous": "其他"
 		}
 	},
 	"metadataAdmin": {
@@ -661,7 +683,8 @@
 			"whyLabel": "原因（简要说明，可选）",
 			"whyPlaceholder": "简要原因、来源或正在更正的内容……",
 			"coverHint": "封面将缩放至最大 1024px。",
-			"charCount": "{{count}}/{{max}} 字符"
+			"charCount": "{{count}}/{{max}} 字符",
+			"genrePlaceholder": "选择类型"
 		},
 		"working": "正在处理……",
 		"submitForReview": "提交审核",

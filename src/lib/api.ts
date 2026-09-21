@@ -554,6 +554,15 @@ export function fetchMetadataSystems(): Promise<MetadataSystem[]> {
 	return api<{ systems: MetadataSystem[] }>("/api/v1/metadata/systems").then((d) => d.systems || []);
 }
 
+export interface Genre {
+	id: string;
+	name: string;
+}
+
+export function fetchGenres(): Promise<Genre[]> {
+	return api<{ genres: Genre[] }>("/api/v1/metadata/genres").then((d) => d.genres || []);
+}
+
 export function fetchMetadataGamesBySystem(systemId: string, limit = 48, offset = 0, type = "", sort = "", signal?: AbortSignal): Promise<{ games: GameSummary[]; total: number }> {
 	const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
 	if (type) params.set("type", type);

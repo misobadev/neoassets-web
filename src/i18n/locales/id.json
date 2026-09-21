@@ -483,6 +483,28 @@
 			"other": "Lainnya",
 			"supermodel": "Supermodel",
 			"virtual": "Virtual"
+		},
+		"genres": {
+			"action": "Aksi",
+			"adventure": "Petualangan",
+			"beat-em-up": "Beat 'em up",
+			"fighting": "Pertarungan",
+			"platformer": "Platformer",
+			"puzzle": "Puzzle",
+			"racing": "Balapan",
+			"rpg": "Role-Playing (RPG)",
+			"shooter": "Tembak-tembakan",
+			"shoot-em-up": "Shoot 'em Up",
+			"simulation": "Simulasi",
+			"sports": "Olahraga",
+			"strategy": "Strategi",
+			"music": "Musik & Ritme",
+			"board-card": "Papan & Kartu",
+			"pinball": "Pinball",
+			"educational": "Edukasi",
+			"quiz": "Kuis",
+			"compilation": "Kompilasi",
+			"miscellaneous": "Lainnya"
 		}
 	},
 	"metadataAdmin": {
@@ -661,7 +683,8 @@
 			"whyLabel": "Alasan (catatan singkat, opsional)",
 			"whyPlaceholder": "Alasan singkat, sumber, atau apa yang dikoreksi...",
 			"coverHint": "Cover diskalakan hingga maks 1024px.",
-			"charCount": "{{count}}/{{max}} karakter"
+			"charCount": "{{count}}/{{max}} karakter",
+			"genrePlaceholder": "Pilih genre"
 		},
 		"working": "Bekerja...",
 		"submitForReview": "Kirim untuk ditinjau",

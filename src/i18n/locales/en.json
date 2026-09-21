@@ -465,7 +465,29 @@
 			"searching": "Searching...",
 			"noGames": "No games found."
 		},
-		"scrapedTimes": "Scraped {{n}} times"
+		"scrapedTimes": "Scraped {{n}} times",
+		"genres": {
+			"action": "Action",
+			"adventure": "Adventure",
+			"beat-em-up": "Beat 'em Up",
+			"fighting": "Fighting",
+			"platformer": "Platformer",
+			"puzzle": "Puzzle",
+			"racing": "Racing",
+			"rpg": "Role-Playing (RPG)",
+			"shooter": "Shooter",
+			"shoot-em-up": "Shoot 'em Up",
+			"simulation": "Simulation",
+			"sports": "Sports",
+			"strategy": "Strategy",
+			"music": "Music & Rhythm",
+			"board-card": "Board & Card",
+			"pinball": "Pinball",
+			"educational": "Educational",
+			"quiz": "Quiz",
+			"compilation": "Compilation",
+			"miscellaneous": "Miscellaneous"
+		}
 	},
 	"metadataAdmin": {
 		"newGame": "New game",
@@ -643,7 +665,8 @@
 			"whyLabel": "Why (brief note, optional)",
 			"whyPlaceholder": "Brief reason, source, or what is being corrected...",
 			"coverHint": "Cover is scaled to max 1024px.",
-			"charCount": "{{count}}/{{max}} characters"
+			"charCount": "{{count}}/{{max}} characters",
+			"genrePlaceholder": "Select a genre"
 		},
 		"working": "Working...",
 		"submitForReview": "Submit for review",

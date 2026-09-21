@@ -483,6 +483,28 @@
 			"other": "その他",
 			"supermodel": "Supermodel",
 			"virtual": "仮想"
+		},
+		"genres": {
+			"action": "アクション",
+			"adventure": "アドベンチャー",
+			"beat-em-up": "ベルトスクロール",
+			"fighting": "格闘",
+			"platformer": "プラットフォーマー",
+			"puzzle": "パズル",
+			"racing": "レース",
+			"rpg": "ロールプレイング (RPG)",
+			"shooter": "シューター",
+			"shoot-em-up": "シューティング",
+			"simulation": "シミュレーション",
+			"sports": "スポーツ",
+			"strategy": "ストラテジー",
+			"music": "音楽・リズム",
+			"board-card": "ボード・カード",
+			"pinball": "ピンボール",
+			"educational": "教育",
+			"quiz": "クイズ",
+			"compilation": "コンピレーション",
+			"miscellaneous": "その他"
 		}
 	},
 	"metadataAdmin": {
@@ -661,7 +683,8 @@
 			"whyLabel": "理由（簡単なメモ、任意）",
 			"whyPlaceholder": "簡単な理由、出典、または修正内容...",
 			"coverHint": "カバーは最大1024pxに縮小されます。",
-			"charCount": "{{count}}/{{max}} 文字"
+			"charCount": "{{count}}/{{max}} 文字",
+			"genrePlaceholder": "ジャンルを選択"
 		},
 		"working": "処理中...",
 		"submitForReview": "レビューに提出",

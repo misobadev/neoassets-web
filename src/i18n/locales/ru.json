@@ -493,6 +493,28 @@
 			"other": "Другое",
 			"supermodel": "Supermodel",
 			"virtual": "Виртуальные"
+		},
+		"genres": {
+			"action": "Экшен",
+			"adventure": "Приключение",
+			"beat-em-up": "Драка",
+			"fighting": "Файтинг",
+			"platformer": "Платформер",
+			"puzzle": "Головоломка",
+			"racing": "Гонки",
+			"rpg": "Ролевая игра (RPG)",
+			"shooter": "Шутер",
+			"shoot-em-up": "Скролл-шутер",
+			"simulation": "Симулятор",
+			"sports": "Спорт",
+			"strategy": "Стратегия",
+			"music": "Музыка и ритм",
+			"board-card": "Настольные и карточные",
+			"pinball": "Пинбол",
+			"educational": "Обучающая",
+			"quiz": "Викторина",
+			"compilation": "Сборник",
+			"miscellaneous": "Разное"
 		}
 	},
 	"metadataAdmin": {
@@ -681,7 +703,8 @@
 			"whyLabel": "Почему (краткое примечание, необязательно)",
 			"whyPlaceholder": "Краткая причина, источник или что исправляется...",
 			"coverHint": "Обложка масштабируется до максимум 1024px.",
-			"charCount": "{{count}}/{{max}} символов"
+			"charCount": "{{count}}/{{max}} символов",
+			"genrePlaceholder": "Выберите жанр"
 		},
 		"working": "Обработка...",
 		"submitForReview": "Отправить на проверку",

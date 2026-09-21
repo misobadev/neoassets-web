@@ -483,6 +483,28 @@
 			"other": "Autres",
 			"supermodel": "Supermodel",
 			"virtual": "Virtuel"
+		},
+		"genres": {
+			"action": "Action",
+			"adventure": "Aventure",
+			"beat-em-up": "Beat 'em up",
+			"fighting": "Combat",
+			"platformer": "Plateforme",
+			"puzzle": "Puzzle",
+			"racing": "Course",
+			"rpg": "Jeu de rôle (RPG)",
+			"shooter": "Tir",
+			"shoot-em-up": "Shoot 'em up",
+			"simulation": "Simulation",
+			"sports": "Sport",
+			"strategy": "Stratégie",
+			"music": "Musique et rythme",
+			"board-card": "Plateau et cartes",
+			"pinball": "Flipper",
+			"educational": "Éducatif",
+			"quiz": "Quiz",
+			"compilation": "Compilation",
+			"miscellaneous": "Divers"
 		}
 	},
 	"metadataAdmin": {
@@ -661,7 +683,8 @@
 			"whyLabel": "Pourquoi (brève note, facultatif)",
 			"whyPlaceholder": "Brève raison, source, ou ce qui est corrigé...",
 			"coverHint": "La jaquette est redimensionnée à 1024px maximum.",
-			"charCount": "{{count}}/{{max}} caractères"
+			"charCount": "{{count}}/{{max}} caractères",
+			"genrePlaceholder": "Choisir un genre"
 		},
 		"working": "Traitement...",
 		"submitForReview": "Soumettre pour révision",

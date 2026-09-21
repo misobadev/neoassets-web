@@ -5,11 +5,13 @@ import { AlertTriangle, Check, ChevronLeft, Clapperboard, FileText, Image as Ima
 import {
 	cdnUrl,
 	createMetadataSubmission,
+	fetchGenres,
 	fetchMetadataGameDetail,
 	fetchMetadataPendingKeys,
 	requestMetadataUploadUrl,
 	userToken,
 	type GameDetail,
+	type Genre,
 	type Language,
 	type MediaKind,
 } from "../lib/api";
@@ -71,6 +73,7 @@ export default function MetadataSubmissionPage() {
 		return t || "";
 	});
 	const [textValue, setTextValue] = useState("");
+	const [genres, setGenres] = useState<Genre[]>([]);
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -99,6 +102,10 @@ export default function MetadataSubmissionPage() {
 			})
 			.catch((e: Error) => setError(e.message));
 	}, [gameId, lang]);
+
+	useEffect(() => {
+		fetchGenres().then(setGenres).catch(() => {});
+	}, []);
 
 	// Restore a client-side draft once (drafts never hit the DB).
 	useEffect(() => {
@@ -506,6 +513,13 @@ export default function MetadataSubmissionPage() {
 										</select>
 										<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.typeHint")}</p>
 									</>
+								) : type === "genre" ? (
+									<select className="select w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)}>
+										<option value="">{t("metadataSubmit.form.genrePlaceholder")}</option>
+										{genres.map((g) => (
+											<option key={g.id} value={g.name}>{t("metadata.genres." + g.id, { defaultValue: g.name })}</option>
+										))}
+									</select>
 								) : (
 									<input className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder={t("metadataSubmit.form.newFieldPlaceholder", { field: textLabel.toLowerCase() })} />
 								)}

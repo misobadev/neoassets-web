@@ -4,10 +4,12 @@ import { useTranslation } from "react-i18next";
 import { AlertTriangle, Check, ChevronLeft, Clapperboard, Plus, Upload } from "lucide-react";
 import {
 	createMetadataSubmission,
+	fetchGenres,
 	fetchMetadataSystems,
 	requestMetadataUploadUrl,
 	searchMetadataGames,
 	type GameSummary,
+	type Genre,
 	type MediaKind,
 	type MetadataSystem,
 } from "../lib/api";
@@ -67,6 +69,7 @@ export default function NewGamePage() {
 	const [description, setDescription] = useState("");
 	const [region, setRegion] = useState("");
 	const [genre, setGenre] = useState("");
+	const [genres, setGenres] = useState<Genre[]>([]);
 	const [developer, setDeveloper] = useState("");
 	const [publisher, setPublisher] = useState("");
 	const [release, setRelease] = useState("");
@@ -87,6 +90,9 @@ export default function NewGamePage() {
 		fetchMetadataSystems()
 			.then((list) => setSystems(list.filter((s) => !s.virtual)))
 			.catch((e: Error) => setStatus({ text: e.message, tone: "error" }));
+		fetchGenres()
+			.then(setGenres)
+			.catch(() => {});
 	}, []);
 
 	// Suggest existing games so the user can open and contribute to them
@@ -328,7 +334,12 @@ export default function NewGamePage() {
 					</div>
 					<div>
 						<label className="label-text" htmlFor="ng-genre">{t("metadataSubmit.textTypes.genre")}</label>
-						<input id="ng-genre" className="input w-full" value={genre} onChange={(e) => setGenre(e.target.value)} disabled={busy} />
+						<select id="ng-genre" className="select w-full" value={genre} onChange={(e) => setGenre(e.target.value)} disabled={busy}>
+							<option value="">{t("metadataSubmit.form.genrePlaceholder")}</option>
+							{genres.map((g) => (
+								<option key={g.id} value={g.name}>{t("metadata.genres." + g.id, { defaultValue: g.name })}</option>
+							))}
+						</select>
 					</div>
 					<div>
 						<label className="label-text" htmlFor="ng-developer">{t("metadataSubmit.textTypes.developer")}</label>
