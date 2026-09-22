@@ -260,11 +260,14 @@ export default function MetadataAdminView() {
 	}, [submissions]);
 
 	// systemOptions lists every system present in the current result set so the
-	// review list can be filtered by system.
+	// review list can be filtered by system. A game edit carries game_id, not
+	// system_id, so fall back to the system name when the id is missing.
+	const systemKey = (s: MetadataSubmission) => s.system_id || s.system_name || "";
 	const systemOptions = useMemo(() => {
 		const map = new Map<string, string>();
 		for (const s of submissions || []) {
-			if (s.system_id && !map.has(s.system_id)) map.set(s.system_id, s.system_name || s.system_id);
+			const key = systemKey(s);
+			if (key && !map.has(key)) map.set(key, s.system_name || key);
 		}
 		return [...map.entries()]
 			.map(([id, name]) => ({ id, name }))
@@ -279,7 +282,7 @@ export default function MetadataAdminView() {
 	const visible = [...(submissions || [])]
 		.filter((s) => !kindFilter || (s.change_kinds || []).includes(kindFilter))
 		.filter((s) => !userFilter || s.user_id === userFilter)
-		.filter((s) => !systemFilter || s.system_id === systemFilter)
+		.filter((s) => !systemFilter || systemKey(s) === systemFilter)
 		.sort((a, b) => (sortDir === "asc" ? (a.created_at > b.created_at ? 1 : -1) : a.created_at < b.created_at ? 1 : -1));
 
 	const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
