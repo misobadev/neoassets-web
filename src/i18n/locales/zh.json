@@ -1031,6 +1031,8 @@
 		"pForceThreads": "Debug。覆盖请求的线程数。",
 		"pForceRate": "Debug。强制返回 429 速率限制响应。",
 		"popularDesc": "抓取次数最多的游戏，可用 system_id 过滤并用 limit 限制数量。免费（不消耗配额）。",
+		"packsDesc": "所有已批准的系统美术包，包含预览 URL 和前四张背景图片。免费（不消耗配额）。",
+		"packDownloadDesc": "选择一个系统美术包并返回其全部图片。每次调用计为一次下载并消耗一个每日配额。",
 		"pType": "名称搜索的可选过滤器：base、hack 或 homebrew（发送哈希时忽略）。",
 		"pRoms": "包含完整 ROM 列表。默认关闭；始终返回 rom_count。",
 		"conceptsExampleNote": "四个选择器都返回同一个游戏。响应中的 system_id 表示真实主板（cps2），rom_name 表示其 ROM 集（sfa3.zip）。",

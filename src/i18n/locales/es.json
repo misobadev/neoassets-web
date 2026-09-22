@@ -1052,6 +1052,8 @@
 		"pForceThreads": "Debug. Fuerza el número de threads para la petición.",
 		"pForceRate": "Debug. Fuerza una respuesta 429 de rate limit.",
 		"popularDesc": "Juegos mas scrapeados, opcionalmente filtrados por system_id y limitados con limit. Gratis (no consume cuota).",
+		"packsDesc": "Todos los system art packs aprobados con su URL de preview y las primeras cuatro imagenes de fondo. Gratis (no consume cuota).",
+		"packDownloadDesc": "Un system art pack con todas sus imagenes. Cada llamada cuenta una descarga y consume una unidad de la cuota diaria.",
 		"pType": "Filtro opcional para la busqueda por nombre: base, hack o homebrew (se ignora si se envia un hash).",
 		"pRoms": "Incluye la lista completa de ROMs. Desactivado por defecto; rom_count y rom_name siempre se devuelven."
 	},

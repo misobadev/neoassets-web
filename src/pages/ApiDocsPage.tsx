@@ -334,6 +334,55 @@ curl "${BASE_URL}/api/v1/scrape/games?group=mame-fbneo&name=sfa3.zip"`}</Code>
 
 				<div className="space-y-2 pt-2 border-t border-[var(--color-base-300)]">
 					<p className="font-mono text-sm">
+						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/scrape/packs
+					</p>
+					<p className="text-sm text-[var(--color-base-content)]/70">{t("apiDocs.packsDesc")}</p>
+					<Code>{`{
+  "packs": [
+    {
+      "folder": "neo-geo-full",
+      "name": "Neo Geo Full",
+      "author": "miguel",
+      "description": "Complete Neo Geo theme.",
+      "version": "1.2",
+      "preview": "https://cdn.neoassets.dev/packs/neo-geo-full/preview.webp",
+      "images": [
+        "https://cdn.neoassets.dev/packs/neo-geo-full/backgrounds/neogeo.webp",
+        "https://cdn.neoassets.dev/packs/neo-geo-full/backgrounds/cps2.webp"
+      ],
+      "systems_covered": 42,
+      "downloads": 318
+    }
+  ],
+  "total": 12
+}`}</Code>
+				</div>
+
+				<div className="space-y-2 pt-2 border-t border-[var(--color-base-300)]">
+					<p className="font-mono text-sm">
+						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/scrape/packs/{"{folder}"}/download
+					</p>
+					<p className="text-sm text-[var(--color-base-content)]/70">{t("apiDocs.packDownloadDesc")}</p>
+					<Code>{`{
+  "folder": "neo-geo-full",
+  "name": "Neo Geo Full",
+  "preview": "https://cdn.neoassets.dev/packs/neo-geo-full/preview.webp",
+  "images": [ "https://cdn.neoassets.dev/packs/neo-geo-full/backgrounds/neogeo.webp" ],
+  "systems_covered": 42,
+  "downloads": 319,
+  "files": [
+    { "kind": "background", "system_id": "neogeo", "file_name": "neogeo.webp",
+      "url": "https://cdn.neoassets.dev/packs/neo-geo-full/backgrounds/neogeo.webp",
+      "size": 12345, "mime": "image/webp" },
+    { "kind": "preview", "file_name": "preview.webp",
+      "url": "https://cdn.neoassets.dev/packs/neo-geo-full/preview.webp",
+      "size": 23456, "mime": "image/webp" }
+  ]
+}`}</Code>
+				</div>
+
+				<div className="space-y-2 pt-2 border-t border-[var(--color-base-300)]">
+					<p className="font-mono text-sm">
 						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/scrape/account
 					</p>
 					<p className="text-sm text-[var(--color-base-content)]/70">{t("apiDocs.accountDesc")}</p>

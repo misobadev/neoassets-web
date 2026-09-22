@@ -1031,6 +1031,8 @@
 		"pForceThreads": "Debug. 요청의 스레드 수를 재정의합니다.",
 		"pForceRate": "Debug. 429 속도 제한 응답을 강제합니다.",
 		"popularDesc": "가장 많이 스크레이프된 게임. system_id로 필터링하고 limit으로 개수를 제한할 수 있습니다. 무료(할당량을 소비하지 않음).",
+		"packsDesc": "승인된 모든 시스템 아트 팩을 미리보기 URL과 처음 4개의 배경 이미지와 함께 반환합니다. 무료(할당량을 소비하지 않음).",
+		"packDownloadDesc": "선택한 시스템 아트 팩을 모든 이미지와 함께 반환합니다. 각 호출은 다운로드로 집계되고 일일 할당량을 1 소비합니다.",
 		"pType": "이름 검색용 선택적 필터: base, hack, homebrew(해시를 보내면 무시됨).",
 		"pRoms": "전체 ROM 목록을 포함합니다. 기본적으로 꺼져 있으며 rom_count는 항상 반환됩니다.",
 		"conceptsExampleNote": "네 가지 모두 같은 게임을 반환합니다. 응답의 system_id는 실제 보드(cps2)를, rom_name은 ROM 세트(sfa3.zip)를 나타냅니다.",

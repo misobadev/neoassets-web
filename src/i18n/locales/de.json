@@ -1031,6 +1031,8 @@
 		"pForceThreads": "Debug. Thread-Anzahl für die Anfrage überschreiben.",
 		"pForceRate": "Debug. Eine 429-Ratenlimit-Antwort erzwingen.",
 		"popularDesc": "Die meistgescrapten Spiele, optional mit system_id gefiltert und mit limit begrenzt. Kostenlos (verbraucht kein Kontingent).",
+		"packsDesc": "Alle genehmigten System-Art-Packs mit Vorschau-URL und den ersten vier Hintergrundbildern. Kostenlos (verbraucht kein Kontingent).",
+		"packDownloadDesc": "Ein System-Art-Pack mit allen Bildern. Jeder Aufruf zahlt einen Download und verbraucht eine Einheit des Tageskontingents.",
 		"pType": "Optionaler Filter für eine Namenssuche: base, hack oder homebrew (wird ignoriert, wenn ein Hash gesendet wird).",
 		"pRoms": "Vollständige ROM-Liste einschließen. Standardmäßig aus; rom_count wird immer zurückgegeben.",
 		"conceptsExampleNote": "Alle vier liefern dasselbe Spiel. Das system_id der Antwort nennt das echte Board (cps2) und rom_name dessen ROM-Set (sfa3.zip).",

@@ -1052,6 +1052,8 @@
 		"pForceThreads": "Debug. Override the thread count for the request.",
 		"pForceRate": "Debug. Force a 429 rate-limit response.",
 		"popularDesc": "Most scraped games, optionally filtered by system_id and limited with limit. Free (does not consume quota).",
+		"packsDesc": "Every approved system art pack with its preview URL and the first four background images. Free (does not consume quota).",
+		"packDownloadDesc": "One system art pack with all of its images. Each call counts a download and consumes one unit of the daily quota.",
 		"pType": "Optional filter for a name search: base, hack or homebrew (ignored when a hash is sent).",
 		"pRoms": "Include the full ROM list. Off by default; rom_count is always returned."
 	},

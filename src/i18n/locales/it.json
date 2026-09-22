@@ -1031,6 +1031,8 @@
 		"pForceThreads": "Debug. Sostituisci il numero di thread per la richiesta.",
 		"pForceRate": "Debug. Forza una risposta 429 di limite di frequenza.",
 		"popularDesc": "I giochi più scrapati, filtrati opzionalmente per system_id e limitati con limit. Gratuito (non consuma quota).",
+		"packsDesc": "Tutti i system art pack approvati con URL di anteprima e le prime quattro immagini di sfondo. Gratuito (non consuma quota).",
+		"packDownloadDesc": "Un system art pack con tutte le sue immagini. Ogni chiamata conta un download e consuma un'unita della quota giornaliera.",
 		"pType": "Filtro opzionale per una ricerca per nome: base, hack o homebrew (ignorato se viene inviato un hash).",
 		"pRoms": "Includi l'elenco completo dei ROM. Disattivato per impostazione predefinita; rom_count è sempre restituito.",
 		"conceptsExampleNote": "Tutti e quattro restituiscono lo stesso gioco. Il system_id della risposta indica la scheda reale (cps2) e rom_name il suo set di ROM (sfa3.zip).",
