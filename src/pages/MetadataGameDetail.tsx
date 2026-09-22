@@ -108,6 +108,9 @@ export default function MetadataGameDetail() {
 	const complete = isGameComplete(game);
 	const contributors = game.contributors || [];
 	const regions = game.regions || [];
+	// A region may exist only to hold regional cover/logo media; it belongs in
+	// the regional media section, not in the regional names list.
+	const namedRegions = regions.filter((r) => r.name || r.release_year);
 
 	return (
 		<div className="space-y-6">
@@ -191,11 +194,11 @@ export default function MetadataGameDetail() {
 							<div><p className="label-text">{t("metadataGame.fields.developer")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="developer" label={t("metadataGame.fields.developer")} value={game.developer} /></div>
 							<div><p className="label-text">{t("metadataGame.fields.genre")}</p><FieldValue gameId={game.id} systemId={systemId || game.system_id} type="genre" label={t("metadataGame.fields.genre")} value={genreLabel(t, game.genre)} /></div>
 						</div>
-						{regions.length > 0 ? (
+						{namedRegions.length > 0 ? (
 							<div>
 								<p className="label-text mb-1">{t("metadataGame.regionalNames")}</p>
 								<div className="space-y-1">
-									{regions.map((r) => (
+									{namedRegions.map((r) => (
 										<p key={r.region} className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap">
 											<span className="badge badge-solid-neutral badge-xs"><RegionLabel region={r.region} /></span>
 											<span>{r.name || <span className="italic opacity-60">{t("metadataAdmin.none")}</span>}</span>
