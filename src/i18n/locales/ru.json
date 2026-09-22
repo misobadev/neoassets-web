@@ -546,6 +546,8 @@
 		"mediaChanges": "Изменения медиа",
 		"none": "Нет",
 		"filterBy": "Фильтр по",
+		"filterSystem": "Фильтр по системе",
+		"allSystems": "Все системы",
 		"filterUser": "Фильтр по пользователю",
 		"allUsers": "Все пользователи",
 		"sortBy": "Сортировка",

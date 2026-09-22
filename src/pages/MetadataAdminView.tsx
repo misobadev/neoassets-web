@@ -74,6 +74,7 @@ export default function MetadataAdminView() {
 	const [status, setStatus] = useState<MetadataStatus | "">("pending");
 	const [kindFilter, setKindFilter] = useState("");
 	const [userFilter, setUserFilter] = useState("");
+	const [systemFilter, setSystemFilter] = useState("");
 	const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 	const [page, setPage] = useState(1);
 	const [submissions, setSubmissions] = useState<MetadataSubmission[] | null>(null);
@@ -258,14 +259,27 @@ export default function MetadataAdminView() {
 			.sort((a, b) => a.name.localeCompare(b.name));
 	}, [submissions]);
 
+	// systemOptions lists every system present in the current result set so the
+	// review list can be filtered by system.
+	const systemOptions = useMemo(() => {
+		const map = new Map<string, string>();
+		for (const s of submissions || []) {
+			if (s.system_id && !map.has(s.system_id)) map.set(s.system_id, s.system_name || s.system_id);
+		}
+		return [...map.entries()]
+			.map(([id, name]) => ({ id, name }))
+			.sort((a, b) => a.name.localeCompare(b.name));
+	}, [submissions]);
+
 	// Reset to the first page whenever a filter or the status tab changes.
 	useEffect(() => {
 		setPage(1);
-	}, [status, kindFilter, userFilter, sortDir]);
+	}, [status, kindFilter, userFilter, systemFilter, sortDir]);
 
 	const visible = [...(submissions || [])]
 		.filter((s) => !kindFilter || (s.change_kinds || []).includes(kindFilter))
 		.filter((s) => !userFilter || s.user_id === userFilter)
+		.filter((s) => !systemFilter || s.system_id === systemFilter)
 		.sort((a, b) => (sortDir === "asc" ? (a.created_at > b.created_at ? 1 : -1) : a.created_at < b.created_at ? 1 : -1));
 
 	const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
@@ -313,13 +327,22 @@ export default function MetadataAdminView() {
 				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-6">{listMsg || t("metadataAdmin.noSubmissions")}</p>
 			) : (
 				<>
-					<div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
 						<label className="w-full">
 							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">{t("metadataAdmin.filterBy")}</span>
 							<select className="select select-sm w-full" value={kindFilter} onChange={(e) => setKindFilter(e.target.value)} aria-label={t("metadataAdmin.filterBy")}>
 								<option value="">{t("common.all")}</option>
 								{allKinds.map((k) => (
 									<option key={k} value={k}>{kindLabel(k)}</option>
+								))}
+							</select>
+						</label>
+						<label className="w-full">
+							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">{t("metadataAdmin.filterSystem")}</span>
+							<select className="select select-sm w-full" value={systemFilter} onChange={(e) => setSystemFilter(e.target.value)} aria-label={t("metadataAdmin.filterSystem")}>
+								<option value="">{t("metadataAdmin.allSystems")}</option>
+								{systemOptions.map((s) => (
+									<option key={s.id} value={s.id}>{s.name}</option>
 								))}
 							</select>
 						</label>

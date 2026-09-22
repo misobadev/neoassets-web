@@ -536,6 +536,8 @@
 		"mediaChanges": "Medienänderungen",
 		"none": "Keine",
 		"filterBy": "Filtern nach",
+		"filterSystem": "Nach System filtern",
+		"allSystems": "Alle Systeme",
 		"filterUser": "Nach Benutzer filtern",
 		"allUsers": "Alle Benutzer",
 		"sortBy": "Sortieren",

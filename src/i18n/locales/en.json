@@ -518,6 +518,8 @@
 		"mediaChanges": "Media changes",
 		"none": "None",
 		"filterBy": "Filter by",
+		"filterSystem": "Filter by system",
+		"allSystems": "All systems",
 		"filterUser": "Filter by user",
 		"allUsers": "All users",
 		"sortBy": "Sort",

@@ -536,6 +536,8 @@
 		"mediaChanges": "미디어 변경",
 		"none": "없음",
 		"filterBy": "필터",
+		"filterSystem": "시스템으로 필터",
+		"allSystems": "모든 시스템",
 		"filterUser": "사용자로 필터",
 		"allUsers": "모든 사용자",
 		"sortBy": "정렬",

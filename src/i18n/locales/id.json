@@ -536,6 +536,8 @@
 		"mediaChanges": "Perubahan media",
 		"none": "Tidak ada",
 		"filterBy": "Filter berdasarkan",
+		"filterSystem": "Filter berdasarkan sistem",
+		"allSystems": "Semua sistem",
 		"filterUser": "Filter berdasarkan pengguna",
 		"allUsers": "Semua pengguna",
 		"sortBy": "Urutkan",

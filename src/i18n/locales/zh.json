@@ -536,6 +536,8 @@
 		"mediaChanges": "媒体更改",
 		"none": "无",
 		"filterBy": "筛选",
+		"filterSystem": "按系统筛选",
+		"allSystems": "所有系统",
 		"filterUser": "按用户筛选",
 		"allUsers": "所有用户",
 		"sortBy": "排序",

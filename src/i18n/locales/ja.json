@@ -536,6 +536,8 @@
 		"mediaChanges": "メディアの変更",
 		"none": "なし",
 		"filterBy": "絞り込み",
+		"filterSystem": "システムで絞り込み",
+		"allSystems": "すべてのシステム",
 		"filterUser": "ユーザーで絞り込み",
 		"allUsers": "すべてのユーザー",
 		"sortBy": "並べ替え",
