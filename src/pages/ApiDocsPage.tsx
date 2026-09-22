@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import CopyButton from "../components/CopyButton";
 import { usePageTitle } from "../lib/seo";
 
-const BASE_URL = "https://neoassets.dev";
+const BASE_URL = "https://api.neoassets.dev";
 
 // prettyJson re-indents a JSON string; returns it unchanged when invalid.
 function prettyJson(code: string): string {
@@ -334,51 +334,72 @@ curl "${BASE_URL}/api/v1/scrape/games?group=mame-fbneo&name=sfa3.zip"`}</Code>
 
 				<div className="space-y-2 pt-2 border-t border-[var(--color-base-300)]">
 					<p className="font-mono text-sm">
-						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/scrape/packs
+						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/packs
+						<span className="badge badge-ghost badge-sm ml-2">{t("apiDocs.publicBadge")}</span>
 					</p>
 					<p className="text-sm text-[var(--color-base-content)]/70">{t("apiDocs.packsDesc")}</p>
 					<Code>{`{
-  "packs": [
+  "themes": [
     {
-      "folder": "neo-geo-full",
-      "name": "Neo Geo Full",
-      "author": "miguel",
-      "description": "Complete Neo Geo theme.",
-      "version": "1.2",
-      "preview": "https://cdn.neoassets.dev/packs/neo-geo-full/preview.webp",
-      "images": [
-        "https://cdn.neoassets.dev/packs/neo-geo-full/backgrounds/neogeo.webp",
-        "https://cdn.neoassets.dev/packs/neo-geo-full/backgrounds/cps2.webp"
+      "folder": "neostation",
+      "name": "NeoStation",
+      "author": "NeoStation Team",
+      "description": "First and Official System Art Pack for NeoStation Frontend.",
+      "version": "1.0",
+      "preview": "packs/neostation/backgrounds/gog.webp",
+      "backgrounds": [
+        "packs/neostation/backgrounds/gog.webp",
+        "packs/neostation/backgrounds/bbcmicro.webp",
+        "packs/neostation/backgrounds/amazon.webp",
+        "packs/neostation/backgrounds/zxspectrum.webp"
       ],
-      "systems_covered": 42,
-      "downloads": 318
+      "downloads": 16,
+      "systems_covered": 96
     }
   ],
-  "total": 12
+  "total": 11
+}`}</Code>
+					<p className="text-xs text-[var(--color-base-content)]/60">{t("apiDocs.packsUrlHint")}</p>
+				</div>
+
+				<div className="space-y-2 pt-2 border-t border-[var(--color-base-300)]">
+					<p className="font-mono text-sm">
+						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/packs/{"{folder}"}
+						<span className="badge badge-ghost badge-sm ml-2">{t("apiDocs.publicBadge")}</span>
+					</p>
+					<p className="text-sm text-[var(--color-base-content)]/70">{t("apiDocs.packsDetailDesc")}</p>
+					<Code>{`{
+  "folder": "neostation",
+  "name": "NeoStation",
+  "downloads": 16,
+  "systems_covered": 96,
+  "files": [
+    { "kind": "background", "system_id": "2600", "file_name": "2600.webp",
+      "object_key": "packs/neostation/backgrounds/2600.webp",
+      "url": "https://cdn.neoassets.dev/packs/neostation/backgrounds/2600.webp",
+      "size": 82176, "mime": "image/webp" }
+  ]
 }`}</Code>
 				</div>
 
 				<div className="space-y-2 pt-2 border-t border-[var(--color-base-300)]">
 					<p className="font-mono text-sm">
-						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/scrape/packs/{"{folder}"}/download
+						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/packs/{"{folder}"}/download
+						<span className="badge badge-ghost badge-sm ml-2">{t("apiDocs.publicBadge")}</span>
 					</p>
 					<p className="text-sm text-[var(--color-base-content)]/70">{t("apiDocs.packDownloadDesc")}</p>
 					<Code>{`{
-  "folder": "neo-geo-full",
-  "name": "Neo Geo Full",
-  "preview": "https://cdn.neoassets.dev/packs/neo-geo-full/preview.webp",
-  "images": [ "https://cdn.neoassets.dev/packs/neo-geo-full/backgrounds/neogeo.webp" ],
-  "systems_covered": 42,
-  "downloads": 319,
+  "folder": "neostation",
+  "name": "NeoStation",
+  "downloads": 17,
+  "systems_covered": 96,
   "files": [
-    { "kind": "background", "system_id": "neogeo", "file_name": "neogeo.webp",
-      "url": "https://cdn.neoassets.dev/packs/neo-geo-full/backgrounds/neogeo.webp",
-      "size": 12345, "mime": "image/webp" },
-    { "kind": "preview", "file_name": "preview.webp",
-      "url": "https://cdn.neoassets.dev/packs/neo-geo-full/preview.webp",
-      "size": 23456, "mime": "image/webp" }
+    { "kind": "background", "system_id": "2600",
+      "url": "https://cdn.neoassets.dev/packs/neostation/backgrounds/2600.webp",
+      "size": 82176, "mime": "image/webp" }
   ]
 }`}</Code>
+					<p className="text-xs text-[var(--color-base-content)]/60">{t("apiDocs.packRateHint")}</p>
 				</div>
 
 				<div className="space-y-2 pt-2 border-t border-[var(--color-base-300)]">
