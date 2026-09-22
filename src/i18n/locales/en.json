@@ -693,7 +693,7 @@
 			"moveHint": "Change the region to move that value to it",
 			"none": "None",
 			"addNewImage": "Add a new image",
-			"changeRegion": "Change region of an existing one",
+			"changeRegion": "Move to another region",
 			"deleteRegion": "Delete per region",
 			"deleteByRegion": "Delete by region",
 			"deleteHint": "Check the ones to remove; a reason is required",

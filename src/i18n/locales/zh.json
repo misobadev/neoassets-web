@@ -711,7 +711,7 @@
 			"moveHint": "更改地区以将该值移动过去",
 			"none": "无",
 			"addNewImage": "添加新图片",
-			"changeRegion": "更改现有图片的地区",
+			"changeRegion": "移动到其他地区",
 			"deleteRegion": "按地区删除",
 			"deleteByRegion": "按地区删除",
 			"deleteHint": "勾选要删除的项；必须填写原因",

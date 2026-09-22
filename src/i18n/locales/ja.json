@@ -711,7 +711,7 @@
 			"moveHint": "地域を変更するとその値が移動します",
 			"none": "なし",
 			"addNewImage": "新しい画像を追加",
-			"changeRegion": "既存の地域を変更",
+			"changeRegion": "別の地域へ移動",
 			"deleteRegion": "地域ごとに削除",
 			"deleteByRegion": "地域別に削除",
 			"deleteHint": "削除するものを選択してください（理由は必須です）",

@@ -711,7 +711,7 @@
 			"moveHint": "지역을 변경하면 해당 값이 이동합니다",
 			"none": "없음",
 			"addNewImage": "새 이미지 추가",
-			"changeRegion": "기존 항목의 지역 변경",
+			"changeRegion": "다른 지역으로 이동",
 			"deleteRegion": "지역별 삭제",
 			"deleteByRegion": "지역별 삭제",
 			"deleteHint": "삭제할 항목을 선택하세요 (사유 필수)",

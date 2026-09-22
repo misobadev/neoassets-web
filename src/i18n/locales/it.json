@@ -711,7 +711,7 @@
 			"moveHint": "Cambia la regione per spostare quel valore",
 			"none": "Nessuno",
 			"addNewImage": "Aggiungi una nuova immagine",
-			"changeRegion": "Cambia la regione di una esistente",
+			"changeRegion": "Sposta in un'altra regione",
 			"deleteRegion": "Elimina per regione",
 			"deleteByRegion": "Elimina per regione",
 			"deleteHint": "Seleziona quelli da rimuovere; il motivo è obbligatorio",
