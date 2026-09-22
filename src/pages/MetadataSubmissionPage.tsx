@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AlertTriangle, Check, ChevronLeft, Clapperboard, FileText, Image as ImageIcon, Upload } from "lucide-react";
+import { AlertTriangle, Check, ChevronLeft, ChevronRight, Clapperboard, FileText, Image as ImageIcon, Upload } from "lucide-react";
 import {
 	cdnUrl,
 	createMetadataSubmission,
@@ -72,6 +72,8 @@ export default function MetadataSubmissionPage() {
 	const [game, setGame] = useState<GameDetail | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [lang, setLang] = useState("en");
+	// Index of the cover shown in the header slideshow (one cover per region).
+	const [coverIdx, setCoverIdx] = useState(0);
 
 	const [type, setType] = useState<string>(() => {
 		const t = searchParams.get("type");
@@ -224,6 +226,8 @@ export default function MetadataSubmissionPage() {
 
 	const currentKind = type as MediaKind;
 	const isRegionalKind = currentKind === "logo" || currentKind === "cover";
+	// Regions with a name or release, shown in the header like the game detail.
+	const namedRegions = (game.regions || []).filter((r) => r.name || r.release_year);
 	// Per-region data, so the "current" value always matches the selected region.
 	const regionMap = new Map((game.regions || []).map((r) => [r.region, r]));
 	const selectedRegion = region ? regionMap.get(region) : undefined;
@@ -545,38 +549,76 @@ export default function MetadataSubmissionPage() {
 
 			<section className="card p-6">
 				<div className="flex flex-col sm:flex-row gap-6">
-					<div className="w-full sm:w-56 shrink-0 h-72 flex items-start justify-center">
+					<div className="w-full sm:w-56 shrink-0 flex flex-col items-center gap-2">
 						{(() => {
-							const cover = game.media.find((m) => m.kind === "cover");
-							return cover ? (
-								<img src={mediaUrl(cover)} alt="" className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-							) : (
-								<div className="w-full h-full rounded-lg bg-[var(--color-base-300)]" />
+							const covers = game.media.filter((m) => m.kind === "cover");
+							if (covers.length === 0) {
+								return <div className="w-full h-72 rounded-lg bg-[var(--color-base-300)]" />;
+							}
+							const idx = Math.min(coverIdx, covers.length - 1);
+							const cover = covers[idx];
+							return (
+								<>
+									<div className="relative w-full h-72 flex items-start justify-center">
+										<img src={mediaUrl(cover)} alt="" className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+										{covers.length > 1 ? (
+											<>
+												<button type="button" onClick={() => setCoverIdx((idx - 1 + covers.length) % covers.length)} aria-label={t("metadata.prev")} className="btn btn-circle btn-xs absolute left-1 top-1/2 -translate-y-1/2 bg-black/50 border-0 text-white hover:bg-black/70">
+													<ChevronLeft className="w-4 h-4" />
+												</button>
+												<button type="button" onClick={() => setCoverIdx((idx + 1) % covers.length)} aria-label={t("metadata.next")} className="btn btn-circle btn-xs absolute right-1 top-1/2 -translate-y-1/2 bg-black/50 border-0 text-white hover:bg-black/70">
+													<ChevronRight className="w-4 h-4" />
+												</button>
+												<span className="badge badge-sm absolute top-2 right-2 bg-black/50 border-0 text-white">{idx + 1}/{covers.length}</span>
+											</>
+										) : null}
+									</div>
+									{cover.region ? <span className="badge badge-solid-neutral badge-sm"><RegionLabel region={cover.region} /></span> : null}
+								</>
 							);
 						})()}
 					</div>
 					<div className="flex-1 min-w-0 space-y-4 text-sm">
 						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 							<div><p className="label-text">{t("metadataGame.fields.ratings")}</p><RatingBadge rating={game.rating} /></div>
-							<div><p className="label-text">{t("metadataGame.fields.release")}</p><p>{game.release_year ? `${game.release_year}${game.release_month ? `-${String(game.release_month).padStart(2, "0")}` : ""}` : "—"}</p></div>
 							<div><p className="label-text">{t("metadataGame.fields.publisher")}</p><p>{game.publisher || "—"}</p></div>
 							<div><p className="label-text">{t("metadataGame.fields.developer")}</p><p>{game.developer || "—"}</p></div>
+							<div><p className="label-text">{t("metadataGame.fields.genre")}</p><p className="text-[var(--color-base-content)]/70">{game.genre ? genreLabel(t, game.genre) : "—"}</p></div>
 						</div>
-						<div><p className="label-text">{t("metadataGame.fields.genre")}</p><p className="text-[var(--color-base-content)]/70">{game.genre ? genreLabel(t, game.genre) : "—"}</p></div>
-						<div>
-							<div className="flex items-center justify-between gap-3 mb-1">
-								<p className="label-text">{t("common.description")}</p>
-								{langOptions.length > 1 ? (
-									<select value={lang} onChange={(e) => setLang(e.target.value)} className="select select-sm shrink-0 w-44" aria-label={t("common.language")}>
-										{langOptions.map((l) => (
-											<option key={l.code} value={l.code}>{l.native_name} ({l.name})</option>
-										))}
-									</select>
-								) : null}
+						{namedRegions.length > 0 ? (
+							<div>
+								<p className="label-text mb-1">{t("metadataGame.regionalNames")}</p>
+								<div className="space-y-1">
+									{namedRegions.map((r) => (
+										<p key={r.region} className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap">
+											<span className="badge badge-solid-neutral badge-xs"><RegionLabel region={r.region} /></span>
+											<span>{r.name || <span className="italic opacity-60">{t("metadataAdmin.none")}</span>}</span>
+											{r.release_year ? (
+												<span className="text-xs text-[var(--color-base-content)]/50">
+													{r.release_year}{r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}
+												</span>
+											) : null}
+										</p>
+									))}
+								</div>
 							</div>
-							<p className="text-[var(--color-base-content)]/70 max-h-40 overflow-y-auto pr-2">{game.description || "—"}</p>
-							{lang !== "en" && activeLang ? <p className="text-xs text-[var(--color-base-content)]/40 mt-1">{t("metadataSubmit.translatedIn", { language: activeLang.name })}</p> : null}
-						</div>
+						) : null}
+						{game.description ? (
+							<div>
+								<div className="flex items-center justify-between gap-3 mb-1">
+									<p className="label-text">{t("common.description")}</p>
+									{langOptions.length > 1 ? (
+										<select value={lang} onChange={(e) => setLang(e.target.value)} className="select select-sm shrink-0 w-44" aria-label={t("common.language")}>
+											{langOptions.map((l) => (
+												<option key={l.code} value={l.code}>{l.native_name} ({l.name})</option>
+											))}
+										</select>
+									) : null}
+								</div>
+								<p className="text-[var(--color-base-content)]/70 max-h-40 overflow-y-auto pr-2">{game.description}</p>
+								{lang !== "en" && activeLang ? <p className="text-xs text-[var(--color-base-content)]/40 mt-1">{t("metadataSubmit.translatedIn", { language: activeLang.name })}</p> : null}
+							</div>
+						) : null}
 					</div>
 				</div>
 			</section>
