@@ -705,6 +705,7 @@
 			"genrePlaceholder": "Seleziona un genere",
 			"regionLabel": "Regione",
 			"regionPlaceholder": "Seleziona una regione",
+			"regionNameReleaseHint": "Regione per il nome e la data di uscita.",
 			"existingByRegion": "Esistenti per regione",
 			"moveFromRegion": "Sposta da regione",
 			"moveHint": "Cambia la regione per spostare quel valore",

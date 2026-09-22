@@ -725,6 +725,7 @@
 			"genrePlaceholder": "Выберите жанр",
 			"regionLabel": "Регион",
 			"regionPlaceholder": "Выберите регион",
+			"regionNameReleaseHint": "Регион для названия и даты выхода.",
 			"existingByRegion": "Существующие по регионам",
 			"moveFromRegion": "Переместить из региона",
 			"moveHint": "Смените регион, чтобы переместить значение",

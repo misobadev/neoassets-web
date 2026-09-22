@@ -21,6 +21,7 @@ import { RegionFlag } from "../components/RegionLabel";
 
 const GAME_TYPES = ["base", "homebrew", "hack"] as const;
 const IMAGE_KINDS: MediaKind[] = ["cover", "screenshot", "fanart", "logo"];
+const REGION_KINDS: MediaKind[] = ["cover", "logo"];
 const VIDEO_KIND: MediaKind = "video";
 
 const MEDIA_LABEL: Record<MediaKind, string> = {
@@ -81,6 +82,7 @@ export default function NewGamePage() {
 	const [note, setNote] = useState("");
 
 	const [files, setFiles] = useState<Partial<Record<MediaKind, File>>>({});
+	const [mediaRegions, setMediaRegions] = useState<Partial<Record<MediaKind, string>>>({});
 	const [videoMeta, setVideoMeta] = useState<{ duration: number; width: number; height: number; fps: number; aspect: string } | null>(null);
 	const [videoError, setVideoError] = useState<string | null>(null);
 
@@ -198,14 +200,15 @@ export default function NewGamePage() {
 		setBusy(true);
 		setStatus({ text: t("metadataSubmit.status.creating"), tone: "info" });
 		try {
-			const uploaded: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number }[] = [];
+			const uploaded: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region?: string }[] = [];
 			for (const [kind, file] of Object.entries(files) as [MediaKind, File][]) {
 				if (!file) continue;
 				const mime = file.type || "application/octet-stream";
-				const resp = await requestMetadataUploadUrl({ system_id: systemId, kind, file_name: file.name, mime_type: mime, size: file.size });
+				const fileRegion = REGION_KINDS.includes(kind) ? mediaRegions[kind] || "" : "";
+				const resp = await requestMetadataUploadUrl({ system_id: systemId, kind, file_name: file.name, mime_type: mime, size: file.size, region: fileRegion });
 				await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(Math.round(p * 100)));
 				setProgress(100);
-				uploaded.push({ kind, object_key: resp.object_key, file_name: file.name, mime_type: mime, size: file.size });
+				uploaded.push({ kind, object_key: resp.object_key, file_name: file.name, mime_type: mime, size: file.size, region: fileRegion });
 			}
 			await createMetadataSubmission({ system_id: systemId, kind: "new_game", payload: buildPayload(), files: uploaded });
 			setStatus({ text: t("metadata.newGame.submitted"), tone: "success" });
@@ -229,7 +232,7 @@ export default function NewGamePage() {
 					<h1 className="text-xl font-bold">{t("metadata.newGame.submittedTitle")}</h1>
 					<p className="text-sm text-[var(--color-base-content)]/70">{t("metadata.newGame.submittedBody")}</p>
 					<div className="flex justify-center gap-2">
-						<button className="btn btn-outline" onClick={() => { setDone(false); setName(""); setDescription(""); setFiles({}); setExisting(null); }}>{t("metadata.newGame.addAnother")}</button>
+						<button className="btn btn-outline" onClick={() => { setDone(false); setName(""); setDescription(""); setFiles({}); setMediaRegions({}); setRegion(""); setExisting(null); }}>{t("metadata.newGame.addAnother")}</button>
 						<Link to="/app/reviews" className="btn btn-primary">{t("reviews.title")}</Link>
 					</div>
 				</div>
@@ -271,40 +274,52 @@ export default function NewGamePage() {
 					</div>
 				</div>
 
-				<div className="relative">
-					<label className="label-text" htmlFor="ng-name">{t("metadataSubmit.textTypes.name")}</label>
-					<input
-						id="ng-name"
-						className="input w-full"
-						value={name}
-						placeholder={t("metadata.newGame.namePlaceholder")}
-						disabled={busy}
-						onChange={(e) => { setName(e.target.value); setShowSuggestions(true); }}
-						onFocus={() => setShowSuggestions(true)}
-						onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-					/>
-					<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadata.newGame.nameSearchHint")}</p>
-					{showSuggestions && suggestions.length > 0 ? (
-						<div className="absolute z-30 left-0 right-0 mt-1 card shadow-xl max-h-64 overflow-y-auto p-1">
-							{suggestions.map((g) => (
-								<button
-									key={g.id}
-									type="button"
-									className="w-full text-left rounded-md px-3 py-2 hover:bg-[var(--color-base-300)]"
-									onMouseDown={(e) => {
-										e.preventDefault();
-										setName(g.name);
-										setExisting(g);
-										setSuggestions([]);
-										setShowSuggestions(false);
-									}}
-								>
-									<p className="text-sm font-medium truncate">{g.name}</p>
-									<p className="text-xs text-[var(--color-base-content)]/50">{g.release_year ? `${g.release_year}` : t("metadata.na")}</p>
-								</button>
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+					<div className="relative">
+						<label className="label-text" htmlFor="ng-name">{t("metadataSubmit.textTypes.name")}</label>
+						<input
+							id="ng-name"
+							className="input w-full"
+							value={name}
+							placeholder={t("metadata.newGame.namePlaceholder")}
+							disabled={busy}
+							onChange={(e) => { setName(e.target.value); setShowSuggestions(true); }}
+							onFocus={() => setShowSuggestions(true)}
+							onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+						/>
+						<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadata.newGame.nameSearchHint")}</p>
+						{showSuggestions && suggestions.length > 0 ? (
+							<div className="absolute z-30 left-0 right-0 mt-1 card shadow-xl max-h-64 overflow-y-auto p-1">
+								{suggestions.map((g) => (
+									<button
+										key={g.id}
+										type="button"
+										className="w-full text-left rounded-md px-3 py-2 hover:bg-[var(--color-base-300)]"
+										onMouseDown={(e) => {
+											e.preventDefault();
+											setName(g.name);
+											setExisting(g);
+											setSuggestions([]);
+											setShowSuggestions(false);
+										}}
+									>
+										<p className="text-sm font-medium truncate">{g.name}</p>
+										<p className="text-xs text-[var(--color-base-content)]/50">{g.release_year ? `${g.release_year}` : t("metadata.na")}</p>
+									</button>
+								))}
+							</div>
+						) : null}
+					</div>
+					<div>
+						<label className="label-text flex items-center gap-1.5" htmlFor="ng-region">{t("metadataSubmit.textTypes.region")}{region ? <RegionFlag region={region} /> : null}</label>
+						<select id="ng-region" className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)} disabled={busy}>
+							<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
+							{regions.map((r) => (
+								<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
 							))}
-						</div>
-					) : null}
+						</select>
+						<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.regionNameReleaseHint")}</p>
+					</div>
 				</div>
 
 				{existing ? (
@@ -335,15 +350,6 @@ export default function NewGamePage() {
 					</div>
 				</div>
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-					<div>
-						<label className="label-text flex items-center gap-1.5" htmlFor="ng-region">{t("metadataSubmit.textTypes.region")}{region ? <RegionFlag region={region} /> : null}</label>
-						<select id="ng-region" className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)} disabled={busy}>
-							<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
-							{regions.map((r) => (
-								<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
-							))}
-						</select>
-					</div>
 					<div>
 						<label className="label-text" htmlFor="ng-genre">{t("metadataSubmit.textTypes.genre")}</label>
 						<select id="ng-genre" className="select w-full" value={genre} onChange={(e) => setGenre(e.target.value)} disabled={busy}>
@@ -398,6 +404,17 @@ export default function NewGamePage() {
 							{t("metadataSubmit.form.imageHint")}
 							{MEDIA_HINT[kind] ? ` ${t(MEDIA_HINT[kind] as string)}` : ""}
 						</p>
+						{REGION_KINDS.includes(kind) ? (
+							<div>
+								<label className="label-text flex items-center gap-1.5" htmlFor={`ng-region-${kind}`}>{t("metadataSubmit.textTypes.region")}{mediaRegions[kind] ? <RegionFlag region={mediaRegions[kind] as string} /> : null}</label>
+								<select id={`ng-region-${kind}`} className="select select-sm w-full" value={mediaRegions[kind] || ""} onChange={(e) => setMediaRegions((prev) => ({ ...prev, [kind]: e.target.value }))} disabled={busy}>
+									<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
+									{regions.map((r) => (
+										<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
+									))}
+								</select>
+							</div>
+						) : null}
 					</div>
 				))}
 

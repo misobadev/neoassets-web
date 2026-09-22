@@ -687,6 +687,7 @@
 			"genrePlaceholder": "Select a genre",
 			"regionLabel": "Region",
 			"regionPlaceholder": "Select a region",
+			"regionNameReleaseHint": "Region for the name and release date.",
 			"existingByRegion": "Existing by region",
 			"moveFromRegion": "Move from region",
 			"moveHint": "Change the region to move that value to it",

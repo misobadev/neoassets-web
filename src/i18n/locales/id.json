@@ -705,6 +705,7 @@
 			"genrePlaceholder": "Pilih genre",
 			"regionLabel": "Wilayah",
 			"regionPlaceholder": "Pilih wilayah",
+			"regionNameReleaseHint": "Wilayah untuk nama dan tanggal rilis.",
 			"existingByRegion": "Ada per wilayah",
 			"moveFromRegion": "Pindahkan dari wilayah",
 			"moveHint": "Ubah wilayah untuk memindahkan nilai itu",
