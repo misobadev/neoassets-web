@@ -705,7 +705,7 @@
 			"genrePlaceholder": "选择类型",
 			"regionLabel": "地区",
 			"regionPlaceholder": "选择地区",
-			"regionNameReleaseHint": "名称和发行日期所属地区。",
+			"addAnotherRegion": "添加其他地区",
 			"existingByRegion": "按地区现有",
 			"moveFromRegion": "从地区移动",
 			"moveHint": "更改地区以将该值移动过去",

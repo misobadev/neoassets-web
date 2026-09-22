@@ -146,7 +146,9 @@ export default function MetadataAdminView() {
 
 	const payload = (detail?.submission.payload || {}) as Record<string, unknown>;
 	const note = typeof payload.note === "string" ? payload.note : "";
-	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month" && k !== "region");
+	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month" && k !== "region" && k !== "regions");
+	// A new game may submit several per-region names/releases at once.
+	const regionEntries = Array.isArray(payload.regions) ? (payload.regions as Array<Record<string, unknown>>).filter((r) => typeof r?.region === "string") : [];
 	const textKeys = [...TEXT_ORDER.filter((k) => payloadKeys.includes(k)), ...payloadKeys.filter((k) => !TEXT_ORDER.includes(k))];
 
 	// Header data for the detail modal: the target game/system and a link to
@@ -434,6 +436,27 @@ export default function MetadataAdminView() {
 							<div>
 								<p className="label-text">{t("metadataAdmin.note")}</p>
 								<p className="text-sm text-[var(--color-base-content)]/70 whitespace-pre-wrap">{note}</p>
+							</div>
+						) : null}
+
+						{regionEntries.length > 0 ? (
+							<div>
+								<p className="label-text mb-2">{t("metadataGame.regionsTitle")}</p>
+								<div className="space-y-2">
+									{regionEntries.map((r) => {
+										const name = typeof r.name === "string" ? r.name : "";
+										const y = r.release_year;
+										const m = r.release_month;
+										const release = y ? `${y}${m ? `-${String(m).padStart(2, "0")}` : ""}` : "";
+										return (
+											<div key={String(r.region)} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1">
+												<p className="font-medium text-sm"><RegionLabel region={String(r.region)} /></p>
+												{name ? <p className="text-sm"><span className="text-[var(--color-base-content)]/50">{t("metadataSubmit.textTypes.name")}: </span>{name}</p> : null}
+												{release ? <p className="text-sm"><span className="text-[var(--color-base-content)]/50">{t("metadataSubmit.textTypes.release")}: </span>{release}</p> : null}
+											</div>
+										);
+									})}
+								</div>
 							</div>
 						) : null}
 

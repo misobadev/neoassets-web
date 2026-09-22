@@ -705,7 +705,7 @@
 			"genrePlaceholder": "장르 선택",
 			"regionLabel": "지역",
 			"regionPlaceholder": "지역 선택",
-			"regionNameReleaseHint": "이름 및 출시일의 지역.",
+			"addAnotherRegion": "다른 지역 추가",
 			"existingByRegion": "지역별 기존",
 			"moveFromRegion": "지역에서 이동",
 			"moveHint": "지역을 변경하면 해당 값이 이동합니다",

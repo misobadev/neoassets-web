@@ -705,7 +705,7 @@
 			"genrePlaceholder": "ジャンルを選択",
 			"regionLabel": "地域",
 			"regionPlaceholder": "地域を選択",
-			"regionNameReleaseHint": "名前と発売日の地域。",
+			"addAnotherRegion": "別の地域を追加",
 			"existingByRegion": "地域別の既存",
 			"moveFromRegion": "地域から移動",
 			"moveHint": "地域を変更するとその値が移動します",
