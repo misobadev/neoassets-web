@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { fetchMyMetadataSubmissions, fetchMySubmissions, userToken, type MetadataSubmission, type SubmissionDetail } from "./api";
+import { fetchMyMetadataSubmissions, fetchMySubmissions, fetchReviewSummary, userToken, type MetadataSubmission, type SubmissionDetail } from "./api";
 
 // A review item is one of the current user's contributions (metadata or system
 // art pack) with its review state. There is no notifications table: the list is
@@ -127,7 +127,6 @@ export async function loadReviews(limit: number, status = ""): Promise<ReviewsDa
 }
 
 interface ReviewsContextValue {
-	items: ReviewItem[];
 	unread: number;
 	totalXP: number;
 	loading: boolean;
@@ -135,10 +134,18 @@ interface ReviewsContextValue {
 	markAllSeen: () => void;
 }
 
+// ReviewKey is the lightweight per-review state the badge needs: the unique key
+// and its status. The full item (payload, cover, ...) is only loaded by the
+// Reviews page.
+interface ReviewKey {
+	key: string;
+	status: string;
+}
+
 const ReviewsContext = createContext<ReviewsContextValue | null>(null);
 
 export function ReviewsProvider({ children }: { children: ReactNode }) {
-	const [items, setItems] = useState<ReviewItem[]>([]);
+	const [keys, setKeys] = useState<ReviewKey[]>([]);
 	const [seen, setSeen] = useState<string[]>(() => loadSeen() ?? []);
 	const [totalXP, setTotalXP] = useState(0);
 	const [loading, setLoading] = useState(false);
@@ -152,17 +159,21 @@ export function ReviewsProvider({ children }: { children: ReactNode }) {
 	const refresh = useCallback(() => {
 		if (!userToken()) return;
 		setLoading(true);
-		loadReviews(REVIEW_PAGE)
-			.then(({ items: list, totalXP: xp }) => {
-				setItems(list);
-				setTotalXP(xp);
+		// The badge only needs the review keys and the XP, so it uses the light
+		// summary endpoint instead of downloading the full review feed.
+		fetchReviewSummary(REVIEW_PAGE)
+			.then(({ items, total_xp }) => {
+				const list = items.map((i) => ({ key: `${i.kind}:${i.id}:${i.status}`, status: i.status }));
+				setKeys(list);
+				setTotalXP(total_xp);
 				if (!initialized.current) {
-					const keys = list.map((i) => i.key);
-					setSeen(keys);
-					saveSeen(keys);
+					const ks = list.map((i) => i.key);
+					setSeen(ks);
+					saveSeen(ks);
 					initialized.current = true;
 				}
 			})
+			.catch(() => {})
 			.finally(() => {
 				setLoading(false);
 				lastFetch.current = Date.now();
@@ -183,7 +194,7 @@ export function ReviewsProvider({ children }: { children: ReactNode }) {
 		tokenRef.current = tok;
 		if (tok) refresh();
 		else {
-			setItems([]);
+			setKeys([]);
 			setTotalXP(0);
 		}
 	});
@@ -199,14 +210,14 @@ export function ReviewsProvider({ children }: { children: ReactNode }) {
 	}, [refresh]);
 
 	const markAllSeen = useCallback(() => {
-		const keys = items.map((i) => i.key);
-		setSeen(keys);
-		saveSeen(keys);
-	}, [items]);
+		const ks = keys.map((i) => i.key);
+		setSeen(ks);
+		saveSeen(ks);
+	}, [keys]);
 
-	const unread = useMemo(() => items.filter((i) => i.status !== "pending" && !seen.includes(i.key)).length, [items, seen]);
+	const unread = useMemo(() => keys.filter((i) => i.status !== "pending" && !seen.includes(i.key)).length, [keys, seen]);
 
-	return <ReviewsContext.Provider value={{ items, unread, totalXP, loading, refresh, markAllSeen }}>{children}</ReviewsContext.Provider>;
+	return <ReviewsContext.Provider value={{ unread, totalXP, loading, refresh, markAllSeen }}>{children}</ReviewsContext.Provider>;
 }
 
 export function useReviews(): ReviewsContextValue {

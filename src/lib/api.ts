@@ -722,6 +722,25 @@ export function fetchMySubmissions(opts?: { limit?: number; offset?: number; sta
 	).then((d) => ({ items: d.submissions || [], total: d.total || 0, totalXP: d.total_xp || 0 }));
 }
 
+// ReviewSummaryItem is a lightweight notification entry (no payload/files/logs).
+export interface ReviewSummaryItem {
+	kind: "metadata" | "sap";
+	id: string;
+	status: string;
+	at: string;
+}
+
+export interface ReviewSummary {
+	items: ReviewSummaryItem[];
+	total_xp: number;
+}
+
+// fetchReviewSummary powers the notification badge: the newest review keys and
+// the lifetime XP, without downloading the full review feed.
+export function fetchReviewSummary(limit = 20): Promise<ReviewSummary> {
+	return api<ReviewSummary>(`/api/v1/auth/reviews/summary?limit=${limit}`, { token: userToken() });
+}
+
 // Admin
 export function fetchMetadataSubmissions(status = ""): Promise<MetadataSubmission[]> {
 	const q = status ? `?status=${status}` : "";
