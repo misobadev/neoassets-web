@@ -231,7 +231,6 @@ export default function SubmissionsView() {
 				) : (
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 						{packs.map((p) => {
-							const preview = p.preview ? `${CDN_BASE}/${p.preview}` : "";
 							const icons = (p.backgrounds || []).map((k) => `${CDN_BASE}/${k}`);
 							const contributed = signedIn && (p.contributors || []).includes(userUsername() || "");
 							return (
@@ -243,8 +242,6 @@ export default function SubmissionsView() {
 													<img key={i} src={src} alt="" loading="lazy" className="w-16 h-16 object-cover rounded-md" onError={(e) => (e.currentTarget.style.display = "none")} />
 												))}
 											</div>
-										) : preview ? (
-											<img src={preview} alt={p.name} loading="lazy" className="object-cover w-full h-full" onError={(e) => (e.currentTarget.style.display = "none")} />
 										) : (
 											<span className="text-sm font-semibold text-[var(--color-base-content)]/30">{t("submissions.noImages")}</span>
 										)}

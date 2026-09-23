@@ -320,31 +320,25 @@ export default function ReviewsPage() {
 									),
 								)}
 
-								{selected.kind === "sap" && pack ? (
-									<div className="space-y-2">
-										{pack.preview ? (
-											<img
-												src={cdnUrl(pack.preview)}
-												alt={pack.name}
-												className="w-full max-h-[45vh] object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]/40"
-												onError={(e) => (e.currentTarget.style.display = "none")}
-											/>
-										) : null}
-										{(pack.backgrounds || []).length > 0 ? (
-											<div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-												{(pack.backgrounds || []).map((k) => (
-													<img
-														key={k}
-														src={cdnUrl(k)}
-														alt=""
-														className="w-full h-28 object-cover rounded-lg border border-[var(--color-base-300)]"
-														onError={(e) => (e.currentTarget.style.display = "none")}
-													/>
-												))}
-											</div>
-										) : null}
-									</div>
-								) : null}
+								{selected.kind === "sap" && pack
+									? (() => {
+											const bgs = (pack.files || []).filter((f) => f.kind === "background");
+											if (bgs.length === 0) return null;
+											return (
+												<div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+													{bgs.map((f) => (
+														<img
+															key={f.object_key}
+															src={f.url}
+															alt=""
+															className="w-full h-28 object-cover rounded-lg border border-[var(--color-base-300)]"
+															onError={(e) => (e.currentTarget.style.display = "none")}
+														/>
+													))}
+												</div>
+											);
+										})()
+									: null}
 							</div>
 						) : null}
 

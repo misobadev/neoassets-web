@@ -190,7 +190,7 @@ export default function LandingPage() {
 					) : (
 						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 							{packs.map((p) => {
-								const preview = p.preview ? `${CDN_BASE}/${p.preview}` : "";
+								const preview = p.backgrounds?.[0] ? `${CDN_BASE}/${p.backgrounds[0]}` : "";
 								return (
 									<div key={p.folder} className="card card-hover overflow-hidden">
 										<div className="h-32 bg-[var(--color-base-300)] flex items-center justify-center overflow-hidden">

@@ -346,12 +346,11 @@ curl "${BASE_URL}/api/v1/scrape/games?group=mame-fbneo&name=sfa3.zip"`}</Code>
       "author": "NeoStation Team",
       "description": "First and Official System Art Pack for NeoStation Frontend.",
       "version": "1.0",
-      "preview": "packs/neostation/backgrounds/gog.webp",
       "backgrounds": [
-        "packs/neostation/backgrounds/gog.webp",
-        "packs/neostation/backgrounds/bbcmicro.webp",
-        "packs/neostation/backgrounds/amazon.webp",
-        "packs/neostation/backgrounds/zxspectrum.webp"
+        "packs/neostation/backgrounds/snes.webp",
+        "packs/neostation/backgrounds/ps1.webp",
+        "packs/neostation/backgrounds/gba.webp",
+        "packs/neostation/backgrounds/genesis.webp"
       ],
       "downloads": 16,
       "systems_covered": 96

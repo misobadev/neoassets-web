@@ -1054,11 +1054,11 @@
 		"pForceThreads": "Debug. Fuerza el número de threads para la petición.",
 		"pForceRate": "Debug. Fuerza una respuesta 429 de rate limit.",
 		"popularDesc": "Juegos mas scrapeados, opcionalmente filtrados por system_id y limitados con limit. Gratis (no consume cuota).",
-		"packsDesc": "Publico, sin credenciales. System art packs aprobados con su preview y las primeras cuatro imagenes de fondo. Las keys son relativas al CDN base (https://cdn.neoassets.dev/).",
+		"packsDesc": "Publico, sin credenciales. System art packs aprobados con las imagenes de fondo de los sistemas mas usados (snes, ps1, gba, genesis). Las keys son relativas al CDN base (https://cdn.neoassets.dev/).",
 		"packsDetailDesc": "Publico, sin credenciales. Un system art pack con todos sus archivos publicados y su URL lista para usar. No cuenta una descarga.",
 		"packDownloadDesc": "Publico, sin credenciales. Mismo payload que el detalle pero cuenta una descarga (+1). Llamalo solo cuando el tema se instala de verdad.",
 		"publicBadge": "Publico",
-		"packsUrlHint": "preview/backgrounds son object keys; anteponles el CDN base https://cdn.neoassets.dev/ para armar las URLs.",
+		"packsUrlHint": "backgrounds son object keys; anteponles el CDN base https://cdn.neoassets.dev/ para armar las URLs.",
 		"packRateHint": "Limitado por IP del cliente.",
 		"pType": "Filtro opcional para la busqueda por nombre: base, hack o homebrew (se ignora si se envia un hash).",
 		"pRoms": "Incluye la lista completa de ROMs. Desactivado por defecto; rom_count y rom_name siempre se devuelven."

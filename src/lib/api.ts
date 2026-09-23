@@ -119,7 +119,6 @@ export interface Pack {
 	donation_url: string;
 	ai: boolean;
 	version: string;
-	preview: string;
 	backgrounds?: string[];
 	downloads?: number;
 	systems_covered?: number;
@@ -154,7 +153,6 @@ export interface PackDetail {
 	donation_url: string;
 	ai: boolean;
 	version: string;
-	preview: string;
 	backgrounds?: string[];
 	downloads?: number;
 	contributors?: string[];
@@ -769,6 +767,7 @@ export interface DashRecentPack {
 	version: string;
 	created_at: string;
 	author_name?: string;
+	image?: string;
 }
 
 export interface DashRecentMetadata {

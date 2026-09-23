@@ -179,7 +179,11 @@ export default function DashboardPage() {
 				<LeaderCard title={t("dashboard.latestSap")} icon={<Package className="w-4 h-4" />} empty={t("dashboard.noPublishedPacks")}>
 					{(data.recent_packs || []).map((p) => (
 						<div key={p.id} className="flex items-center gap-3">
-							<img src={cdnUrl(`packs/${p.pack_id}/preview.webp`)} alt="" className="w-12 h-12 object-cover rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+							{p.image ? (
+								<img src={cdnUrl(p.image)} alt="" className="w-12 h-12 object-cover rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+							) : (
+								<div className="w-12 h-12 rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]" />
+							)}
 							<div className="min-w-0 flex-1">
 								<p className="font-medium truncate">{p.name}</p>
 								<p className="text-xs text-[var(--color-base-content)]/50 truncate">{t("dashboard.by", { author: p.author_name || p.author })} · v{p.version}</p>
@@ -215,7 +219,6 @@ export default function DashboardPage() {
 				) : (
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 						{packs.map((p) => {
-							const preview = p.preview ? `${CDN_BASE}/${p.preview}` : "";
 							const icons = (p.backgrounds || []).map((k) => `${CDN_BASE}/${k}`);
 							return (
 								<div key={p.folder} className="card card-hover overflow-hidden">
@@ -226,8 +229,6 @@ export default function DashboardPage() {
 													<img key={i} src={src} alt="" className="w-16 h-16 object-cover rounded-md" onError={(e) => (e.currentTarget.style.display = "none")} />
 												))}
 											</div>
-										) : preview ? (
-											<img src={preview} alt={p.name} className="object-cover w-full h-full" onError={(e) => (e.currentTarget.style.display = "none")} />
 										) : null}
 									</div>
 									<div className="p-4 space-y-1">
