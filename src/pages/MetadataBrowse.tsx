@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChevronDown, Clapperboard, Download, FileText, Globe, Image, ImagePlus, Images, Languages, Plus, Search, Server, Tag } from "lucide-react";
+import { ChevronDown, Clapperboard, Download, FileText, Globe, Image, ImagePlus, Images, Languages, Layers, Plus, Search, Server, Tag } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import { cdnUrl, fetchMetadataGamesBySystem, fetchMetadataSystems, searchMetadataGames, type GameSummary, type MetadataSystem } from "../lib/api";
@@ -67,7 +67,10 @@ function SystemOption({ system, active, onSelect }: { system: MetadataSystem; ac
 		>
 			<div className="flex items-center gap-3">
 				<div className="min-w-0 flex-1">
-					<p className="font-medium text-sm truncate">{system.name}</p>
+					<p className="font-medium text-sm truncate flex items-center gap-1.5">
+						{system.virtual ? <Layers className="w-3.5 h-3.5 shrink-0 text-[var(--color-primary)]" /> : null}
+						{system.name}
+					</p>
 					<p className="text-xs text-[var(--color-base-content)]/50 flex items-center gap-1.5 flex-wrap">
 						<span className="inline-flex items-center gap-1"><Tag className="w-3 h-3" />{system.total_games ?? 0}</span>
 						<span className="text-[var(--color-base-content)]/40">·</span>
@@ -294,10 +297,10 @@ export default function MetadataBrowse() {
 
 	const selected = (systems || []).find((s) => s.id === systemId) || null;
 
-	// The selector is grouped by family (arcade, console, computer, ...), and
-	// within a family by group (e.g. the arcade family splits into mame-fbneo,
-	// flycast, supermodel, dolphin). Systems without a group fall in the family
-	// grid directly.
+	// The selector is grouped by family (arcade, console, computer, ...). The
+	// arcade family keeps its boards flat (no mame-fbneo/flycast labels) and the
+	// virtual "Arcade" parent is listed first so it can be opened to browse every
+	// arcade game at once.
 	const familyGroups = useMemo(() => {
 		const FAMILY_ORDER = ["arcade", "console", "computer", "handheld", "virtual"];
 		const fams = new Map<string, MetadataSystem[]>();
@@ -312,29 +315,18 @@ export default function MetadataBrowse() {
 				const ib = FAMILY_ORDER.indexOf(b[0]);
 				return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
 			})
-			.map(([family, list]) => {
-				const groups = new Map<string, MetadataSystem[]>();
-				for (const s of list) {
-					const g = (s.group || "").trim();
-					if (!g) continue;
-					if (!groups.has(g)) groups.set(g, []);
-					groups.get(g)!.push(s);
-				}
-				const ungrouped = list.filter((s) => !(s.group || "").trim());
-				return {
-					family,
-					systems: list,
-					groups: [...groups.entries()].map(([group, sys]) => ({ group, systems: sys })),
-					ungrouped,
-				};
-			});
+			.map(([family, list]) => ({
+				family,
+				systems: [...list].sort((a, b) => {
+					if (!!a.virtual !== !!b.virtual) return a.virtual ? -1 : 1;
+					return (a.name || "").localeCompare(b.name || "");
+				}),
+			}));
 	}, [systems]);
 
 	useEffect(() => {
 		fetchMetadataSystems()
-			// Virtual systems own no games (they aggregate a family/group), so
-			// they are not browsable.
-			.then((list) => setSystems(list.filter((s) => !s.virtual)))
+			.then(setSystems)
 			.catch((e: Error) => setError(e.message));
 	}, []);
 
@@ -474,25 +466,11 @@ export default function MetadataBrowse() {
 										{t("metadata.systemsCount", { count: g.systems.length })}
 									</p>
 								</div>
-								{g.groups.map((sub) => (
-									<div key={sub.group} className="mb-2 rounded-lg border border-[var(--color-base-300)]/70 p-2 last:mb-0">
-										<p className="px-1 pb-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-base-content)]/45">
-											{kindLabel(sub.group, t)}
-										</p>
-										<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
-											{sub.systems.map((s) => (
-												<SystemOption key={s.id} system={s} active={s.id === systemId} onSelect={() => goSystem(s.id)} />
-											))}
-										</div>
-									</div>
-								))}
-								{g.ungrouped.length ? (
-									<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
-										{g.ungrouped.map((s) => (
-											<SystemOption key={s.id} system={s} active={s.id === systemId} onSelect={() => goSystem(s.id)} />
-										))}
-									</div>
-								) : null}
+								<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
+									{g.systems.map((s) => (
+										<SystemOption key={s.id} system={s} active={s.id === systemId} onSelect={() => goSystem(s.id)} />
+									))}
+								</div>
 							</div>
 						))}
 					</div>
