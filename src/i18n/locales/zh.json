@@ -731,7 +731,7 @@
 	},
 	"nav": {
 		"donations": "捐赠",
-		"myReviews": "我的审核列表",
+		"myReviews": "我的贡献",
 		"notifications": "通知",
 		"menu": "菜单",
 		"home": "首页",
@@ -828,6 +828,8 @@
 		"title": "我的投稿",
 		"subtitle": "制作资源包，保存为草稿，准备好后提交审核。",
 		"newSubmission": "贡献",
+		"addNewPack": "添加新的系统美术包",
+		"gallery": "图库",
 		"loading": "正在加载你的投稿……",
 		"noImages": "暂无图片",
 		"untitledDraft": "未命名草稿",
@@ -958,7 +960,7 @@
 		"systemsShort": "系统"
 	},
 	"reviews": {
-		"title": "我的审核",
+		"title": "我的贡献",
 		"subtitle": "查看你的贡献的审核状态。",
 		"experienceEarned": "获得经验",
 		"experience": "XP",
@@ -975,7 +977,12 @@
 		"reviewerComment": "审核人评论",
 		"noComment": "无评论。",
 		"viewGame": "查看游戏",
-		"viewPack": "查看包"
+		"viewPack": "查看包",
+		"cancel": "取消提交",
+		"filterKind": "按类型筛选",
+		"kindAll": "所有类型",
+		"cancelConfirmTitle": "取消提交？",
+		"cancelConfirmBody": "这将删除你的提交及上传的媒体，以便重新提交。不可撤销。"
 	},
 	"adminDonations": {
 		"title": "捐赠",

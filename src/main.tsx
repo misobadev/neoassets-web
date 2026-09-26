@@ -7,6 +7,7 @@ import AppPage from "./pages/AppPage";
 import HomeView from "./pages/HomeView";
 import AuthPage from "./pages/AuthPage";
 import SubmissionsView from "./pages/SubmissionsView";
+import SapDetailPage from "./pages/SapDetailPage";
 import SubmissionEditor from "./components/SubmissionEditor";
 import ContributePage from "./pages/ContributePage";
 import AdminView from "./pages/AdminView";
@@ -49,7 +50,9 @@ createRoot(document.getElementById("root")!).render(
 						<Route path="developer" element={<RequireAuth><DeveloperPage /></RequireAuth>} />
 						<Route path="u/:username" element={<PublicProfilePage />} />
 						<Route path="sap" element={<SubmissionsView />} />
-						<Route path="reviews" element={<RequireAuth><ReviewsPage /></RequireAuth>} />
+						<Route path="sap/:packID" element={<SapDetailPage />} />
+						<Route path="contributions" element={<RequireAuth><ReviewsPage /></RequireAuth>} />
+						<Route path="reviews" element={<Navigate to="/app/contributions" replace />} />
 						<Route path="sap/:packID/contribute" element={<RequireAuth><ContributePage /></RequireAuth>} />
 						<Route path="submissions" element={<Navigate to="/app/sap" replace />} />
 						<Route path="submissions/new" element={<RequireAuth><SubmissionEditor /></RequireAuth>} />

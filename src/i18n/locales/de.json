@@ -731,7 +731,7 @@
 	},
 	"nav": {
 		"donations": "Spenden",
-		"myReviews": "Meine Prüfliste",
+		"myReviews": "Meine Beiträge",
 		"notifications": "Benachrichtigungen",
 		"menu": "Menü",
 		"home": "Startseite",
@@ -828,6 +828,8 @@
 		"title": "Meine Einreichungen",
 		"subtitle": "Erstelle ein Pack, speichere es als Entwurf und reiche es zur Prüfung ein, wann immer du bereit bist.",
 		"newSubmission": "Beitragen",
+		"addNewPack": "Neuen System-Art-Pack hinzufügen",
+		"gallery": "Galerie",
 		"loading": "Deine Einreichungen werden geladen...",
 		"noImages": "Noch keine Bilder",
 		"untitledDraft": "Unbenannter Entwurf",
@@ -958,7 +960,7 @@
 		"systemsShort": "Systeme"
 	},
 	"reviews": {
-		"title": "Meine Prüfungen",
+		"title": "Meine Beiträge",
 		"subtitle": "Verfolge den Prüfstatus deiner Beiträge.",
 		"experienceEarned": "Erhaltene Erfahrung",
 		"experience": "XP",
@@ -975,7 +977,12 @@
 		"reviewerComment": "Kommentar des Prüfers",
 		"noComment": "Kein Kommentar.",
 		"viewGame": "Spiel ansehen",
-		"viewPack": "Pack ansehen"
+		"viewPack": "Pack ansehen",
+		"cancel": "Beitrag abbrechen",
+		"filterKind": "Nach Typ filtern",
+		"kindAll": "Alle Typen",
+		"cancelConfirmTitle": "Beitrag abbrechen?",
+		"cancelConfirmBody": "Dies löscht deinen Beitrag und die hochgeladenen Medien, damit du ihn erneut einreichen kannst. Nicht umkehrbar."
 	},
 	"adminDonations": {
 		"title": "Spenden",

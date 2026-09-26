@@ -713,7 +713,7 @@
 	},
 	"nav": {
 		"donations": "Donaciones",
-		"myReviews": "Mi lista de revisiones",
+		"myReviews": "Mis contribuciones",
 		"notifications": "Notificaciones",
 		"menu": "Menú",
 		"home": "Inicio",
@@ -826,6 +826,8 @@
 		"title": "Mis envíos",
 		"subtitle": "Crea un paquete, guárdalo como borrador y envíalo para revisión cuando quieras.",
 		"newSubmission": "Aportar",
+		"addNewPack": "Agregar un nuevo system art pack",
+		"gallery": "Galeria",
 		"loading": "Cargando tus envíos...",
 		"noImages": "Aún no hay imágenes",
 		"untitledDraft": "Borrador sin título",
@@ -956,7 +958,7 @@
 		}
 	},
 	"reviews": {
-		"title": "Mis revisiones",
+		"title": "Mis contribuciones",
 		"subtitle": "Sigue el estado de revisión de tus contribuciones.",
 		"experienceEarned": "Experiencia ganada",
 		"experience": "XP",
@@ -973,7 +975,12 @@
 		"reviewerComment": "Comentario del revisor",
 		"noComment": "Sin comentario.",
 		"viewGame": "Ver juego",
-		"viewPack": "Ver pack"
+		"viewPack": "Ver pack",
+		"cancel": "Cancelar envio",
+		"filterKind": "Filtrar por tipo",
+		"kindAll": "Todos los tipos",
+		"cancelConfirmTitle": "¿Cancelar el envio?",
+		"cancelConfirmBody": "Esto borra tu envio y sus medios subidos para que puedas enviarlo de nuevo. No se puede deshacer."
 	},
 	"adminDonations": {
 		"title": "Donaciones",

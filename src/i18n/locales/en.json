@@ -713,7 +713,7 @@
 	},
 	"nav": {
 		"donations": "Donations",
-		"myReviews": "My review list",
+		"myReviews": "My contributions",
 		"notifications": "Notifications",
 		"menu": "Menu",
 		"home": "Home",
@@ -826,6 +826,8 @@
 		"title": "My submissions",
 		"subtitle": "Build a pack, save it as a draft, and submit it for review whenever you are ready.",
 		"newSubmission": "Contribute",
+		"addNewPack": "Add a new system art pack",
+		"gallery": "Gallery",
 		"loading": "Loading your submissions...",
 		"noImages": "No images yet",
 		"untitledDraft": "Untitled draft",
@@ -956,7 +958,7 @@
 		}
 	},
 	"reviews": {
-		"title": "My reviews",
+		"title": "My contributions",
 		"subtitle": "Track the review status of your contributions.",
 		"experienceEarned": "Experience earned",
 		"experience": "XP",
@@ -973,7 +975,12 @@
 		"reviewerComment": "Reviewer comment",
 		"noComment": "No comment.",
 		"viewGame": "View game",
-		"viewPack": "View pack"
+		"viewPack": "View pack",
+		"cancel": "Cancel submission",
+		"filterKind": "Filter by type",
+		"kindAll": "All types",
+		"cancelConfirmTitle": "Cancel submission?",
+		"cancelConfirmBody": "This deletes your submission and its uploaded media so you can submit it again. This cannot be undone."
 	},
 	"adminDonations": {
 		"title": "Donations",

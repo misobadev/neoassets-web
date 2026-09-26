@@ -731,7 +731,7 @@
 	},
 	"nav": {
 		"donations": "후원",
-		"myReviews": "내 검토 목록",
+		"myReviews": "내 기여",
 		"notifications": "알림",
 		"menu": "메뉴",
 		"home": "홈",
@@ -828,6 +828,8 @@
 		"title": "내 제출물",
 		"subtitle": "팩을 만들고 초안으로 저장한 뒤 준비되면 검토를 위해 제출하세요.",
 		"newSubmission": "기여하기",
+		"addNewPack": "새 시스템 아트 팩 추가",
+		"gallery": "갤러리",
 		"loading": "제출물 불러오는 중...",
 		"noImages": "아직 이미지가 없습니다",
 		"untitledDraft": "제목 없는 초안",
@@ -958,7 +960,7 @@
 		"systemsShort": "시스템"
 	},
 	"reviews": {
-		"title": "내 리뷰",
+		"title": "내 기여",
 		"subtitle": "기여의 검토 상태를 확인하세요.",
 		"experienceEarned": "획득 경험치",
 		"experience": "XP",
@@ -975,7 +977,12 @@
 		"reviewerComment": "검토자 의견",
 		"noComment": "의견 없음.",
 		"viewGame": "게임 보기",
-		"viewPack": "팩 보기"
+		"viewPack": "팩 보기",
+		"cancel": "제출 취소",
+		"filterKind": "유형으로 필터",
+		"kindAll": "모든 유형",
+		"cancelConfirmTitle": "제출을 취소할까요?",
+		"cancelConfirmBody": "제출물과 업로드한 미디어를 삭제하여 다시 제출할 수 있게 합니다. 되돌릴 수 없습니다."
 	},
 	"adminDonations": {
 		"title": "후원",

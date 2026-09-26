@@ -731,7 +731,7 @@
 	},
 	"nav": {
 		"donations": "Donasi",
-		"myReviews": "Daftar tinjauan saya",
+		"myReviews": "Kontribusi saya",
 		"notifications": "Notifikasi",
 		"menu": "Menu",
 		"home": "Beranda",
@@ -828,6 +828,8 @@
 		"title": "Kiriman saya",
 		"subtitle": "Buat paket, simpan sebagai draf, dan kirim untuk ditinjau kapan pun Anda siap.",
 		"newSubmission": "Berkontribusi",
+		"addNewPack": "Tambah system art pack baru",
+		"gallery": "Galeri",
 		"loading": "Memuat kiriman Anda...",
 		"noImages": "Belum ada gambar",
 		"untitledDraft": "Draf tanpa judul",
@@ -958,7 +960,7 @@
 		"systemsShort": "sistem"
 	},
 	"reviews": {
-		"title": "Tinjauan saya",
+		"title": "Kontribusi saya",
 		"subtitle": "Lacak status tinjauan kontribusi kamu.",
 		"experienceEarned": "Pengalaman diperoleh",
 		"experience": "XP",
@@ -975,7 +977,12 @@
 		"reviewerComment": "Komentar peninjau",
 		"noComment": "Tanpa komentar.",
 		"viewGame": "Lihat game",
-		"viewPack": "Lihat pack"
+		"viewPack": "Lihat pack",
+		"cancel": "Batalkan kiriman",
+		"filterKind": "Filter berdasarkan jenis",
+		"kindAll": "Semua jenis",
+		"cancelConfirmTitle": "Batalkan kiriman?",
+		"cancelConfirmBody": "Ini menghapus kiriman dan media yang diunggah agar bisa dikirim lagi. Tidak bisa dibatalkan."
 	},
 	"adminDonations": {
 		"title": "Donasi",

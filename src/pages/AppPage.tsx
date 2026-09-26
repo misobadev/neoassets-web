@@ -154,7 +154,7 @@ export default function AppPage() {
 					{!collapsed ? <p className="sap-section">{t("nav.submissions")}</p> : null}
 					<SideLink to="/app/metadata" icon={<Gamepad2 className="w-4 h-4 shrink-0" />} label={t("nav.gameMetadata")} active={path === "/app/metadata" || path.startsWith("/app/metadata/")} collapsed={collapsed} />
 					<SideLink to="/app/sap" icon={<Palette className="w-4 h-4 shrink-0" />} label={t("nav.systemArtPack")} end collapsed={collapsed} />
-					{authed ? <SideLink to="/app/reviews" icon={<ListChecks className="w-4 h-4 shrink-0" />} label={t("nav.myReviews")} collapsed={collapsed} /> : null}
+					{authed ? <SideLink to="/app/contributions" icon={<ListChecks className="w-4 h-4 shrink-0" />} label={t("nav.myReviews")} collapsed={collapsed} /> : null}
 				</div>
 
 				{/* Help */}
@@ -287,9 +287,9 @@ function NotificationBell() {
 	const { pathname } = useLocation();
 	return (
 		<NavLink
-			to="/app/reviews"
+			to="/app/contributions"
 			title={t("nav.notifications")}
-			className={`sap-icon-btn relative ${pathname === "/app/reviews" ? "sap-icon-btn-active" : ""}`}
+			className={`sap-icon-btn relative ${pathname === "/app/contributions" ? "sap-icon-btn-active" : ""}`}
 		>
 			<Bell className="w-4 h-4" />
 			{unread > 0 ? (

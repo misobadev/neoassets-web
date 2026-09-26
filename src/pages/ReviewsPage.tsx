@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, X, Zap } from "lucide-react";
-import { cdnUrl, fetchMetadataGameDetail, fetchPackDetail, type MediaKind, type MetadataMedia, type PackDetail } from "../lib/api";
+import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, Trash2, X, Zap } from "lucide-react";
+import { cancelMetadataSubmission, cdnUrl, fetchMetadataGameDetail, fetchPackDetail, trashSubmission, type MediaKind, type MetadataMedia, type PackDetail } from "../lib/api";
 import { formatDate } from "../lib/format";
 import Pagination from "../components/Pagination";
 import { useReviews, loadReviews, type ReviewItem, type ReviewStatus } from "../lib/reviews";
@@ -45,6 +45,7 @@ export default function ReviewsPage() {
 	const { t } = useTranslation();
 	const { markAllSeen } = useReviews();
 	const [statusFilter, setStatusFilter] = useState<ReviewStatus | "">("");
+	const [kindFilter, setKindFilter] = useState<"" | "metadata" | "sap">("");
 	const [page, setPage] = useState(1);
 	const [items, setItems] = useState<ReviewItem[]>([]);
 	const [total, setTotal] = useState(0);
@@ -53,9 +54,16 @@ export default function ReviewsPage() {
 	const [selected, setSelected] = useState<ReviewItem | null>(null);
 	const [gameMedia, setGameMedia] = useState<MetadataMedia[]>([]);
 	const [pack, setPack] = useState<PackDetail | null>(null);
+	const [reloadTick, setReloadTick] = useState(0);
+	const [confirmCancel, setConfirmCancel] = useState(false);
+	const [cancelling, setCancelling] = useState(false);
 
-	const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
-	const pageItems = items.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+	// The kind filter (game metadata vs system art pack) is applied client-side
+	// over the loaded feed.
+	const visibleItems = kindFilter ? items.filter((r) => r.kind === kindFilter) : items;
+	const visibleTotal = kindFilter ? visibleItems.length : total;
+	const totalPages = Math.max(1, Math.ceil(visibleTotal / PER_PAGE));
+	const pageItems = visibleItems.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
 	// The feed is paginated server-side: each page fetches the newest
 	// page*PER_PAGE items of the merged review list (the top N of the merge is
@@ -77,16 +85,16 @@ export default function ReviewsPage() {
 		return () => {
 			cancelled = true;
 		};
-	}, [page, statusFilter]);
+	}, [page, statusFilter, reloadTick]);
 
 	useEffect(() => {
 		markAllSeen();
 	}, [markAllSeen]);
 
-	// Reset to the first page when the filter changes.
+	// Reset to the first page when a filter changes.
 	useEffect(() => {
 		setPage(1);
-	}, [statusFilter]);
+	}, [statusFilter, kindFilter]);
 
 	// Keep the page in range when the list shrinks (e.g. after a refetch).
 	useEffect(() => {
@@ -133,6 +141,24 @@ export default function ReviewsPage() {
 		return v === undefined || v === null ? "" : String(v);
 	}
 
+	// cancelSelected deletes the current user's own submission so it can be
+	// submitted again without waiting for a review.
+	async function cancelSelected() {
+		if (!selected) return;
+		setCancelling(true);
+		try {
+			if (selected.kind === "metadata") await cancelMetadataSubmission(selected.id);
+			else await trashSubmission(selected.id);
+			setConfirmCancel(false);
+			setSelected(null);
+			setReloadTick((n) => n + 1);
+		} catch (e) {
+			alert((e as Error).message);
+		} finally {
+			setCancelling(false);
+		}
+	}
+
 	const filters: { label: string; value: ReviewStatus | "" }[] = [
 		{ label: t("common.all"), value: "" },
 		{ label: t("metadataStatus.pending"), value: "pending" },
@@ -175,14 +201,25 @@ export default function ReviewsPage() {
 						{f.label}
 					</button>
 				))}
+				<select
+					className="select select-sm w-52 sm:ml-auto"
+					value={kindFilter}
+					onChange={(e) => setKindFilter(e.target.value as "" | "metadata" | "sap")}
+					aria-label={t("reviews.filterKind")}
+				>
+					<option value="">{t("reviews.kindAll")}</option>
+					<option value="metadata">{t("reviews.metadata")}</option>
+					<option value="sap">{t("reviews.sap")}</option>
+				</select>
 			</div>
 
 			{loading && items.length === 0 ? (
 				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("common.loading")}</p>
-			) : items.length === 0 ? (
+			) : visibleItems.length === 0 ? (
 				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("reviews.empty")}</p>
 			) : (
 				<>
+					{totalPages > 1 ? <Pagination page={page} totalPages={totalPages} onChange={setPage} /> : null}
 					<div className="space-y-3">
 						{pageItems.map((r) => {
 							const boosted = r.status === "approved" && (r.baseXP ?? 0) > 0 && r.xp > (r.baseXP ?? 0);
@@ -352,12 +389,40 @@ export default function ReviewsPage() {
 						) : null}
 
 						<div className="flex justify-end gap-2">
+							{selected.status === "pending" ? (
+								<button type="button" className="btn btn-error btn-outline mr-auto" onClick={() => setConfirmCancel(true)}>
+									<Trash2 className="w-4 h-4" />
+									{t("reviews.cancel")}
+								</button>
+							) : null}
 							<button className="btn btn-ghost" type="button" onClick={() => setSelected(null)}>{t("common.close")}</button>
 							{selected.status === "approved" && selected.href ? (
 								<Link to={selected.href} className="btn btn-primary" onClick={() => setSelected(null)}>
 									{selected.kind === "metadata" ? t("reviews.viewGame") : t("reviews.viewPack")}
 								</Link>
 							) : null}
+						</div>
+					</div>
+				</div>
+			) : null}
+
+			{confirmCancel && selected ? (
+				<div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && !cancelling && setConfirmCancel(false)}>
+					<div className="card w-full max-w-md p-6 space-y-4">
+						<div className="flex items-start gap-3">
+							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
+								<Trash2 className="w-5 h-5 text-[var(--color-error)]" />
+							</div>
+							<div className="min-w-0">
+								<h2 className="text-lg font-bold">{t("reviews.cancelConfirmTitle")}</h2>
+								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">{t("reviews.cancelConfirmBody")}</p>
+							</div>
+						</div>
+						<div className="flex justify-end gap-2">
+							<button className="btn btn-ghost" type="button" onClick={() => setConfirmCancel(false)} disabled={cancelling}>{t("common.cancel")}</button>
+							<button className="btn btn-error" type="button" onClick={cancelSelected} disabled={cancelling}>
+								{cancelling ? t("common.loading") : t("reviews.cancel")}
+							</button>
 						</div>
 					</div>
 				</div>

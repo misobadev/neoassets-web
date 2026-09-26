@@ -731,7 +731,7 @@
 	},
 	"nav": {
 		"donations": "寄付",
-		"myReviews": "マイレビュー一覧",
+		"myReviews": "マイ投稿",
 		"notifications": "通知",
 		"menu": "メニュー",
 		"home": "ホーム",
@@ -828,6 +828,8 @@
 		"title": "自分の投稿",
 		"subtitle": "パックを作成し、下書きとして保存し、準備ができたらレビューに提出しましょう。",
 		"newSubmission": "投稿",
+		"addNewPack": "新しいシステムアートパックを追加",
+		"gallery": "ギャラリー",
 		"loading": "投稿を読み込み中...",
 		"noImages": "画像はまだありません",
 		"untitledDraft": "無題の下書き",
@@ -958,7 +960,7 @@
 		"systemsShort": "システム"
 	},
 	"reviews": {
-		"title": "マイレビュー",
+		"title": "マイ投稿",
 		"subtitle": "投稿のレビュー状況を確認できます。",
 		"experienceEarned": "獲得経験値",
 		"experience": "XP",
@@ -975,7 +977,12 @@
 		"reviewerComment": "レビュアーのコメント",
 		"noComment": "コメントなし。",
 		"viewGame": "ゲームを見る",
-		"viewPack": "パックを見る"
+		"viewPack": "パックを見る",
+		"cancel": "投稿をキャンセル",
+		"filterKind": "種類で絞り込み",
+		"kindAll": "すべての種類",
+		"cancelConfirmTitle": "投稿をキャンセルしますか？",
+		"cancelConfirmBody": "投稿とアップロードしたメディアを削除して、もう一度送信できるようにします。元に戻せません。"
 	},
 	"adminDonations": {
 		"title": "寄付",

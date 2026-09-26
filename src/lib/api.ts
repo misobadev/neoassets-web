@@ -155,6 +155,8 @@ export interface PackDetail {
 	version: string;
 	backgrounds?: string[];
 	downloads?: number;
+	systems_covered?: number;
+	submitted_by?: string;
 	contributors?: string[];
 	files: PackFile[];
 	contributions?: PackContribution[];
@@ -720,6 +722,18 @@ export function fetchMySubmissions(opts?: { limit?: number; offset?: number; sta
 		`/api/v1/auth/submissions${pagedQuery(opts)}`,
 		{ token: userToken() },
 	).then((d) => ({ items: d.submissions || [], total: d.total || 0, totalXP: d.total_xp || 0 }));
+}
+
+// cancelMetadataSubmission deletes the current user's own metadata submission
+// (draft, pending or rejected) so a mistake can be cleared and submitted again.
+export function cancelMetadataSubmission(id: string): Promise<{ ok: boolean }> {
+	return api<{ ok: boolean }>(`/api/v1/metadata/submissions/${id}`, { method: "DELETE", token: userToken() });
+}
+
+// trashSubmission moves the current user's own system art pack submission to the
+// trash (draft, pending or rejected) so it can be submitted again.
+export function trashSubmission(id: string): Promise<void> {
+	return api(`/api/v1/submissions/${id}/trash`, { method: "POST", token: userToken() });
 }
 
 // ReviewSummaryItem is a lightweight notification entry (no payload/files/logs).

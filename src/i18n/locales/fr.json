@@ -731,7 +731,7 @@
 	},
 	"nav": {
 		"donations": "Dons",
-		"myReviews": "Ma liste de révisions",
+		"myReviews": "Mes contributions",
 		"notifications": "Notifications",
 		"menu": "Menu",
 		"home": "Accueil",
@@ -828,6 +828,8 @@
 		"title": "Mes soumissions",
 		"subtitle": "Créez un pack, enregistrez-le comme brouillon et soumettez-le pour révision quand vous êtes prêt.",
 		"newSubmission": "Contribuer",
+		"addNewPack": "Ajouter un nouveau pack d'art système",
+		"gallery": "Galerie",
 		"loading": "Chargement de vos soumissions...",
 		"noImages": "Aucune image pour le moment",
 		"untitledDraft": "Brouillon sans titre",
@@ -958,7 +960,7 @@
 		"systemsShort": "systèmes"
 	},
 	"reviews": {
-		"title": "Mes révisions",
+		"title": "Mes contributions",
 		"subtitle": "Suivez l'état de révision de vos contributions.",
 		"experienceEarned": "Expérience gagnée",
 		"experience": "XP",
@@ -975,7 +977,12 @@
 		"reviewerComment": "Commentaire du réviseur",
 		"noComment": "Aucun commentaire.",
 		"viewGame": "Voir le jeu",
-		"viewPack": "Voir le pack"
+		"viewPack": "Voir le pack",
+		"cancel": "Annuler la soumission",
+		"filterKind": "Filtrer par type",
+		"kindAll": "Tous les types",
+		"cancelConfirmTitle": "Annuler la soumission ?",
+		"cancelConfirmBody": "Cela supprime votre soumission et ses médias pour pouvoir la renvoyer. Irréversible."
 	},
 	"adminDonations": {
 		"title": "Dons",

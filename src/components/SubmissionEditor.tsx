@@ -443,7 +443,9 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 		}
 	}
 
-	const canTrash = !subId || (submissionStatus !== null && submissionStatus !== "pending" && submissionStatus !== "approved" && submissionStatus !== "trashed");
+	// A user can clear their own submission while it is a draft, pending review
+	// or rejected; only an approved (published) pack is protected.
+	const canTrash = !subId || (submissionStatus !== null && submissionStatus !== "approved" && submissionStatus !== "trashed");
 
 	async function adminDeleteConfirmed() {
 		if (!subId) return;

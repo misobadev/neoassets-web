@@ -297,7 +297,7 @@ export default function NewGamePage() {
 					<p className="text-sm text-[var(--color-base-content)]/70">{t("metadata.newGame.submittedBody")}</p>
 					<div className="flex justify-center gap-2">
 						<button className="btn btn-outline" onClick={() => { setDone(false); setNameRows([{ region: "", value: "" }]); setReleaseRows([{ region: "", value: "" }]); setDescription(""); setMediaRows({}); setExisting(null); }}>{t("metadata.newGame.addAnother")}</button>
-						<Link to="/app/reviews" className="btn btn-primary">{t("reviews.title")}</Link>
+						<Link to="/app/contributions" className="btn btn-primary">{t("reviews.title")}</Link>
 					</div>
 				</div>
 			</div>
