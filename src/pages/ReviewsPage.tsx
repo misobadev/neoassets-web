@@ -5,6 +5,7 @@ import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, Trash2, X, Zap
 import { cancelMetadataSubmission, cdnUrl, fetchMetadataGameDetail, fetchPackDetail, trashSubmission, type MediaKind, type MetadataMedia, type PackDetail } from "../lib/api";
 import { formatDate } from "../lib/format";
 import Pagination from "../components/Pagination";
+import RegionLabel from "../components/RegionLabel";
 import { useReviews, loadReviews, type ReviewItem, type ReviewStatus } from "../lib/reviews";
 
 const PER_PAGE = 20;
@@ -329,8 +330,8 @@ export default function ReviewsPage() {
 							) : null}
 						</div>
 
-						{/* Published content: the approved text and media. */}
-						{textKinds.length > 0 || publishedMedia.length > 0 || (selected.kind === "sap" && pack) ? (
+						{/* Submitted / approved text and media. */}
+						{textKinds.length > 0 || publishedMedia.length > 0 || (selected.media || []).length > 0 || (selected.kind === "sap" && pack) ? (
 							<div className="space-y-3">
 								<p className="label-text">{selected.status === "approved" ? t("reviews.approvedContent") : t("reviews.submittedContent")}</p>
 
@@ -342,6 +343,28 @@ export default function ReviewsPage() {
 										</p>
 									</div>
 								))}
+
+								{/* Submitted media, shown while the item is not yet published. */}
+								{selected.status !== "approved"
+									? (selected.media || []).map((m, i) => (
+											<div key={i} className="rounded-lg border border-[var(--color-base-300)] p-2 space-y-1">
+												{m.kind === "video" ? (
+													<video src={mediaUrl(m.object_key)} controls className="w-full max-h-[45vh] rounded-lg bg-black" />
+												) : (
+													<img
+														src={mediaUrl(m.object_key)}
+														alt={kindLabel(m.kind)}
+														className="w-full max-h-[45vh] object-contain rounded-lg bg-[var(--color-base-300)]/40"
+														onError={(e) => (e.currentTarget.style.display = "none")}
+													/>
+												)}
+												<div className="flex items-center gap-2">
+													<span className="text-xs font-medium text-[var(--color-base-content)]/70">{kindLabel(m.kind)}</span>
+													{m.region ? <span className="badge badge-solid-neutral badge-xs"><RegionLabel region={m.region} /></span> : null}
+												</div>
+											</div>
+										))
+									: null}
 
 								{publishedMedia.map((m) =>
 									m.kind === "video" ? (

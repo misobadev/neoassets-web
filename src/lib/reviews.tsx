@@ -31,6 +31,8 @@ export interface ReviewItem {
 	systemId?: string;
 	packId?: string;
 	payload?: Record<string, unknown>;
+	// Submitted media (not yet published), shown while the item is pending.
+	media?: { kind: string; object_key: string; region?: string }[];
 }
 
 const SEEN_KEY = "ns-seen-reviews";
@@ -82,6 +84,7 @@ export function buildReviewItems(meta: MetadataSubmission[], sap: SubmissionDeta
 			gameId: m.game_id || undefined,
 			systemId: m.system_id || undefined,
 			payload: m.payload,
+			media: (m.files || []).map((f) => ({ kind: f.kind, object_key: f.object_key, region: f.region })),
 		});
 	}
 	for (const s of sap) {
@@ -100,6 +103,7 @@ export function buildReviewItems(meta: MetadataSubmission[], sap: SubmissionDeta
 			xp: s.points_earned || 0,
 			baseXP: s.base_points_earned,
 			packId: s.pack_id || undefined,
+			media: (s.files || []).map((f) => ({ kind: f.kind, object_key: f.object_key })),
 		});
 	}
 	return items.sort((a, b) => (a.at < b.at ? 1 : -1));

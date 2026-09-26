@@ -312,6 +312,9 @@ export interface MetadataSubmission {
 	cover?: string;
 	cover_updated?: string;
 	change_kinds?: string[];
+	// Uploaded media, populated on the review feed so the submitted media can be
+	// shown before the submission is approved.
+	files?: MetadataSubmissionFile[];
 	points_earned?: number;
 	base_points_earned?: number;
 }
