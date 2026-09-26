@@ -643,6 +643,8 @@
 		},
 		"pendingTitle": "此项目已有待审核的投稿。",
 		"pendingSuffix": " · 待审核",
+		"hasData": "已有数据",
+		"noData": "暂无数据",
 		"status": {
 			"pickType": "请先选择你要提交的内容。",
 			"enterValue": "请输入新值。",

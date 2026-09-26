@@ -255,11 +255,7 @@ function GameCard({ g }: { g: GameSummary }) {
 					</span>
 					<span
 						title={pct === 100 ? t("metadata.completed") : t("metadata.completion")}
-						className={
-							pct === 100
-								? "holo-badge inline-flex items-center rounded-full border border-black/15 px-2.5 py-0.5 text-[11px] font-bold shadow-sm"
-								: "inline-flex items-center rounded-full border border-[var(--color-base-300)] bg-[var(--color-base-300)]/40 px-2.5 py-0.5 text-[11px] font-bold text-[var(--color-base-content)]/70"
-						}
+						className={`badge badge-sm ${pct === 100 ? "holo-badge" : "badge-solid-neutral"}`}
 					>
 						{pct}%
 					</span>

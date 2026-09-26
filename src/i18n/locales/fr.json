@@ -643,6 +643,8 @@
 		},
 		"pendingTitle": "Vous avez déjà une soumission en attente pour ce",
 		"pendingSuffix": " · en attente",
+		"hasData": "Donnees deja presentes",
+		"noData": "Pas encore de donnees",
 		"status": {
 			"pickType": "Choisissez d'abord ce que vous voulez soumettre.",
 			"enterValue": "Saisissez la nouvelle valeur.",

@@ -625,6 +625,8 @@
 		},
 		"pendingTitle": "Ya tienes un envío pendiente para este",
 		"pendingSuffix": " · pendiente",
+		"hasData": "Ya tiene datos",
+		"noData": "Sin datos aun",
 		"status": {
 			"pickType": "Elige primero qué quieres enviar.",
 			"enterValue": "Introduce el nuevo valor.",

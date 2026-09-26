@@ -643,6 +643,8 @@
 		},
 		"pendingTitle": "この項目にはすでに保留中の投稿があります",
 		"pendingSuffix": " · 保留中",
+		"hasData": "データあり",
+		"noData": "データなし",
 		"status": {
 			"pickType": "まず投稿する項目を選択してください。",
 			"enterValue": "新しい値を入力してください。",

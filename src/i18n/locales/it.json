@@ -643,6 +643,8 @@
 		},
 		"pendingTitle": "Hai già una proposta in attesa per questo",
 		"pendingSuffix": " · in attesa",
+		"hasData": "Dati gia presenti",
+		"noData": "Nessun dato",
 		"status": {
 			"pickType": "Scegli prima cosa vuoi inviare.",
 			"enterValue": "Inserisci il nuovo valore.",

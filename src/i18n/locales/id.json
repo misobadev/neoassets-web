@@ -643,6 +643,8 @@
 		},
 		"pendingTitle": "Anda sudah memiliki kiriman yang menunggu untuk ini",
 		"pendingSuffix": " · menunggu",
+		"hasData": "Sudah ada data",
+		"noData": "Belum ada data",
 		"status": {
 			"pickType": "Pilih dulu apa yang ingin Anda kirim.",
 			"enterValue": "Masukkan nilai baru.",

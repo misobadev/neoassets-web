@@ -643,6 +643,8 @@
 		},
 		"pendingTitle": "이 항목에 대해 이미 대기 중인 제출물이 있습니다",
 		"pendingSuffix": " · 대기 중",
+		"hasData": "데이터 있음",
+		"noData": "데이터 없음",
 		"status": {
 			"pickType": "먼저 제출할 항목을 선택하세요.",
 			"enterValue": "새 값을 입력하세요.",

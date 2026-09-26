@@ -625,6 +625,8 @@
 		},
 		"pendingTitle": "You already have a pending submission for this",
 		"pendingSuffix": " · pending",
+		"hasData": "Already has data",
+		"noData": "No data yet",
 		"status": {
 			"pickType": "Pick what you want to submit first.",
 			"enterValue": "Enter the new value.",

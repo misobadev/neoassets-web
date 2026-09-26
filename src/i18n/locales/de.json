@@ -643,6 +643,8 @@
 		},
 		"pendingTitle": "Du hast bereits eine ausstehende Einreichung für dieses",
 		"pendingSuffix": " · ausstehend",
+		"hasData": "Hat bereits Daten",
+		"noData": "Noch keine Daten",
 		"status": {
 			"pickType": "Wähle zuerst aus, was du einreichen möchtest.",
 			"enterValue": "Gib den neuen Wert ein.",

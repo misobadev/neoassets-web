@@ -116,13 +116,14 @@ export default function MetadataGameDetail() {
 
 	return (
 		<div className="space-y-6">
-			<div className="flex items-center gap-3">
-				<Link to={`/app/metadata/${systemId || game.system_id}`} className="btn btn-ghost !p-2" aria-label={t("common.back")}>
-					<ChevronLeft className="w-5 h-5" />
+			<div className="flex items-stretch gap-3">
+				<Link to={`/app/metadata/${systemId || game.system_id}`} className="btn btn-ghost !px-3 self-stretch" aria-label={t("common.back")}>
+					<ChevronLeft className="w-6 h-6" />
 				</Link>
-				<div className="min-w-0 flex-1">
+				<div className="min-w-0 flex-1 self-center">
+					<h1 className="text-2xl md:text-3xl font-bold tracking-tight break-words">{game.name}</h1>
 					<div
-						className="flex items-center gap-2 min-w-0"
+						className="flex items-center gap-2 flex-wrap mt-1.5"
 						onPointerMove={(e) => {
 							const r = e.currentTarget.getBoundingClientRect();
 							setHoloMx((e.clientX - r.left) / r.width - 0.5);
@@ -134,24 +135,19 @@ export default function MetadataGameDetail() {
 						}}
 						style={{ "--mx": holoMx, "--my": holoMy } as React.CSSProperties}
 					>
-						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{game.name}</h1>
-						<span className={`badge badge-lg shrink-0 uppercase ${game.type === "hack" ? "badge-solid-warning" : game.type === "homebrew" ? "badge-solid-info" : "badge-solid-neutral"}`}>{game.type || "base"}</span>
-						{game.region ? <span className="badge badge-lg badge-solid-neutral shrink-0"><RegionLabel region={game.region} /></span> : null}
+						{game.system_name ? <span className="badge badge-lg border-0 bg-[var(--color-base-content)] text-[var(--color-base-100)]">{game.system_name}</span> : null}
+						<span className={`badge badge-lg uppercase ${game.type === "hack" ? "badge-solid-warning" : game.type === "homebrew" ? "badge-solid-info" : "badge-solid-neutral"}`}>{game.type || "base"}</span>
+						{game.region ? <span className="badge badge-lg badge-solid-neutral"><RegionLabel region={game.region} /></span> : null}
 						<span
 							title={completionPct === 100 ? t("metadataGame.completed") : t("metadata.completion")}
-							className={
-								completionPct === 100
-									? "holo-badge inline-flex items-center rounded-full border border-black/15 px-3 py-0.5 text-xs font-bold shadow-sm shrink-0"
-									: "inline-flex items-center rounded-full border border-[var(--color-base-300)] bg-[var(--color-base-300)]/40 px-3 py-0.5 text-xs font-bold text-[var(--color-base-content)]/70 shrink-0"
-							}
+							className={`badge badge-lg ${completionPct === 100 ? "holo-badge" : "badge-solid-neutral"}`}
 						>
 							{completionPct}%
 						</span>
 					</div>
-					<p className="text-sm text-[var(--color-base-content)]/60">{game.system_name}</p>
 				</div>
 				{userToken() ? (
-					<Link to={`/app/metadata/${systemId || game.system_id}/game/${game.id}/submit`} className="btn btn-primary btn-sm shrink-0">
+					<Link to={`/app/metadata/${systemId || game.system_id}/game/${game.id}/submit`} className="btn btn-primary btn-sm shrink-0 self-center">
 						<PenSquare className="w-4 h-4" />
 						{t("metadataGame.submitChanges")}
 					</Link>
@@ -159,7 +155,7 @@ export default function MetadataGameDetail() {
 					<Link
 						to="/app/login"
 						state={{ from: `/app/metadata/${systemId || game.system_id}/game/${game.id}/submit` }}
-						className="btn btn-primary btn-sm shrink-0"
+						className="btn btn-primary btn-sm shrink-0 self-center"
 					>
 						<PenSquare className="w-4 h-4" />
 						{t("metadataGame.signInToSubmit")}

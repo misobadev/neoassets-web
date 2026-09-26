@@ -643,6 +643,8 @@
 		},
 		"pendingTitle": "Você já tem um envio pendente para este",
 		"pendingSuffix": " · pendente",
+		"hasData": "Ja tem dados",
+		"noData": "Sem dados ainda",
 		"status": {
 			"pickType": "Escolha primeiro o que você quer enviar.",
 			"enterValue": "Digite o novo valor.",

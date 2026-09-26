@@ -306,16 +306,35 @@ export default function MetadataSubmissionPage() {
 		return text ? t(text.label) : k;
 	});
 
+	// hasData reports whether the game already has a value for a text field or a
+	// media kind, so the "what to submit" buttons can show what is still missing.
+	function hasData(key: string): boolean {
+		if (!game) return false;
+		switch (key) {
+			case "name": return Boolean(game.name);
+			case "description": return Boolean(game.description);
+			case "genre": return Boolean(game.genre);
+			case "developer": return Boolean(game.developer);
+			case "publisher": return Boolean(game.publisher);
+			case "release_year": return Boolean(game.release_year);
+			case "rating": return (game.rating ?? 0) > 0;
+			case "type": return Boolean(game.type);
+			default: return game.media.some((m) => m.kind === key);
+		}
+	}
+
 	// TypeButton renders a "what to submit" option, disabled when the user
-	// already has a pending submission for that field/kind on this game.
+	// already has a pending submission for that field/kind on this game. The
+	// color and dot tell whether the game already has that data.
 	const typeButton = (key: string, label: string) => {
 		const pending = pendingKeys.includes(key);
+		const filled = hasData(key);
 		return (
 			<button
 				key={key}
 				type="button"
 				disabled={pending}
-				title={pending ? t("metadataSubmit.pendingTitle") : undefined}
+				title={pending ? t("metadataSubmit.pendingTitle") : filled ? t("metadataSubmit.hasData") : t("metadataSubmit.noData")}
 				onClick={() => {
 					if (pending) return;
 					setType(key);
@@ -323,8 +342,9 @@ export default function MetadataSubmissionPage() {
 					setFile(null);
 					setFileError(null);
 				}}
-				className={`btn btn-sm ${type === key ? "btn-primary" : "btn-outline"} ${pending ? "opacity-50 cursor-not-allowed" : ""}`}
+				className={`btn btn-sm gap-1.5 ${type === key ? "btn-primary" : "btn-outline"} ${pending ? "opacity-50 cursor-not-allowed" : ""}`}
 			>
+				<span className={`w-2.5 h-2.5 rounded-full shrink-0 ${filled ? "bg-[var(--color-success)]" : "bg-[var(--color-base-content)]/30"}`} aria-hidden />
 				{label}
 				{pending ? t("metadataSubmit.pendingSuffix") : ""}
 			</button>
