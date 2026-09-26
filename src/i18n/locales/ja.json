@@ -439,7 +439,9 @@
 			"ratingAsc": "評価 低い順",
 			"yearDesc": "年 新しい順",
 			"yearAsc": "年 古い順",
-			"scrapesDesc": "最もスクレイプされた"
+			"scrapesDesc": "最もスクレイプされた",
+			"completionAsc": "完成度 低→高",
+			"completionDesc": "完成度 高→低"
 		},
 		"gamesCount_one": "{{count}} ゲーム",
 		"gamesCount_other": "{{count}} ゲーム",

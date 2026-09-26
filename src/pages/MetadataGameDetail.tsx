@@ -47,13 +47,15 @@ function mediaUrl(m: MetadataMedia): string {
 	return m.created_at ? `${url}?v=${encodeURIComponent(m.created_at)}` : url;
 }
 
-// isGameComplete mirrors the "Completed" flag from the game list: full text
-// metadata, translations and cover/logo/screenshot/fanart/video. The media
-// kinds match the backend's system completion calculation (which counts cover).
-function isGameComplete(g: GameDetail): boolean {
+// gameCompletionPct is the share of the curated metadata the game already has
+// (full text, translations, cover/logo/screenshot/fanart/video), so the header
+// badge can show the exact percentage. The media kinds match the backend's
+// system completion calculation (which counts cover).
+function gameCompletionPct(g: GameDetail): number {
 	const textComplete = Boolean(g.description && g.genre && g.developer && g.publisher && g.release_year && (g.rating ?? 0) > 0);
 	const has = (kind: string) => g.media.some((m) => m.kind === kind);
-	return textComplete && (g.translations?.length ?? 0) > 0 && has("cover") && has("logo") && has("screenshot") && has("fanart") && has("video");
+	const checks = [textComplete, (g.translations?.length ?? 0) > 0, has("cover"), has("logo"), has("screenshot"), has("fanart"), has("video")];
+	return Math.round((checks.filter(Boolean).length / checks.length) * 100);
 }
 
 export default function MetadataGameDetail() {
@@ -105,7 +107,7 @@ export default function MetadataGameDetail() {
 	if (error) return <p className="text-sm text-[var(--color-error)] text-center py-10">{error}</p>;
 	if (!game) return <p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("metadataGame.loadingGame")}</p>;
 
-	const complete = isGameComplete(game);
+	const completionPct = gameCompletionPct(game);
 	const contributors = game.contributors || [];
 	const regions = game.regions || [];
 	// A region may exist only to hold regional cover/logo media; it belongs in
@@ -135,7 +137,16 @@ export default function MetadataGameDetail() {
 						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{game.name}</h1>
 						<span className={`badge badge-lg shrink-0 uppercase ${game.type === "hack" ? "badge-solid-warning" : game.type === "homebrew" ? "badge-solid-info" : "badge-solid-neutral"}`}>{game.type || "base"}</span>
 						{game.region ? <span className="badge badge-lg badge-solid-neutral shrink-0"><RegionLabel region={game.region} /></span> : null}
-						{complete ? <span className="holo-badge inline-flex items-center rounded-full border border-black/15 px-3 py-0.5 text-xs font-bold shadow-sm shrink-0">{t("metadataGame.completed")}</span> : null}
+						<span
+							title={completionPct === 100 ? t("metadataGame.completed") : t("metadata.completion")}
+							className={
+								completionPct === 100
+									? "holo-badge inline-flex items-center rounded-full border border-black/15 px-3 py-0.5 text-xs font-bold shadow-sm shrink-0"
+									: "inline-flex items-center rounded-full border border-[var(--color-base-300)] bg-[var(--color-base-300)]/40 px-3 py-0.5 text-xs font-bold text-[var(--color-base-content)]/70 shrink-0"
+							}
+						>
+							{completionPct}%
+						</span>
 					</div>
 					<p className="text-sm text-[var(--color-base-content)]/60">{game.system_name}</p>
 				</div>

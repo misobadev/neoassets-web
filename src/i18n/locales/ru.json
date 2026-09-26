@@ -447,7 +447,9 @@
 			"ratingAsc": "Рейтинг: по возрастанию",
 			"yearDesc": "Год: новые-старые",
 			"yearAsc": "Год: старые-новые",
-			"scrapesDesc": "Самые скрапленные"
+			"scrapesDesc": "Самые скрапленные",
+			"completionAsc": "Полнота низкая-высокая",
+			"completionDesc": "Полнота высокая-низкая"
 		},
 		"gamesCount_one": "{{count}} игра",
 		"gamesCount_few": "{{count}} игры",

@@ -433,7 +433,9 @@
 			"ratingAsc": "Rating low-high",
 			"yearDesc": "Year new-old",
 			"yearAsc": "Year old-new",
-			"scrapesDesc": "Most scraped"
+			"scrapesDesc": "Most scraped",
+			"completionAsc": "Completion low-high",
+			"completionDesc": "Completion high-low"
 		},
 		"gamesCount_one": "{{count}} game",
 		"gamesCount_other": "{{count}} games",

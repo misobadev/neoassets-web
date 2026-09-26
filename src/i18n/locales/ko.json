@@ -439,7 +439,9 @@
 			"ratingAsc": "평점 낮은순",
 			"yearDesc": "연도 최신순",
 			"yearAsc": "연도 오래된순",
-			"scrapesDesc": "가장 많이 스크레이프됨"
+			"scrapesDesc": "가장 많이 스크레이프됨",
+			"completionAsc": "완성도 낮음→높음",
+			"completionDesc": "완성도 높음→낮음"
 		},
 		"gamesCount_one": "{{count}} 게임",
 		"gamesCount_other": "{{count}} 게임",

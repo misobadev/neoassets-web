@@ -439,7 +439,9 @@
 			"ratingAsc": "评分从低到高",
 			"yearDesc": "年份从新到旧",
 			"yearAsc": "年份从旧到新",
-			"scrapesDesc": "抓取最多"
+			"scrapesDesc": "抓取最多",
+			"completionAsc": "完整度 低→高",
+			"completionDesc": "完整度 高→低"
 		},
 		"gamesCount_one": "{{count}} 款游戏",
 		"gamesCount_other": "{{count}} 款游戏",

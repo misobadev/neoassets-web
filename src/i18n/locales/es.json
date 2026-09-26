@@ -421,7 +421,9 @@
 			"ratingAsc": "Valoración de menor a mayor",
 			"yearDesc": "Año de nuevo a antiguo",
 			"yearAsc": "Año de antiguo a nuevo",
-			"scrapesDesc": "Más scrapeados"
+			"scrapesDesc": "Más scrapeados",
+			"completionAsc": "Completado bajo-alto",
+			"completionDesc": "Completado alto-bajo"
 		},
 		"gamesCount_one": "{{count}} juego",
 		"gamesCount_other": "{{count}} juegos",

@@ -439,7 +439,9 @@
 			"ratingAsc": "Bewertung niedrig-hoch",
 			"yearDesc": "Jahr neu-alt",
 			"yearAsc": "Jahr alt-neu",
-			"scrapesDesc": "Meistgescrapt"
+			"scrapesDesc": "Meistgescrapt",
+			"completionAsc": "Vollständigkeit niedrig-hoch",
+			"completionDesc": "Vollständigkeit hoch-niedrig"
 		},
 		"gamesCount_one": "{{count}} Spiel",
 		"gamesCount_other": "{{count}} Spiele",

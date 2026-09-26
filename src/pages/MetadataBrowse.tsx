@@ -150,24 +150,26 @@ function textMetaTitle(t: TFunction, g: GameSummary): string {
 	return filled > 0 ? t("metadata.textMeta.partial", { filled }) : t("metadata.textMeta.none");
 }
 
-// isComplete reports whether a game has all the curated metadata: full text,
-// translations, cover, and logo/screenshot/fanart/video. The media kinds match
-// the backend's system completion calculation (which counts cover).
-function isComplete(g: GameSummary): boolean {
-	return Boolean(
-		g.text_complete &&
-			g.has_translations &&
-			g.cover &&
-			g.has_logo &&
-			g.has_screenshot &&
-			g.has_fanart &&
-			g.has_video,
-	);
+// completionPct is the share of the curated metadata a game already has (full
+// text, translations, cover, logo, screenshot, fanart, video), so the card badge
+// can show the exact percentage instead of a binary "completed". The media kinds
+// match the backend's system completion calculation (which counts cover).
+function completionPct(g: GameSummary): number {
+	const checks = [
+		Boolean(g.text_complete),
+		Boolean(g.has_translations),
+		Boolean(g.cover),
+		Boolean(g.has_logo),
+		Boolean(g.has_screenshot),
+		Boolean(g.has_fanart),
+		Boolean(g.has_video),
+	];
+	return Math.round((checks.filter(Boolean).length / checks.length) * 100);
 }
 
-// GameCard renders one game card. Completed games get the 3D tilt + magnification
-// on the card, and a holographic "Completed" badge next to the video icon whose
-// sheen follows the pointer.
+// GameCard renders one game card. The completion badge shows the metadata
+// percentage: at 100% it is the holographic badge whose sheen follows the
+// pointer, below 100% it is a plain badge without the shell effect.
 function GameCard({ g }: { g: GameSummary }) {
 	const { t } = useTranslation();
 	const ref = useRef<HTMLAnchorElement>(null);
@@ -200,7 +202,7 @@ function GameCard({ g }: { g: GameSummary }) {
 		setMy(0);
 	};
 
-	const complete = isComplete(g);
+	const pct = completionPct(g);
 	const style = { "--mx": mx, "--my": my } as React.CSSProperties;
 
 	return (
@@ -251,11 +253,16 @@ function GameCard({ g }: { g: GameSummary }) {
 					<span className={`badge badge-sm uppercase ${g.type === "hack" ? "badge-solid-warning" : g.type === "homebrew" ? "badge-solid-info" : "badge-solid-neutral"}`}>
 						{g.type || "base"}
 					</span>
-					{complete ? (
-						<span className="holo-badge inline-flex items-center rounded-full border border-black/15 px-2.5 py-0.5 text-[11px] font-bold shadow-sm">
-							{t("metadata.completed")}
-						</span>
-					) : null}
+					<span
+						title={pct === 100 ? t("metadata.completed") : t("metadata.completion")}
+						className={
+							pct === 100
+								? "holo-badge inline-flex items-center rounded-full border border-black/15 px-2.5 py-0.5 text-[11px] font-bold shadow-sm"
+								: "inline-flex items-center rounded-full border border-[var(--color-base-300)] bg-[var(--color-base-300)]/40 px-2.5 py-0.5 text-[11px] font-bold text-[var(--color-base-content)]/70"
+						}
+					>
+						{pct}%
+					</span>
 				</div>
 				<div className="flex items-center gap-2 shrink-0">
 					<span
@@ -500,6 +507,8 @@ export default function MetadataBrowse() {
 					<option value="rating_asc">{t("metadata.sort.ratingAsc")}</option>
 					<option value="year_desc">{t("metadata.sort.yearDesc")}</option>
 					<option value="year_asc">{t("metadata.sort.yearAsc")}</option>
+					<option value="completion_asc">{t("metadata.sort.completionAsc")}</option>
+					<option value="completion_desc">{t("metadata.sort.completionDesc")}</option>
 				</select>
 				<div className="flex items-center gap-1 bg-[var(--color-base-300)] rounded-lg p-1 shrink-0">
 					{TYPE_TABS.map((tab) => (

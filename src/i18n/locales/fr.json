@@ -439,7 +439,9 @@
 			"ratingAsc": "Note croissante",
 			"yearDesc": "Année récente-ancienne",
 			"yearAsc": "Année ancienne-récente",
-			"scrapesDesc": "Les plus scrapés"
+			"scrapesDesc": "Les plus scrapés",
+			"completionAsc": "Complétude faible-élevée",
+			"completionDesc": "Complétude élevée-faible"
 		},
 		"gamesCount_one": "{{count}} jeu",
 		"gamesCount_other": "{{count}} jeux",

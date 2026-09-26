@@ -439,7 +439,9 @@
 			"ratingAsc": "Rating rendah-tinggi",
 			"yearDesc": "Tahun baru-lama",
 			"yearAsc": "Tahun lama-baru",
-			"scrapesDesc": "Paling banyak di-scrape"
+			"scrapesDesc": "Paling banyak di-scrape",
+			"completionAsc": "Kelengkapan rendah-tinggi",
+			"completionDesc": "Kelengkapan tinggi-rendah"
 		},
 		"gamesCount_one": "{{count}} game",
 		"gamesCount_other": "{{count}} game",
