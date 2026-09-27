@@ -505,18 +505,15 @@ export default function MetadataBrowse() {
 					<option value="completion_asc">{t("metadata.sort.completionAsc")}</option>
 					<option value="completion_desc">{t("metadata.sort.completionDesc")}</option>
 				</select>
-				<div className="flex items-center gap-1 bg-[var(--color-base-300)] rounded-lg p-1 shrink-0">
+				<select
+					className="select select-sm shrink-0 w-36"
+					value={typeFilter}
+					onChange={(e) => { setTypeFilter(e.target.value as TypeFilter); setPage(1); }}
+				>
 					{TYPE_TABS.map((tab) => (
-						<button
-							key={tab.key}
-							type="button"
-							onClick={() => { setTypeFilter(tab.key); setPage(1); }}
-							className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${typeFilter === tab.key ? "bg-[var(--color-primary)] text-[var(--color-primary-content)]" : "text-[var(--color-base-content)]/60 hover:text-[var(--color-base-content)]"}`}
-						>
-							{t(tab.labelKey)}
-						</button>
+						<option key={tab.key} value={tab.key}>{t(tab.labelKey)}</option>
 					))}
-				</div>
+				</select>
 				<p className="text-sm text-[var(--color-base-content)]/50 sm:shrink-0">{t("metadata.gamesCount", { count: total })}</p>
 			</div>
 
