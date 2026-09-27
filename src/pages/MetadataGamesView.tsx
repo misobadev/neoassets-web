@@ -106,8 +106,8 @@ export default function MetadataGamesView() {
 								</p>
 							</div>
 							<div className="flex items-center gap-2 shrink-0">
-								<span className={`badge badge-sm uppercase ${typeBadgeClass(g.type)}`}>
-									{g.type || "base"}
+								<span className={`badge badge-sm ${typeBadgeClass(g.type)}`}>
+									{t("metadata.type." + (g.type || "base"))}
 								</span>
 								<RatingBadge rating={g.rating} />
 							</div>

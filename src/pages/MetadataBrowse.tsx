@@ -249,8 +249,8 @@ function GameCard({ g }: { g: GameSummary }) {
 			</div>
 			<div className="flex items-center justify-between gap-2 border-t border-[var(--color-base-300)] pt-2 relative z-[1]">
 				<div className="flex items-center gap-2 min-w-0">
-					<span className={`badge badge-sm uppercase ${typeBadgeClass(g.type)}`}>
-						{g.type || "base"}
+					<span className={`badge badge-sm ${typeBadgeClass(g.type)}`}>
+						{t("metadata.type." + (g.type || "base"))}
 					</span>
 					<span
 						title={pct === 100 ? t("metadata.completed") : t("metadata.completion")}

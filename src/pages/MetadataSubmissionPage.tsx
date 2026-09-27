@@ -561,7 +561,7 @@ export default function MetadataSubmissionPage() {
 					<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{t("metadataSubmit.submitChanges")}</h1>
 					<p className="text-sm text-[var(--color-base-content)]/60 flex items-center gap-2">
 						<span className="truncate">{game.name} · {game.system_name}</span>
-						<span className={`badge badge-sm shrink-0 uppercase ${typeBadgeClass(game.type)}`}>{game.type || "base"}</span>
+						<span className={`badge badge-sm shrink-0 ${typeBadgeClass(game.type)}`}>{t("metadata.type." + (game.type || "base"))}</span>
 					</p>
 				</div>
 			</div>
