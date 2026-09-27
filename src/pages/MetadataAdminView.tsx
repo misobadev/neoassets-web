@@ -147,7 +147,11 @@ export default function MetadataAdminView() {
 
 	const payload = (detail?.submission.payload || {}) as Record<string, unknown>;
 	const note = typeof payload.note === "string" ? payload.note : "";
-	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month" && k !== "region" && k !== "regions");
+	// A duplicate report asks for the whole game to be removed and points at the
+	// game that should be kept.
+	const isDeleteGame = payload.delete_game === true;
+	const duplicateOf = typeof payload.duplicate_of === "string" ? payload.duplicate_of : "";
+	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month" && k !== "region" && k !== "regions" && k !== "duplicate_of" && k !== "delete_game");
 	// A new game may submit several per-region names/releases at once.
 	const regionEntries = Array.isArray(payload.regions) ? (payload.regions as Array<Record<string, unknown>>).filter((r) => typeof r?.region === "string") : [];
 	const textKeys = [...TEXT_ORDER.filter((k) => payloadKeys.includes(k)), ...payloadKeys.filter((k) => !TEXT_ORDER.includes(k))];
@@ -239,6 +243,7 @@ export default function MetadataAdminView() {
 	// kindLabel resolves a change kind (a payload field or a media kind) to a
 	// human label for the list badges and the filter chips.
 	function kindLabel(key: string): string {
+		if (key === "delete_game") return t("metadataAdmin.deleteGame");
 		if (TEXT_LABEL[key]) return t(TEXT_LABEL[key]);
 		const media = MEDIA_LABEL[key as MediaKind];
 		if (media) return t(media);
@@ -427,6 +432,7 @@ export default function MetadataAdminView() {
 									{systemName ? <span className="badge badge-ghost badge-sm shrink-0">{systemName}</span> : null}
 									{subRegion ? <span className="badge badge-solid-neutral badge-sm shrink-0"><RegionLabel region={subRegion} /></span> : null}
 									{detail.submission.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
+									{isDeleteGame ? <span className="badge badge-error badge-sm shrink-0">{t("metadataAdmin.deleteGame")}</span> : null}
 								</div>
 								{gameID && systemID ? (
 									<Link
@@ -462,6 +468,13 @@ export default function MetadataAdminView() {
 							<div>
 								<p className="label-text">{t("metadataAdmin.note")}</p>
 								<p className="text-sm text-[var(--color-base-content)]/70 whitespace-pre-wrap">{note}</p>
+							</div>
+						) : null}
+
+						{isDeleteGame && duplicateOf ? (
+							<div>
+								<p className="label-text">{t("metadataAdmin.duplicateOf")}</p>
+								<a href={duplicateOf} target="_blank" rel="noreferrer" className="link link-primary text-sm break-all">{duplicateOf}</a>
 							</div>
 						) : null}
 

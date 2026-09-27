@@ -508,6 +508,8 @@
 		}
 	},
 	"metadataAdmin": {
+		"deleteGame": "Solicitud de eliminación",
+		"duplicateOf": "Duplicado de",
 		"newGame": "Juego nuevo",
 		"subtitle": "Aprueba o rechaza los envíos de metadatos/multimedia de los colaboradores.",
 		"noSubmissions": "No hay envíos en este estado.",
@@ -594,6 +596,19 @@
 		"rejected": "Rechazado"
 	},
 	"metadataSubmit": {
+		"duplicate": {
+			"title": "¿Es un duplicado?",
+			"subtitle": "Si crees que este juego está duplicado, solicita su eliminación y enlaza el juego más completo que debe conservarse.",
+			"linkLabel": "Enlace al juego que se conserva",
+			"linkPlaceholder": "https://neoassets.dev/app/metadata/...",
+			"noteLabel": "¿Por qué es un duplicado?",
+			"notePlaceholder": "Explica qué juego debe conservarse y por qué.",
+			"request": "Solicitar eliminación",
+			"linkRequired": "Añade el enlace al juego que debe conservarse.",
+			"noteRequired": "Explica por qué este juego es un duplicado.",
+			"sending": "Enviando la solicitud de eliminación...",
+			"sent": "Solicitud de eliminación enviada para revisión. ¡Gracias!"
+		},
 		"loadingGame": "Cargando juego...",
 		"submitChanges": "Aportar",
 		"translatedIn": "Traducido al {{language}}",

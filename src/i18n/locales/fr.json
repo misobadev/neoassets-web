@@ -526,6 +526,8 @@
 		}
 	},
 	"metadataAdmin": {
+		"deleteGame": "Demande de suppression",
+		"duplicateOf": "Doublon de",
 		"newGame": "Nouveau jeu",
 		"subtitle": "Approuvez ou rejetez les soumissions de métadonnées/médias des contributeurs.",
 		"noSubmissions": "Aucune soumission dans cet état.",
@@ -612,6 +614,19 @@
 		"rejected": "Rejeté"
 	},
 	"metadataSubmit": {
+		"duplicate": {
+			"title": "Est-ce un doublon ?",
+			"subtitle": "Si vous pensez que ce jeu est un doublon, demandez sa suppression et indiquez le lien vers le jeu le plus complet à conserver.",
+			"linkLabel": "Lien vers le jeu à conserver",
+			"linkPlaceholder": "https://neoassets.dev/app/metadata/...",
+			"noteLabel": "Pourquoi est-ce un doublon ?",
+			"notePlaceholder": "Expliquez quel jeu doit être conservé et pourquoi.",
+			"request": "Demander la suppression",
+			"linkRequired": "Ajoutez le lien vers le jeu à conserver.",
+			"noteRequired": "Expliquez pourquoi ce jeu est un doublon.",
+			"sending": "Envoi de la demande de suppression...",
+			"sent": "Demande de suppression envoyée pour révision. Merci !"
+		},
 		"loadingGame": "Chargement du jeu...",
 		"submitChanges": "Contribuer",
 		"translatedIn": "Traduit en {{language}}",

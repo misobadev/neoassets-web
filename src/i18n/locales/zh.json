@@ -526,6 +526,8 @@
 		}
 	},
 	"metadataAdmin": {
+		"deleteGame": "删除申请",
+		"duplicateOf": "重复于",
 		"newGame": "新游戏",
 		"subtitle": "批准或拒绝贡献者的元数据/媒体投稿。",
 		"noSubmissions": "此状态下没有投稿。",
@@ -612,6 +614,19 @@
 		"rejected": "已拒绝"
 	},
 	"metadataSubmit": {
+		"duplicate": {
+			"title": "是重复的吗？",
+			"subtitle": "如果你认为这个游戏是重复的，请申请删除，并附上应保留的更完整游戏的链接。",
+			"linkLabel": "要保留的游戏的链接",
+			"linkPlaceholder": "https://neoassets.dev/app/metadata/...",
+			"noteLabel": "为什么是重复的？",
+			"notePlaceholder": "说明应保留哪个游戏以及原因。",
+			"request": "申请删除",
+			"linkRequired": "添加要保留的游戏的链接。",
+			"noteRequired": "说明为什么这个游戏是重复的。",
+			"sending": "正在发送删除申请...",
+			"sent": "删除申请已发送以供审核。谢谢！"
+		},
 		"loadingGame": "正在加载游戏……",
 		"submitChanges": "贡献",
 		"translatedIn": "已翻译为 {{language}}",

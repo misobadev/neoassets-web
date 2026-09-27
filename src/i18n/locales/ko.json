@@ -526,6 +526,8 @@
 		}
 	},
 	"metadataAdmin": {
+		"deleteGame": "삭제 요청",
+		"duplicateOf": "중복 원본",
 		"newGame": "새 게임",
 		"subtitle": "기여자 메타데이터/미디어 제출물을 승인하거나 거부합니다.",
 		"noSubmissions": "이 상태의 제출물이 없습니다.",
@@ -612,6 +614,19 @@
 		"rejected": "거부됨"
 	},
 	"metadataSubmit": {
+		"duplicate": {
+			"title": "중복인가요?",
+			"subtitle": "이 게임이 중복이라고 생각되면 삭제를 요청하고, 남겨야 할 더 완전한 게임의 링크를 남겨 주세요.",
+			"linkLabel": "남길 게임 링크",
+			"linkPlaceholder": "https://neoassets.dev/app/metadata/...",
+			"noteLabel": "왜 중복인가요?",
+			"notePlaceholder": "어떤 게임을 남겨야 하는지와 그 이유를 설명해 주세요.",
+			"request": "삭제 요청",
+			"linkRequired": "남겨야 할 게임의 링크를 추가하세요.",
+			"noteRequired": "이 게임이 중복인 이유를 설명해 주세요.",
+			"sending": "삭제 요청을 보내는 중...",
+			"sent": "삭제 요청을 검토용으로 보냈습니다. 감사합니다!"
+		},
 		"loadingGame": "게임 불러오는 중...",
 		"submitChanges": "기여하기",
 		"translatedIn": "{{language}}(으)로 번역됨",

@@ -508,6 +508,8 @@
 		}
 	},
 	"metadataAdmin": {
+		"deleteGame": "Deletion request",
+		"duplicateOf": "Duplicate of",
 		"newGame": "New game",
 		"subtitle": "Approve or reject contributor metadata/media submissions.",
 		"noSubmissions": "No submissions in this state.",
@@ -594,6 +596,19 @@
 		"rejected": "Rejected"
 	},
 	"metadataSubmit": {
+		"duplicate": {
+			"title": "Is duplicate?",
+			"subtitle": "If you think this game is a duplicate, request its deletion and link the more complete game that should be kept.",
+			"linkLabel": "Link to the game to keep",
+			"linkPlaceholder": "https://neoassets.dev/app/metadata/...",
+			"noteLabel": "Why is it a duplicate?",
+			"notePlaceholder": "Explain which game should be kept and why.",
+			"request": "Request deletion",
+			"linkRequired": "Add the link to the game that should be kept.",
+			"noteRequired": "Explain why this game is a duplicate.",
+			"sending": "Sending the deletion request...",
+			"sent": "Deletion request sent for review. Thanks!"
+		},
 		"loadingGame": "Loading game...",
 		"submitChanges": "Contribute",
 		"translatedIn": "Translated in {{language}}",

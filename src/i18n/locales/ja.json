@@ -526,6 +526,8 @@
 		}
 	},
 	"metadataAdmin": {
+		"deleteGame": "削除申請",
+		"duplicateOf": "重複元",
 		"newGame": "新しいゲーム",
 		"subtitle": "投稿者のメタデータ/メディア投稿を承認または却下します。",
 		"noSubmissions": "この状態の投稿はありません。",
@@ -612,6 +614,19 @@
 		"rejected": "却下済み"
 	},
 	"metadataSubmit": {
+		"duplicate": {
+			"title": "重複していますか？",
+			"subtitle": "このゲームが重複していると思う場合は、削除を申請し、残すべきより完全なゲームのリンクを貼ってください。",
+			"linkLabel": "残すゲームへのリンク",
+			"linkPlaceholder": "https://neoassets.dev/app/metadata/...",
+			"noteLabel": "なぜ重複なのですか？",
+			"notePlaceholder": "どのゲームを残すべきか、その理由を説明してください。",
+			"request": "削除を申請",
+			"linkRequired": "残すゲームのリンクを追加してください。",
+			"noteRequired": "このゲームが重複している理由を説明してください。",
+			"sending": "削除申請を送信中...",
+			"sent": "削除申請をレビュー用に送信しました。ありがとうございます！"
+		},
 		"loadingGame": "ゲームを読み込み中...",
 		"submitChanges": "投稿",
 		"translatedIn": "{{language}} に翻訳済み",

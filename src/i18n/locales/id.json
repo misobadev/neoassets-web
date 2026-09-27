@@ -526,6 +526,8 @@
 		}
 	},
 	"metadataAdmin": {
+		"deleteGame": "Permintaan penghapusan",
+		"duplicateOf": "Duplikat dari",
 		"newGame": "Game baru",
 		"subtitle": "Setujui atau tolak kiriman metadata/media dari kontributor.",
 		"noSubmissions": "Tidak ada kiriman dalam status ini.",
@@ -612,6 +614,19 @@
 		"rejected": "Ditolak"
 	},
 	"metadataSubmit": {
+		"duplicate": {
+			"title": "Duplikat?",
+			"subtitle": "Jika menurutmu game ini duplikat, ajukan penghapusannya dan tautkan game yang lebih lengkap yang harus dipertahankan.",
+			"linkLabel": "Tautan ke game yang dipertahankan",
+			"linkPlaceholder": "https://neoassets.dev/app/metadata/...",
+			"noteLabel": "Mengapa duplikat?",
+			"notePlaceholder": "Jelaskan game mana yang harus dipertahankan dan mengapa.",
+			"request": "Ajukan penghapusan",
+			"linkRequired": "Tambahkan tautan ke game yang harus dipertahankan.",
+			"noteRequired": "Jelaskan mengapa game ini duplikat.",
+			"sending": "Mengirim permintaan penghapusan...",
+			"sent": "Permintaan penghapusan dikirim untuk ditinjau. Terima kasih!"
+		},
 		"loadingGame": "Memuat game...",
 		"submitChanges": "Berkontribusi",
 		"translatedIn": "Diterjemahkan dalam {{language}}",

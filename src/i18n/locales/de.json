@@ -526,6 +526,8 @@
 		}
 	},
 	"metadataAdmin": {
+		"deleteGame": "Löschanfrage",
+		"duplicateOf": "Duplikat von",
 		"newGame": "Neues Spiel",
 		"subtitle": "Metadaten-/Medien-Einreichungen von Beitragenden genehmigen oder ablehnen.",
 		"noSubmissions": "Keine Einreichungen in diesem Status.",
@@ -612,6 +614,19 @@
 		"rejected": "Abgelehnt"
 	},
 	"metadataSubmit": {
+		"duplicate": {
+			"title": "Ist es ein Duplikat?",
+			"subtitle": "Wenn du glaubst, dass dieses Spiel ein Duplikat ist, beantrage seine Löschung und verlinke das vollständigere Spiel, das bleiben soll.",
+			"linkLabel": "Link zum Spiel, das bleibt",
+			"linkPlaceholder": "https://neoassets.dev/app/metadata/...",
+			"noteLabel": "Warum ist es ein Duplikat?",
+			"notePlaceholder": "Erkläre, welches Spiel bleiben soll und warum.",
+			"request": "Löschung beantragen",
+			"linkRequired": "Füge den Link zum Spiel hinzu, das bleiben soll.",
+			"noteRequired": "Erkläre, warum dieses Spiel ein Duplikat ist.",
+			"sending": "Löschanfrage wird gesendet...",
+			"sent": "Löschanfrage zur Prüfung gesendet. Danke!"
+		},
 		"loadingGame": "Spiel wird geladen...",
 		"submitChanges": "Beitragen",
 		"translatedIn": "Übersetzt auf {{language}}",

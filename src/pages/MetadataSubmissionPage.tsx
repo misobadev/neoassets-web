@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AlertTriangle, Check, ChevronLeft, ChevronRight, Clapperboard, FileText, Image as ImageIcon, Upload } from "lucide-react";
+import { AlertTriangle, Check, ChevronLeft, ChevronRight, Clapperboard, Copy, FileText, Image as ImageIcon, Trash2, Upload } from "lucide-react";
 import {
 	cdnUrl,
 	createMetadataSubmission,
@@ -99,6 +99,11 @@ export default function MetadataSubmissionPage() {
 	const [confirmSubmit, setConfirmSubmit] = useState(false);
 	const [progress, setProgress] = useState<number | null>(null);
 	const [pendingKeys, setPendingKeys] = useState<string[]>([]);
+	// Duplicate report: the link to the game that should be kept and the reason.
+	const [dupLink, setDupLink] = useState("");
+	const [dupNote, setDupNote] = useState("");
+	const [dupBusy, setDupBusy] = useState(false);
+	const [dupStatus, setDupStatus] = useState<{ text: string; tone: string } | null>(null);
 	const videoRef = useRef<HTMLVideoElement | null>(null);
 
 	const isText = TEXT_TYPES.some((t) => t.key === type);
@@ -551,6 +556,36 @@ export default function MetadataSubmissionPage() {
 		}
 	}
 
+	// submitDuplicate files a deletion request for a game the user believes is a
+	// duplicate. It goes to the review queue like any other contribution and
+	// carries the link to the game that should be kept plus a mandatory reason.
+	async function submitDuplicate() {
+		if (!game) return;
+		if (!dupLink.trim()) {
+			setDupStatus({ text: t("metadataSubmit.duplicate.linkRequired"), tone: "error" });
+			return;
+		}
+		if (!dupNote.trim()) {
+			setDupStatus({ text: t("metadataSubmit.duplicate.noteRequired"), tone: "error" });
+			return;
+		}
+		setDupBusy(true);
+		setDupStatus({ text: t("metadataSubmit.duplicate.sending"), tone: "info" });
+		try {
+			await createMetadataSubmission({
+				game_id: game.id,
+				payload: { delete_game: true, duplicate_of: dupLink.trim(), note: dupNote.trim() },
+			});
+			setDupLink("");
+			setDupNote("");
+			setDupStatus({ text: t("metadataSubmit.duplicate.sent"), tone: "success" });
+		} catch (e) {
+			setDupStatus({ text: (e as Error).message, tone: "error" });
+		} finally {
+			setDupBusy(false);
+		}
+	}
+
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-3">
@@ -980,6 +1015,40 @@ export default function MetadataSubmissionPage() {
 					</div>
 				</section>
 			) : null}
+
+			{/* Duplicate report: requests the deletion of this game in favor of a
+			    more complete one. Red-toned because it is a deletion request. */}
+			<section className="card p-6 space-y-4 border border-[var(--color-error)]/40 bg-[var(--color-error)]/5">
+				<div className="flex items-start gap-3">
+					<span className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
+						<Copy className="w-5 h-5 text-[var(--color-error)]" />
+					</span>
+					<div className="min-w-0">
+						<h2 className="font-semibold text-[var(--color-error)]">{t("metadataSubmit.duplicate.title")}</h2>
+						<p className="text-xs text-[var(--color-base-content)]/60 mt-1">{t("metadataSubmit.duplicate.subtitle")}</p>
+					</div>
+				</div>
+
+				<div>
+					<label className="label-text">{t("metadataSubmit.duplicate.linkLabel")} <span className="text-[var(--color-error)]">*</span></label>
+					<input className="input w-full" type="url" value={dupLink} onChange={(e) => setDupLink(e.target.value)} placeholder={t("metadataSubmit.duplicate.linkPlaceholder")} disabled={dupBusy} />
+				</div>
+
+				<div>
+					<label className="label-text">{t("metadataSubmit.duplicate.noteLabel")} <span className="text-[var(--color-error)]">*</span></label>
+					<textarea className="input w-full min-h-20" value={dupNote} onChange={(e) => setDupNote(e.target.value)} placeholder={t("metadataSubmit.duplicate.notePlaceholder")} disabled={dupBusy} />
+				</div>
+
+				{dupStatus ? (
+					<p className={`text-sm ${dupStatus.tone === "error" ? "text-[var(--color-error)]" : dupStatus.tone === "success" ? "text-[var(--color-success)]" : "text-[var(--color-info)]"}`}>{dupStatus.text}</p>
+				) : null}
+
+				<div className="flex justify-end">
+					<button type="button" className="btn btn-error" onClick={submitDuplicate} disabled={dupBusy}>
+						{dupBusy ? t("metadataSubmit.working") : <><Trash2 className="w-4 h-4" /> {t("metadataSubmit.duplicate.request")}</>}
+					</button>
+				</div>
+			</section>
 
 			{progress !== null ? (
 				<div className="card p-3">
