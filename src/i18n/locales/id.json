@@ -397,7 +397,7 @@
 			"subtitle": "Jelajahi sistem dan game-nya. Filter berdasarkan tipe dan cari."
 		},
 		"allSystems": "Semua sistem",
-		"systemStats": "{{games}} game · {{base}} base · {{hack}} hack · {{homebrew}} homebrew",
+		"systemStats": "{{games}} game · {{base}} base · {{hack}} hack · {{homebrew}} homebrew · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} sistem",
 		"systemsCount_other": "{{count}} sistem",
 		"loadingSystems": "Memuat sistem...",
@@ -406,12 +406,16 @@
 		"type": {
 			"base": "Base",
 			"hack": "Hack",
-			"homebrew": "Homebrew"
+			"homebrew": "Homebrew",
+			"bootleg": "Bootleg",
+			"aftermarket": "Aftermarket"
 		},
 		"abbr": {
 			"base": "B",
 			"hack": "H",
-			"homebrew": "HB"
+			"homebrew": "HB",
+			"bootleg": "BL",
+			"aftermarket": "AM"
 		},
 		"na": "N/A",
 		"hasTranslations": "Ada terjemahan",
@@ -651,7 +655,7 @@
 			"invalidYear": "Masukkan tahun rilis yang valid.",
 			"invalidMonth": "Masukkan bulan yang valid (01-12).",
 			"invalidRating": "Masukkan rating dari 1 hingga 10.",
-			"invalidGameType": "Pilih tipe yang valid (base, homebrew, atau hack).",
+			"invalidGameType": "Pilih tipe game yang valid.",
 			"pickVideo": "Pilih berkas video untuk dikirim.",
 			"pickImage": "Pilih berkas gambar untuk dikirim.",
 			"fixVideo": "Perbaiki masalah video sebelum mengirim.",
@@ -684,7 +688,7 @@
 			"descriptionNote": "Deskripsi hanya diterima dalam bahasa Inggris (maks. {{max}} karakter). Setelah disetujui, terjemahan ke semua bahasa yang didukung dibuat secara otomatis.",
 			"releaseHint": "Pilih tahun dan bulan (ditampilkan sebagai YYYY-MM, mis. 1996-03).",
 			"ratingHint": "Beri rating game dari 1 hingga 10.",
-			"typeHint": "Base adalah rilis retail asli; homebrew dan hack dibuat oleh komunitas.",
+			"typeHint": "Base adalah rilis retail asli; tipe lainnya dibuat oleh komunitas atau tidak resmi.",
 			"newFieldPlaceholder": "{{field}} baru...",
 			"currentMedia_one": "{{media}} saat ini ({{count}})",
 			"currentMedia_other": "{{media}} saat ini ({{count}})",
@@ -1050,7 +1054,7 @@
 		"publicBadge": "Publik",
 		"packsUrlHint": "backgrounds adalah object key; tambahkan basis CDN https://cdn.neoassets.dev/ untuk membentuk URL gambar.",
 		"packRateHint": "Dibatasi per IP klien.",
-		"pType": "Filter opsional untuk pencarian nama: base, hack, atau homebrew (diabaikan jika hash dikirim).",
+		"pType": "Filter opsional untuk pencarian nama: base, homebrew, hack, bootleg, aftermarket (diabaikan jika hash dikirim).",
 		"pRoms": "Sertakan daftar ROM lengkap. Nonaktif secara default; rom_count selalu dikembalikan.",
 		"conceptsExampleNote": "Keempatnya mengembalikan game yang sama. system_id pada respons menunjukkan papan sebenarnya (cps2) dan rom_name set ROM-nya (sfa3.zip).",
 		"conceptsExampleTitle": "Contoh: Street Fighter Alpha 3 (sfa3.zip)",

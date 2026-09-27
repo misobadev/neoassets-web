@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cdnUrl, fetchMetadataGamesBySystem, fetchMetadataSystems, searchMetadataGames, type GameSummary, type MetadataSystem } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
+import { typeBadgeClass } from "../lib/gameTypes";
 
 const LIMIT = 20;
 
@@ -105,7 +106,7 @@ export default function MetadataGamesView() {
 								</p>
 							</div>
 							<div className="flex items-center gap-2 shrink-0">
-								<span className={`badge badge-sm uppercase ${g.type === "hack" ? "badge-solid-warning" : g.type === "homebrew" ? "badge-solid-info" : "badge-solid-neutral"}`}>
+								<span className={`badge badge-sm uppercase ${typeBadgeClass(g.type)}`}>
 									{g.type || "base"}
 								</span>
 								<RatingBadge rating={g.rating} />

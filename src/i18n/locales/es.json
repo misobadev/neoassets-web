@@ -379,7 +379,7 @@
 			"subtitle": "Explora los sistemas y sus juegos. Filtra por tipo y busca."
 		},
 		"allSystems": "Todos los sistemas",
-		"systemStats": "{{games}} juegos · {{base}} base · {{hack}} hack · {{homebrew}} homebrew",
+		"systemStats": "{{games}} juegos · {{base}} base · {{hack}} hack · {{homebrew}} homebrew · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} sistema",
 		"systemsCount_other": "{{count}} sistemas",
 		"loadingSystems": "Cargando sistemas...",
@@ -388,12 +388,16 @@
 		"type": {
 			"base": "Base",
 			"hack": "Hack",
-			"homebrew": "Homebrew"
+			"homebrew": "Homebrew",
+			"bootleg": "Bootleg",
+			"aftermarket": "Aftermarket"
 		},
 		"abbr": {
 			"base": "B",
 			"hack": "H",
-			"homebrew": "HB"
+			"homebrew": "HB",
+			"bootleg": "BL",
+			"aftermarket": "AM"
 		},
 		"na": "N/D",
 		"hasTranslations": "Tiene traducciones",
@@ -633,7 +637,7 @@
 			"invalidYear": "Introduce un año de lanzamiento válido.",
 			"invalidMonth": "Introduce un mes válido (01-12).",
 			"invalidRating": "Introduce una valoración de 1 a 10.",
-			"invalidGameType": "Elige un tipo válido (base, homebrew o hack).",
+			"invalidGameType": "Elige un tipo de juego válido.",
 			"pickVideo": "Elige un archivo de vídeo para enviar.",
 			"pickImage": "Elige un archivo de imagen para enviar.",
 			"fixVideo": "Corrige los problemas del vídeo antes de enviar.",
@@ -666,7 +670,7 @@
 			"descriptionNote": "Las descripciones solo se aceptan en inglés (máx. {{max}} caracteres). Una vez aprobadas, se generan automáticamente traducciones a todos los idiomas compatibles.",
 			"releaseHint": "Elige el año y el mes (se muestra como AAAA-MM, p. ej. 1996-03).",
 			"ratingHint": "Valora el juego de 1 a 10.",
-			"typeHint": "Base es el lanzamiento comercial original; homebrew y hack son hechos por la comunidad.",
+			"typeHint": "Base es el lanzamiento comercial original; los demás tipos son hechos por la comunidad o no oficiales.",
 			"newFieldPlaceholder": "Nuevo valor de {{field}}...",
 			"currentMedia_one": "{{media}} actual ({{count}})",
 			"currentMedia_other": "{{media}} actual ({{count}})",
@@ -1071,7 +1075,7 @@
 		"publicBadge": "Publico",
 		"packsUrlHint": "backgrounds son object keys; anteponles el CDN base https://cdn.neoassets.dev/ para armar las URLs.",
 		"packRateHint": "Limitado por IP del cliente.",
-		"pType": "Filtro opcional para la busqueda por nombre: base, hack o homebrew (se ignora si se envia un hash).",
+		"pType": "Filtro opcional para la busqueda por nombre: base, homebrew, hack, bootleg, aftermarket (se ignora si se envia un hash).",
 		"pRoms": "Incluye la lista completa de ROMs. Desactivado por defecto; rom_count y rom_name siempre se devuelven."
 	},
 	"developer": {

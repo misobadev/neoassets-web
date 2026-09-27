@@ -397,7 +397,7 @@
 			"subtitle": "시스템과 게임을 둘러보세요. 유형별로 필터링하고 검색하세요."
 		},
 		"allSystems": "모든 시스템",
-		"systemStats": "{{games}} 게임 · {{base}} 기본 · {{hack}} 핵 · {{homebrew}} 홈브루",
+		"systemStats": "{{games}} 게임 · {{base}} 기본 · {{hack}} 핵 · {{homebrew}} 홈브루 · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} 시스템",
 		"systemsCount_other": "{{count}} 시스템",
 		"loadingSystems": "시스템 불러오는 중...",
@@ -406,12 +406,16 @@
 		"type": {
 			"base": "기본",
 			"hack": "핵",
-			"homebrew": "홈브루"
+			"homebrew": "홈브루",
+			"bootleg": "Bootleg",
+			"aftermarket": "Aftermarket"
 		},
 		"abbr": {
 			"base": "B",
 			"hack": "H",
-			"homebrew": "HB"
+			"homebrew": "HB",
+			"bootleg": "BL",
+			"aftermarket": "AM"
 		},
 		"na": "N/A",
 		"hasTranslations": "번역 있음",
@@ -651,7 +655,7 @@
 			"invalidYear": "유효한 출시 연도를 입력하세요.",
 			"invalidMonth": "유효한 월(01-12)을 입력하세요.",
 			"invalidRating": "1에서 10 사이의 평점을 입력하세요.",
-			"invalidGameType": "유효한 유형(기본, 홈브루 또는 핵)을 선택하세요.",
+			"invalidGameType": "유효한 게임 유형을 선택하세요.",
 			"pickVideo": "제출할 비디오 파일을 선택하세요.",
 			"pickImage": "제출할 이미지 파일을 선택하세요.",
 			"fixVideo": "제출하기 전에 비디오 문제를 수정하세요.",
@@ -684,7 +688,7 @@
 			"descriptionNote": "설명은 영어로만 접수됩니다(최대 {{max}}자). 승인되면 지원되는 모든 언어로 번역이 자동 생성됩니다.",
 			"releaseHint": "연도와 월을 선택하세요 (YYYY-MM 형식, 예: 1996-03).",
 			"ratingHint": "게임을 1에서 10 사이로 평가하세요.",
-			"typeHint": "기본은 원래 정식 출시판이며, 홈브루와 핵은 커뮤니티가 제작합니다.",
+			"typeHint": "기본은 원래 정식 출시판이며, 나머지 유형은 커뮤니티 제작 또는 비공식입니다.",
 			"newFieldPlaceholder": "새 {{field}}...",
 			"currentMedia_one": "현재 {{media}} ({{count}})",
 			"currentMedia_other": "현재 {{media}} ({{count}})",
@@ -1050,7 +1054,7 @@
 		"publicBadge": "공개",
 		"packsUrlHint": "backgrounds는 object key입니다. 이미지 URL을 만들려면 CDN 베이스 https://cdn.neoassets.dev/를 앞에 붙이세요.",
 		"packRateHint": "클라이언트 IP별로 제한됩니다.",
-		"pType": "이름 검색용 선택적 필터: base, hack, homebrew(해시를 보내면 무시됨).",
+		"pType": "이름 검색용 선택적 필터: base, homebrew, hack, bootleg, aftermarket(해시를 보내면 무시됨).",
 		"pRoms": "전체 ROM 목록을 포함합니다. 기본적으로 꺼져 있으며 rom_count는 항상 반환됩니다.",
 		"conceptsExampleNote": "네 가지 모두 같은 게임을 반환합니다. 응답의 system_id는 실제 보드(cps2)를, rom_name은 ROM 세트(sfa3.zip)를 나타냅니다.",
 		"conceptsExampleTitle": "예: Street Fighter Alpha 3 (sfa3.zip)",

@@ -24,6 +24,7 @@ import { genreLabel } from "../lib/genres";
 import { regionLabel } from "../lib/regions";
 import RegionLabel, { RegionFlag } from "../components/RegionLabel";
 import { uploadWithProgress } from "../lib/upload";
+import { GAME_TYPES, typeBadgeClass } from "../lib/gameTypes";
 import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
 
 const TEXT_TYPES = [
@@ -36,8 +37,6 @@ const TEXT_TYPES = [
 	{ key: "rating", label: "metadataSubmit.textTypes.rating" },
 	{ key: "type", label: "metadataSubmit.textTypes.type" },
 ] as const;
-
-const GAME_TYPES = ["base", "homebrew", "hack"] as const;
 
 const MEDIA_LABEL: Record<MediaKind, string> = {
 	cover: "metadataSubmit.mediaKind.cover",
@@ -562,7 +561,7 @@ export default function MetadataSubmissionPage() {
 					<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{t("metadataSubmit.submitChanges")}</h1>
 					<p className="text-sm text-[var(--color-base-content)]/60 flex items-center gap-2">
 						<span className="truncate">{game.name} · {game.system_name}</span>
-						<span className={`badge badge-sm shrink-0 uppercase ${game.type === "hack" ? "badge-solid-warning" : game.type === "homebrew" ? "badge-solid-info" : "badge-solid-neutral"}`}>{game.type || "base"}</span>
+						<span className={`badge badge-sm shrink-0 uppercase ${typeBadgeClass(game.type)}`}>{game.type || "base"}</span>
 					</p>
 				</div>
 			</div>

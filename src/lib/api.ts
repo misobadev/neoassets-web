@@ -194,6 +194,8 @@ export interface MetadataSystem {
 	base?: number;
 	hack?: number;
 	homebrew?: number;
+	bootleg?: number;
+	aftermarket?: number;
 	metadata_pct?: number;
 	text_pct?: number;
 	media_pct?: number;
@@ -232,7 +234,7 @@ export interface GameSummary {
 	system_name: string;
 	cover?: string | null;
 	cover_updated?: string;
-	type?: string; // base | hack | homebrew
+	type?: string; // base | homebrew | hack | bootleg | aftermarket
 	text_complete?: boolean;
 	has_translations?: boolean;
 	has_screenshot?: boolean;

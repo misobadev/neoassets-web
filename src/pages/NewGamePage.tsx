@@ -16,9 +16,9 @@ import {
 	type Region,
 } from "../lib/api";
 import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
+import { GAME_TYPES } from "../lib/gameTypes";
 import { uploadWithProgress } from "../lib/upload";
 
-const GAME_TYPES = ["base", "homebrew", "hack"] as const;
 const IMAGE_KINDS: MediaKind[] = ["cover", "screenshot", "fanart", "logo"];
 const REGION_KINDS: MediaKind[] = ["cover", "logo"];
 const VIDEO_KIND: MediaKind = "video";

@@ -397,7 +397,7 @@
 			"subtitle": "Sfoglia i sistemi e i loro giochi. Filtra per tipo e cerca."
 		},
 		"allSystems": "Tutti i sistemi",
-		"systemStats": "{{games}} giochi · {{base}} base · {{hack}} hack · {{homebrew}} homebrew",
+		"systemStats": "{{games}} giochi · {{base}} base · {{hack}} hack · {{homebrew}} homebrew · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} sistema",
 		"systemsCount_other": "{{count}} sistemi",
 		"loadingSystems": "Caricamento dei sistemi...",
@@ -406,12 +406,16 @@
 		"type": {
 			"base": "Base",
 			"hack": "Hack",
-			"homebrew": "Homebrew"
+			"homebrew": "Homebrew",
+			"bootleg": "Bootleg",
+			"aftermarket": "Aftermarket"
 		},
 		"abbr": {
 			"base": "B",
 			"hack": "H",
-			"homebrew": "HB"
+			"homebrew": "HB",
+			"bootleg": "BL",
+			"aftermarket": "AM"
 		},
 		"na": "N/D",
 		"hasTranslations": "Con traduzioni",
@@ -651,7 +655,7 @@
 			"invalidYear": "Inserisci un anno di uscita valido.",
 			"invalidMonth": "Inserisci un mese valido (01-12).",
 			"invalidRating": "Inserisci una valutazione da 1 a 10.",
-			"invalidGameType": "Scegli un tipo valido (base, homebrew o hack).",
+			"invalidGameType": "Scegli un tipo di gioco valido.",
 			"pickVideo": "Scegli un file video da inviare.",
 			"pickImage": "Scegli un file immagine da inviare.",
 			"fixVideo": "Risolvi i problemi del video prima di inviare.",
@@ -684,7 +688,7 @@
 			"descriptionNote": "Le descrizioni sono accettate solo in inglese (max {{max}} caratteri). Una volta approvate, le traduzioni in tutte le lingue supportate vengono generate automaticamente.",
 			"releaseHint": "Scegli l'anno e il mese (mostrati come AAAA-MM, es. 1996-03).",
 			"ratingHint": "Valuta il gioco da 1 a 10.",
-			"typeHint": "Base è la versione originale pubblicata; homebrew e hack sono creati dalla community.",
+			"typeHint": "Base è la versione originale pubblicata; gli altri tipi sono creati dalla community o non ufficiali.",
 			"newFieldPlaceholder": "Nuovo {{field}}...",
 			"currentMedia_one": "{{media}} attuale ({{count}})",
 			"currentMedia_other": "{{media}} attuali ({{count}})",
@@ -1050,7 +1054,7 @@
 		"publicBadge": "Pubblico",
 		"packsUrlHint": "backgrounds sono object key; anteponi la base CDN https://cdn.neoassets.dev/ per costruire gli URL.",
 		"packRateHint": "Limitato per IP del client.",
-		"pType": "Filtro opzionale per una ricerca per nome: base, hack o homebrew (ignorato se viene inviato un hash).",
+		"pType": "Filtro opzionale per una ricerca per nome: base, homebrew, hack, bootleg, aftermarket (ignorato se viene inviato un hash).",
 		"pRoms": "Includi l'elenco completo dei ROM. Disattivato per impostazione predefinita; rom_count è sempre restituito.",
 		"conceptsExampleNote": "Tutti e quattro restituiscono lo stesso gioco. Il system_id della risposta indica la scheda reale (cps2) e rom_name il suo set di ROM (sfa3.zip).",
 		"conceptsExampleTitle": "Esempio: Street Fighter Alpha 3 (sfa3.zip)",

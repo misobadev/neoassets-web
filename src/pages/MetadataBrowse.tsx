@@ -6,18 +6,17 @@ import type { TFunction } from "i18next";
 import { cdnUrl, fetchMetadataGamesBySystem, fetchMetadataSystems, searchMetadataGames, type GameSummary, type MetadataSystem } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import Pagination from "../components/Pagination";
+import { GAME_TYPES, typeBadgeClass, type GameType } from "../lib/gameTypes";
 import { usePageTitle } from "../lib/seo";
 
 // LIMIT is a multiple of 3 so the 3-column grid always fills its last row.
 const LIMIT = 15;
 
-type TypeFilter = "" | "base" | "hack" | "homebrew";
+type TypeFilter = "" | GameType;
 
 const TYPE_TABS: { key: TypeFilter; labelKey: string }[] = [
 	{ key: "", labelKey: "common.all" },
-	{ key: "base", labelKey: "metadata.type.base" },
-	{ key: "hack", labelKey: "metadata.type.hack" },
-	{ key: "homebrew", labelKey: "metadata.type.homebrew" },
+	...GAME_TYPES.map((g) => ({ key: g as TypeFilter, labelKey: "metadata.type." + g })),
 ];
 
 function completenessStroke(pct: number): string {
@@ -250,7 +249,7 @@ function GameCard({ g }: { g: GameSummary }) {
 			</div>
 			<div className="flex items-center justify-between gap-2 border-t border-[var(--color-base-300)] pt-2 relative z-[1]">
 				<div className="flex items-center gap-2 min-w-0">
-					<span className={`badge badge-sm uppercase ${g.type === "hack" ? "badge-solid-warning" : g.type === "homebrew" ? "badge-solid-info" : "badge-solid-neutral"}`}>
+					<span className={`badge badge-sm uppercase ${typeBadgeClass(g.type)}`}>
 						{g.type || "base"}
 					</span>
 					<span
@@ -431,7 +430,7 @@ export default function MetadataBrowse() {
 						<p className="font-semibold truncate">{selected ? selected.name : t("metadata.allSystems")}</p>
 						{selected ? (
 							<p className="text-xs text-[var(--color-base-content)]/50">
-								{t("metadata.systemStats", { games: selected.total_games ?? 0, base: selected.base ?? 0, hack: selected.hack ?? 0, homebrew: selected.homebrew ?? 0 })}
+								{t("metadata.systemStats", { games: selected.total_games ?? 0, base: selected.base ?? 0, hack: selected.hack ?? 0, homebrew: selected.homebrew ?? 0, bootleg: selected.bootleg ?? 0, aftermarket: selected.aftermarket ?? 0 })}
 							</p>
 						) : (
 							<p className="text-xs text-[var(--color-base-content)]/50">{systems ? t("metadata.systemsCount", { count: systems.length }) : t("metadata.loadingSystems")}</p>

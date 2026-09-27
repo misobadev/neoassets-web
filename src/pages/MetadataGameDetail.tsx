@@ -7,6 +7,7 @@ import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import UserLink from "../components/UserLink";
 import { genreLabel } from "../lib/genres";
+import { typeBadgeClass } from "../lib/gameTypes";
 import RegionLabel from "../components/RegionLabel";
 import { usePageTitle } from "../lib/seo";
 
@@ -136,7 +137,7 @@ export default function MetadataGameDetail() {
 						style={{ "--mx": holoMx, "--my": holoMy } as React.CSSProperties}
 					>
 						{game.system_name ? <span className="badge badge-lg border-0 bg-[var(--color-base-content)] text-[var(--color-base-100)]">{game.system_name}</span> : null}
-						<span className={`badge badge-lg uppercase ${game.type === "hack" ? "badge-solid-warning" : game.type === "homebrew" ? "badge-solid-info" : "badge-solid-neutral"}`}>{game.type || "base"}</span>
+						<span className={`badge badge-lg uppercase ${typeBadgeClass(game.type)}`}>{game.type || "base"}</span>
 						{game.region ? <span className="badge badge-lg badge-solid-neutral"><RegionLabel region={game.region} /></span> : null}
 						<span
 							title={completionPct === 100 ? t("metadataGame.completed") : t("metadata.completion")}

@@ -397,7 +397,7 @@
 			"subtitle": "浏览系统及其游戏。按类型筛选并搜索。"
 		},
 		"allSystems": "所有系统",
-		"systemStats": "{{games}} 款游戏 · {{base}} 个正式版 · {{hack}} 个改版 · {{homebrew}} 个自制",
+		"systemStats": "{{games}} 款游戏 · {{base}} 个正式版 · {{hack}} 个改版 · {{homebrew}} 个自制 · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} 个系统",
 		"systemsCount_other": "{{count}} 个系统",
 		"loadingSystems": "正在加载系统……",
@@ -406,12 +406,16 @@
 		"type": {
 			"base": "正式版",
 			"hack": "改版",
-			"homebrew": "自制"
+			"homebrew": "自制",
+			"bootleg": "Bootleg",
+			"aftermarket": "Aftermarket"
 		},
 		"abbr": {
 			"base": "B",
 			"hack": "H",
-			"homebrew": "HB"
+			"homebrew": "HB",
+			"bootleg": "BL",
+			"aftermarket": "AM"
 		},
 		"na": "不适用",
 		"hasTranslations": "有翻译",
@@ -651,7 +655,7 @@
 			"invalidYear": "请输入有效的发行年份。",
 			"invalidMonth": "请输入有效的月份（01-12）。",
 			"invalidRating": "请输入 1 到 10 的评分。",
-			"invalidGameType": "请选择有效的版本类型（正式版、自制或改版）。",
+			"invalidGameType": "请选择有效的游戏类型。",
 			"pickVideo": "请选择要提交的视频文件。",
 			"pickImage": "请选择要提交的图片文件。",
 			"fixVideo": "请在提交前修复视频问题。",
@@ -684,7 +688,7 @@
 			"descriptionNote": "描述仅接受英文（最多 {{max}} 个字符）。一经批准，将自动生成所有受支持语言的翻译。",
 			"releaseHint": "选择年份和月份（显示为 YYYY-MM，例如 1996-03）。",
 			"ratingHint": "为游戏评分，从 1 到 10。",
-			"typeHint": "正式版是原始零售发行版；自制和改版由社区制作。",
+			"typeHint": "正式版是原始零售发行版；其他类型由社区制作或为非官方版本。",
 			"newFieldPlaceholder": "新{{field}}……",
 			"currentMedia_one": "当前{{media}}（{{count}}）",
 			"currentMedia_other": "当前{{media}}（{{count}}）",
@@ -1050,7 +1054,7 @@
 		"publicBadge": "公开",
 		"packsUrlHint": "backgrounds 是 object key；请在前面加上 CDN 基础地址 https://cdn.neoassets.dev/ 来生成图片 URL。",
 		"packRateHint": "按客户端 IP 限流。",
-		"pType": "名称搜索的可选过滤器：base、hack 或 homebrew（发送哈希时忽略）。",
+		"pType": "名称搜索的可选过滤器：base, homebrew, hack, bootleg, aftermarket（发送哈希时忽略）。",
 		"pRoms": "包含完整 ROM 列表。默认关闭；始终返回 rom_count。",
 		"conceptsExampleNote": "四个选择器都返回同一个游戏。响应中的 system_id 表示真实主板（cps2），rom_name 表示其 ROM 集（sfa3.zip）。",
 		"conceptsExampleTitle": "示例：Street Fighter Alpha 3 (sfa3.zip)",
