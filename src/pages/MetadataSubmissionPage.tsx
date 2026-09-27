@@ -100,6 +100,7 @@ export default function MetadataSubmissionPage() {
 	const [progress, setProgress] = useState<number | null>(null);
 	const [pendingKeys, setPendingKeys] = useState<string[]>([]);
 	// Duplicate report: the link to the game that should be kept and the reason.
+	const [dupOpen, setDupOpen] = useState(false);
 	const [dupLink, setDupLink] = useState("");
 	const [dupNote, setDupNote] = useState("");
 	const [dupBusy, setDupBusy] = useState(false);
@@ -599,6 +600,16 @@ export default function MetadataSubmissionPage() {
 						<span className={`badge badge-sm shrink-0 ${typeBadgeClass(game.type)}`}>{t("metadata.type." + (game.type || "base"))}</span>
 					</p>
 				</div>
+				{/* Game-level action: report this game as a duplicate of another one.
+				    Kept in the header so it does not mix with the field/media form. */}
+				<button
+					type="button"
+					onClick={() => { setDupStatus(null); setDupOpen(true); }}
+					className="btn btn-sm ml-auto shrink-0 border border-[var(--color-error)]/40 text-[var(--color-error)] hover:bg-[var(--color-error)]/10"
+				>
+					<Copy className="w-4 h-4" />
+					{t("metadataSubmit.duplicate.title")}
+				</button>
 			</div>
 
 			<section className="card p-6">
@@ -1016,40 +1027,6 @@ export default function MetadataSubmissionPage() {
 				</section>
 			) : null}
 
-			{/* Duplicate report: requests the deletion of this game in favor of a
-			    more complete one. Red-toned because it is a deletion request. */}
-			<section className="card p-6 space-y-4 border border-[var(--color-error)]/40 bg-[var(--color-error)]/5">
-				<div className="flex items-start gap-3">
-					<span className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
-						<Copy className="w-5 h-5 text-[var(--color-error)]" />
-					</span>
-					<div className="min-w-0">
-						<h2 className="font-semibold text-[var(--color-error)]">{t("metadataSubmit.duplicate.title")}</h2>
-						<p className="text-xs text-[var(--color-base-content)]/60 mt-1">{t("metadataSubmit.duplicate.subtitle")}</p>
-					</div>
-				</div>
-
-				<div>
-					<label className="label-text">{t("metadataSubmit.duplicate.linkLabel")} <span className="text-[var(--color-error)]">*</span></label>
-					<input className="input w-full" type="url" value={dupLink} onChange={(e) => setDupLink(e.target.value)} placeholder={t("metadataSubmit.duplicate.linkPlaceholder")} disabled={dupBusy} />
-				</div>
-
-				<div>
-					<label className="label-text">{t("metadataSubmit.duplicate.noteLabel")} <span className="text-[var(--color-error)]">*</span></label>
-					<textarea className="input w-full min-h-20" value={dupNote} onChange={(e) => setDupNote(e.target.value)} placeholder={t("metadataSubmit.duplicate.notePlaceholder")} disabled={dupBusy} />
-				</div>
-
-				{dupStatus ? (
-					<p className={`text-sm ${dupStatus.tone === "error" ? "text-[var(--color-error)]" : dupStatus.tone === "success" ? "text-[var(--color-success)]" : "text-[var(--color-info)]"}`}>{dupStatus.text}</p>
-				) : null}
-
-				<div className="flex justify-end">
-					<button type="button" className="btn btn-error" onClick={submitDuplicate} disabled={dupBusy}>
-						{dupBusy ? t("metadataSubmit.working") : <><Trash2 className="w-4 h-4" /> {t("metadataSubmit.duplicate.request")}</>}
-					</button>
-				</div>
-			</section>
-
 			{progress !== null ? (
 				<div className="card p-3">
 					<div className="flex justify-between text-xs mb-1">
@@ -1088,6 +1065,45 @@ export default function MetadataSubmissionPage() {
 						<div className="flex justify-end gap-2">
 							<button className="btn btn-ghost" type="button" onClick={() => setConfirmSubmit(false)}>{t("common.cancel")}</button>
 							<button className="btn btn-primary" type="button" disabled={busy} onClick={submit}>{t("metadataSubmit.submitForReview")}</button>
+						</div>
+					</div>
+				</div>
+			) : null}
+
+			{/* Duplicate report: requests the deletion of this game in favor of a
+			    more complete one. Red-toned because it is a deletion request. */}
+			{dupOpen ? (
+				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && setDupOpen(false)}>
+					<div className="card w-full max-w-lg p-6 space-y-4 border border-[var(--color-error)]/40">
+						<div className="flex items-start gap-3">
+							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
+								<Copy className="w-5 h-5 text-[var(--color-error)]" />
+							</div>
+							<div className="min-w-0">
+								<h2 className="text-lg font-bold text-[var(--color-error)]">{t("metadataSubmit.duplicate.title")}</h2>
+								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">{t("metadataSubmit.duplicate.subtitle")}</p>
+							</div>
+						</div>
+
+						<div>
+							<label className="label-text">{t("metadataSubmit.duplicate.linkLabel")} <span className="text-[var(--color-error)]">*</span></label>
+							<input className="input w-full" type="url" value={dupLink} onChange={(e) => setDupLink(e.target.value)} placeholder={t("metadataSubmit.duplicate.linkPlaceholder")} disabled={dupBusy} />
+						</div>
+
+						<div>
+							<label className="label-text">{t("metadataSubmit.duplicate.noteLabel")} <span className="text-[var(--color-error)]">*</span></label>
+							<textarea className="input w-full min-h-20" value={dupNote} onChange={(e) => setDupNote(e.target.value)} placeholder={t("metadataSubmit.duplicate.notePlaceholder")} disabled={dupBusy} />
+						</div>
+
+						{dupStatus ? (
+							<p className={`text-sm ${dupStatus.tone === "error" ? "text-[var(--color-error)]" : dupStatus.tone === "success" ? "text-[var(--color-success)]" : "text-[var(--color-info)]"}`}>{dupStatus.text}</p>
+						) : null}
+
+						<div className="flex justify-end gap-2">
+							<button className="btn btn-ghost" type="button" onClick={() => setDupOpen(false)} disabled={dupBusy}>{t("common.cancel")}</button>
+							<button className="btn btn-error" type="button" onClick={submitDuplicate} disabled={dupBusy}>
+								{dupBusy ? t("metadataSubmit.working") : <><Trash2 className="w-4 h-4" /> {t("metadataSubmit.duplicate.request")}</>}
+							</button>
 						</div>
 					</div>
 				</div>
