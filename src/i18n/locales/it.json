@@ -545,6 +545,9 @@
 		"note": "Nota",
 		"textChanges": "Modifiche al testo",
 		"mediaChanges": "Modifiche ai media",
+		"movedFrom": "spostato da",
+		"nameRemoved": "Nome rimosso",
+		"releaseRemoved": "Data di uscita rimossa",
 		"none": "Nessuno",
 		"filterBy": "Filtra per",
 		"filterSystem": "Filtra per sistema",
@@ -744,7 +747,9 @@
 			"deleteByRegion": "Elimina per regione",
 			"deleteHint": "Seleziona quelli da rimuovere; il motivo è obbligatorio",
 			"whyLabelRequired": "Perché (obbligatorio)",
-			"addNewValue": "Aggiungi un nuovo valore"
+			"addNewValue": "Aggiungi un nuovo valore",
+			"actionLabel": "Azione",
+			"addRegion": "Aggiungi regione"
 		},
 		"working": "Elaborazione...",
 		"submitForReview": "Invia per la revisione",

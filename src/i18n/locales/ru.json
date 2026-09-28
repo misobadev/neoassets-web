@@ -555,6 +555,9 @@
 		"note": "Примечание",
 		"textChanges": "Изменения текста",
 		"mediaChanges": "Изменения медиа",
+		"movedFrom": "перемещено из",
+		"nameRemoved": "Название удалено",
+		"releaseRemoved": "Дата выхода удалена",
 		"none": "Нет",
 		"filterBy": "Фильтр по",
 		"filterSystem": "Фильтр по системе",
@@ -764,7 +767,9 @@
 			"deleteByRegion": "Удалить по региону",
 			"deleteHint": "Отметьте удаляемые; причина обязательна",
 			"whyLabelRequired": "Почему (обязательно)",
-			"addNewValue": "Добавить новое значение"
+			"addNewValue": "Добавить новое значение",
+			"actionLabel": "Действие",
+			"addRegion": "Добавить регион"
 		},
 		"working": "Обработка...",
 		"submitForReview": "Отправить на проверку",

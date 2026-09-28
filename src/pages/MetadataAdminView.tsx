@@ -487,16 +487,22 @@ export default function MetadataAdminView() {
 								<div>
 									<p className="label-text mb-2">{t("metadataGame.regionsTitle")}</p>
 									<div className="space-y-2">
-										{regionEntries.map((r) => {
+										{regionEntries.map((r, i) => {
 											const name = typeof r.name === "string" ? r.name : "";
+											const nameFrom = typeof r.name_from === "string" ? r.name_from : "";
+											const releaseFrom = typeof r.release_from === "string" ? r.release_from : "";
 											const y = r.release_year;
 											const m = r.release_month;
 											const release = y ? `${y}${m ? `-${String(m).padStart(2, "0")}` : ""}` : "";
+											const delName = r.delete_name === true;
+											const delRelease = r.delete_release === true;
 											return (
-												<div key={String(r.region)} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1">
+												<div key={i} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1">
 													<p className="font-medium text-sm"><RegionLabel region={String(r.region)} /></p>
-													{name ? <p className="text-sm"><span className="text-[var(--color-base-content)]/50">{t("metadataSubmit.textTypes.name")}: </span>{name}</p> : null}
-													{release ? <p className="text-sm"><span className="text-[var(--color-base-content)]/50">{t("metadataSubmit.textTypes.release")}: </span>{release}</p> : null}
+													{name ? <p className="text-sm"><span className="text-[var(--color-base-content)]/50">{t("metadataSubmit.textTypes.name")}: </span>{name}{nameFrom ? <span className="text-[var(--color-base-content)]/50"> ({t("metadataAdmin.movedFrom")} <RegionLabel region={nameFrom} />)</span> : null}</p> : null}
+													{delName ? <p className="text-sm text-[var(--color-error)]">{t("metadataAdmin.nameRemoved")}</p> : null}
+													{release ? <p className="text-sm"><span className="text-[var(--color-base-content)]/50">{t("metadataSubmit.textTypes.release")}: </span>{release}{releaseFrom ? <span className="text-[var(--color-base-content)]/50"> ({t("metadataAdmin.movedFrom")} <RegionLabel region={releaseFrom} />)</span> : null}</p> : null}
+													{delRelease ? <p className="text-sm text-[var(--color-error)]">{t("metadataAdmin.releaseRemoved")}</p> : null}
 												</div>
 											);
 										})}

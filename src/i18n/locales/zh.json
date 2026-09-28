@@ -545,6 +545,9 @@
 		"note": "备注",
 		"textChanges": "文本更改",
 		"mediaChanges": "媒体更改",
+		"movedFrom": "移动自",
+		"nameRemoved": "名称已删除",
+		"releaseRemoved": "发行日期已删除",
 		"none": "无",
 		"filterBy": "筛选",
 		"filterSystem": "按系统筛选",
@@ -744,7 +747,9 @@
 			"deleteByRegion": "按地区删除",
 			"deleteHint": "勾选要删除的项；必须填写原因",
 			"whyLabelRequired": "原因（必填）",
-			"addNewValue": "添加新值"
+			"addNewValue": "添加新值",
+			"actionLabel": "操作",
+			"addRegion": "添加地区"
 		},
 		"working": "正在处理……",
 		"submitForReview": "提交审核",

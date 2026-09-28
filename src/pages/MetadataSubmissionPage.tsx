@@ -22,7 +22,7 @@ import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import { genreLabel } from "../lib/genres";
 import { regionLabel } from "../lib/regions";
-import RegionLabel, { RegionFlag } from "../components/RegionLabel";
+import RegionLabel from "../components/RegionLabel";
 import { uploadWithProgress } from "../lib/upload";
 import { GAME_TYPES, typeBadgeClass } from "../lib/gameTypes";
 import { IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, checkVideoMeasurement, measureVideo } from "../lib/media";
@@ -56,11 +56,53 @@ function mediaUrl(m: { object_key: string; created_at?: string }): string {
 	return m.created_at ? `${url}?v=${encodeURIComponent(m.created_at)}` : url;
 }
 
+// parseYearMonth parses a "YYYY" or "YYYY-MM" release value.
+function parseYearMonth(v: string): { year: number; month?: number } | null {
+	const [ys, ms] = v.split("-");
+	const year = Number(ys);
+	if (!Number.isInteger(year) || year < 0 || year > 10000) return null;
+	if (ms !== undefined && ms !== "") {
+		const month = Number(ms);
+		if (!Number.isInteger(month) || month < 1 || month > 12) return null;
+		return { year, month };
+	}
+	return { year };
+}
+
 interface Draft {
 	type: string;
 	textValue: string;
 	note: string;
 }
+
+// One multi-region text change: set a region's value, move it from another
+// region, or delete it.
+interface RegionTextRow {
+	key: string;
+	action: "set" | "move" | "delete";
+	region: string;
+	value: string;
+	fromRegion: string;
+}
+
+// One multi-region media change: upload a new asset for a region, move an
+// existing one from another region, or delete it.
+interface RegionMediaRow {
+	key: string;
+	action: "new" | "move" | "delete";
+	region: string;
+	fromRegion: string;
+	file: File | null;
+}
+
+// World is the default region: a row always targets a region, so the region
+// select never has an empty placeholder.
+const DEFAULT_REGION = "World";
+
+let rowSeq = 0;
+const nextRowKey = () => `row-${++rowSeq}`;
+const newTextRow = (): RegionTextRow => ({ key: nextRowKey(), action: "set", region: DEFAULT_REGION, value: "", fromRegion: "" });
+const newMediaRow = (): RegionMediaRow => ({ key: nextRowKey(), action: "new", region: DEFAULT_REGION, fromRegion: "", file: null });
 
 export default function MetadataSubmissionPage() {
 	const { t } = useTranslation();
@@ -81,14 +123,10 @@ export default function MetadataSubmissionPage() {
 	const [textValue, setTextValue] = useState("");
 	const [genres, setGenres] = useState<Genre[]>([]);
 	const [regions, setRegions] = useState<Region[]>([]);
-	const [region, setRegion] = useState("");
-	// Region corrections: existing media to move (object_key -> new region) and
-	// the source region when moving an existing name/release.
-	const [mediaMoves, setMediaMoves] = useState<Record<string, string>>({});
-	const [mediaDeletes, setMediaDeletes] = useState<Record<string, boolean>>({});
-	const [mediaMode, setMediaMode] = useState<"new" | "move" | "delete">("new");
-	const [textMode, setTextMode] = useState<"new" | "move" | "delete">("new");
-	const [textMoveFrom, setTextMoveFrom] = useState("");
+	// Multi-region changes: name/release use textRows, cover/logo use mediaRows.
+	// Each row sets, moves or deletes one region's value in a single submission.
+	const [textRows, setTextRows] = useState<RegionTextRow[]>([newTextRow()]);
+	const [mediaRows, setMediaRows] = useState<RegionMediaRow[]>([newMediaRow()]);
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -219,9 +257,8 @@ export default function MetadataSubmissionPage() {
 	const isRegionalKind = currentKind === "logo" || currentKind === "cover";
 	// Regions with a name or release, shown in the header like the game detail.
 	const namedRegions = (game.regions || []).filter((r) => r.name || r.release_year);
-	// Per-region data, so the "current" value always matches the selected region.
+	// Per-region data, so a row can show the region's current value.
 	const regionMap = new Map((game.regions || []).map((r) => [r.region, r]));
-	const selectedRegion = region ? regionMap.get(region) : undefined;
 
 	function regionRelease(gr?: { release_year?: number | null; release_month?: number | null }): string {
 		if (!gr?.release_year) return "";
@@ -230,7 +267,7 @@ export default function MetadataSubmissionPage() {
 
 	const currentText =
 		type === "name"
-			? (region ? selectedRegion?.name || "" : game.name)
+			? game.name
 			: type === "description"
 				? game.description
 				: type === "genre"
@@ -240,27 +277,16 @@ export default function MetadataSubmissionPage() {
 						: type === "publisher"
 							? game.publisher
 							: type === "release_year"
-								? (region ? regionRelease(selectedRegion) : regionRelease(game))
+								? regionRelease(game)
 								: type === "rating"
 									? game.rating ? String(game.rating) : ""
 									: type === "type"
 										? game.type || ""
 										: "";
 
-	// For regional media, only the selected region's asset is the "current" one;
-	// for the rest, the region does not apply.
-	const currentMedia = isText
-		? []
-		: isRegionalKind && region
-			? (selectedRegion?.media || []).filter((m) => m.kind === currentKind)
-			: game.media.filter((m) => m.kind === currentKind);
+	const currentMedia = isText ? [] : game.media.filter((m) => m.kind === currentKind);
 
-	// Region the "current" value belongs to: the selected one, or the game's
-	// resolved primary when no region has been picked yet.
-	const currentRegion = region || game.region || "";
-
-	// Which region already holds data for the field/kind being submitted, so the
-	// select can flag it.
+	// Which region already holds data for the field/kind being submitted.
 	function regionHasData(r: Region): boolean {
 		const gr = regionMap.get(r.name);
 		if (!gr) return false;
@@ -286,7 +312,9 @@ export default function MetadataSubmissionPage() {
 		type === "name" ? r.name || "" : r.release_year ? `${r.release_year}${r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}` : "";
 
 	// Deleting requires a reason, so the "why" is mandatory in that case.
-	const deleting = (textMode === "delete" && textMoveFrom !== "") || Object.keys(mediaDeletes).length > 0;
+	const deleting =
+		(isText && textRows.some((r) => r.action === "delete" && r.region !== "")) ||
+		(!isText && isRegionalKind && mediaRows.some((r) => r.action === "delete" && r.region !== ""));
 
 	const textType = TEXT_TYPES.find((t) => t.key === type);
 	const textLabel = textType ? t(textType.label) : "";
@@ -389,6 +417,19 @@ export default function MetadataSubmissionPage() {
 		</>
 	);
 
+	function updateTextRow(key: string, patch: Partial<RegionTextRow>) {
+		setTextRows((rows) => rows.map((r) => (r.key === key ? { ...r, ...patch } : r)));
+	}
+	function removeTextRow(key: string) {
+		setTextRows((rows) => (rows.length > 1 ? rows.filter((r) => r.key !== key) : rows));
+	}
+	function updateMediaRow(key: string, patch: Partial<RegionMediaRow>) {
+		setMediaRows((rows) => rows.map((r) => (r.key === key ? { ...r, ...patch } : r)));
+	}
+	function removeMediaRow(key: string) {
+		setMediaRows((rows) => (rows.length > 1 ? rows.filter((r) => r.key !== key) : rows));
+	}
+
 	async function submit() {
 		setConfirmSubmit(false);
 		if (!game) return;
@@ -396,37 +437,42 @@ export default function MetadataSubmissionPage() {
 			setStatus({ text: t("metadataSubmit.status.pickType"), tone: "error" });
 			return;
 		}
-		const hasMediaMoves = Object.keys(mediaMoves).length > 0;
-		const hasMediaDeletes = Object.keys(mediaDeletes).length > 0;
 		// Removing content must always explain why.
 		if (deleting && !note.trim()) {
 			setStatus({ text: t("metadataSubmit.status.deleteReason"), tone: "error" });
 			return;
 		}
-		if (isText && textMode === "delete") {
-			if (!textMoveFrom) {
-				setStatus({ text: t("metadataSubmit.status.pickDeleteRegion"), tone: "error" });
+		const regionalText = isText && (type === "name" || type === "release_year");
+		if (regionalText) {
+			const rows = textRows.filter((r) => r.region);
+			if (rows.length === 0) {
+				setStatus({ text: t("metadataSubmit.status.enterValue"), tone: "error" });
 				return;
+			}
+			for (const r of rows) {
+				if (r.action === "move" && (!r.fromRegion || r.fromRegion === r.region)) {
+					setStatus({ text: t("metadataSubmit.status.pickMoveRegion"), tone: "error" });
+					return;
+				}
+				if (r.action === "set") {
+					if (!r.value.trim()) {
+						setStatus({ text: t("metadataSubmit.status.enterValue"), tone: "error" });
+						return;
+					}
+					if (type === "release_year" && !parseYearMonth(r.value.trim())) {
+						setStatus({ text: t("metadataSubmit.status.invalidYear"), tone: "error" });
+						return;
+					}
+				}
 			}
 		} else if (isText) {
 			if (!textValue.trim()) {
 				setStatus({ text: t("metadataSubmit.status.enterValue"), tone: "error" });
 				return;
 			}
-			if (textType?.key === "release_year") {
-				const [ys, ms] = textValue.trim().split("-");
-				const y = Number(ys);
-				if (!Number.isInteger(y) || y < 0 || y > 10000) {
-					setStatus({ text: t("metadataSubmit.status.invalidYear"), tone: "error" });
-					return;
-				}
-				if (ms !== undefined && ms !== "") {
-					const m = Number(ms);
-					if (!Number.isInteger(m) || m < 1 || m > 12) {
-						setStatus({ text: t("metadataSubmit.status.invalidMonth"), tone: "error" });
-						return;
-					}
-				}
+			if (textType?.key === "release_year" && !parseYearMonth(textValue.trim())) {
+				setStatus({ text: t("metadataSubmit.status.invalidYear"), tone: "error" });
+				return;
 			}
 			if (textType?.key === "rating") {
 				const r = Number(textValue.trim());
@@ -435,26 +481,37 @@ export default function MetadataSubmissionPage() {
 					return;
 				}
 			}
-			if (textType?.key === "type") {
-				if (!(GAME_TYPES as readonly string[]).includes(textValue.trim())) {
-					setStatus({ text: t("metadataSubmit.status.invalidGameType"), tone: "error" });
-					return;
-				}
+			if (textType?.key === "type" && !(GAME_TYPES as readonly string[]).includes(textValue.trim())) {
+				setStatus({ text: t("metadataSubmit.status.invalidGameType"), tone: "error" });
+				return;
 			}
 			if (textType?.key === "description" && textValue.trim().length > MAX_DESCRIPTION_LENGTH) {
 				setStatus({ text: t("metadataSubmit.status.descriptionTooLong", { max: MAX_DESCRIPTION_LENGTH }), tone: "error" });
 				return;
 			}
 		}
-		if (isRegionalKind && mediaMode === "move" && !hasMediaMoves) {
-			setStatus({ text: t("metadataSubmit.status.pickMoveRegion"), tone: "error" });
-			return;
+		if (!isText && isRegionalKind) {
+			const rows = mediaRows.filter((r) => r.region || r.file);
+			if (rows.length === 0) {
+				setStatus({ text: t("metadataSubmit.status.pickImage"), tone: "error" });
+				return;
+			}
+			for (const r of rows) {
+				if (r.action === "new" && (!r.region || !r.file)) {
+					setStatus({ text: t("metadataSubmit.status.pickImage"), tone: "error" });
+					return;
+				}
+				if (r.action === "move" && (!r.region || !r.fromRegion || r.fromRegion === r.region)) {
+					setStatus({ text: t("metadataSubmit.status.pickMoveRegion"), tone: "error" });
+					return;
+				}
+				if (r.action === "delete" && !r.region) {
+					setStatus({ text: t("metadataSubmit.status.pickDelete"), tone: "error" });
+					return;
+				}
+			}
 		}
-		if (isRegionalKind && mediaMode === "delete" && !hasMediaDeletes) {
-			setStatus({ text: t("metadataSubmit.status.pickDelete"), tone: "error" });
-			return;
-		}
-		if (!isText && !file && !hasMediaMoves && !hasMediaDeletes) {
+		if (!isText && !isRegionalKind && !file) {
 			setStatus({ text: isVideo ? t("metadataSubmit.status.pickVideo") : t("metadataSubmit.status.pickImage"), tone: "error" });
 			return;
 		}
@@ -467,28 +524,48 @@ export default function MetadataSubmissionPage() {
 		try {
 			const payload: Record<string, unknown> = {};
 			if (note.trim()) payload.note = note.trim();
-			if (isText && textType) {
-				if (textMode === "delete") {
-					// Remove the name/release of a region.
-					payload.delete = true;
-					payload.region = textMoveFrom;
-					payload.field = textType.key === "name" ? "name" : "release";
+			if (regionalText) {
+				// One entry per region: set, move (from another region) or delete.
+				payload.regions = textRows
+					.filter((r) => r.region)
+					.map((r) => {
+						const entry: Record<string, unknown> = { region: r.region };
+						if (r.action === "delete") {
+							if (type === "name") entry.delete_name = true;
+							else entry.delete_release = true;
+						} else if (r.action === "move") {
+							const gr = regionMap.get(r.fromRegion);
+							if (type === "name") {
+								entry.name = gr ? textValueOf(gr) : "";
+								entry.name_from = r.fromRegion;
+							} else {
+								const [ys, ms] = (gr ? regionRelease(gr) : "").split("-");
+								if (ys) entry.release_year = Number(ys);
+								if (ms) entry.release_month = Number(ms);
+								entry.release_from = r.fromRegion;
+							}
+						} else if (type === "name") {
+							entry.name = r.value.trim();
+						} else {
+							const ym = parseYearMonth(r.value.trim());
+							if (ym) {
+								entry.release_year = ym.year;
+								if (ym.month) entry.release_month = ym.month;
+							}
+						}
+						return entry;
+					});
+			} else if (isText && textType) {
+				if (textType.key === "release_year") {
+					const ym = parseYearMonth(textValue.trim());
+					if (ym) {
+						payload.release_year = ym.year;
+						if (ym.month) payload.release_month = ym.month;
+					}
+				} else if (textType.key === "rating") {
+					payload.rating = Number(textValue.trim());
 				} else {
-					if (textType.key === "release_year") {
-						const [ys, ms] = textValue.trim().split("-");
-						payload.release_year = Number(ys);
-						if (ms) payload.release_month = Number(ms);
-					} else if (textType.key === "rating") {
-						payload.rating = Number(textValue.trim());
-					} else {
-						payload[textType.key] = textValue.trim();
-					}
-					// The name and release date are region-specific. region_from
-					// moves an existing value from another region.
-					if ((textType.key === "name" || textType.key === "release_year") && region) {
-						payload.region = region;
-						if (textMoveFrom && textMoveFrom !== region) payload.region_from = textMoveFrom;
-					}
+					payload[textType.key] = textValue.trim();
 				}
 			}
 
@@ -496,25 +573,34 @@ export default function MetadataSubmissionPage() {
 				await createMetadataSubmission({ game_id: game.id, payload });
 			} else {
 				const files: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region: string; delete?: boolean; move?: boolean }[] = [];
-				// Existing cover/logo deleted from a region.
-				for (const m of existingMedia) {
-					if (mediaDeletes[m.object_key]) {
-						const fileName = m.object_key.split("/").pop() || m.object_key;
-						files.push({ kind: m.kind, object_key: m.object_key, file_name: fileName, mime_type: m.mime, size: m.size, region: m.region || "", delete: true });
+				if (isRegionalKind) {
+					// One entry per region: new upload, move (from another region)
+					// or delete. A submission replaces the media of that region.
+					for (const r of mediaRows) {
+						if (!r.region && !r.file) continue;
+						if (r.action === "delete") {
+							const m = existingMedia.find((x) => (x.region || "") === r.region);
+							if (m) {
+								const fileName = m.object_key.split("/").pop() || m.object_key;
+								files.push({ kind: currentKind, object_key: m.object_key, file_name: fileName, mime_type: m.mime, size: m.size, region: r.region, delete: true });
+							}
+						} else if (r.action === "move") {
+							const m = existingMedia.find((x) => (x.region || "") === r.fromRegion);
+							if (m) {
+								const fileName = m.object_key.split("/").pop() || m.object_key;
+								files.push({ kind: currentKind, object_key: m.object_key, file_name: fileName, mime_type: m.mime, size: m.size, region: r.region, move: true });
+							}
+						} else if (r.file) {
+							const mime = r.file.type || "application/octet-stream";
+							setStatus({ text: t("metadataSubmit.uploadingImage"), tone: "info" });
+							const resp = await requestMetadataUploadUrl({ game_id: game.id, kind: currentKind, file_name: r.file.name, mime_type: mime, size: r.file.size, region: r.region });
+							await uploadWithProgress(resp.upload_url, r.file, mime, (p) => setProgress(Math.round(p * 100)));
+							setProgress(100);
+							files.push({ kind: currentKind, object_key: resp.object_key, file_name: r.file.name, mime_type: mime, size: r.file.size, region: r.region });
+						}
 					}
-				}
-				// Existing cover/logo moved to another region (no new upload).
-				for (const m of existingMedia) {
-					const target = mediaMoves[m.object_key];
-					if (target && target !== (m.region || "")) {
-						const fileName = m.object_key.split("/").pop() || m.object_key;
-						files.push({ kind: m.kind, object_key: m.object_key, file_name: fileName, mime_type: m.mime, size: m.size, region: target, move: true });
-					}
-				}
-				// A newly picked file (optional when only moving).
-				if (file) {
+				} else if (file) {
 					const mime = file.type || "application/octet-stream";
-					const regionForFile = isRegionalKind ? region : "";
 					setStatus({ text: isVideo ? t("metadataSubmit.uploadingVideo") : t("metadataSubmit.uploadingImage"), tone: "info" });
 					const resp = await requestMetadataUploadUrl({
 						game_id: game.id,
@@ -522,11 +608,11 @@ export default function MetadataSubmissionPage() {
 						file_name: file.name,
 						mime_type: mime,
 						size: file.size,
-						region: regionForFile,
+						region: "",
 					});
 					await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(Math.round(p * 100)));
 					setProgress(100);
-					files.push({ kind: currentKind, object_key: resp.object_key, file_name: file.name, mime_type: mime, size: file.size, region: regionForFile });
+					files.push({ kind: currentKind, object_key: resp.object_key, file_name: file.name, mime_type: mime, size: file.size, region: "" });
 				}
 				await createMetadataSubmission({ game_id: game.id, payload, files });
 			}
@@ -742,95 +828,69 @@ export default function MetadataSubmissionPage() {
 					{isText ? (
 						type === "name" || type === "release_year" ? (
 							<div className="space-y-3">
-								<div className="flex gap-2 flex-wrap">
-									<button type="button" className={textMode === "new" ? "btn btn-primary btn-sm" : "btn btn-outline btn-sm"} onClick={() => { setTextMode("new"); setTextMoveFrom(""); }}>
-										{t("metadataSubmit.form.addNewValue")}
-									</button>
-									<button type="button" className={textMode === "move" ? "btn btn-primary btn-sm" : "btn btn-outline btn-sm"} onClick={() => { setTextMode("move"); setTextMoveFrom(""); }} disabled={existingText.length === 0}>
-										{t("metadataSubmit.form.changeRegion")}
-									</button>
-									<button type="button" className={textMode === "delete" ? "btn btn-error btn-sm" : "btn btn-outline btn-sm"} onClick={() => { setTextMode("delete"); setTextMoveFrom(""); }} disabled={existingText.length === 0}>
-										{t("metadataSubmit.form.deleteRegion")}
-									</button>
-								</div>
-								{textMode === "new" ? (
-									<>
-										<div>
-											<label className="label-text flex items-center gap-1.5">{t("metadataSubmit.form.regionLabel")}{region ? <RegionFlag region={region} /> : null}</label>
-											<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
-												<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
-												{regions.map((r) => (
-													<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
-												))}
-											</select>
-										</div>
-										<div>
-											<p className="label-text">{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}</p>
-											<p className="text-sm text-[var(--color-base-content)]/70">
-												{currentText || "—"}
-												{currentText && currentRegion ? (
-													<span className="ml-2 badge badge-solid-neutral badge-xs align-middle"><RegionLabel region={currentRegion} /></span>
-												) : null}
-											</p>
-										</div>
-										<div>
-											<label className="label-text">{t("metadataSubmit.form.newField", { field: textLabel.toLowerCase() })}</label>
-											{renderTextInput()}
-										</div>
-									</>
-								) : textMode === "move" ? (
+								{existingText.length > 0 ? (
 									<div>
 										<p className="label-text mb-1">{t("metadataSubmit.form.existingByRegion")}</p>
-										<div className="space-y-2">
-											{existingText.map((r) => {
-												const source = r.region;
-												const target = textMoveFrom === source ? region : source;
-												return (
-													<div key={source} className="flex items-center gap-2">
-														<span className="badge badge-solid-neutral badge-sm shrink-0"><RegionLabel region={source} /></span>
-														<span className="text-[var(--color-base-content)]/40 shrink-0">→</span>
-														<select
-															className="select select-sm flex-1"
-															value={target}
-															onChange={(e) => {
-																const v = e.target.value;
-																if (v === source) {
-																	setTextMoveFrom("");
-																	setRegion("");
-																} else {
-																	setTextMoveFrom(source);
-																	setRegion(v);
-																	setTextValue(textValueOf(r));
-																}
-															}}
-														>
-															{regions.map((rr) => <option key={rr.id} value={rr.name}>{regionLabel(t, rr.name)}</option>)}
-														</select>
-													</div>
-												);
-											})}
-										</div>
-										<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.moveHint")}</p>
-									</div>
-								) : (
-									<div>
-										<p className="label-text mb-1">{t("metadataSubmit.form.deleteByRegion")}</p>
-										<div className="space-y-2">
+										<div className="space-y-1">
 											{existingText.map((r) => (
-												<label key={r.region} className="flex items-center gap-2 cursor-pointer">
-													<input
-														type="checkbox"
-														className="checkbox checkbox-sm checkbox-error"
-														checked={textMoveFrom === r.region}
-														onChange={(e) => setTextMoveFrom(e.target.checked ? r.region : "")}
-													/>
-													<span className="text-sm"><RegionLabel region={r.region} /> — {textValueOf(r)}</span>
-												</label>
+												<p key={r.region} className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2">
+													<span className="badge badge-solid-neutral badge-xs"><RegionLabel region={r.region} /></span>
+													<span>{textValueOf(r) || "—"}</span>
+												</p>
 											))}
 										</div>
-										<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.deleteHint")}</p>
 									</div>
-								)}
+								) : null}
+								<div className="space-y-2">
+									{textRows.map((row) => (
+										<div key={row.key} className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2">
+											{textRows.length > 1 ? (
+												<button type="button" className="btn btn-ghost btn-xs absolute top-2 right-2" onClick={() => removeTextRow(row.key)} aria-label={t("common.delete")}>
+													<Trash2 className="w-3.5 h-3.5" />
+												</button>
+											) : null}
+											<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+												<div>
+													<label className="label-text">{t("metadataSubmit.form.actionLabel")}</label>
+													<select className="select select-sm w-full" value={row.action} onChange={(e) => updateTextRow(row.key, { action: e.target.value as RegionTextRow["action"] })}>
+														<option value="set">{t("metadataSubmit.form.addNewValue")}</option>
+														<option value="move" disabled={existingText.length === 0}>{t("metadataSubmit.form.changeRegion")}</option>
+														<option value="delete" disabled={existingText.length === 0}>{t("metadataSubmit.form.deleteRegion")}</option>
+													</select>
+												</div>
+												<div>
+													<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
+													<select className="select select-sm w-full" value={row.region} onChange={(e) => updateTextRow(row.key, { region: e.target.value })}>
+														{regions.map((r) => (
+															<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
+														))}
+													</select>
+												</div>
+											</div>
+											{row.action === "move" ? (
+												<div>
+													<label className="label-text">{t("metadataSubmit.form.moveFromRegion")}</label>
+													<select className="select select-sm w-full" value={row.fromRegion} onChange={(e) => updateTextRow(row.key, { fromRegion: e.target.value })}>
+														<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
+														{existingText.map((r) => <option key={r.region} value={r.region}>{regionLabel(t, r.region)}</option>)}
+													</select>
+												</div>
+											) : null}
+											{row.action === "set" ? (
+												<input
+													className="input input-sm w-full"
+													value={row.value}
+													onChange={(e) => updateTextRow(row.key, { value: e.target.value })}
+													placeholder={type === "release_year" ? "YYYY-MM" : t("metadataSubmit.form.newField", { field: textLabel.toLowerCase() })}
+												/>
+											) : null}
+										</div>
+									))}
+								</div>
+								<button type="button" className="btn btn-outline btn-sm w-fit" onClick={() => setTextRows((rows) => [...rows, newTextRow()])}>
+									{t("metadataSubmit.form.addRegion")}
+								</button>
+								<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.form.moveHint")}</p>
 							</div>
 						) : (
 							<div className="space-y-3">
@@ -838,9 +898,6 @@ export default function MetadataSubmissionPage() {
 									<p className="label-text">{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}</p>
 									<p className="text-sm text-[var(--color-base-content)]/70">
 										{currentText || "—"}
-										{currentText && currentRegion ? (
-											<span className="ml-2 badge badge-solid-neutral badge-xs align-middle"><RegionLabel region={currentRegion} /></span>
-										) : null}
 									</p>
 								</div>
 								<div>
@@ -852,163 +909,161 @@ export default function MetadataSubmissionPage() {
 					) : (
 						<div className="space-y-3">
 							{isRegionalKind ? (
-								<div className="flex gap-2 flex-wrap">
-									<button type="button" className={mediaMode === "new" ? "btn btn-primary btn-sm" : "btn btn-outline btn-sm"} onClick={() => setMediaMode("new")}>
-										{t("metadataSubmit.form.addNewImage")}
-									</button>
-									<button type="button" className={mediaMode === "move" ? "btn btn-primary btn-sm" : "btn btn-outline btn-sm"} onClick={() => setMediaMode("move")} disabled={existingMedia.length === 0}>
-										{t("metadataSubmit.form.changeRegion")}
-									</button>
-									<button type="button" className={mediaMode === "delete" ? "btn btn-error btn-sm" : "btn btn-outline btn-sm"} onClick={() => setMediaMode("delete")} disabled={existingMedia.length === 0}>
-										{t("metadataSubmit.form.deleteRegion")}
-									</button>
-								</div>
-							) : null}
-							{isRegionalKind && (mediaMode === "move" || mediaMode === "delete") ? (
-								<div>
-									<p className="label-text mb-1">{mediaMode === "delete" ? t("metadataSubmit.form.deleteByRegion") : t("metadataSubmit.form.existingByRegion")}</p>
+								<>
+									{existingMedia.length > 0 ? (
+										<div>
+											<p className="label-text mb-2">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: existingMedia.length })}</p>
+											<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+												{existingMedia.map((m) => (
+													<div key={m.id} className="relative">
+														<img src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-28 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+														{m.region ? <span className="badge badge-solid-neutral badge-sm absolute bottom-1 right-1"><RegionLabel region={m.region} /></span> : null}
+													</div>
+												))}
+											</div>
+										</div>
+									) : null}
 									<div className="space-y-2">
-										{existingMedia.map((m) => {
-											const currentReg = m.region || "";
-											const target = mediaMoves[m.object_key] ?? currentReg;
-											return (
-												<div key={m.id} className="flex items-center gap-2">
-													<img src={mediaUrl(m)} alt="" className="w-12 h-12 object-contain rounded border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30" onError={(e) => (e.currentTarget.style.display = "none")} />
-													{mediaMode === "delete" ? (
-														<label className="flex items-center gap-2 cursor-pointer flex-1">
-															<input
-																type="checkbox"
-																className="checkbox checkbox-sm checkbox-error"
-																checked={!!mediaDeletes[m.object_key]}
-																onChange={(e) =>
-																	setMediaDeletes((prev) => {
-																		const next = { ...prev };
-																		if (e.target.checked) next[m.object_key] = true;
-																		else delete next[m.object_key];
-																		return next;
-																	})
-																}
-															/>
-															<span className="text-sm"><RegionLabel region={currentReg} /></span>
-														</label>
-													) : (
-														<>
-															<span className="badge badge-solid-neutral badge-sm shrink-0"><RegionLabel region={currentReg} /></span>
-															<span className="text-[var(--color-base-content)]/40 shrink-0">→</span>
-															<select
-																className="select select-sm flex-1"
-																value={target}
-																onChange={(e) => {
-																	const v = e.target.value;
-																	setMediaMoves((prev) => {
-																		const next = { ...prev };
-																		if (v === currentReg) delete next[m.object_key];
-																		else next[m.object_key] = v;
-																		return next;
-																	});
-																}}
-															>
-																{regions.map((r) => <option key={r.id} value={r.name}>{regionLabel(t, r.name)}</option>)}
-															</select>
-														</>
-													)}
+										{mediaRows.map((row) => (
+											<div key={row.key} className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2">
+												{mediaRows.length > 1 ? (
+													<button type="button" className="btn btn-ghost btn-xs absolute top-2 right-2" onClick={() => removeMediaRow(row.key)} aria-label={t("common.delete")}>
+														<Trash2 className="w-3.5 h-3.5" />
+													</button>
+												) : null}
+												<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+													<div>
+														<label className="label-text">{t("metadataSubmit.form.actionLabel")}</label>
+														<select className="select select-sm w-full" value={row.action} onChange={(e) => updateMediaRow(row.key, { action: e.target.value as RegionMediaRow["action"] })}>
+															<option value="new">{t("metadataSubmit.form.addNewImage")}</option>
+															<option value="move" disabled={existingMedia.length === 0}>{t("metadataSubmit.form.changeRegion")}</option>
+															<option value="delete" disabled={existingMedia.length === 0}>{t("metadataSubmit.form.deleteRegion")}</option>
+														</select>
+													</div>
+													<div>
+														<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
+														<select className="select select-sm w-full" value={row.region} onChange={(e) => updateMediaRow(row.key, { region: e.target.value })}>
+															{regions.map((r) => (
+																<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
+															))}
+														</select>
+													</div>
 												</div>
-											);
-										})}
+												{row.action === "move" ? (
+													<div>
+														<label className="label-text">{t("metadataSubmit.form.moveFromRegion")}</label>
+														<select className="select select-sm w-full" value={row.fromRegion} onChange={(e) => updateMediaRow(row.key, { fromRegion: e.target.value })}>
+															<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
+															{existingMedia.map((m) => <option key={m.id} value={m.region || ""}>{regionLabel(t, m.region || "")}</option>)}
+														</select>
+													</div>
+												) : null}
+												{row.action === "new" ? (
+													<label className="btn btn-outline btn-sm w-fit cursor-pointer">
+														<Upload className="w-3.5 h-3.5" />
+														{row.file ? row.file.name : t("metadataSubmit.form.chooseImage")}
+														<input
+															type="file"
+															accept={IMAGE_ACCEPT}
+															className="hidden"
+															disabled={busy}
+															onChange={(e) => {
+																const f = e.target.files?.[0] || null;
+																if (f) updateMediaRow(row.key, { file: f });
+																e.target.value = "";
+															}}
+														/>
+													</label>
+												) : null}
+											</div>
+										))}
 									</div>
-									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{mediaMode === "delete" ? t("metadataSubmit.form.deleteHint") : t("metadataSubmit.form.moveHint")}</p>
-								</div>
+									<button type="button" className="btn btn-outline btn-sm w-fit" onClick={() => setMediaRows((rows) => [...rows, newMediaRow()])}>
+										{t("metadataSubmit.form.addRegion")}
+									</button>
+									<p className="text-xs text-[var(--color-base-content)]/50">
+										{t("metadataSubmit.form.imageHint")}
+										{currentKind === "logo" ? ` ${t("metadataSubmit.form.logoHint")}` : currentKind === "cover" ? ` ${t("metadataSubmit.form.coverHint")}` : ""}
+									</p>
+								</>
 							) : (
 								<>
-							{isRegionalKind ? (
-								<div>
-									<label className="label-text flex items-center gap-1.5">{t("metadataSubmit.form.regionLabel")}{region ? <RegionFlag region={region} /> : null}</label>
-									<select className="select w-full" value={region} onChange={(e) => setRegion(e.target.value)}>
-										<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
-										{regions.map((r) => (
-											<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
-										))}
-									</select>
-								</div>
-							) : null}
-							{!isVideo && file && previewUrl ? (
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-									<div>
-										<p className="label-text mb-2">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
-										{currentMedia.length > 0 ? (
-											<div className="relative">
-												<img src={mediaUrl(currentMedia[0])} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-												{currentMedia[0].region ? <span className="badge badge-solid-neutral badge-sm absolute bottom-1 right-1"><RegionLabel region={currentMedia[0].region} /></span> : null}
+									{!isVideo && file && previewUrl ? (
+										<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+											<div>
+												<p className="label-text mb-2">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
+												{currentMedia.length > 0 ? (
+													<div className="relative">
+														<img src={mediaUrl(currentMedia[0])} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+													</div>
+												) : (
+													<div className="w-full h-44 flex items-center justify-center rounded-lg border border-dashed border-[var(--color-base-300)] bg-[var(--color-base-300)]/30 px-2">
+														<p className="text-sm text-[var(--color-base-content)]/50 text-center">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+													</div>
+												)}
 											</div>
-										) : (
-											<div className="w-full h-44 flex items-center justify-center rounded-lg border border-dashed border-[var(--color-base-300)] bg-[var(--color-base-300)]/30 px-2">
-												<p className="text-sm text-[var(--color-base-content)]/50 text-center">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+											<div>
+												<p className="label-text mb-2">{t("metadataSubmit.form.newField", { field: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+												<img src={previewUrl} alt="" className="w-full h-44 object-contain rounded-lg border border-[var(--color-primary)] bg-[var(--color-base-300)]" />
 											</div>
-										)}
-									</div>
-									<div>
-										<p className="label-text mb-2">{t("metadataSubmit.form.newField", { field: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
-										<img src={previewUrl} alt="" className="w-full h-44 object-contain rounded-lg border border-[var(--color-primary)] bg-[var(--color-base-300)]" />
-									</div>
-								</div>
-							) : (
-								<div>
-									<p className="label-text">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
-									{currentMedia.length > 0 ? (
-										<div className="grid grid-cols-2 gap-3 mt-2">
-											{currentMedia.map((m) => (
-												<div key={m.id} className="relative">
-													{isVideo ? (
-														<video src={mediaUrl(m)} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-black" controls muted />
-													) : (
-														<img src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-													)}
-													{m.region ? <span className="badge badge-solid-neutral badge-sm absolute bottom-1 right-1"><RegionLabel region={m.region} /></span> : null}
-												</div>
-											))}
 										</div>
 									) : (
-										<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+										<div>
+											<p className="label-text">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
+											{currentMedia.length > 0 ? (
+												<div className="grid grid-cols-2 gap-3 mt-2">
+													{currentMedia.map((m) => (
+														<div key={m.id} className="relative">
+															{isVideo ? (
+																<video src={mediaUrl(m)} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-black" controls muted />
+															) : (
+																<img src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+															)}
+														</div>
+													))}
+												</div>
+											) : (
+												<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+											)}
+										</div>
 									)}
-								</div>
-							)}
-							<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.replaceMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.replaceMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
 
-							<label className="btn btn-outline cursor-pointer">
-								{isVideo ? <Clapperboard className="w-4 h-4" /> : <Upload className="w-4 h-4" />}
-								{file ? file.name : isVideo ? t("metadataSubmit.form.chooseVideo") : t("metadataSubmit.form.chooseImage")}
-								<input
-									type="file"
-									accept={isVideo ? VIDEO_ACCEPT : IMAGE_ACCEPT}
-									className="hidden"
-									disabled={busy}
-									onChange={(e) => onPickFile(e.target.files?.[0] || null)}
-								/>
-							</label>
-							{!isVideo ? (
-								<p className="text-xs text-[var(--color-base-content)]/50">
-									{t("metadataSubmit.form.imageHint")}
-									{currentKind === "fanart" ? ` ${t("metadataSubmit.form.fanartHint")}` : currentKind === "logo" ? ` ${t("metadataSubmit.form.logoHint")}` : currentKind === "cover" ? ` ${t("metadataSubmit.form.coverHint")}` : ""}
-								</p>
-							) : null}
-							{!isVideo && currentKind === "screenshot" ? (
-								<p className="text-xs text-[var(--color-warning)] leading-relaxed">{t("metadataSubmit.form.screenshotHint")}</p>
-							) : null}
-							{fileError ? <p className="text-xs text-[var(--color-error)]">{fileError}</p> : null}
-							{isVideo ? <p className="text-xs text-[var(--color-warning)] leading-relaxed">{t("metadataSubmit.form.videoAspectHint")}</p> : null}
+									<label className="btn btn-outline cursor-pointer">
+										{isVideo ? <Clapperboard className="w-4 h-4" /> : <Upload className="w-4 h-4" />}
+										{file ? file.name : isVideo ? t("metadataSubmit.form.chooseVideo") : t("metadataSubmit.form.chooseImage")}
+										<input
+											type="file"
+											accept={isVideo ? VIDEO_ACCEPT : IMAGE_ACCEPT}
+											className="hidden"
+											disabled={busy}
+											onChange={(e) => onPickFile(e.target.files?.[0] || null)}
+										/>
+									</label>
+									{!isVideo ? (
+										<p className="text-xs text-[var(--color-base-content)]/50">
+											{t("metadataSubmit.form.imageHint")}
+											{currentKind === "fanart" ? ` ${t("metadataSubmit.form.fanartHint")}` : ""}
+										</p>
+									) : null}
+									{!isVideo && currentKind === "screenshot" ? (
+										<p className="text-xs text-[var(--color-warning)] leading-relaxed">{t("metadataSubmit.form.screenshotHint")}</p>
+									) : null}
+									{fileError ? <p className="text-xs text-[var(--color-error)]">{fileError}</p> : null}
+									{isVideo ? <p className="text-xs text-[var(--color-warning)] leading-relaxed">{t("metadataSubmit.form.videoAspectHint")}</p> : null}
 
-							{isVideo && file && videoMeta ? (
-								<div className="text-xs space-y-1 text-[var(--color-base-content)]/60">
-									<div className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1 bg-[var(--color-base-300)]/30">
-										<p>{t("metadataSubmit.form.resolution", { width: videoMeta.width, height: videoMeta.height, aspect: videoMeta.aspect })}</p>
-										<p>{t("metadataSubmit.form.duration", { duration: videoMeta.duration.toFixed(1) })} {videoMeta.duration < VIDEO_MIN_SECONDS || videoMeta.duration > VIDEO_MAX_SECONDS ? <span className="text-[var(--color-error)]">{t("metadataSubmit.form.durationRange", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS })}</span> : null}</p>
-										<p>{t("metadataSubmit.form.frameRate", { fps: videoMeta.fps > 0 ? `${videoMeta.fps} fps` : t("metadataSubmit.form.frameRateUnknown") })}</p>
-										{fpsWarning ? <p className="text-[var(--color-warning)]">{fpsWarning}</p> : null}
-									</div>
-									<video ref={videoRef} src={URL.createObjectURL(file)} controls className="w-full max-h-64 rounded-lg border border-[var(--color-base-300)] bg-black" muted />
-									{fileError ? <p className="text-[var(--color-error)]">{fileError}</p> : <p className="text-[var(--color-success)]">{t("metadataSubmit.form.videoOk")}</p>}
-								</div>
-							) : null}
+									{isVideo && file && videoMeta ? (
+										<div className="text-xs space-y-1 text-[var(--color-base-content)]/60">
+											<div className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1 bg-[var(--color-base-300)]/30">
+												<p>{t("metadataSubmit.form.resolution", { width: videoMeta.width, height: videoMeta.height, aspect: videoMeta.aspect })}</p>
+												<p>{t("metadataSubmit.form.duration", { duration: videoMeta.duration.toFixed(1) })} {videoMeta.duration < VIDEO_MIN_SECONDS || videoMeta.duration > VIDEO_MAX_SECONDS ? <span className="text-[var(--color-error)]">{t("metadataSubmit.form.durationRange", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS })}</span> : null}</p>
+												<p>{t("metadataSubmit.form.frameRate", { fps: videoMeta.fps > 0 ? `${videoMeta.fps} fps` : t("metadataSubmit.form.frameRateUnknown") })}</p>
+												{fpsWarning ? <p className="text-[var(--color-warning)]">{fpsWarning}</p> : null}
+											</div>
+											<video ref={videoRef} src={URL.createObjectURL(file)} controls className="w-full max-h-64 rounded-lg border border-[var(--color-base-300)] bg-black" muted />
+											{fileError ? <p className="text-[var(--color-error)]">{fileError}</p> : <p className="text-[var(--color-success)]">{t("metadataSubmit.form.videoOk")}</p>}
+										</div>
+									) : null}
 								</>
 							)}
 						</div>

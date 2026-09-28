@@ -545,6 +545,9 @@
 		"note": "Catatan",
 		"textChanges": "Perubahan teks",
 		"mediaChanges": "Perubahan media",
+		"movedFrom": "dipindahkan dari",
+		"nameRemoved": "Nama dihapus",
+		"releaseRemoved": "Tanggal rilis dihapus",
 		"none": "Tidak ada",
 		"filterBy": "Filter berdasarkan",
 		"filterSystem": "Filter berdasarkan sistem",
@@ -744,7 +747,9 @@
 			"deleteByRegion": "Hapus menurut wilayah",
 			"deleteHint": "Centang yang ingin dihapus; alasan wajib diisi",
 			"whyLabelRequired": "Alasan (wajib)",
-			"addNewValue": "Tambah nilai baru"
+			"addNewValue": "Tambah nilai baru",
+			"actionLabel": "Tindakan",
+			"addRegion": "Tambah wilayah"
 		},
 		"working": "Bekerja...",
 		"submitForReview": "Kirim untuk ditinjau",

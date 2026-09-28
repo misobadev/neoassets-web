@@ -527,6 +527,9 @@
 		"note": "Note",
 		"textChanges": "Text changes",
 		"mediaChanges": "Media changes",
+		"movedFrom": "moved from",
+		"nameRemoved": "Name removed",
+		"releaseRemoved": "Release removed",
 		"none": "None",
 		"filterBy": "Filter by",
 		"filterSystem": "Filter by system",
@@ -726,7 +729,9 @@
 			"deleteByRegion": "Delete by region",
 			"deleteHint": "Check the ones to remove; a reason is required",
 			"whyLabelRequired": "Why (required)",
-			"addNewValue": "Add a new value"
+			"addNewValue": "Add a new value",
+			"actionLabel": "Action",
+			"addRegion": "Add Region"
 		},
 		"working": "Working...",
 		"submitForReview": "Submit for review",

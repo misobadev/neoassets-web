@@ -545,6 +545,9 @@
 		"note": "Notiz",
 		"textChanges": "Textänderungen",
 		"mediaChanges": "Medienänderungen",
+		"movedFrom": "verschoben von",
+		"nameRemoved": "Name entfernt",
+		"releaseRemoved": "Veröffentlichung entfernt",
 		"none": "Keine",
 		"filterBy": "Filtern nach",
 		"filterSystem": "Nach System filtern",
@@ -744,7 +747,9 @@
 			"deleteByRegion": "Nach Region löschen",
 			"deleteHint": "Markiere die zu entfernenden; eine Begründung ist erforderlich",
 			"whyLabelRequired": "Warum (erforderlich)",
-			"addNewValue": "Neuen Wert hinzufügen"
+			"addNewValue": "Neuen Wert hinzufügen",
+			"actionLabel": "Aktion",
+			"addRegion": "Region hinzufügen"
 		},
 		"working": "Wird verarbeitet...",
 		"submitForReview": "Zur Prüfung einreichen",

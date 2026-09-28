@@ -545,6 +545,9 @@
 		"note": "メモ",
 		"textChanges": "テキストの変更",
 		"mediaChanges": "メディアの変更",
+		"movedFrom": "移動元",
+		"nameRemoved": "名前を削除",
+		"releaseRemoved": "発売日を削除",
 		"none": "なし",
 		"filterBy": "絞り込み",
 		"filterSystem": "システムで絞り込み",
@@ -744,7 +747,9 @@
 			"deleteByRegion": "地域別に削除",
 			"deleteHint": "削除するものを選択してください（理由は必須です）",
 			"whyLabelRequired": "理由（必須）",
-			"addNewValue": "新しい値を追加"
+			"addNewValue": "新しい値を追加",
+			"actionLabel": "操作",
+			"addRegion": "地域を追加"
 		},
 		"working": "処理中...",
 		"submitForReview": "レビューに提出",
