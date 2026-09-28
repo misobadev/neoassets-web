@@ -592,6 +592,8 @@
 		"romDumpsTitle_one": "Volcados de ROM ({{count}})",
 		"romDumpsTitle_other": "Volcados de ROM ({{count}})",
 		"noDumps": "Sin volcados.",
+		"romSearch": "Buscar por nombre o hash",
+		"noDumpsMatch": "Ningún volcado ROM coincide con tu búsqueda.",
 		"regionsTitle": "Regiones",
 		"regionalNames": "Nombres por región"
 	},
@@ -731,7 +733,16 @@
 			"whyLabelRequired": "Por qué (obligatorio)",
 			"addNewValue": "Agregar un valor nuevo",
 			"actionLabel": "Acción",
-			"addRegion": "Agregar región"
+			"addRegion": "Agregar región",
+			"roms": "Volcados ROM",
+			"romHint": "Agrega, edita o elimina los volcados ROM del juego. Arrastra un archivo para completar los datos automáticamente.",
+			"addRom": "Agregar volcado ROM",
+			"romPick": "Selecciona un volcado ROM",
+			"romDrop": "Arrastra un archivo ROM o haz clic para buscar (el nombre, tamaño y hashes se calculan localmente)",
+			"romHashing": "Calculando hashes…",
+			"romHashFailed": "No se pudo leer el archivo ROM.",
+			"romDuplicate": "Este ROM ya existe para este juego.",
+			"romZipNote": "Los archivos comprimidos (ZIP, RAR, 7z) se envían solo con el nombre; no se calculan tamaño ni hashes."
 		},
 		"working": "Procesando...",
 		"submitForReview": "Enviar para revisión",

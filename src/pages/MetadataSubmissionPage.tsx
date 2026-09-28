@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AlertTriangle, Check, ChevronLeft, ChevronRight, Clapperboard, Copy, FileText, Image as ImageIcon, Trash2, Upload } from "lucide-react";
+import { AlertTriangle, Check, ChevronLeft, ChevronRight, Clapperboard, Copy, FileText, HardDrive, Image as ImageIcon, Trash2, Upload } from "lucide-react";
 import {
 	cdnUrl,
 	createMetadataSubmission,
@@ -20,10 +20,12 @@ import {
 } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
+import Pagination from "../components/Pagination";
 import { genreLabel } from "../lib/genres";
 import { regionLabel } from "../lib/regions";
 import RegionLabel from "../components/RegionLabel";
 import { uploadWithProgress } from "../lib/upload";
+import { hashRomFile } from "../lib/romhash";
 import { GAME_TYPES, typeBadgeClass } from "../lib/gameTypes";
 import { IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, checkVideoMeasurement, measureVideo } from "../lib/media";
 
@@ -50,10 +52,20 @@ const MEDIA_LABEL: Record<MediaKind, string> = {
 
 const IMAGE_KINDS: MediaKind[] = ["cover", "screenshot", "logo", "fanart"];
 const VIDEO_KIND: MediaKind = "video";
+// ROMS_KIND is a pseudo-type that opens the ROM dump editor instead of a field.
+const ROMS_KIND = "roms";
 
 function mediaUrl(m: { object_key: string; created_at?: string }): string {
 	const url = cdnUrl(m.object_key);
 	return m.created_at ? `${url}?v=${encodeURIComponent(m.created_at)}` : url;
+}
+
+// fmtBytes renders a byte count as a short human-readable size.
+function fmtBytes(bytes: number): string {
+	if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+	if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(0)} MB`;
+	if (bytes >= 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+	return `${bytes} B`;
 }
 
 // parseYearMonth parses a "YYYY" or "YYYY-MM" release value.
@@ -104,6 +116,23 @@ const nextRowKey = () => `row-${++rowSeq}`;
 const newTextRow = (): RegionTextRow => ({ key: nextRowKey(), action: "set", region: DEFAULT_REGION, value: "", fromRegion: "" });
 const newMediaRow = (): RegionMediaRow => ({ key: nextRowKey(), action: "new", region: DEFAULT_REGION, fromRegion: "", file: null });
 
+// One ROM dump change: add a new dump, edit an existing one, or delete it.
+interface RomRow {
+	key: string;
+	action: "add" | "edit" | "delete";
+	id: string;
+	name: string;
+	size: string;
+	region: string;
+	crc: string;
+	md5: string;
+	sha1: string;
+	sha256: string;
+	hashing?: boolean;
+	duplicate?: boolean;
+}
+const newRomRow = (): RomRow => ({ key: nextRowKey(), action: "add", id: "", name: "", size: "", region: DEFAULT_REGION, crc: "", md5: "", sha1: "", sha256: "" });
+
 export default function MetadataSubmissionPage() {
 	const { t } = useTranslation();
 	const { gameId } = useParams<{ gameId: string }>();
@@ -127,6 +156,8 @@ export default function MetadataSubmissionPage() {
 	// Each row sets, moves or deletes one region's value in a single submission.
 	const [textRows, setTextRows] = useState<RegionTextRow[]>([newTextRow()]);
 	const [mediaRows, setMediaRows] = useState<RegionMediaRow[]>([newMediaRow()]);
+	const [romRows, setRomRows] = useState<RomRow[]>([newRomRow()]);
+	const [romPage, setRomPage] = useState(1);
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -150,6 +181,7 @@ export default function MetadataSubmissionPage() {
 
 	const isText = TEXT_TYPES.some((t) => t.key === type);
 	const isVideo = type === VIDEO_KIND;
+	const isRoms = type === ROMS_KIND;
 
 	const translations: Language[] = game?.translations || [];
 	const langOptions: Language[] = [{ code: "en", name: "English", native_name: "English" }, ...translations];
@@ -311,6 +343,13 @@ export default function MetadataSubmissionPage() {
 	const textValueOf = (r: GameRegion): string =>
 		type === "name" ? r.name || "" : r.release_year ? `${r.release_year}${r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}` : "";
 
+	// ROM dump list pagination (15 per page, controls above and below).
+	const romList = game.roms || [];
+	const ROM_PAGE_SIZE = 15;
+	const romTotalPages = Math.max(1, Math.ceil(romList.length / ROM_PAGE_SIZE));
+	const romPageClamped = Math.min(romPage, romTotalPages);
+	const romPageItems = romList.slice((romPageClamped - 1) * ROM_PAGE_SIZE, romPageClamped * ROM_PAGE_SIZE);
+
 	// Deleting requires a reason, so the "why" is mandatory in that case.
 	const deleting =
 		(isText && textRows.some((r) => r.action === "delete" && r.region !== "")) ||
@@ -338,6 +377,7 @@ export default function MetadataSubmissionPage() {
 			case "release_year": return Boolean(game.release_year);
 			case "rating": return (game.rating ?? 0) > 0;
 			case "type": return Boolean(game.type);
+			case "roms": return (game.roms || []).length > 0;
 			default: return game.media.some((m) => m.kind === key);
 		}
 	}
@@ -429,6 +469,46 @@ export default function MetadataSubmissionPage() {
 	function removeMediaRow(key: string) {
 		setMediaRows((rows) => (rows.length > 1 ? rows.filter((r) => r.key !== key) : rows));
 	}
+	function updateRomRow(key: string, patch: Partial<RomRow>) {
+		setRomRows((rows) => rows.map((r) => (r.key === key ? { ...r, ...patch } : r)));
+	}
+	function removeRomRow(key: string) {
+		setRomRows((rows) => (rows.length > 1 ? rows.filter((r) => r.key !== key) : rows));
+	}
+	// onPickRomFile hashes the dropped/selected ROM in the browser and fills the
+	// row's name, size and hashes so they never have to be typed by hand. If any
+	// hash already belongs to another dump of this game it is flagged.
+	async function onPickRomFile(key: string, file: File) {
+		// Arcade ROM sets are archives (ZIP/RAR/7z) contributed by name only, so
+		// no size or hashes are computed for them.
+		const isArchive =
+			/\.(zip|rar|7z)$/i.test(file.name) ||
+			["application/zip", "application/x-zip-compressed", "application/x-rar-compressed", "application/vnd.rar", "application/x-7z-compressed"].includes(file.type);
+		if (isArchive) {
+			updateRomRow(key, { hashing: false, duplicate: false, name: file.name, size: "", crc: "", md5: "", sha1: "", sha256: "" });
+			setStatus({ text: t("metadataSubmit.form.romZipNote"), tone: "info" });
+			return;
+		}
+		updateRomRow(key, { hashing: true });
+		try {
+			const h = await hashRomFile(file);
+			const row = romRows.find((r) => r.key === key);
+			const duplicate = (game?.roms || []).some((r) => {
+				if (row?.id && r.id === row.id) return false;
+				return (
+					(h.crc && r.crc === h.crc) ||
+					(h.md5 && r.md5 === h.md5) ||
+					(h.sha1 && r.sha1 === h.sha1) ||
+					(h.sha256 && r.sha256 === h.sha256)
+				);
+			});
+			updateRomRow(key, { hashing: false, duplicate, name: h.name, size: String(h.size), crc: h.crc, md5: h.md5, sha1: h.sha1, sha256: h.sha256 });
+			if (duplicate) setStatus({ text: t("metadataSubmit.form.romDuplicate"), tone: "error" });
+		} catch {
+			updateRomRow(key, { hashing: false });
+			setStatus({ text: t("metadataSubmit.form.romHashFailed"), tone: "error" });
+		}
+	}
 
 	async function submit() {
 		setConfirmSubmit(false);
@@ -490,7 +570,18 @@ export default function MetadataSubmissionPage() {
 				return;
 			}
 		}
-		if (!isText && isRegionalKind) {
+		if (isRoms) {
+			const complete = romRows.filter((r) => (r.action === "delete" ? r.id !== "" : r.name.trim() !== ""));
+			if (complete.length === 0) {
+				setStatus({ text: t("metadataSubmit.status.enterValue"), tone: "error" });
+				return;
+			}
+			if (complete.some((r) => r.duplicate)) {
+				setStatus({ text: t("metadataSubmit.form.romDuplicate"), tone: "error" });
+				return;
+			}
+		}
+		if (!isText && !isRoms && isRegionalKind) {
 			const rows = mediaRows.filter((r) => r.region || r.file);
 			if (rows.length === 0) {
 				setStatus({ text: t("metadataSubmit.status.pickImage"), tone: "error" });
@@ -511,7 +602,7 @@ export default function MetadataSubmissionPage() {
 				}
 			}
 		}
-		if (!isText && !isRegionalKind && !file) {
+		if (!isText && !isRoms && !isRegionalKind && !file) {
 			setStatus({ text: isVideo ? t("metadataSubmit.status.pickVideo") : t("metadataSubmit.status.pickImage"), tone: "error" });
 			return;
 		}
@@ -567,9 +658,26 @@ export default function MetadataSubmissionPage() {
 				} else {
 					payload[textType.key] = textValue.trim();
 				}
+			} else if (isRoms) {
+				payload.roms = romRows
+					.filter((r) => (r.action === "delete" ? r.id !== "" : r.name.trim() !== ""))
+					.map((r) => {
+						const entry: Record<string, unknown> = { action: r.action };
+						if (r.action !== "add") entry.id = r.id;
+						if (r.action !== "delete") {
+							entry.name = r.name.trim();
+							entry.size = r.size ? Number(r.size) : 0;
+							entry.crc = r.crc.trim().toLowerCase();
+							entry.md5 = r.md5.trim().toLowerCase();
+							entry.sha1 = r.sha1.trim().toLowerCase();
+							entry.sha256 = r.sha256.trim().toLowerCase();
+							entry.region = r.region;
+						}
+						return entry;
+					});
 			}
 
-			if (isText) {
+			if (isText || isRoms) {
 				await createMetadataSubmission({ game_id: game.id, payload });
 			} else {
 				const files: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region: string; delete?: boolean; move?: boolean }[] = [];
@@ -819,13 +927,137 @@ export default function MetadataSubmissionPage() {
 						{t("metadataSubmit.videoHint", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS, fpsMin: VIDEO_FPS_MIN, fpsMax: VIDEO_FPS_MAX, fps: VIDEO_FPS })}
 					</p>
 				</div>
+
+				<div>
+					<p className="label-text mb-2 flex items-center gap-1.5">
+						<HardDrive className="w-3.5 h-3.5" /> {t("metadataSubmit.form.roms")}
+					</p>
+					<div className="flex flex-wrap gap-2">
+						{typeButton(ROMS_KIND, t("metadataSubmit.form.roms"))}
+					</div>
+					<p className="text-xs text-[var(--color-base-content)]/50 mt-1.5">{t("metadataSubmit.form.romHint")}</p>
+				</div>
 			</section>
 
 			{type ? (
 				<section className="card p-6 space-y-4">
 					<h2 className="font-semibold">{t("metadataSubmit.detailsTitle")}</h2>
 
-					{isText ? (
+					{isRoms ? (
+						<div className="space-y-3">
+							<div className="space-y-2">
+								{romRows.map((row) => (
+									<div key={row.key} className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2">
+										{romRows.length > 1 ? (
+											<button type="button" className="btn btn-ghost btn-xs absolute top-2 right-2" onClick={() => removeRomRow(row.key)} aria-label={t("common.delete")}>
+												<Trash2 className="w-3.5 h-3.5" />
+											</button>
+										) : null}
+										<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+											<div>
+												<label className="label-text">{t("metadataSubmit.form.actionLabel")}</label>
+												<select className="select select-sm w-full" value={row.action} onChange={(e) => updateRomRow(row.key, { action: e.target.value as RomRow["action"] })}>
+													<option value="add">{t("common.add")}</option>
+													<option value="edit" disabled={!game.roms || game.roms.length === 0}>{t("common.edit")}</option>
+													<option value="delete" disabled={!game.roms || game.roms.length === 0}>{t("common.delete")}</option>
+												</select>
+											</div>
+											<div>
+												<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
+												<select className="select select-sm w-full" value={row.region} onChange={(e) => updateRomRow(row.key, { region: e.target.value })}>
+													{regions.map((r) => (
+														<option key={r.id} value={r.name}>{regionLabel(t, r.name)}</option>
+													))}
+												</select>
+											</div>
+										</div>
+										{row.action !== "add" ? (
+											<div>
+												<label className="label-text">{t("metadataSubmit.form.romPick")}</label>
+												<select
+													className="select select-sm w-full"
+													value={row.id}
+													onChange={(e) => {
+														const id = e.target.value;
+														const rom = (game.roms || []).find((x) => x.id === id);
+														if (rom) {
+															updateRomRow(row.key, { id, name: rom.name, size: rom.size ? String(rom.size) : "", region: rom.region || DEFAULT_REGION, crc: rom.crc || "", md5: rom.md5 || "", sha1: rom.sha1 || "", sha256: rom.sha256 || "" });
+														} else {
+															updateRomRow(row.key, { id: "" });
+														}
+													}}
+												>
+													<option value="">—</option>
+													{(game.roms || []).map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
+												</select>
+											</div>
+										) : null}
+										{row.action !== "delete" ? (
+											<>
+											<label
+												className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[var(--color-base-300)] px-4 py-10 text-sm text-[var(--color-base-content)]/60 cursor-pointer text-center transition-colors hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-primary)]/5 ${row.hashing ? "opacity-60" : ""}`}
+												onDragOver={(e) => e.preventDefault()}
+												onDrop={(e) => {
+													e.preventDefault();
+													const f = e.dataTransfer.files?.[0];
+													if (f) void onPickRomFile(row.key, f);
+												}}
+											>
+												<Upload className="w-8 h-8" />
+												<span className="max-w-md">{row.hashing ? t("metadataSubmit.form.romHashing") : t("metadataSubmit.form.romDrop")}</span>
+												<input
+													type="file"
+													className="hidden"
+													disabled={busy || row.hashing}
+													onChange={(e) => {
+														const f = e.target.files?.[0] || null;
+														if (f) void onPickRomFile(row.key, f);
+														e.target.value = "";
+													}}
+												/>
+											</label>
+											<div>
+												<label className="label-text">{t("common.name")}</label>
+												<input className="input input-sm w-full" value={row.name} onChange={(e) => updateRomRow(row.key, { name: e.target.value })} />
+											</div>
+											<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
+												<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">{t("common.size")}</span><span className="font-mono truncate">{row.size ? fmtBytes(Number(row.size)) : "—"}</span></div>
+												<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">CRC</span><span className="font-mono truncate">{row.crc || "—"}</span></div>
+												<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">MD5</span><span className="font-mono truncate">{row.md5 || "—"}</span></div>
+												<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">SHA1</span><span className="font-mono truncate">{row.sha1 || "—"}</span></div>
+												<div className="flex items-baseline gap-2 min-w-0 sm:col-span-2"><span className="label-text shrink-0">SHA256</span><span className="font-mono truncate">{row.sha256 || "—"}</span></div>
+											</div>
+											{row.duplicate ? <p className="text-xs text-[var(--color-error)]">{t("metadataSubmit.form.romDuplicate")}</p> : null}
+											</>
+										) : null}
+									</div>
+								))}
+							</div>
+							<button type="button" className="btn btn-outline btn-sm w-fit" onClick={() => setRomRows((rows) => [...rows, newRomRow()])}>
+								{t("metadataSubmit.form.addRom")}
+							</button>
+							<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.form.romHint")}</p>
+							<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.form.romZipNote")}</p>
+
+							{romList.length > 0 ? (
+								<div className="space-y-3 border-t border-[var(--color-base-300)] pt-4">
+									<p className="label-text">{t("metadataGame.romDumpsTitle", { count: romList.length })}</p>
+									<Pagination page={romPageClamped} totalPages={romTotalPages} onChange={setRomPage} />
+									<div className="space-y-1.5">
+										{romPageItems.map((r) => (
+											<div key={r.id} className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap">
+												<span className="font-medium">{r.name}</span>
+												{r.region ? <RegionLabel region={r.region} /> : null}
+												{r.size ? <span className="text-[var(--color-base-content)]/50">{fmtBytes(r.size)}</span> : null}
+												{r.sha1 ? <span className="font-mono text-[11px] text-[var(--color-base-content)]/40 break-all">SHA1 {r.sha1}</span> : null}
+											</div>
+										))}
+									</div>
+									<Pagination page={romPageClamped} totalPages={romTotalPages} onChange={setRomPage} />
+								</div>
+							) : null}
+						</div>
+					) : isText ? (
 						type === "name" || type === "release_year" ? (
 							<div className="space-y-3">
 								{existingText.length > 0 ? (

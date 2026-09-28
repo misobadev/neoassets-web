@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, ChevronRight, PenSquare, PlusCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, PenSquare, PlusCircle, Search } from "lucide-react";
 import { cdnUrl, fetchMetadataGameDetail, isAuthed, type GameDetail, type Language, type MediaKind, type MetadataMedia } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import UserLink from "../components/UserLink";
+import Pagination from "../components/Pagination";
 import { genreLabel } from "../lib/genres";
 import { typeBadgeClass } from "../lib/gameTypes";
 import RegionLabel from "../components/RegionLabel";
@@ -68,6 +69,8 @@ export default function MetadataGameDetail() {
 	const [holoMx, setHoloMx] = useState(0);
 	const [holoMy, setHoloMy] = useState(0);
 	const [coverIdx, setCoverIdx] = useState(0);
+	const [romQuery, setRomQuery] = useState("");
+	const [romPage, setRomPage] = useState(1);
 	usePageTitle(game ? `${game.name} - NeoAssets` : "NeoAssets - Game Metadata");
 
 	useEffect(() => {
@@ -111,6 +114,16 @@ export default function MetadataGameDetail() {
 	const completionPct = gameCompletionPct(game);
 	const contributors = game.contributors || [];
 	const regions = game.regions || [];
+
+	// ROM dump search (by name or any hash) and pagination.
+	const romQueryNorm = romQuery.trim().toLowerCase();
+	const filteredRoms = romQueryNorm
+		? game.roms.filter((r) => [r.name, r.sha1, r.crc, r.md5, r.sha256].some((v) => (v || "").toLowerCase().includes(romQueryNorm)))
+		: game.roms;
+	const ROM_PAGE_SIZE = 15;
+	const romTotalPages = Math.max(1, Math.ceil(filteredRoms.length / ROM_PAGE_SIZE));
+	const romPageClamped = Math.min(romPage, romTotalPages);
+	const romPageItems = filteredRoms.slice((romPageClamped - 1) * ROM_PAGE_SIZE, romPageClamped * ROM_PAGE_SIZE);
 	// A region may exist only to hold regional cover/logo media; it belongs in
 	// the regional media section, not in the regional names list.
 	const namedRegions = regions.filter((r) => r.name || r.release_year);
@@ -298,19 +311,36 @@ export default function MetadataGameDetail() {
 
 			<section className="card p-6">
 				<h2 className="font-semibold mb-3">{t("metadataGame.romDumpsTitle", { count: game.roms.length })}</h2>
+				{game.roms.length > 0 ? (
+					<div className="relative mb-3">
+						<Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-base-content)]/40" />
+						<input
+							className="input w-full pl-9"
+							placeholder={t("metadataGame.romSearch")}
+							value={romQuery}
+							onChange={(e) => {
+								setRomQuery(e.target.value);
+								setRomPage(1);
+							}}
+						/>
+					</div>
+				) : null}
 				<div className="space-y-3">
-					{game.roms.map((r) => (
+					{filteredRoms.length > 0 ? <Pagination page={romPageClamped} totalPages={romTotalPages} onChange={setRomPage} /> : null}
+					{romPageItems.map((r) => (
 						<div key={r.id} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-2">
 							<p className="font-mono text-xs font-semibold text-[var(--color-base-content)]/80 truncate">{r.name}</p>
 							<div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2">
 								<div><p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">SHA1</p><p className="font-mono text-[11px] break-all">{r.sha1 || "—"}</p></div>
 								<div><p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">CRC</p><p className="font-mono text-[11px]">{r.crc || "—"}</p></div>
 								<div><p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">MD5</p><p className="font-mono text-[11px] break-all">{r.md5 || "—"}</p></div>
-								<div><p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">{t("common.size")}</p><p className="font-mono text-[11px]">{(r.size / 1024 / 1024).toFixed(1)} MB</p></div>
+								<div><p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">{t("common.size")}</p><p className="font-mono text-[11px]">{r.size ? `${(r.size / 1024 / 1024).toFixed(1)} MB` : "—"}</p></div>
 							</div>
 						</div>
 					))}
 					{game.roms.length === 0 ? <p className="text-sm text-[var(--color-base-content)]/50">{t("metadataGame.noDumps")}</p> : null}
+					{game.roms.length > 0 && filteredRoms.length === 0 ? <p className="text-sm text-[var(--color-base-content)]/50">{t("metadataGame.noDumpsMatch")}</p> : null}
+					{filteredRoms.length > 0 ? <Pagination page={romPageClamped} totalPages={romTotalPages} onChange={setRomPage} /> : null}
 				</div>
 			</section>
 		</div>

@@ -151,9 +151,11 @@ export default function MetadataAdminView() {
 	// game that should be kept.
 	const isDeleteGame = payload.delete_game === true;
 	const duplicateOf = typeof payload.duplicate_of === "string" ? payload.duplicate_of : "";
-	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month" && k !== "region" && k !== "regions" && k !== "duplicate_of" && k !== "delete_game");
+	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month" && k !== "region" && k !== "regions" && k !== "roms" && k !== "duplicate_of" && k !== "delete_game");
 	// A new game may submit several per-region names/releases at once.
 	const regionEntries = Array.isArray(payload.regions) ? (payload.regions as Array<Record<string, unknown>>).filter((r) => typeof r?.region === "string") : [];
+	// ROM dump changes (add/edit/delete), each matched against the current roms.
+	const romEntries = Array.isArray(payload.roms) ? (payload.roms as Array<Record<string, unknown>>).filter((r) => typeof r?.action === "string") : [];
 	const textKeys = [...TEXT_ORDER.filter((k) => payloadKeys.includes(k)), ...payloadKeys.filter((k) => !TEXT_ORDER.includes(k))];
 
 	// Header data for the detail modal: the target game/system and a link to
@@ -503,6 +505,32 @@ export default function MetadataAdminView() {
 													{delName ? <p className="text-sm text-[var(--color-error)]">{t("metadataAdmin.nameRemoved")}</p> : null}
 													{release ? <p className="text-sm"><span className="text-[var(--color-base-content)]/50">{t("metadataSubmit.textTypes.release")}: </span>{release}{releaseFrom ? <span className="text-[var(--color-base-content)]/50"> ({t("metadataAdmin.movedFrom")} <RegionLabel region={releaseFrom} />)</span> : null}</p> : null}
 													{delRelease ? <p className="text-sm text-[var(--color-error)]">{t("metadataAdmin.releaseRemoved")}</p> : null}
+												</div>
+											);
+										})}
+									</div>
+								</div>
+							) : null}
+
+							{romEntries.length > 0 ? (
+								<div>
+									<p className="label-text mb-2">{t("metadataGame.romDumpsTitle", { count: romEntries.length })}</p>
+									<div className="space-y-2">
+										{romEntries.map((r, i) => {
+											const action = typeof r.action === "string" ? r.action : "";
+											const name = typeof r.name === "string" ? r.name : "";
+											const region = typeof r.region === "string" ? r.region : "";
+											const sha1 = typeof r.sha1 === "string" ? r.sha1 : "";
+											const current = (detail?.game?.roms || []).find((x) => x.id === r.id);
+											return (
+												<div key={i} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1">
+													<p className="font-medium text-sm flex items-center gap-2 flex-wrap">
+														<span className={`badge badge-sm ${action === "delete" ? "badge-error" : action === "edit" ? "badge-warning" : "badge-primary"}`}>{t("common." + action, { defaultValue: action })}</span>
+														{name || current?.name}
+														{region ? <RegionLabel region={region} /> : null}
+													</p>
+													{action !== "delete" && sha1 ? <p className="font-mono text-[11px] break-all text-[var(--color-base-content)]/60">SHA1 {sha1}</p> : null}
+													{current ? <p className="text-xs text-[var(--color-base-content)]/40">{t("admin.old")}: {current.name}{current.sha1 ? ` · SHA1 ${current.sha1}` : ""}</p> : null}
 												</div>
 											);
 										})}

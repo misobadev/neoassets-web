@@ -610,6 +610,8 @@
 		"romDumpsTitle_one": "ROM 덤프 ({{count}})",
 		"romDumpsTitle_other": "ROM 덤프 ({{count}})",
 		"noDumps": "덤프가 없습니다.",
+		"romSearch": "이름 또는 해시로 검색",
+		"noDumpsMatch": "검색과 일치하는 ROM 덤프가 없습니다.",
 		"regionsTitle": "지역",
 		"regionalNames": "지역별 이름"
 	},
@@ -749,7 +751,16 @@
 			"whyLabelRequired": "이유 (필수)",
 			"addNewValue": "새 값 추가",
 			"actionLabel": "작업",
-			"addRegion": "지역 추가"
+			"addRegion": "지역 추가",
+			"roms": "ROM 덤프",
+			"romHint": "게임의 ROM 덤프를 추가, 편집 또는 삭제합니다. 파일을 끌어다 놓으면 세부 정보가 자동으로 채워집니다.",
+			"addRom": "ROM 덤프 추가",
+			"romPick": "ROM 덤프 선택",
+			"romDrop": "ROM 파일을 끌어다 놓거나 클릭하여 선택하세요 (이름, 크기, 해시는 로컬에서 계산됨)",
+			"romHashing": "해시 계산 중…",
+			"romHashFailed": "ROM 파일을 읽을 수 없습니다.",
+			"romDuplicate": "이 ROM은 이 게임에 이미 존재합니다.",
+			"romZipNote": "압축 파일(ZIP, RAR, 7z)은 이름만으로 제출되며 크기와 해시는 계산되지 않습니다."
 		},
 		"working": "작업 중...",
 		"submitForReview": "검토를 위해 제출",

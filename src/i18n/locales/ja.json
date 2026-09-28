@@ -610,6 +610,8 @@
 		"romDumpsTitle_one": "ROMダンプ（{{count}}）",
 		"romDumpsTitle_other": "ROMダンプ（{{count}}）",
 		"noDumps": "ダンプがありません。",
+		"romSearch": "名前またはハッシュで検索",
+		"noDumpsMatch": "検索に一致するROMダンプはありません。",
 		"regionsTitle": "地域",
 		"regionalNames": "地域別の名前"
 	},
@@ -749,7 +751,16 @@
 			"whyLabelRequired": "理由（必須）",
 			"addNewValue": "新しい値を追加",
 			"actionLabel": "操作",
-			"addRegion": "地域を追加"
+			"addRegion": "地域を追加",
+			"roms": "ROMダンプ",
+			"romHint": "ゲームのROMダンプを追加・編集・削除します。ファイルをドロップすると詳細が自動入力されます。",
+			"addRom": "ROMダンプを追加",
+			"romPick": "ROMダンプを選択",
+			"romDrop": "ROMファイルをドロップするかクリックして選択（名前・サイズ・ハッシュはローカルで計算）",
+			"romHashing": "ハッシュを計算中…",
+			"romHashFailed": "ROMファイルを読み込めませんでした。",
+			"romDuplicate": "このROMはこのゲームに既に存在します。",
+			"romZipNote": "アーカイブファイル（ZIP、RAR、7z）は名前のみで送信されます。サイズとハッシュは計算されません。"
 		},
 		"working": "処理中...",
 		"submitForReview": "レビューに提出",

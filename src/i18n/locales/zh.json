@@ -610,6 +610,8 @@
 		"romDumpsTitle_one": "ROM 转储（{{count}}）",
 		"romDumpsTitle_other": "ROM 转储（{{count}}）",
 		"noDumps": "无转储。",
+		"romSearch": "按名称或哈希搜索",
+		"noDumpsMatch": "没有与搜索匹配的 ROM 转储。",
 		"regionsTitle": "地区",
 		"regionalNames": "地区名称"
 	},
@@ -749,7 +751,16 @@
 			"whyLabelRequired": "原因（必填）",
 			"addNewValue": "添加新值",
 			"actionLabel": "操作",
-			"addRegion": "添加地区"
+			"addRegion": "添加地区",
+			"roms": "ROM 转储",
+			"romHint": "添加、编辑或删除游戏的 ROM 转储。拖放文件以自动填充详细信息。",
+			"addRom": "添加 ROM 转储",
+			"romPick": "选择 ROM 转储",
+			"romDrop": "拖放 ROM 文件或点击浏览（名称、大小和哈希在本地计算）",
+			"romHashing": "正在计算哈希…",
+			"romHashFailed": "无法读取 ROM 文件。",
+			"romDuplicate": "该 ROM 已存在于该游戏中。",
+			"romZipNote": "压缩文件（ZIP、RAR、7z）仅以名称提交；不计算大小和哈希。"
 		},
 		"working": "正在处理……",
 		"submitForReview": "提交审核",

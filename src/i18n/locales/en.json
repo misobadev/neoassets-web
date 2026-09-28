@@ -592,6 +592,8 @@
 		"romDumpsTitle_one": "ROM dumps ({{count}})",
 		"romDumpsTitle_other": "ROM dumps ({{count}})",
 		"noDumps": "No dumps.",
+		"romSearch": "Search by name or hash",
+		"noDumpsMatch": "No ROM dumps match your search.",
 		"regionsTitle": "Regions",
 		"regionalNames": "Regional names"
 	},
@@ -731,7 +733,16 @@
 			"whyLabelRequired": "Why (required)",
 			"addNewValue": "Add a new value",
 			"actionLabel": "Action",
-			"addRegion": "Add Region"
+			"addRegion": "Add Region",
+			"roms": "ROM dumps",
+			"romHint": "Add, edit or delete the game's ROM dumps. Drop a file to fill in the details automatically.",
+			"addRom": "Add ROM dump",
+			"romPick": "Select a ROM dump",
+			"romDrop": "Drop a ROM file or click to browse (name, size and hashes are computed locally)",
+			"romHashing": "Hashing…",
+			"romHashFailed": "Could not read the ROM file.",
+			"romDuplicate": "This ROM already exists for this game.",
+			"romZipNote": "Archive files (ZIP, RAR, 7z) are submitted by name only; size and hashes are not calculated."
 		},
 		"working": "Working...",
 		"submitForReview": "Submit for review",

@@ -610,6 +610,8 @@
 		"romDumpsTitle_one": "Dump ROM ({{count}})",
 		"romDumpsTitle_other": "Dump ROM ({{count}})",
 		"noDumps": "Tidak ada dump.",
+		"romSearch": "Cari berdasarkan nama atau hash",
+		"noDumpsMatch": "Tidak ada dump ROM yang cocok dengan pencarian Anda.",
 		"regionsTitle": "Wilayah",
 		"regionalNames": "Nama regional"
 	},
@@ -749,7 +751,16 @@
 			"whyLabelRequired": "Alasan (wajib)",
 			"addNewValue": "Tambah nilai baru",
 			"actionLabel": "Tindakan",
-			"addRegion": "Tambah wilayah"
+			"addRegion": "Tambah wilayah",
+			"roms": "Dump ROM",
+			"romHint": "Tambah, edit, atau hapus dump ROM game. Seret file untuk mengisi detail secara otomatis.",
+			"addRom": "Tambah dump ROM",
+			"romPick": "Pilih dump ROM",
+			"romDrop": "Seret file ROM atau klik untuk memilih (nama, ukuran, dan hash dihitung secara lokal)",
+			"romHashing": "Menghitung hash…",
+			"romHashFailed": "Tidak dapat membaca file ROM.",
+			"romDuplicate": "ROM ini sudah ada untuk game ini.",
+			"romZipNote": "File arsip (ZIP, RAR, 7z) dikirim hanya dengan nama; ukuran dan hash tidak dihitung."
 		},
 		"working": "Bekerja...",
 		"submitForReview": "Kirim untuk ditinjau",
