@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AlertTriangle, Check, ChevronLeft, Clapperboard, Plus, Trash2, Upload } from "lucide-react";
+import { AlertTriangle, Check, ChevronLeft, Clapperboard, HardDrive, Plus, Trash2, Upload } from "lucide-react";
 import {
 	createMetadataSubmission,
 	fetchGenres,
@@ -18,6 +18,35 @@ import {
 import { IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, checkVideoMeasurement, measureVideo } from "../lib/media";
 import { GAME_TYPES } from "../lib/gameTypes";
 import { uploadWithProgress } from "../lib/upload";
+import { hashRomFile } from "../lib/romhash";
+
+// World is the default region for a ROM dump row.
+const DEFAULT_REGION = "World";
+
+// One ROM dump to add with the new game: its region and (when not an archive)
+// the name/size/hashes read from the dropped file.
+interface RomRow {
+	key: string;
+	region: string;
+	name: string;
+	size: string;
+	crc: string;
+	md5: string;
+	sha1: string;
+	sha256: string;
+	hashing?: boolean;
+	duplicate?: boolean;
+}
+
+let romSeq = 0;
+const newRomRow = (): RomRow => ({ key: `rom-${++romSeq}`, region: DEFAULT_REGION, name: "", size: "", crc: "", md5: "", sha1: "", sha256: "" });
+
+function fmtBytes(bytes: number): string {
+	if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+	if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(0)} MB`;
+	if (bytes >= 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+	return `${bytes} B`;
+}
 
 const IMAGE_KINDS: MediaKind[] = ["cover", "screenshot", "fanart", "logo"];
 const REGION_KINDS: MediaKind[] = ["cover", "logo"];
@@ -97,6 +126,7 @@ export default function NewGamePage() {
 	const [note, setNote] = useState("");
 
 	const [mediaRows, setMediaRows] = useState<Partial<Record<MediaKind, MediaRow[]>>>({});
+	const [romRows, setRomRows] = useState<RomRow[]>([newRomRow()]);
 	const [videoMeta, setVideoMeta] = useState<{ duration: number; width: number; height: number; fps: number; aspect: string } | null>(null);
 	const [videoError, setVideoError] = useState<string | null>(null);
 	const [fpsWarning, setFpsWarning] = useState<string | null>(null);
@@ -130,6 +160,37 @@ export default function NewGamePage() {
 			const rows = (prev[kind] ?? [newMediaRow()]).filter((_, i) => i !== index);
 			return { ...prev, [kind]: rows.length ? rows : [newMediaRow()] };
 		});
+	}
+	function updateRomRow(key: string, patch: Partial<RomRow>) {
+		setRomRows((rows) => rows.map((r) => (r.key === key ? { ...r, ...patch } : r)));
+	}
+	function removeRomRow(key: string) {
+		setRomRows((rows) => (rows.length > 1 ? rows.filter((r) => r.key !== key) : rows));
+	}
+	// onPickRomFile hashes a dropped/selected ROM in the browser (or takes just
+	// the name for archives) and flags duplicates within the new game's rows.
+	async function onPickRomFile(key: string, file: File) {
+		const isArchive =
+			/\.(zip|rar|7z)$/i.test(file.name) ||
+			["application/zip", "application/x-zip-compressed", "application/x-rar-compressed", "application/vnd.rar", "application/x-7z-compressed"].includes(file.type);
+		if (isArchive) {
+			updateRomRow(key, { hashing: false, duplicate: false, name: file.name, size: "", crc: "", md5: "", sha1: "", sha256: "" });
+			setStatus({ text: t("metadataSubmit.form.romZipNote"), tone: "info" });
+			return;
+		}
+		updateRomRow(key, { hashing: true });
+		try {
+			const h = await hashRomFile(file);
+			const duplicate = romRows.some((r) => {
+				if (r.key === key) return false;
+				return (h.crc && r.crc === h.crc) || (h.md5 && r.md5 === h.md5) || (h.sha1 && r.sha1 === h.sha1) || (h.sha256 && r.sha256 === h.sha256);
+			});
+			updateRomRow(key, { hashing: false, duplicate, name: h.name, size: String(h.size), crc: h.crc, md5: h.md5, sha1: h.sha1, sha256: h.sha256 });
+			if (duplicate) setStatus({ text: t("metadataSubmit.form.romDuplicate"), tone: "error" });
+		} catch {
+			updateRomRow(key, { hashing: false });
+			setStatus({ text: t("metadataSubmit.form.romHashFailed"), tone: "error" });
+		}
 	}
 
 	useEffect(() => {
@@ -235,6 +296,21 @@ export default function NewGamePage() {
 			payload.release_year = canonical.release_year;
 			if (canonical.release_month) payload.release_month = canonical.release_month;
 		}
+
+		// ROM dumps for the new game (all are adds).
+		const roms = romRows
+			.filter((r) => r.name.trim() !== "")
+			.map((r) => ({
+				action: "add",
+				name: r.name.trim(),
+				size: r.size ? Number(r.size) : 0,
+				crc: r.crc.trim().toLowerCase(),
+				md5: r.md5.trim().toLowerCase(),
+				sha1: r.sha1.trim().toLowerCase(),
+				sha256: r.sha256.trim().toLowerCase(),
+				region: r.region,
+			}));
+		if (roms.length > 0) payload.roms = roms;
 		return payload;
 	}
 
@@ -247,6 +323,7 @@ export default function NewGamePage() {
 			return setStatus({ text: t("metadataSubmit.status.descriptionTooLong", { max: MAX_DESCRIPTION_LENGTH }), tone: "error" });
 		}
 		if (rowsFor(VIDEO_KIND)[0]?.file && videoError) return setStatus({ text: t("metadataSubmit.status.fixVideo"), tone: "error" });
+		if (romRows.some((r) => r.duplicate)) return setStatus({ text: t("metadataSubmit.form.romDuplicate"), tone: "error" });
 
 		setBusy(true);
 		setStatus({ text: t("metadataSubmit.status.creating"), tone: "info" });
@@ -585,6 +662,72 @@ export default function NewGamePage() {
 					{videoError ? <p className="text-xs text-[var(--color-error)]">{videoError}</p> : null}
 					<p className="text-xs text-[var(--color-warning)] leading-relaxed">{t("metadataSubmit.form.videoAspectHint")}</p>
 				</div>
+			</section>
+
+			{/* ROM dumps */}
+			<section className="card p-6 space-y-4">
+				<h2 className="font-semibold flex items-center gap-2">
+					<HardDrive className="w-4 h-4 text-[var(--color-primary)]" />
+					{t("metadataSubmit.form.roms")}
+				</h2>
+				<div className="space-y-3">
+					{romRows.map((row) => (
+						<div key={row.key} className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2">
+							{romRows.length > 1 ? (
+								<button type="button" className="btn btn-ghost btn-xs absolute top-2 right-2" onClick={() => removeRomRow(row.key)} disabled={busy} aria-label={t("common.delete")}>
+									<Trash2 className="w-3.5 h-3.5" />
+								</button>
+							) : null}
+							<div>
+								<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
+								<select className="select select-sm w-full" value={row.region} onChange={(e) => updateRomRow(row.key, { region: e.target.value })} disabled={busy}>
+									{regions.map((r) => (
+										<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
+									))}
+								</select>
+							</div>
+							<label
+								className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[var(--color-base-300)] px-4 py-10 text-sm text-[var(--color-base-content)]/60 cursor-pointer text-center transition-colors hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-primary)]/5 ${row.hashing ? "opacity-60" : ""}`}
+								onDragOver={(e) => e.preventDefault()}
+								onDrop={(e) => {
+									e.preventDefault();
+									const f = e.dataTransfer.files?.[0];
+									if (f) void onPickRomFile(row.key, f);
+								}}
+							>
+								<Upload className="w-8 h-8" />
+								<span className="max-w-md">{row.hashing ? t("metadataSubmit.form.romHashing") : t("metadataSubmit.form.romDrop")}</span>
+								<input
+									type="file"
+									className="hidden"
+									disabled={busy || row.hashing}
+									onChange={(e) => {
+										const f = e.target.files?.[0] || null;
+										if (f) void onPickRomFile(row.key, f);
+										e.target.value = "";
+									}}
+								/>
+							</label>
+							<div>
+								<label className="label-text">{t("common.name")}</label>
+								<input className="input input-sm w-full" value={row.name} onChange={(e) => updateRomRow(row.key, { name: e.target.value })} disabled={busy} />
+							</div>
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
+								<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">{t("common.size")}</span><span className="font-mono truncate">{row.size ? fmtBytes(Number(row.size)) : "—"}</span></div>
+								<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">CRC</span><span className="font-mono truncate">{row.crc || "—"}</span></div>
+								<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">MD5</span><span className="font-mono truncate">{row.md5 || "—"}</span></div>
+								<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">SHA1</span><span className="font-mono truncate">{row.sha1 || "—"}</span></div>
+								<div className="flex items-baseline gap-2 min-w-0 sm:col-span-2"><span className="label-text shrink-0">SHA256</span><span className="font-mono truncate">{row.sha256 || "—"}</span></div>
+							</div>
+							{row.duplicate ? <p className="text-xs text-[var(--color-error)]">{t("metadataSubmit.form.romDuplicate")}</p> : null}
+						</div>
+					))}
+				</div>
+				<button type="button" className="btn btn-outline btn-sm w-fit" onClick={() => setRomRows((rows) => [...rows, newRomRow()])} disabled={busy}>
+					{t("metadataSubmit.form.addRom")}
+				</button>
+				<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.form.romHint")}</p>
+				<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.form.romZipNote")}</p>
 			</section>
 
 			<section className="card p-6">
