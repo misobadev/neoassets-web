@@ -75,7 +75,7 @@ export default function MetadataAdminView() {
 	const [kindFilter, setKindFilter] = useState("");
 	const [userFilter, setUserFilter] = useState("");
 	const [systemFilter, setSystemFilter] = useState("");
-	const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+	const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 	const [page, setPage] = useState(1);
 	const [submissions, setSubmissions] = useState<MetadataSubmission[] | null>(null);
 	const [detail, setDetail] = useState<MetadataSubmissionDetail | null>(null);
