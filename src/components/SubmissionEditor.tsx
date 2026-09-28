@@ -6,7 +6,7 @@ import { api, cdnUrl, isAdmin, type PackDetail, type SubmissionDetail, type Subm
 import { formatDate } from "../lib/format";
 import { useSystems } from "../lib/systems";
 import { uploadWithProgress } from "../lib/upload";
-import { clearPackDraft, loadPackDraft, savePackDraft } from "../lib/draft";
+import { clearPackDraft, loadPackDraft, savePackDraft, type PackDraft } from "../lib/draft";
 import UserLink from "./UserLink";
 
 interface EditorFile {
@@ -73,6 +73,9 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 	const [status, setStatus] = useState<{ text: string; tone: string } | null>(null);
 	const [submissionStatus, setSubmissionStatus] = useState<SubmissionStatus | null>(null);
 	const [loaded, setLoaded] = useState(!id);
+	// `hydrated` flips once the initial draft/server load finished. Autosave must
+	// wait for it, otherwise the empty initial state overwrites the stored draft.
+	const [hydrated, setHydrated] = useState(false);
 
 	const [name, setName] = useState("");
 	const [author, setAuthor] = useState("");
@@ -98,6 +101,12 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 
 	const addFileInputRef = useRef<HTMLInputElement>(null);
 	const addToSystemRef = useRef<string>("");
+
+	// Latest draft snapshot, kept in a ref so it can be flushed on page hide /
+	// unmount without waiting for the debounce. `persistBlockedRef` suppresses
+	// that flush after the draft was intentionally cleared (submit/trash).
+	const latestDraftRef = useRef<{ key: string; data: PackDraft } | null>(null);
+	const persistBlockedRef = useRef(false);
 
 	const editable = submissionStatus === null || submissionStatus === "created" || submissionStatus === "rejected";
 
@@ -157,7 +166,10 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 					}
 				})
 				.catch(() => {})
-				.finally(() => setLoaded(true));
+				.finally(() => {
+					setLoaded(true);
+					setHydrated(true);
+				});
 			return;
 		}
 		api<SubmissionDetail>(`/api/v1/auth/submissions/${id}`, { token: userToken() })
@@ -207,22 +219,52 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 				}
 				setFiles(base);
 				setLoaded(true);
+				setHydrated(true);
 			})
 			.catch((e: Error) => {
 				setStatus({ text: e.message, tone: "error" });
 				setLoaded(true);
+				setHydrated(true);
 			});
 	}, [id]);
 
 	// Persist the draft (metadata + image blobs) automatically, debounced. Only
-	// while the pack is a create/rejected-editable state (never once submitted).
+	// while the pack is a create/rejected-editable state (never once submitted)
+	// and only after the initial load, so the empty mount state cannot clobber a
+	// stored draft before it is restored.
 	useEffect(() => {
-		if (!editable) return;
-		const t = setTimeout(() => {
-			savePackDraft({ createdAt: Date.now(), name, author, description, donationUrl, ai, files }, draftKey).catch(() => {});
+		if (!hydrated || !editable) return;
+		latestDraftRef.current = { key: draftKey, data: { createdAt: Date.now(), name, author, description, donationUrl, ai, files } };
+		const timer = setTimeout(() => {
+			const d = latestDraftRef.current;
+			if (!d) return;
+			savePackDraft(d.data, d.key).catch((e: Error) => {
+				setStatus({ text: t("submissions.editor.saveFailed", { message: e.message }), tone: "error" });
+			});
 		}, 500);
-		return () => clearTimeout(t);
-	}, [editable, draftKey, name, author, description, donationUrl, ai, files]);
+		return () => clearTimeout(timer);
+	}, [hydrated, editable, draftKey, name, author, description, donationUrl, ai, files, t]);
+
+	// Flush the pending draft when the tab is hidden/closed or the editor is
+	// unmounted (navigating away), so images added within the debounce window are
+	// not lost. Skipped after an intentional clear (submit/trash).
+	useEffect(() => {
+		const flush = () => {
+			if (persistBlockedRef.current) return;
+			const d = latestDraftRef.current;
+			if (d) savePackDraft(d.data, d.key).catch(() => {});
+		};
+		const onVisibility = () => {
+			if (document.visibilityState === "hidden") flush();
+		};
+		window.addEventListener("pagehide", flush);
+		document.addEventListener("visibilitychange", onVisibility);
+		return () => {
+			window.removeEventListener("pagehide", flush);
+			document.removeEventListener("visibilitychange", onVisibility);
+			flush();
+		};
+	}, []);
 
 	async function addFile(file: File, systemId: string) {
 		const ext = (file.name.split(".").pop() || "").toLowerCase();
@@ -328,7 +370,17 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 			return;
 		}
 		if (!subId) {
-			setStatus({ text: t("submissions.editor.savedLocal"), tone: "success" });
+			setSubmitting(true);
+			try {
+				const data = { createdAt: Date.now(), name, author, description, donationUrl, ai, files };
+				latestDraftRef.current = { key: draftKey, data };
+				await savePackDraft(data, draftKey);
+				setStatus({ text: t("submissions.editor.savedLocal"), tone: "success" });
+			} catch (e) {
+				setStatus({ text: t("submissions.editor.saveFailed", { message: (e as Error).message }), tone: "error" });
+			} finally {
+				setSubmitting(false);
+			}
 			return;
 		}
 		setSubmitting(true);
@@ -392,6 +444,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 				});
 				sub = await api<Submission>(`/api/v1/submissions/${subId}/submit`, { method: "POST", token: userToken() });
 				setSubId(sub.id);
+				persistBlockedRef.current = true;
 				try { await clearPackDraft(`pack-${sub.id}`); } catch {}
 			} else {
 				sub = await api<Submission>("/api/v1/submissions", {
@@ -410,6 +463,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 				});
 				setSubId(sub.id);
 				if (uploaded.length > 0) markUploaded(uploaded, true);
+				persistBlockedRef.current = true;
 				try { await clearPackDraft(draftKey); } catch {}
 				try { await clearPackDraft(`pack-${sub.id}`); } catch {}
 			}
@@ -429,9 +483,11 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 		try {
 			if (subId) {
 				await api(`/api/v1/submissions/${subId}/trash`, { method: "POST", token: userToken() });
+				persistBlockedRef.current = true;
 				try { await clearPackDraft(`pack-${subId}`); } catch {}
 			} else {
-				await clearPackDraft("current");
+				persistBlockedRef.current = true;
+				await clearPackDraft(draftKey);
 				navigate("/app/submissions");
 			}
 			setStatus({ text: t("submissions.editor.removed"), tone: "success" });

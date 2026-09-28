@@ -14,17 +14,22 @@ a static file.
 
 ```
 Browser (React SPA)
-  -> GET /api/v1/packs            approved packs (LandingPage)
-  -> GET /api/v1/systems          system catalog (upload grid)
-  -> GET /auth/submissions        current user's submissions + files + logs
-  -> GET /auth/submissions/:id    a submission detail
-  -> POST /submissions            create a draft
-  -> PUT  /submissions/:id        save a draft
-  -> POST /submissions/:id/upload presigned R2 URL
-  -> PUT  <presigned R2 URL>      direct browser upload (XHR)
-  -> POST /submissions/:id/submit draft -> pending
-  -> POST /submissions/:id/trash  non-approved -> trashed (deletes files)
+  -> GET  /api/v1/packs            approved packs (LandingPage)
+  -> GET  /api/v1/systems          system catalog (upload grid)
+  -> GET  /auth/submissions        current user's submissions + files + logs
+  -> GET  /auth/submissions/:id    a submission detail
+  -> POST /submissions/upload-url  presigned R2 URL (no submission row yet)
+  -> PUT  <presigned R2 URL>       direct browser upload (XHR)
+  -> POST /submissions             create + submit a new pack (files included)
+  -> POST /submissions/:id/files   register files on an existing draft/rejected
+  -> PUT  /submissions/:id         edit a draft's metadata
+  -> POST /submissions/:id/submit  draft -> pending
+  -> POST /submissions/:id/trash   non-approved -> trashed (deletes files)
 ```
+
+Drafts are **client-side** (IndexedDB, `src/lib/draft.ts`): no submission row
+exists until the user submits for review. The R2 uploads for a new pack use the
+`/submissions/upload-url` endpoint, which presigns keys from the pack name.
 
 ## Scraping API docs
 
@@ -45,6 +50,10 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
 - `src/lib/image.ts`       `toSafeBackground()` for avatars (center-crops to a
                            square WebP in the browser).
 - `src/lib/upload.ts`      `uploadWithProgress()` PUT via XHR to the presigned URL.
+- `src/lib/draft.ts`       client-side draft store (IndexedDB): `savePackDraft()`,
+                           `loadPackDraft()`, `clearPackDraft()`. Holds metadata +
+                           the actual image `File` blobs; a single DB connection is
+                           reused.
 - `src/lib/media.ts`       metadata media helpers: accepted formats,
                            `measureVideo()`, accepted aspect ratios and video
                            limits. Submission images are uploaded as picked; the
@@ -68,20 +77,25 @@ inline SVGs; pick an existing `lucide-react` icon instead.
 ## Behavior to preserve
 
 - **Statuses**: `created` (editable draft), `pending` (in review),
-  `approved` (published, shows in `/packs`), `rejected`, `trashed`. Editor is
-  read-only unless status is `created`. A user can trash (`trashed`) a pack only
-  while it is `created` or `rejected` (the trash button is hidden when pending
-  review or approved). The API filters `trashed` out of the list and deletes its
-  R2 files. Labels live under `status.*` in `src/i18n/locales/en.json` and are
+  `approved` (published, shows in `/packs`), `rejected`, `trashed`. The editor is
+  editable while the status is missing (new pack), `created` or `rejected`; it is
+  read-only for `pending`, `approved` and `trashed`. A user can trash (`trashed`)
+  a pack unless it is `approved` or already `trashed` (the trash button is hidden
+  when approved). The API filters `trashed` out of the list and deletes its R2
+  files. Labels live under `status.*` in `src/i18n/locales/en.json` and are
   resolved with `t("status." + value)`.
-- **Lazy creation**: for `/submissions/new` the submission is created on the
-  first upload/save/submit via `ensureSubmission()`. It requires `name` and
-  `author`; creation is memoized with a ref + promise so concurrent file adds
-  reuse one id and never create duplicates.
+- **Client-side drafts**: a new pack has no submission row. Metadata + image
+  blobs live in IndexedDB (`src/lib/draft.ts`), keyed by `pack-<id>` (editing an
+  existing submission), `contribution-<folder>` (contributing to a published
+  pack) or `current` (brand-new pack). Autosave is debounced and gated on the
+  initial load (`hydrated`) so the empty mount state cannot overwrite a stored
+  draft; it flushes on `pagehide`/`visibilitychange`/unmount. The row is only
+  created on submit (`POST /submissions` with the uploaded files). "Save draft"
+  on a new pack writes the IndexedDB draft; on an existing submission it also
+  PUTs the metadata and uploads any new files.
 - **Images in cards**: built with `cdnUrl(file.object_key)` from the `files`
   array. The edit grid shows `file.blob` immediately after upload and
   `file.objectKey` for existing files.
-- **Draft persistence** is server-side now (created/pending), not localStorage.
 - **i18n**: never hardcode UI text; add keys to `src/i18n/locales/en.json` and use
   `useTranslation()` + `t()`. Keep the same keys across every locale file and
   preserve `{{placeholders}}`. Status/role/log labels use `status.*`,

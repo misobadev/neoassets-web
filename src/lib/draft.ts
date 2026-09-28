@@ -26,15 +26,32 @@ export interface PackDraft {
 const DB_NAME = "ns-pack-draft-db";
 const STORE = "drafts";
 
+// A single connection is reused across every draft read/write. Opening a new
+// connection per call leaked them and made later opens slow enough for the
+// editor's debounced autosave to overwrite a draft before it was loaded.
+let dbPromise: Promise<IDBDatabase> | null = null;
+
 function openDB(): Promise<IDBDatabase> {
-	return new Promise((resolve, reject) => {
+	if (dbPromise) return dbPromise;
+	dbPromise = new Promise((resolve, reject) => {
 		const req = indexedDB.open(DB_NAME, 1);
 		req.onupgradeneeded = () => {
 			if (!req.result.objectStoreNames.contains(STORE)) req.result.createObjectStore(STORE);
 		};
-		req.onsuccess = () => resolve(req.result);
-		req.onerror = () => reject(req.error);
+		req.onsuccess = () => {
+			const db = req.result;
+			db.onversionchange = () => {
+				db.close();
+				dbPromise = null;
+			};
+			resolve(db);
+		};
+		req.onerror = () => {
+			dbPromise = null;
+			reject(req.error);
+		};
 	});
+	return dbPromise;
 }
 
 export async function savePackDraft(draft: PackDraft, key = "current"): Promise<void> {
