@@ -141,6 +141,7 @@
 		"loading": "Caricamento della dashboard...",
 		"subtitle": "L'attività della community a colpo d'occhio.",
 		"totalStorage": "Spazio totale",
+		"usedSpace": "Spazio utilizzato",
 		"mediaStorage": "Spazio media",
 		"objects_one": "{{count, number}} oggetto",
 		"objects_other": "{{count, number}} oggetti",
@@ -175,7 +176,7 @@
 		"topLevels": "Livelli migliori",
 		"totalContributions": "Contributi",
 		"totalGames": "Giochi nel catalogo",
-		"totalPacks": "Pack approvati",
+		"totalPacks": "Pacchetti artistici di sistema",
 		"totalSystems": "Sistemi",
 		"totalUsers": "Utenti"
 	},

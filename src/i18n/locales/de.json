@@ -141,6 +141,7 @@
 		"loading": "Dashboard wird geladen...",
 		"subtitle": "Community-Aktivität auf einen Blick.",
 		"totalStorage": "Gesamtspeicher",
+		"usedSpace": "Belegter Speicher",
 		"mediaStorage": "Medienspeicher",
 		"objects_one": "{{count, number}} Objekt",
 		"objects_other": "{{count, number}} Objekte",
@@ -175,7 +176,7 @@
 		"topLevels": "Top-Level",
 		"totalContributions": "Beiträge",
 		"totalGames": "Spiele im Katalog",
-		"totalPacks": "Genehmigte Packs",
+		"totalPacks": "System-Art-Packs",
 		"totalSystems": "Systeme",
 		"totalUsers": "Nutzer"
 	},

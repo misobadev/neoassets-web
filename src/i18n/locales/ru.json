@@ -145,6 +145,7 @@
 		"loading": "Загрузка панели...",
 		"subtitle": "Активность сообщества одним взглядом.",
 		"totalStorage": "Всего хранилища",
+		"usedSpace": "Использовано",
 		"mediaStorage": "Хранилище медиа",
 		"objects_one": "{{count, number}} объект",
 		"objects_few": "{{count, number}} объекта",
@@ -181,7 +182,7 @@
 		"topLevels": "Топ уровней",
 		"totalContributions": "Вклады",
 		"totalGames": "Игр в каталоге",
-		"totalPacks": "Одобренных пакетов",
+		"totalPacks": "Паки оформления систем",
 		"totalSystems": "Систем",
 		"totalUsers": "Пользователей"
 	},

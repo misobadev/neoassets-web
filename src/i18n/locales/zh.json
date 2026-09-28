@@ -141,6 +141,7 @@
 		"loading": "正在加载仪表盘……",
 		"subtitle": "社区活动一览。",
 		"totalStorage": "总存储",
+		"usedSpace": "已用空间",
 		"mediaStorage": "媒体存储",
 		"objects_one": "{{count, number}} 个对象",
 		"objects_other": "{{count, number}} 个对象",
@@ -175,7 +176,7 @@
 		"topLevels": "最高等级",
 		"totalContributions": "贡献",
 		"totalGames": "目录中的游戏",
-		"totalPacks": "已批准的包",
+		"totalPacks": "系统美术资源包",
 		"totalSystems": "系统",
 		"totalUsers": "用户"
 	},

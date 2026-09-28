@@ -141,6 +141,7 @@
 		"loading": "Memuat dasbor...",
 		"subtitle": "Sekilas aktivitas komunitas.",
 		"totalStorage": "Total penyimpanan",
+		"usedSpace": "Ruang terpakai",
 		"mediaStorage": "Penyimpanan media",
 		"objects_one": "{{count, number}} objek",
 		"objects_other": "{{count, number}} objek",
@@ -175,7 +176,7 @@
 		"topLevels": "Level teratas",
 		"totalContributions": "Kontribusi",
 		"totalGames": "Game di katalog",
-		"totalPacks": "Paket disetujui",
+		"totalPacks": "Paket Seni Sistem",
 		"totalSystems": "Sistem",
 		"totalUsers": "Pengguna"
 	},

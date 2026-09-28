@@ -141,6 +141,7 @@
 		"loading": "Chargement du tableau de bord...",
 		"subtitle": "L'activité de la communauté en un coup d'œil.",
 		"totalStorage": "Stockage total",
+		"usedSpace": "Espace utilisé",
 		"mediaStorage": "Stockage des médias",
 		"objects_one": "{{count, number}} objet",
 		"objects_other": "{{count, number}} objets",
@@ -175,7 +176,7 @@
 		"topLevels": "Meilleurs niveaux",
 		"totalContributions": "Contributions",
 		"totalGames": "Jeux au catalogue",
-		"totalPacks": "Packs approuvés",
+		"totalPacks": "Packs d'art système",
 		"totalSystems": "Systèmes",
 		"totalUsers": "Utilisateurs"
 	},

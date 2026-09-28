@@ -141,6 +141,7 @@
 		"loading": "Carregando painel...",
 		"subtitle": "Atividade da comunidade em um relance.",
 		"totalStorage": "Armazenamento total",
+		"usedSpace": "Espaço utilizado",
 		"mediaStorage": "Armazenamento de mídia",
 		"objects_one": "{{count, number}} objeto",
 		"objects_other": "{{count, number}} objetos",
@@ -175,7 +176,7 @@
 		"topLevels": "Melhores níveis",
 		"totalContributions": "Contribuições",
 		"totalGames": "Jogos no catálogo",
-		"totalPacks": "Packs aprovados",
+		"totalPacks": "Pacotes de Arte de Sistema",
 		"totalSystems": "Sistemas",
 		"totalUsers": "Utilizadores"
 	},

@@ -141,6 +141,7 @@
 		"loading": "ダッシュボードを読み込み中...",
 		"subtitle": "コミュニティの活動をひと目で。",
 		"totalStorage": "合計ストレージ",
+		"usedSpace": "使用容量",
 		"mediaStorage": "メディアストレージ",
 		"objects_one": "{{count, number}} 個のオブジェクト",
 		"objects_other": "{{count, number}} 個のオブジェクト",
@@ -175,7 +176,7 @@
 		"topLevels": "トップレベル",
 		"totalContributions": "投稿",
 		"totalGames": "カタログ内のゲーム",
-		"totalPacks": "承認済みパック",
+		"totalPacks": "システムアートパック",
 		"totalSystems": "システム",
 		"totalUsers": "ユーザー"
 	},
