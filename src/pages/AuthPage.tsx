@@ -1,5 +1,4 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Image } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import AuthForm from "../components/AuthForm";
 
@@ -16,10 +15,6 @@ export default function AuthPage({ mode }: { mode: "login" | "register" }) {
 		<div className="min-h-[70vh] flex items-center justify-center px-4 py-8">
 			<div className="w-full max-w-md">
 				<div className="text-center mb-8">
-					<span className="pill inline-flex mx-auto mb-3">
-						<Image className="w-3.5 h-3.5 text-[var(--color-primary)]" />
-						NeoAssets
-					</span>
 					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">
 						{mode === "register" ? t("auth.pageTitleRegister") : t("auth.pageTitleSignIn")}
 					</h1>
@@ -28,7 +23,9 @@ export default function AuthPage({ mode }: { mode: "login" | "register" }) {
 					</p>
 				</div>
 				<div className="card p-6 md:p-8">
-					<AuthForm initialMode={mode} onAuthed={() => navigate(from, { replace: true })} />
+					{/* key forces a remount when navigating between /app/login and
+					    /app/register, so the form opens on the route's mode. */}
+					<AuthForm key={mode} initialMode={mode} onAuthed={() => navigate(from, { replace: true })} />
 				</div>
 			</div>
 		</div>
