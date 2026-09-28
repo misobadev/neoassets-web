@@ -10,7 +10,7 @@ import {
 	fetchMetadataPendingKeys,
 	fetchRegions,
 	requestMetadataUploadUrl,
-	userToken,
+	isAuthed,
 	type GameDetail,
 	type GameRegion,
 	type Genre,
@@ -148,7 +148,7 @@ export default function MetadataSubmissionPage() {
 
 	// Fields/kinds that already have a pending submission for this user+game.
 	useEffect(() => {
-		if (!gameId || !userToken()) return;
+		if (!gameId || !isAuthed()) return;
 		fetchMetadataPendingKeys(gameId)
 			.then(setPendingKeys)
 			.catch(() => {});

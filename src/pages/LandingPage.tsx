@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, Download, Image } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { api, type Pack, CDN_BASE, userToken } from "../lib/api";
+import { api, type Pack, CDN_BASE, isAuthed } from "../lib/api";
 import DonateButton from "../components/DonateButton";
 
 export default function LandingPage() {
 	const [packs, setPacks] = useState<Pack[] | null>(null);
 	const [packsError, setPacksError] = useState<string | null>(null);
-	const signedIn = !!userToken();
+	const signedIn = isAuthed();
 	const { t } = useTranslation();
 
 	useEffect(() => {

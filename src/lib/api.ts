@@ -1,13 +1,10 @@
 export const API_BASE = import.meta.env.VITE_ASSETS_API_URL || "https://neoassets.dev";
 export const CDN_BASE = import.meta.env.VITE_CDN_BASE || "https://cdn.neoassets.dev";
 
-export const USER_TOKEN_KEY = "neoassets-user-token";
 export const USER_EMAIL_KEY = "neoassets-user-email";
 export const USER_NAME_KEY = "neoassets-user-name";
 export const USER_ROLE_KEY = "neoassets-user-role";
 export const USER_ID_KEY = "neoassets-user-id";
-export const ADMIN_TOKEN_KEY = "neoassets-admin-token";
-export const ADMIN_EMAIL_KEY = "neoassets-admin-email";
 
 export type SubmissionStatus = "created" | "pending" | "approved" | "rejected" | "trashed";
 
@@ -39,7 +36,9 @@ export interface User {
 
 export interface AuthResult {
 	user: User;
-	token: string;
+	// The session is delivered as httpOnly cookies; the server no longer returns
+	// the raw tokens to the browser.
+	token?: string;
 	is_admin?: boolean;
 	admin_token?: string;
 }
@@ -362,6 +361,9 @@ export async function api<T = unknown>(path: string, opts: ApiOptions = {}): Pro
 		method: opts.method || "GET",
 		headers,
 		cache: "no-store",
+		// The session is an httpOnly cookie, so every request must opt into
+		// sending credentials.
+		credentials: "include",
 		body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
 		signal: opts.signal,
 	});
@@ -373,6 +375,9 @@ export async function api<T = unknown>(path: string, opts: ApiOptions = {}): Pro
 		} catch {
 			/* keep statusText */
 		}
+		// 401 means the session cookie is missing/expired/revoked: drop the
+		// cached (non-secret) auth state so the UI falls back to guest.
+		if (res.status === 401) clearStoredAuth();
 		throw new ApiError(detail, res.status);
 	}
 	return res.json() as Promise<T>;
@@ -411,8 +416,33 @@ export function fetchConfig(): Promise<PublicConfig> {
 	return api<PublicConfig>("/api/v1/config");
 }
 
+// The browser session is carried in an httpOnly cookie, so no token is ever
+// read from (or written to) JavaScript-accessible storage. Requests authenticate
+// via `credentials: "include"`. These helpers return null for call sites that
+// still pass an explicit token; the cookie takes over.
 export function userToken(): string | null {
-	return localStorage.getItem(USER_TOKEN_KEY);
+	return null;
+}
+
+// isAuthed reports whether a session is believed to exist, based on the
+// non-secret profile cached after login. The server remains the source of truth
+// (a 401 clears it).
+export function isAuthed(): boolean {
+	try {
+		return !!localStorage.getItem(USER_ID_KEY);
+	} catch {
+		return false;
+	}
+}
+
+// clearStoredAuth removes the cached (non-secret) profile after logout or a 401.
+export function clearStoredAuth(): void {
+	try {
+		localStorage.removeItem(USER_ID_KEY);
+		localStorage.removeItem(USER_NAME_KEY);
+		localStorage.removeItem(USER_EMAIL_KEY);
+		localStorage.removeItem(USER_ROLE_KEY);
+	} catch {}
 }
 
 export function userEmail(): string | null {
@@ -545,21 +575,26 @@ export function userRole(): string | null {
 }
 
 export function isAdmin(): boolean {
-	return userRole() === "admin" || !!adminToken();
+	return userRole() === "admin";
 }
 
 export function isReviewer(): boolean {
-	return userRole() === "admin" || userRole() === "reviewer" || !!adminToken();
+	return userRole() === "admin" || userRole() === "reviewer";
 }
 
-// reviewToken is the token to use for review endpoints: an admin token if the
-// user is an admin, otherwise the user token (reviewers authenticate as users).
+// reviewToken/adminToken are kept for call-site compatibility but return null:
+// review and admin endpoints authenticate with the httpOnly session cookie.
 export function reviewToken(): string | null {
-	return adminToken() || userToken();
+	return null;
 }
 
 export function adminToken(): string | null {
-	return localStorage.getItem(ADMIN_TOKEN_KEY);
+	return null;
+}
+
+// logoutRequest clears the httpOnly session cookies on the server.
+export function logoutRequest(): Promise<{ message: string }> {
+	return api<{ message: string }>("/api/v1/logout", { method: "POST" });
 }
 
 // ---------------------------------------------------------------------------
@@ -815,6 +850,8 @@ export interface DashRecentMetadata {
 	game_name: string;
 	system_name: string;
 	submitted_by?: string;
+	cover?: string;
+	cover_updated?: string;
 	created_at: string;
 }
 
@@ -855,6 +892,8 @@ export interface DashboardData {
 	top_systems: DashSystem[];
 	recent_packs: DashRecentPack[];
 	recent_metadata: DashRecentMetadata[];
+	// Only the total used space is public on the dashboard.
+	storage?: { total_bytes: number };
 }
 
 export function fetchDashboard(): Promise<DashboardData> {

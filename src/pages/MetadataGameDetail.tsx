@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, PenSquare, PlusCircle } from "lucide-react";
-import { cdnUrl, fetchMetadataGameDetail, userToken, type GameDetail, type Language, type MediaKind, type MetadataMedia } from "../lib/api";
+import { cdnUrl, fetchMetadataGameDetail, isAuthed, type GameDetail, type Language, type MediaKind, type MetadataMedia } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import UserLink from "../components/UserLink";
@@ -147,7 +147,7 @@ export default function MetadataGameDetail() {
 						</span>
 					</div>
 				</div>
-				{userToken() ? (
+				{isAuthed() ? (
 					<Link to={`/app/metadata/${systemId || game.system_id}/game/${game.id}/submit`} className="btn btn-primary btn-sm shrink-0 self-center">
 						<PenSquare className="w-4 h-4" />
 						{t("metadataGame.submitChanges")}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ChevronLeft, Download, Layers, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { fetchPackDetail, userToken, type PackDetail } from "../lib/api";
+import { fetchPackDetail, isAuthed, type PackDetail } from "../lib/api";
 import UserLink from "../components/UserLink";
 import DonateButton from "../components/DonateButton";
 import { usePageTitle } from "../lib/seo";
@@ -15,7 +15,7 @@ export default function SapDetailPage() {
 	const { t } = useTranslation();
 	const [pack, setPack] = useState<PackDetail | null>(null);
 	const [error, setError] = useState<string | null>(null);
-	const signedIn = !!userToken();
+	const signedIn = isAuthed();
 	usePageTitle(pack ? pack.name : t("nav.systemArtPack"));
 
 	useEffect(() => {

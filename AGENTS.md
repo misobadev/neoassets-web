@@ -41,8 +41,13 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
 
 ## Key files
 
-- `src/lib/api.ts`         `api()` fetch helper, types, `USER_TOKEN_KEY`,
-                           `CDN_BASE`, `cdnUrl()`.
+- `src/lib/api.ts`         `api()` fetch helper (`credentials: "include"`),
+                           types, `isAuthed()`, `clearStoredAuth()`, `cdnUrl()`.
+                           Auth is an httpOnly session cookie set by the API, so
+                           no token is stored in JS: `userToken()`/`reviewToken()`
+                           return null and the cookie authenticates the request.
+                           Only the non-secret profile (`USER_ID/NAME/EMAIL/ROLE`)
+                           is cached in `localStorage` for the UI.
 - `src/i18n/index.ts`      i18next setup, `LANGUAGES`, `setLanguage()`, persisted
                            in `localStorage` under `ns-language`.
 - `src/i18n/locales/*.json` all UI strings (en, de, es, fr, id, it, ja, ko, pt, ru, zh).

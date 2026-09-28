@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { api, type AuthResult, USER_EMAIL_KEY, USER_TOKEN_KEY, ADMIN_EMAIL_KEY, ADMIN_TOKEN_KEY, USER_ROLE_KEY, USER_NAME_KEY, USER_ID_KEY } from "../lib/api";
+import { api, type AuthResult, USER_EMAIL_KEY, USER_ROLE_KEY, USER_NAME_KEY, USER_ID_KEY } from "../lib/api";
 
 type AuthMode = "login" | "register" | "forgot" | "reset";
 
@@ -38,20 +38,12 @@ export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed
 				method: "POST",
 				body: { email: authEmail, password: authPassword },
 			});
-			localStorage.setItem(USER_TOKEN_KEY, data.token);
+			// The session itself lives in httpOnly cookies set by the server; only
+			// the non-secret profile is cached locally for the UI.
 			localStorage.setItem(USER_EMAIL_KEY, data.user.email);
 			localStorage.setItem(USER_NAME_KEY, data.user.username || "");
 			localStorage.setItem(USER_ID_KEY, data.user.id || "");
 			localStorage.setItem(USER_ROLE_KEY, data.user.role || "user");
-			if (data.is_admin && data.admin_token) {
-				localStorage.setItem(ADMIN_TOKEN_KEY, data.admin_token);
-				localStorage.setItem(ADMIN_EMAIL_KEY, data.user.email);
-			} else {
-				// A previous admin session must not leak into this one: a reviewer
-				// (or plain user) logging in clears any stale admin token.
-				localStorage.removeItem(ADMIN_TOKEN_KEY);
-				localStorage.removeItem(ADMIN_EMAIL_KEY);
-			}
 			setAuthMsg(null);
 			onAuthed?.();
 		} catch (e) {

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { fetchMyMetadataSubmissions, fetchMySubmissions, fetchReviewSummary, userToken, type MetadataSubmission, type SubmissionDetail } from "./api";
+import { fetchMyMetadataSubmissions, fetchMySubmissions, fetchReviewSummary, isAuthed, type MetadataSubmission, type SubmissionDetail } from "./api";
 
 // A review item is one of the current user's contributions (metadata or system
 // art pack) with its review state. There is no notifications table: the list is
@@ -161,7 +161,7 @@ export function ReviewsProvider({ children }: { children: ReactNode }) {
 	const lastFetch = useRef(0);
 
 	const refresh = useCallback(() => {
-		if (!userToken()) return;
+		if (!isAuthed()) return;
 		setLoading(true);
 		// The badge only needs the review keys and the XP, so it uses the light
 		// summary endpoint instead of downloading the full review feed.
@@ -188,15 +188,15 @@ export function ReviewsProvider({ children }: { children: ReactNode }) {
 		refresh();
 	}, [refresh]);
 
-	// Refresh when the auth token appears (login) and clear when it goes away
+	// Refresh when a session appears (login) and clear when it goes away
 	// (logout). The provider lives above the router outlet, so it is not
 	// remounted on navigation.
-	const tokenRef = useRef(userToken());
+	const authedRef = useRef(isAuthed());
 	useEffect(() => {
-		const tok = userToken();
-		if (tok === tokenRef.current) return;
-		tokenRef.current = tok;
-		if (tok) refresh();
+		const authed = isAuthed();
+		if (authed === authedRef.current) return;
+		authedRef.current = authed;
+		if (authed) refresh();
 		else {
 			setKeys([]);
 			setTotalXP(0);

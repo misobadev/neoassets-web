@@ -4,7 +4,7 @@ import { Bell, Gamepad2, HelpCircle, Home, KeyRound, LayoutDashboard, LayoutGrid
 import { useTranslation } from "react-i18next";
 import LanguageSelect from "../components/LanguageSelect";
 import { useReviews } from "../lib/reviews";
-import { userUsername, userRole, userToken, isAdmin, isReviewer, fetchMe, USER_TOKEN_KEY, USER_EMAIL_KEY, USER_NAME_KEY, USER_ROLE_KEY, ADMIN_TOKEN_KEY, ADMIN_EMAIL_KEY } from "../lib/api";
+import { userUsername, userRole, isAdmin, isReviewer, isAuthed, fetchMe, clearStoredAuth, logoutRequest, USER_ROLE_KEY } from "../lib/api";
 
 const THEME_KEY = "ns-theme";
 const SIDEBAR_KEY = "ns-sidebar-collapsed";
@@ -25,12 +25,11 @@ function applyTheme(theme: "dark" | "light") {
 }
 
 function logout() {
-	localStorage.removeItem(USER_TOKEN_KEY);
-	localStorage.removeItem(USER_EMAIL_KEY);
-	localStorage.removeItem(USER_NAME_KEY);
-	localStorage.removeItem(USER_ROLE_KEY);
-	localStorage.removeItem(ADMIN_TOKEN_KEY);
-	localStorage.removeItem(ADMIN_EMAIL_KEY);
+	// Clear the server session cookies, then the cached profile. The local clear
+	// runs regardless so the UI logs out even if the request fails.
+	return logoutRequest()
+		.catch(() => {})
+		.finally(() => clearStoredAuth());
 }
 
 // SideLink renders a sidebar nav item. When the sidebar is collapsed only the
@@ -52,7 +51,7 @@ function SideLink({ to, icon, label, end, collapsed, active }: { to: string; ico
 }
 
 export default function AppPage() {
-	const [authed, setAuthed] = useState(!!userToken());
+	const [authed, setAuthed] = useState(isAuthed());
 	const [theme, setTheme] = useState<"dark" | "light">(initialTheme);
 	const [collapsed, setCollapsed] = useState(() => {
 		try {
@@ -75,7 +74,7 @@ export default function AppPage() {
 
 	// Keep the auth state in sync when navigating (e.g. after login/logout).
 	useEffect(() => {
-		setAuthed(!!userToken());
+		setAuthed(isAuthed());
 	}, [location.pathname]);
 
 	// Refresh the stored role from the server so a promotion to reviewer/admin
@@ -214,8 +213,8 @@ export default function AppPage() {
 								type="button"
 								title={t("nav.logout")}
 								onClick={() => {
-									logout();
 									setAuthed(false);
+									void logout();
 								}}
 							>
 								<LogOut className="w-4 h-4" />
