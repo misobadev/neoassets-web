@@ -653,6 +653,8 @@ export const REGION_FALLBACK: Region[] = [
 	{ id: "usa", name: "USA" },
 	{ id: "europe", name: "Europe" },
 	{ id: "japan", name: "Japan" },
+	{ id: "brazil", name: "Brazil" },
+	{ id: "asia", name: "Asia" },
 	{ id: "spain", name: "Spain" },
 	{ id: "france", name: "France" },
 	{ id: "germany", name: "Germany" },

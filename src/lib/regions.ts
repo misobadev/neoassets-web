@@ -13,6 +13,8 @@ const REGION_SLUGS: Record<string, string> = {
 	"Italy": "italy",
 	"Korea": "korea",
 	"China": "china",
+	"Brazil": "brazil",
+	"Asia": "asia",
 };
 
 // regionLabel resolves a stored region name to its translated label, falling
@@ -36,6 +38,8 @@ const REGION_FLAGS: Record<string, string> = {
 	"Italy": "it",
 	"Korea": "kr",
 	"China": "cn",
+	"Brazil": "br",
+	// Asia has no single country flag, so it is shown without one.
 };
 
 // regionFlagClass returns the flag-icons class for a region (empty when the
