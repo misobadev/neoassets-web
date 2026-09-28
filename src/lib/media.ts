@@ -18,12 +18,18 @@ export const VIDEO_FPS_MAX = 60;
 // is the maximum the worker accepts (and what the backend enforces).
 export const MAX_DESCRIPTION_LENGTH = 1500;
 
-// Common retro/console aspect ratios a video should match.
+// Common retro/console aspect ratios, used only to LABEL a video's resolution
+// in the UI. Aspect ratio is not restricted: arcade boards and vertical shmups
+// use many different DARs (4:3, 3:4, 10:9, 8:7, 5:4, ...).
 export const ACCEPTED_ASPECTS: { label: string; ratio: number }[] = [
 	{ label: "4:3", ratio: 4 / 3 },
 	{ label: "3:2", ratio: 3 / 2 },
 	{ label: "16:9", ratio: 16 / 9 },
 	{ label: "1:1", ratio: 1 },
+	{ label: "3:4", ratio: 3 / 4 },
+	{ label: "10:9", ratio: 10 / 9 },
+	{ label: "5:4", ratio: 5 / 4 },
+	{ label: "8:7", ratio: 8 / 7 },
 ];
 
 export function aspectLabel(w: number, h: number): string {
@@ -48,8 +54,10 @@ export interface VideoMeasurement {
 }
 
 // measureVideo loads a video to read its duration, dimensions and frame rate.
-// Browsers do not expose FPS directly, so it is measured by sampling frames
-// over a short muted playback.
+// Browsers do not expose FPS directly, so it is measured by sampling presented
+// frames over a muted playback. The element is attached to the DOM (visually
+// hidden) because requestVideoFrameCallback does not fire reliably for a
+// detached video, which made some videos measure as ~3 fps.
 export function measureVideo(file: File): Promise<VideoMeasurement> {
 	return new Promise((resolve, reject) => {
 		const url = URL.createObjectURL(file);
@@ -57,44 +65,111 @@ export function measureVideo(file: File): Promise<VideoMeasurement> {
 		video.preload = "auto";
 		video.muted = true;
 		video.playsInline = true;
+		video.style.cssText = "position:fixed;left:-10000px;top:0;width:2px;height:2px;opacity:0;pointer-events:none";
+		document.body.appendChild(video);
 		video.src = url;
+
 		let settled = false;
+		const guard = window.setTimeout(() => done(0), 4000);
+		const cleanup = () => {
+			window.clearTimeout(guard);
+			try { video.pause(); } catch {}
+			video.removeAttribute("src");
+			try { video.load(); } catch {}
+			video.remove();
+			URL.revokeObjectURL(url);
+		};
 		const done = (fps: number) => {
 			if (settled) return;
 			settled = true;
 			const result = { duration: video.duration, width: video.videoWidth, height: video.videoHeight, fps };
-			video.pause();
-			URL.revokeObjectURL(url);
+			cleanup();
 			resolve(result);
 		};
 		const fail = () => {
 			if (settled) return;
 			settled = true;
-			video.pause();
-			URL.revokeObjectURL(url);
+			cleanup();
 			reject(new Error("could not read video"));
 		};
+
+		video.onerror = fail;
 		video.onloadedmetadata = () => {
-			if (!video.requestVideoFrameCallback) {
-				done(0);
-				return;
-			}
-			let frames = 0;
-			let first = -1;
-			const onFrame = (_now: number, meta: { mediaTime: number }) => {
+			// Ignore the decoder warm-up, then count presented frames over a
+			// fixed wall-clock window. getVideoPlaybackQuality is preferred (it
+			// counts frames the compositor actually presented); rVFC callbacks are
+			// the fallback.
+			const warmupMs = 500;
+			const sampleMs = 1500;
+			const t0 = performance.now();
+			const qualityFrames = () => (typeof video.getVideoPlaybackQuality === "function" ? video.getVideoPlaybackQuality().totalVideoFrames : null);
+			let sampling = false;
+			let sampleStart = 0;
+			let sampleStartFrames = 0;
+			let rvfcAtStart = 0;
+			let rvfcCount = 0;
+
+			const finish = () => {
+				const seconds = (performance.now() - sampleStart) / 1000;
+				const endFrames = qualityFrames();
+				const frames = endFrames != null ? endFrames - sampleStartFrames : rvfcCount - rvfcAtStart;
+				done(frames > 0 && seconds > 0.3 ? Math.round(frames / seconds) : 0);
+			};
+			const tick = () => {
 				if (settled) return;
-				if (first < 0) first = meta.mediaTime;
-				frames++;
-				const elapsed = meta.mediaTime - first;
-				if (elapsed >= 0.6) {
-					done(Math.round(frames / elapsed));
+				const elapsed = performance.now() - t0;
+				if (!sampling && elapsed >= warmupMs) {
+					sampling = true;
+					sampleStart = performance.now();
+					sampleStartFrames = qualityFrames() ?? 0;
+					rvfcAtStart = rvfcCount;
+				}
+				if (sampling && performance.now() - sampleStart >= sampleMs) {
+					finish();
+					return;
+				}
+				if (typeof video.requestVideoFrameCallback === "function") {
+					video.requestVideoFrameCallback(() => {
+						rvfcCount++;
+						tick();
+					});
 				} else {
-					video.requestVideoFrameCallback(onFrame);
+					window.setTimeout(tick, 100);
 				}
 			};
-			video.requestVideoFrameCallback(onFrame);
-			video.play().catch(() => done(0));
+			video.play().then(tick).catch(() => done(0));
 		};
-		video.onerror = fail;
 	});
+}
+
+// VideoCheck is a client-side validation result expressed as i18n keys so the
+// caller can translate it. FPS is only a warning: the browser measurement is not
+// fully reliable, so the server is authoritative and rejects a genuinely low
+// frame rate when the submission is created.
+export interface VideoCheck {
+	errors: { key: string; params?: Record<string, unknown> }[];
+	warnings: { key: string; params?: Record<string, unknown> }[];
+}
+
+// checkVideoMeasurement applies the video rules. Aspect ratio is intentionally
+// not restricted (arcade boards use many DARs).
+export function checkVideoMeasurement(fileName: string, m: VideoMeasurement): VideoCheck {
+	const errors: VideoCheck["errors"] = [];
+	const warnings: VideoCheck["warnings"] = [];
+	if (!VIDEO_ACCEPT.split(",").some((e) => fileName.toLowerCase().endsWith(e))) {
+		errors.push({ key: "metadataSubmit.errors.format" });
+	}
+	if (m.duration < VIDEO_MIN_SECONDS - 0.5) {
+		errors.push({ key: "metadataSubmit.errors.durationMin", params: { min: VIDEO_MIN_SECONDS, current: m.duration.toFixed(1) } });
+	}
+	if (m.duration > VIDEO_MAX_SECONDS + 0.5) {
+		errors.push({ key: "metadataSubmit.errors.durationMax", params: { max: VIDEO_MAX_SECONDS, current: m.duration.toFixed(1) } });
+	}
+	if (m.width <= 0 || m.height <= 0) {
+		errors.push({ key: "metadataSubmit.errors.dimensions" });
+	}
+	if (m.fps > 0 && m.fps < VIDEO_FPS_MIN) {
+		warnings.push({ key: "metadataSubmit.errors.frameRate", params: { fpsMin: VIDEO_FPS_MIN, fps: VIDEO_FPS, detected: m.fps } });
+	}
+	return { errors, warnings };
 }

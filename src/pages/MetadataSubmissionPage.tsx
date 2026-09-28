@@ -25,7 +25,7 @@ import { regionLabel } from "../lib/regions";
 import RegionLabel, { RegionFlag } from "../components/RegionLabel";
 import { uploadWithProgress } from "../lib/upload";
 import { GAME_TYPES, typeBadgeClass } from "../lib/gameTypes";
-import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
+import { IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, checkVideoMeasurement, measureVideo } from "../lib/media";
 
 const TEXT_TYPES = [
 	{ key: "name", label: "metadataSubmit.textTypes.name" },
@@ -94,6 +94,7 @@ export default function MetadataSubmissionPage() {
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const [videoMeta, setVideoMeta] = useState<{ duration: number; width: number; height: number; fps: number; aspect: string } | null>(null);
 	const [fileError, setFileError] = useState<string | null>(null);
+	const [fpsWarning, setFpsWarning] = useState<string | null>(null);
 	const [status, setStatus] = useState<{ text: string; tone: string } | null>(null);
 	const [busy, setBusy] = useState(false);
 	const [confirmSubmit, setConfirmSubmit] = useState(false);
@@ -164,42 +165,25 @@ export default function MetadataSubmissionPage() {
 		if (!isVideo || !file) {
 			setVideoMeta(null);
 			setFileError(null);
+			setFpsWarning(null);
 			return;
 		}
-		// Load the video to validate format / duration / fps / aspect ratio
-		// before upload. FPS is measured by sampling frames over a short muted
-		// playback (browsers do not expose it directly).
+		// Load the video to validate format / duration / dimensions before upload.
+		// FPS is only a warning (the browser measurement is unreliable; the server
+		// validates it authoritatively on submit). Aspect ratio is not restricted.
 		let cancelled = false;
 		measureVideo(file)
-			.then(({ duration, width, height, fps }) => {
+			.then((m) => {
 				if (cancelled) return;
-				const errors: string[] = [];
-				if (!VIDEO_ACCEPT.split(",").some((e) => file.name.toLowerCase().endsWith(e))) {
-					errors.push(t("metadataSubmit.errors.format"));
-				}
-				if (duration < VIDEO_MIN_SECONDS - 0.5) {
-					errors.push(t("metadataSubmit.errors.durationMin", { min: VIDEO_MIN_SECONDS, current: duration.toFixed(1) }));
-				}
-				if (duration > VIDEO_MAX_SECONDS + 0.5) {
-					errors.push(t("metadataSubmit.errors.durationMax", { max: VIDEO_MAX_SECONDS, current: duration.toFixed(1) }));
-				}
-				if (width <= 0 || height <= 0) {
-					errors.push(t("metadataSubmit.errors.dimensions"));
-				}
-				const ratio = width / height;
-				const aspectOk = ACCEPTED_ASPECTS.some((a) => Math.abs(a.ratio - ratio) < 0.03);
-				if (width > 0 && height > 0 && !aspectOk) {
-					errors.push(t("metadataSubmit.errors.aspect", { ratio: (width / height).toFixed(2) }));
-				}
-				if (fps > 0 && fps < VIDEO_FPS_MIN) {
-					errors.push(t("metadataSubmit.errors.frameRate", { fpsMin: VIDEO_FPS_MIN, fps: VIDEO_FPS, detected: fps }));
-				}
-				setVideoMeta({ duration, width, height, fps, aspect: aspectLabel(width, height) });
-				setFileError(errors.length ? errors.join(" ") : null);
+				const { errors, warnings } = checkVideoMeasurement(file.name, m);
+				setVideoMeta({ ...m, aspect: aspectLabel(m.width, m.height) });
+				setFileError(errors.length ? errors.map((e) => t(e.key, e.params)).join(" ") : null);
+				setFpsWarning(warnings.length ? warnings.map((e) => t(e.key, e.params)).join(" ") : null);
 			})
 			.catch(() => {
 				if (cancelled) return;
 				setFileError(t("metadataSubmit.errors.readVideo"));
+				setFpsWarning(null);
 				setVideoMeta(null);
 			});
 		return () => {
@@ -1018,7 +1002,8 @@ export default function MetadataSubmissionPage() {
 									<div className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1 bg-[var(--color-base-300)]/30">
 										<p>{t("metadataSubmit.form.resolution", { width: videoMeta.width, height: videoMeta.height, aspect: videoMeta.aspect })}</p>
 										<p>{t("metadataSubmit.form.duration", { duration: videoMeta.duration.toFixed(1) })} {videoMeta.duration < VIDEO_MIN_SECONDS || videoMeta.duration > VIDEO_MAX_SECONDS ? <span className="text-[var(--color-error)]">{t("metadataSubmit.form.durationRange", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS })}</span> : null}</p>
-										<p>{t("metadataSubmit.form.frameRate", { fps: videoMeta.fps > 0 ? `${videoMeta.fps} fps` : t("metadataSubmit.form.frameRateUnknown") })} {videoMeta.fps > 0 && videoMeta.fps < VIDEO_FPS_MIN ? <span className="text-[var(--color-error)]">				{t("metadataSubmit.form.frameRateRange", { fpsMin: VIDEO_FPS_MIN })}</span> : null}</p>
+										<p>{t("metadataSubmit.form.frameRate", { fps: videoMeta.fps > 0 ? `${videoMeta.fps} fps` : t("metadataSubmit.form.frameRateUnknown") })}</p>
+										{fpsWarning ? <p className="text-[var(--color-warning)]">{fpsWarning}</p> : null}
 									</div>
 									<video ref={videoRef} src={URL.createObjectURL(file)} controls className="w-full max-h-64 rounded-lg border border-[var(--color-base-300)] bg-black" muted />
 									{fileError ? <p className="text-[var(--color-error)]">{fileError}</p> : <p className="text-[var(--color-success)]">{t("metadataSubmit.form.videoOk")}</p>}

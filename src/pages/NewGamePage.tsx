@@ -15,7 +15,7 @@ import {
 	type MetadataSystem,
 	type Region,
 } from "../lib/api";
-import { ACCEPTED_ASPECTS, IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, measureVideo } from "../lib/media";
+import { IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, checkVideoMeasurement, measureVideo } from "../lib/media";
 import { GAME_TYPES } from "../lib/gameTypes";
 import { uploadWithProgress } from "../lib/upload";
 
@@ -99,6 +99,7 @@ export default function NewGamePage() {
 	const [mediaRows, setMediaRows] = useState<Partial<Record<MediaKind, MediaRow[]>>>({});
 	const [videoMeta, setVideoMeta] = useState<{ duration: number; width: number; height: number; fps: number; aspect: string } | null>(null);
 	const [videoError, setVideoError] = useState<string | null>(null);
+	const [fpsWarning, setFpsWarning] = useState<string | null>(null);
 
 	const [status, setStatus] = useState<{ text: string; tone: string } | null>(null);
 	const [busy, setBusy] = useState(false);
@@ -169,32 +170,22 @@ export default function NewGamePage() {
 		if (!file) {
 			setVideoMeta(null);
 			setVideoError(null);
+			setFpsWarning(null);
 			return;
 		}
 		let cancelled = false;
 		measureVideo(file)
-			.then(({ duration, width, height, fps }) => {
+			.then((m) => {
 				if (cancelled) return;
-				const errors: string[] = [];
-				if (!VIDEO_ACCEPT.split(",").some((e) => file.name.toLowerCase().endsWith(e))) {
-					errors.push(t("metadataSubmit.errors.format"));
-				}
-				if (duration < VIDEO_MIN_SECONDS - 0.5) errors.push(t("metadataSubmit.errors.durationMin", { min: VIDEO_MIN_SECONDS, current: duration.toFixed(1) }));
-				if (duration > VIDEO_MAX_SECONDS + 0.5) errors.push(t("metadataSubmit.errors.durationMax", { max: VIDEO_MAX_SECONDS, current: duration.toFixed(1) }));
-				if (width <= 0 || height <= 0) errors.push(t("metadataSubmit.errors.dimensions"));
-				const ratio = width / height;
-				if (width > 0 && height > 0 && !ACCEPTED_ASPECTS.some((a) => Math.abs(a.ratio - ratio) < 0.03)) {
-					errors.push(t("metadataSubmit.errors.aspect", { ratio: ratio.toFixed(2) }));
-				}
-				if (fps > 0 && fps < VIDEO_FPS_MIN) {
-					errors.push(t("metadataSubmit.errors.frameRate", { fpsMin: VIDEO_FPS_MIN, fps: VIDEO_FPS, detected: fps }));
-				}
-				setVideoMeta({ duration, width, height, fps, aspect: aspectLabel(width, height) });
-				setVideoError(errors.length ? errors.join(" ") : null);
+				const { errors, warnings } = checkVideoMeasurement(file.name, m);
+				setVideoMeta({ ...m, aspect: aspectLabel(m.width, m.height) });
+				setVideoError(errors.length ? errors.map((e) => t(e.key, e.params)).join(" ") : null);
+				setFpsWarning(warnings.length ? warnings.map((e) => t(e.key, e.params)).join(" ") : null);
 			})
 			.catch(() => {
 				if (cancelled) return;
 				setVideoError(t("metadataSubmit.errors.readVideo"));
+				setFpsWarning(null);
 				setVideoMeta(null);
 			});
 		return () => {
@@ -588,6 +579,7 @@ export default function NewGamePage() {
 							<p>{t("metadataSubmit.form.resolution", { width: videoMeta.width, height: videoMeta.height, aspect: videoMeta.aspect })}</p>
 							<p>{t("metadataSubmit.form.duration", { duration: videoMeta.duration.toFixed(1) })}</p>
 							<p>{t("metadataSubmit.form.frameRate", { fps: videoMeta.fps > 0 ? `${videoMeta.fps} fps` : t("metadataSubmit.form.frameRateUnknown") })}</p>
+							{fpsWarning ? <p className="text-[var(--color-warning)]">{fpsWarning}</p> : null}
 						</div>
 					) : null}
 					{videoError ? <p className="text-xs text-[var(--color-error)]">{videoError}</p> : null}
