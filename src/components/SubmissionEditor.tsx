@@ -350,7 +350,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 			body: { name, kind: f.kind, file_name: f.fileName, system_id: f.systemId, mime_type: f.mimeType, size: f.size },
 		});
 		await uploadWithProgress(resp.upload_url, f.blob!, f.mimeType, (p) =>
-			setProgress({ active: true, label: t("submissions.editor.uploadingFile", { name: f.fileName }), percent: Math.round(p * 100) }),
+			setProgress({ active: true, label: t("submissions.editor.uploadingFile", { name: f.fileName }), percent: p }),
 		);
 		return { kind: f.kind, system_id: f.systemId, object_key: resp.object_key, file_name: f.fileName, mime_type: f.mimeType, size: f.size, reason: f.reason };
 	}

@@ -510,6 +510,22 @@ export default function MetadataSubmissionPage() {
 		}
 	}
 
+	// resetForm clears every input after a successful submission (the selected
+	// field/kind is kept so another change can be entered right away).
+	function resetForm() {
+		setTextRows([newTextRow()]);
+		setMediaRows([newMediaRow()]);
+		setRomRows([newRomRow()]);
+		setTextValue("");
+		setNote("");
+		setFile(null);
+		setPreviewUrl(null);
+		setVideoMeta(null);
+		setFileError(null);
+		setFpsWarning(null);
+		setRomPage(1);
+	}
+
 	async function submit() {
 		setConfirmSubmit(false);
 		if (!game) return;
@@ -702,7 +718,7 @@ export default function MetadataSubmissionPage() {
 							const mime = r.file.type || "application/octet-stream";
 							setStatus({ text: t("metadataSubmit.uploadingImage"), tone: "info" });
 							const resp = await requestMetadataUploadUrl({ game_id: game.id, kind: currentKind, file_name: r.file.name, mime_type: mime, size: r.file.size, region: r.region });
-							await uploadWithProgress(resp.upload_url, r.file, mime, (p) => setProgress(Math.round(p * 100)));
+							await uploadWithProgress(resp.upload_url, r.file, mime, (p) => setProgress(p));
 							setProgress(100);
 							files.push({ kind: currentKind, object_key: resp.object_key, file_name: r.file.name, mime_type: mime, size: r.file.size, region: r.region });
 						}
@@ -718,7 +734,7 @@ export default function MetadataSubmissionPage() {
 						size: file.size,
 						region: "",
 					});
-					await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(Math.round(p * 100)));
+					await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(p));
 					setProgress(100);
 					files.push({ kind: currentKind, object_key: resp.object_key, file_name: file.name, mime_type: mime, size: file.size, region: "" });
 				}
@@ -728,6 +744,7 @@ export default function MetadataSubmissionPage() {
 			try {
 				localStorage.removeItem(draftKey);
 			} catch {}
+			resetForm();
 			setStatus({ text: t("metadataSubmit.status.submitted"), tone: "success" });
 			setProgress(null);
 		} catch (e) {

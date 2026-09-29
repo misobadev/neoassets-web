@@ -140,6 +140,28 @@ export default function NewGamePage() {
 	// The first filled name row drives the "existing game" search.
 	const primaryName = nameRows.find((r) => r.value.trim())?.value.trim() || "";
 
+	// resetForm clears every input so a fresh game can be added.
+	function resetForm() {
+		setNameRows([{ region: "", value: "" }]);
+		setReleaseRows([{ region: "", value: "" }]);
+		setDescription("");
+		setGenre("");
+		setDeveloper("");
+		setPublisher("");
+		setRating("");
+		setNote("");
+		setMediaRows({});
+		setRomRows([newRomRow()]);
+		setExisting(null);
+		setSuggestions([]);
+		setShowSuggestions(false);
+		setVideoMeta(null);
+		setVideoError(null);
+		setFpsWarning(null);
+		setStatus(null);
+		setProgress(null);
+	}
+
 	function updateNameRow(index: number, patch: Partial<RegionValue>) {
 		setNameRows((rows) => rows.map((r, i) => (i === index ? { ...r, ...patch } : r)));
 	}
@@ -337,7 +359,7 @@ export default function NewGamePage() {
 					const mime = file.type || "application/octet-stream";
 					const fileRegion = isRegional ? row.region.trim() : "";
 					const resp = await requestMetadataUploadUrl({ system_id: systemId, kind, file_name: file.name, mime_type: mime, size: file.size, region: fileRegion });
-					await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(Math.round(p * 100)));
+					await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(p));
 					setProgress(100);
 					uploaded.push({ kind, object_key: resp.object_key, file_name: file.name, mime_type: mime, size: file.size, region: fileRegion });
 				}
@@ -364,7 +386,7 @@ export default function NewGamePage() {
 					<h1 className="text-xl font-bold">{t("metadata.newGame.submittedTitle")}</h1>
 					<p className="text-sm text-[var(--color-base-content)]/70">{t("metadata.newGame.submittedBody")}</p>
 					<div className="flex justify-center gap-2">
-						<button className="btn btn-outline" onClick={() => { setDone(false); setNameRows([{ region: "", value: "" }]); setReleaseRows([{ region: "", value: "" }]); setDescription(""); setMediaRows({}); setExisting(null); }}>{t("metadata.newGame.addAnother")}</button>
+						<button className="btn btn-outline" onClick={() => { setDone(false); resetForm(); }}>{t("metadata.newGame.addAnother")}</button>
 						<Link to="/app/contributions" className="btn btn-primary">{t("reviews.title")}</Link>
 					</div>
 				</div>
