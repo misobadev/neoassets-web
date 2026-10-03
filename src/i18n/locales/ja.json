@@ -548,6 +548,7 @@
 		"movedFrom": "移動元",
 		"nameRemoved": "名前を削除",
 		"releaseRemoved": "発売日を削除",
+		"openConflictingGame": "既存のゲームを開く: {{name}}",
 		"none": "なし",
 		"filterBy": "絞り込み",
 		"filterSystem": "システムで絞り込み",

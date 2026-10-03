@@ -530,6 +530,7 @@
 		"movedFrom": "movido desde",
 		"nameRemoved": "Nombre eliminado",
 		"releaseRemoved": "Fecha de lanzamiento eliminada",
+		"openConflictingGame": "Abrir el juego existente: {{name}}",
 		"none": "Ninguno",
 		"filterBy": "Filtrar por",
 		"filterSystem": "Filtrar por sistema",

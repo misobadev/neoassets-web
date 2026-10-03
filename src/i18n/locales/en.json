@@ -530,6 +530,7 @@
 		"movedFrom": "moved from",
 		"nameRemoved": "Name removed",
 		"releaseRemoved": "Release removed",
+		"openConflictingGame": "Open the existing game: {{name}}",
 		"none": "None",
 		"filterBy": "Filter by",
 		"filterSystem": "Filter by system",

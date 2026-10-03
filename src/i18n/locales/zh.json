@@ -548,6 +548,7 @@
 		"movedFrom": "移动自",
 		"nameRemoved": "名称已删除",
 		"releaseRemoved": "发行日期已删除",
+		"openConflictingGame": "打开现有游戏：{{name}}",
 		"none": "无",
 		"filterBy": "筛选",
 		"filterSystem": "按系统筛选",

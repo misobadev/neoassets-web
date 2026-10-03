@@ -548,6 +548,7 @@
 		"movedFrom": "이동 출처",
 		"nameRemoved": "이름 삭제됨",
 		"releaseRemoved": "출시일 삭제됨",
+		"openConflictingGame": "기존 게임 열기: {{name}}",
 		"none": "없음",
 		"filterBy": "필터",
 		"filterSystem": "시스템으로 필터",

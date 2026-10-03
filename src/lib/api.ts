@@ -339,9 +339,13 @@ export interface MetadataSubmissionFile {
 
 export class ApiError extends Error {
 	status: number;
-	constructor(message: string, status: number) {
+	// data is the parsed error body, so callers can read extra fields (e.g. a
+	// name conflict's conflicting game).
+	data?: unknown;
+	constructor(message: string, status: number, data?: unknown) {
 		super(message);
 		this.status = status;
+		this.data = data;
 	}
 }
 
@@ -369,16 +373,17 @@ export async function api<T = unknown>(path: string, opts: ApiOptions = {}): Pro
 	});
 	if (!res.ok) {
 		let detail = res.statusText;
+		let body: unknown = null;
 		try {
-			const body = await res.json();
-			detail = body.error || detail;
+			body = await res.json();
+			detail = (body as { error?: string })?.error || detail;
 		} catch {
 			/* keep statusText */
 		}
 		// 401 means the session cookie is missing/expired/revoked: drop the
 		// cached (non-secret) auth state so the UI falls back to guest.
 		if (res.status === 401) clearStoredAuth();
-		throw new ApiError(detail, res.status);
+		throw new ApiError(detail, res.status, body);
 	}
 	return res.json() as Promise<T>;
 }

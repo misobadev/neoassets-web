@@ -548,6 +548,7 @@
 		"movedFrom": "dipindahkan dari",
 		"nameRemoved": "Nama dihapus",
 		"releaseRemoved": "Tanggal rilis dihapus",
+		"openConflictingGame": "Buka game yang ada: {{name}}",
 		"none": "Tidak ada",
 		"filterBy": "Filter berdasarkan",
 		"filterSystem": "Filter berdasarkan sistem",

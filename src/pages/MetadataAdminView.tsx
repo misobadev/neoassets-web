@@ -6,6 +6,7 @@ import Pagination from "../components/Pagination";
 import UserLink from "../components/UserLink";
 import { useReviews } from "../lib/reviews";
 import {
+	ApiError,
 	approveMetadataSubmission,
 	cdnUrl,
 	rejectMetadataSubmission,
@@ -83,6 +84,9 @@ export default function MetadataAdminView() {
 	const [comment, setComment] = useState("");
 	const [listMsg, setListMsg] = useState<string | null>(null);
 	const [busy, setBusy] = useState(false);
+	const [actionError, setActionError] = useState<string | null>(null);
+	// A name collision returns the existing game so the reviewer can open it.
+	const [actionConflict, setActionConflict] = useState<{ gameId: string; systemId: string; name: string } | null>(null);
 	const [approved, setApproved] = useState<{ id: string; description: boolean } | null>(null);
 
 	function load(s = status) {
@@ -107,14 +111,26 @@ export default function MetadataAdminView() {
 			const d = await fetchMetadataSubmissionDetail(id);
 			setDetail({ ...d, files: d.files || [], media: d.media || [] });
 			setComment("");
+			setActionError(null);
 		} catch (e) {
 			alert((e as Error).message);
 		}
 	}
 
+	// describeError surfaces the backend message and, for a name conflict, the
+	// conflicting game so it can be linked.
+	function describeError(e: unknown) {
+		const err = e as ApiError;
+		setActionError(err.message);
+		const c = (err.data as { conflict?: { game_id?: string; system_id?: string; name?: string } } | null)?.conflict;
+		setActionConflict(c?.game_id && c?.system_id ? { gameId: c.game_id, systemId: c.system_id, name: c.name || "" } : null);
+	}
+
 	async function approve() {
 		if (!detail) return;
 		setBusy(true);
+		setActionError(null);
+		setActionConflict(null);
 		try {
 			await approveMetadataSubmission(detail.submission.id, comment);
 			const hasDescription =
@@ -124,7 +140,7 @@ export default function MetadataAdminView() {
 			load();
 			refreshReviews();
 		} catch (e) {
-			alert((e as Error).message);
+			describeError(e);
 		} finally {
 			setBusy(false);
 		}
@@ -133,13 +149,15 @@ export default function MetadataAdminView() {
 	async function reject() {
 		if (!detail) return;
 		setBusy(true);
+		setActionError(null);
+		setActionConflict(null);
 		try {
 			await rejectMetadataSubmission(detail.submission.id, comment);
 			setDetail(null);
 			load();
 			refreshReviews();
 		} catch (e) {
-			alert((e as Error).message);
+			describeError(e);
 		} finally {
 			setBusy(false);
 		}
@@ -632,6 +650,25 @@ export default function MetadataAdminView() {
 												? t("metadataAdmin.approvingWithTranslations")
 												: t("metadataAdmin.approving")}
 										</p>
+									</div>
+								) : null}
+								{actionError ? (
+									<div className="space-y-2 rounded-lg border border-[var(--color-error)]/40 bg-[var(--color-error)]/10 p-3 text-sm text-[var(--color-error)]">
+										<div className="flex items-start gap-2">
+											<AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+											<span className="break-words">{actionError}</span>
+										</div>
+										{actionConflict ? (
+											<Link
+												to={`/app/metadata/${actionConflict.systemId}/game/${actionConflict.gameId}`}
+												target="_blank"
+												rel="noreferrer"
+												className="inline-flex items-center gap-1.5 link font-medium"
+											>
+												<ExternalLink className="w-3.5 h-3.5" />
+												{t("metadataAdmin.openConflictingGame", { name: actionConflict.name })}
+											</Link>
+										) : null}
 									</div>
 								) : null}
 								<div className="flex justify-end gap-2">

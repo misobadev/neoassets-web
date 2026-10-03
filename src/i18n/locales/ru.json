@@ -558,6 +558,7 @@
 		"movedFrom": "перемещено из",
 		"nameRemoved": "Название удалено",
 		"releaseRemoved": "Дата выхода удалена",
+		"openConflictingGame": "Открыть существующую игру: {{name}}",
 		"none": "Нет",
 		"filterBy": "Фильтр по",
 		"filterSystem": "Фильтр по системе",
