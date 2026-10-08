@@ -302,7 +302,6 @@
 		"gameMetadata": "Spiel-Metadaten",
 		"createAccount": "Konto erstellen",
 		"signIn": "Anmelden",
-		"supportKofi": "Auf Ko-fi unterstützen",
 		"becomePatron": "Auf Patreon unterstützen",
 		"fasterScraper": "Ein viel schnellerer Scraper",
 		"noSubmissionsLimit": "Kein Einreichungslimit"
@@ -318,7 +317,6 @@
 			"noTransferLimits": "Keine Transferlimits",
 			"freeNote": "NeoAssets ist für alle kostenlos und wird nur durch Spenden finanziert.",
 			"openApp": "App öffnen",
-			"supportKofi": "Auf Ko-fi unterstützen",
 			"becomePatron": "Auf Patreon unterstützen"
 		},
 		"categories": {
@@ -1031,7 +1029,6 @@
 		"hint": "Füge Supporter-E-Mails ein, eine pro Zeile. Vorhandene werden aktualisiert, nicht dupliziert.",
 		"placeholder": "supporter@example.com",
 		"parsed": "{{count}} E-Mails",
-		"platform": "Plattform",
 		"import": "Importieren",
 		"importing": "Wird importiert...",
 		"preview": "Vorschau",
@@ -1166,7 +1163,7 @@
 		"delete": "Löschen"
 	},
 	"adminMenu": {
-		"donationsBody": "Historische Ko-fi-Spenden importieren.",
+		"donationsBody": "Historische Patreon-Spenden importieren.",
 		"metadataBody": "Spiel-Metadaten und Medien-Beiträge prüfen.",
 		"sapBody": "System-Art-Pack-Einreichungen prüfen, genehmigen oder ablehnen.",
 		"subtitle": "Moderations- und Verwaltungswerkzeuge.",
@@ -1182,7 +1179,7 @@
 		"claimEmailPlaceholder": "Spenden-E-Mail",
 		"claimSend": "Code senden",
 		"claimSent": "Wir haben einen Code an diese E-Mail gesendet. Er läuft in 15 Minuten ab.",
-		"claimSubtitle": "Auf Ko-fi mit einer anderen E-Mail gespendet? Gib diese E-Mail ein, um deine Supporter-Vorteile mit diesem Konto zu verknüpfen.",
+		"claimSubtitle": "Auf Patreon mit einer anderen E-Mail gespendet? Gib diese E-Mail ein, um deine Supporter-Vorteile mit diesem Konto zu verknüpfen.",
 		"claimTitle": "Spende verknüpfen",
 		"monthly_supporter": "Monatlicher Supporter",
 		"none": "Keiner",

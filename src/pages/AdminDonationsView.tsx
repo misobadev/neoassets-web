@@ -17,7 +17,6 @@ function parseEmails(text: string): string[] {
 
 export default function AdminDonationsView() {
 	const { t } = useTranslation();
-	const [platform, setPlatform] = useState<"kofi" | "patreon">("kofi");
 	const [kind, setKind] = useState<"subscription" | "one_time">("subscription");
 	const [text, setText] = useState("");
 	const [busy, setBusy] = useState(false);
@@ -34,13 +33,13 @@ export default function AdminDonationsView() {
 		try {
 			const now = new Date().toISOString();
 			const donations: DonationImportItem[] = emails.map((email) => ({
-				platform,
+				platform: "patreon",
 				email,
 				kind,
 				amount_cents: 0,
 				currency: "USD",
 				occurred_at: now,
-				external_id: `import-${platform}-${email}`,
+				external_id: `import-patreon-${email}`,
 			}));
 			setResult(await importDonations(donations));
 		} catch (e) {
@@ -65,21 +64,12 @@ export default function AdminDonationsView() {
 			<section className="card p-6 space-y-4">
 				<p className="text-sm text-[var(--color-base-content)]/70">{t("adminDonations.hint")}</p>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-					<div>
-						<label className="label-text" htmlFor="don-platform">{t("adminDonations.platform")}</label>
-						<select id="don-platform" className="select w-full" value={platform} onChange={(e) => { setPlatform(e.target.value as "kofi" | "patreon"); setResult(null); }} disabled={busy}>
-							<option value="kofi">Ko-fi</option>
-							<option value="patreon">Patreon</option>
-						</select>
-					</div>
-					<div>
-						<label className="label-text" htmlFor="don-kind">{t("adminDonations.kind")}</label>
-						<select id="don-kind" className="select w-full" value={kind} onChange={(e) => { setKind(e.target.value as "subscription" | "one_time"); setResult(null); }} disabled={busy}>
-							<option value="subscription">{t("adminDonations.monthly")}</option>
-							<option value="one_time">{t("adminDonations.oneTime")}</option>
-						</select>
-					</div>
+				<div>
+					<label className="label-text" htmlFor="don-kind">{t("adminDonations.kind")}</label>
+					<select id="don-kind" className="select w-full" value={kind} onChange={(e) => { setKind(e.target.value as "subscription" | "one_time"); setResult(null); }} disabled={busy}>
+						<option value="subscription">{t("adminDonations.monthly")}</option>
+						<option value="one_time">{t("adminDonations.oneTime")}</option>
+					</select>
 				</div>
 
 				<textarea

@@ -1,8 +1,8 @@
 import { HandCoins } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-// DonateButton renders a generic donation link (Ko-fi, Patreon, or any other
-// donation URL) for a pack. It renders nothing when the pack has no link.
+// DonateButton renders a generic donation link (Patreon or any other donation
+// URL) for a pack. It renders nothing when the pack has no link.
 export default function DonateButton({ url, author }: { url?: string; author?: string }) {
 	const { t } = useTranslation();
 	if (!url) return null;

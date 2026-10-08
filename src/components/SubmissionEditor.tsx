@@ -633,7 +633,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 						</div>
 						<div>
 							<label className="label-text" htmlFor="pack-donation">{t("submissions.form.donationLabel")}</label>
-							<input id="pack-donation" className={`input ${!editable || isContribution ? "opacity-60 cursor-not-allowed" : ""}`} placeholder="https://ko-fi.com/you" value={donationUrl} onChange={(e) => setDonationUrl(e.target.value)} disabled={!editable || isContribution} />
+							<input id="pack-donation" className={`input ${!editable || isContribution ? "opacity-60 cursor-not-allowed" : ""}`} placeholder="https://patreon.com/you" value={donationUrl} onChange={(e) => setDonationUrl(e.target.value)} disabled={!editable || isContribution} />
 						</div>
 						<div className="md:col-span-2">
 							<div className={`rounded-lg border border-[var(--color-base-300)] p-4 space-y-2 ${!editable || isContribution ? "opacity-60 cursor-not-allowed" : ""}`}>

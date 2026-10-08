@@ -265,9 +265,6 @@ export default function AppPage() {
 							<a href="https://discord.gg/xE2kgKsRVq" target="_blank" rel="noopener noreferrer" className="hover:text-base-content">
 								Discord
 							</a>
-							<a href="https://ko-fi.com/neostation" target="_blank" rel="noopener noreferrer" className="hover:text-base-content">
-								Ko-fi
-							</a>
 							<a href="https://www.patreon.com/cw/NeoAssets" target="_blank" rel="noopener noreferrer" className="hover:text-base-content">
 								Patreon
 							</a>

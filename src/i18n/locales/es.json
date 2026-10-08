@@ -138,7 +138,7 @@
 		"prev": "Anterior"
 	},
 	"adminMenu": {
-		"donationsBody": "Importa donaciones históricas de Ko-fi.",
+		"donationsBody": "Importa donaciones históricas de Patreon.",
 		"subtitle": "Herramientas de moderación y administración.",
 		"sapBody": "Revisa, aprueba o rechaza envíos de paquetes de arte de sistemas.",
 		"metadataBody": "Revisa contribuciones de metadatos y medios de juegos.",
@@ -286,7 +286,6 @@
 		"gameMetadata": "Metadatos de juegos",
 		"createAccount": "Crear una cuenta",
 		"signIn": "Iniciar sesión",
-		"supportKofi": "Apoya en Ko-fi",
 		"becomePatron": "Apoya en Patreon"
 	},
 	"landing": {
@@ -300,7 +299,6 @@
 			"noTransferLimits": "Sin límites de transferencia",
 			"freeNote": "NeoAssets es gratis para todos y se mantiene solo con donaciones.",
 			"openApp": "Abrir la aplicación",
-			"supportKofi": "Apoya en Ko-fi",
 			"becomePatron": "Apoya en Patreon"
 		},
 		"categories": {
@@ -855,7 +853,7 @@
 		"supporter": "Supporter",
 		"monthly_supporter": "Supporter mensual",
 		"claimTitle": "Vincular una donación",
-		"claimSubtitle": "¿Donaste en Ko-fi con otro correo? Ingresa ese correo para vincular tus beneficios de supporter a esta cuenta.",
+		"claimSubtitle": "¿Donaste en Patreon con otro correo? Ingresa ese correo para vincular tus beneficios de supporter a esta cuenta.",
 		"claimEmailPlaceholder": "Correo de la donación",
 		"claimSend": "Enviar código",
 		"claimCodePlaceholder": "Código de 6 dígitos",
@@ -1029,7 +1027,6 @@
 		"hint": "Pega emails de supporters, uno por línea. Los existentes se actualizan, no se duplican.",
 		"placeholder": "supporter@example.com",
 		"parsed": "{{count}} emails",
-		"platform": "Plataforma",
 		"import": "Importar",
 		"importing": "Importando...",
 		"preview": "Vista previa",

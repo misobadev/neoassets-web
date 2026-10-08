@@ -302,7 +302,6 @@
 		"gameMetadata": "게임 메타데이터",
 		"createAccount": "계정 만들기",
 		"signIn": "로그인",
-		"supportKofi": "Ko-fi에서 후원하기",
 		"becomePatron": "Patreon에서 후원하기",
 		"fasterScraper": "훨씬 빠른 스크레이퍼",
 		"noSubmissionsLimit": "제출 제한 없음"
@@ -318,7 +317,6 @@
 			"noTransferLimits": "전송 제한 없음",
 			"freeNote": "NeoAssets는 모든 사람에게 무료이며 오직 기부로만 유지됩니다.",
 			"openApp": "앱 열기",
-			"supportKofi": "Ko-fi에서 후원하기",
 			"becomePatron": "Patreon에서 후원하기"
 		},
 		"categories": {
@@ -1031,7 +1029,6 @@
 		"hint": "서포터 이메일을 한 줄에 하나씩 붙여넣으세요. 기존 항목은 업데이트되며 중복되지 않습니다.",
 		"placeholder": "supporter@example.com",
 		"parsed": "{{count}}개 이메일",
-		"platform": "플랫폼",
 		"import": "가져오기",
 		"importing": "가져오는 중...",
 		"preview": "미리보기",
@@ -1166,7 +1163,7 @@
 		"delete": "삭제"
 	},
 	"adminMenu": {
-		"donationsBody": "과거 Ko-fi 후원을 가져옵니다.",
+		"donationsBody": "과거 Patreon 후원을 가져옵니다.",
 		"metadataBody": "게임 메타데이터와 미디어 기여를 검토합니다.",
 		"sapBody": "System Art Pack 제출물을 검토, 승인 또는 거부합니다.",
 		"subtitle": "모데레이션 및 관리 도구.",
@@ -1182,7 +1179,7 @@
 		"claimEmailPlaceholder": "후원 이메일",
 		"claimSend": "코드 보내기",
 		"claimSent": "해당 이메일로 코드를 보냈습니다. 15분 후에 만료됩니다.",
-		"claimSubtitle": "다른 이메일로 Ko-fi에서 후원하셨나요? 그 이메일을 입력하면 서포터 혜택을 이 계정에 연결할 수 있습니다.",
+		"claimSubtitle": "다른 이메일로 Patreon에서 후원하셨나요? 그 이메일을 입력하면 서포터 혜택을 이 계정에 연결할 수 있습니다.",
 		"claimTitle": "후원 연결",
 		"monthly_supporter": "월간 서포터",
 		"none": "없음",

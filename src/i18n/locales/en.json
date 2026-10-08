@@ -138,7 +138,7 @@
 		"prev": "Prev"
 	},
 	"adminMenu": {
-		"donationsBody": "Import historical Ko-fi donations.",
+		"donationsBody": "Import historical Patreon donations.",
 		"subtitle": "Moderation and administration tools.",
 		"sapBody": "Review, approve or reject System Art Pack submissions.",
 		"metadataBody": "Review game metadata and media contributions.",
@@ -286,7 +286,6 @@
 		"gameMetadata": "Game Metadata",
 		"createAccount": "Create an account",
 		"signIn": "Sign in",
-		"supportKofi": "Support on Ko-fi",
 		"becomePatron": "Support on Patreon"
 	},
 	"landing": {
@@ -300,7 +299,6 @@
 			"noTransferLimits": "No transfer limits",
 			"freeNote": "NeoAssets is free for everyone and maintained only through donations.",
 			"openApp": "Open the app",
-			"supportKofi": "Support on Ko-fi",
 			"becomePatron": "Support on Patreon"
 		},
 		"categories": {
@@ -855,7 +853,7 @@
 		"supporter": "Supporter",
 		"monthly_supporter": "Monthly Supporter",
 		"claimTitle": "Link a donation",
-		"claimSubtitle": "Donated on Ko-fi with a different email? Enter that email to link your supporter benefits to this account.",
+		"claimSubtitle": "Donated on Patreon with a different email? Enter that email to link your supporter benefits to this account.",
 		"claimEmailPlaceholder": "Donation email",
 		"claimSend": "Send code",
 		"claimCodePlaceholder": "6-digit code",
@@ -1029,7 +1027,6 @@
 		"hint": "Paste supporter emails, one per line. Existing emails are updated, not duplicated.",
 		"placeholder": "supporter@example.com",
 		"parsed": "{{count}} emails",
-		"platform": "Platform",
 		"import": "Import",
 		"importing": "Importing...",
 		"preview": "Preview",

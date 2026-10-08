@@ -308,7 +308,6 @@
 		"gameMetadata": "Игровые метаданные",
 		"createAccount": "Создать аккаунт",
 		"signIn": "Войти",
-		"supportKofi": "Поддержать на Ko-fi",
 		"becomePatron": "Поддержать на Patreon",
 		"fasterScraper": "Гораздо более быстрый скрапер",
 		"noSubmissionsLimit": "Без лимита заявок"
@@ -324,7 +323,6 @@
 			"noTransferLimits": "Без лимитов передачи",
 			"freeNote": "NeoAssets бесплатен для всех и поддерживается только за счёт пожертвований.",
 			"openApp": "Открыть приложение",
-			"supportKofi": "Поддержать на Ko-fi",
 			"becomePatron": "Поддержать на Patreon"
 		},
 		"categories": {
@@ -1055,7 +1053,6 @@
 		"hint": "Вставьте email саппортеров, по одному в строке. Существующие обновляются, а не дублируются.",
 		"placeholder": "supporter@example.com",
 		"parsed": "{{count}} email",
-		"platform": "Платформа",
 		"import": "Импортировать",
 		"importing": "Импорт...",
 		"preview": "Предпросмотр",
@@ -1190,7 +1187,7 @@
 		"delete": "Удалить"
 	},
 	"adminMenu": {
-		"donationsBody": "Импорт исторических донатов Ko-fi.",
+		"donationsBody": "Импорт исторических донатов Patreon.",
 		"metadataBody": "Проверяйте метаданные игр и медиавклады.",
 		"sapBody": "Проверяйте, одобряйте или отклоняйте заявки System Art Pack.",
 		"subtitle": "Инструменты модерации и администрирования.",
@@ -1206,7 +1203,7 @@
 		"claimEmailPlaceholder": "Email пожертвования",
 		"claimSend": "Отправить код",
 		"claimSent": "Мы отправили код на этот email. Он действует 15 минут.",
-		"claimSubtitle": "Донатили на Ko-fi с другого email? Введите его, чтобы привязать бонусы саппортера к этому аккаунту.",
+		"claimSubtitle": "Донатили на Patreon с другого email? Введите его, чтобы привязать бонусы саппортера к этому аккаунту.",
 		"claimTitle": "Привязать пожертвование",
 		"monthly_supporter": "Ежемесячный саппортер",
 		"none": "Нет",

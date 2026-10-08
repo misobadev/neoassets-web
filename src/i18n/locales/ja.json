@@ -302,7 +302,6 @@
 		"gameMetadata": "ゲームメタデータ",
 		"createAccount": "アカウントを作成",
 		"signIn": "ログイン",
-		"supportKofi": "Ko-fiで支援",
 		"becomePatron": "Patreonで支援",
 		"fasterScraper": "はるかに高速なスクレイパー",
 		"noSubmissionsLimit": "投稿数無制限"
@@ -318,7 +317,6 @@
 			"noTransferLimits": "転送制限なし",
 			"freeNote": "NeoAssetsは誰でも無料で、寄付によってのみ運営されています。",
 			"openApp": "アプリを開く",
-			"supportKofi": "Ko-fiで支援",
 			"becomePatron": "Patreonで支援"
 		},
 		"categories": {
@@ -1031,7 +1029,6 @@
 		"hint": "サポーターのメールを1行に1つずつ貼り付けてください。既存は更新され、重複しません。",
 		"placeholder": "supporter@example.com",
 		"parsed": "{{count}} 件のメール",
-		"platform": "プラットフォーム",
 		"import": "インポート",
 		"importing": "インポート中...",
 		"preview": "プレビュー",
@@ -1166,7 +1163,7 @@
 		"delete": "削除"
 	},
 	"adminMenu": {
-		"donationsBody": "過去のKo-fi寄付をインポートします。",
+		"donationsBody": "過去のPatreon寄付をインポートします。",
 		"metadataBody": "ゲームのメタデータとメディアの投稿を審査します。",
 		"sapBody": "System Art Pack の投稿を審査・承認・却下します。",
 		"subtitle": "モデレーションと管理のツール。",
@@ -1182,7 +1179,7 @@
 		"claimEmailPlaceholder": "寄付時のメール",
 		"claimSend": "コードを送信",
 		"claimSent": "そのメールにコードを送信しました。15分で有効期限が切れます。",
-		"claimSubtitle": "Ko-fi に別のメールで寄付しましたか？そのメールを入力すると、サポーター特典をこのアカウントに紐付けられます。",
+		"claimSubtitle": "Patreon に別のメールで寄付しましたか？そのメールを入力すると、サポーター特典をこのアカウントに紐付けられます。",
 		"claimTitle": "寄付を紐付ける",
 		"monthly_supporter": "月額サポーター",
 		"none": "なし",

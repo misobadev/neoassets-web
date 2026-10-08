@@ -302,7 +302,6 @@
 		"gameMetadata": "Metadata Game",
 		"createAccount": "Buat akun",
 		"signIn": "Masuk",
-		"supportKofi": "Dukung di Ko-fi",
 		"becomePatron": "Dukung di Patreon",
 		"fasterScraper": "Scraper yang jauh lebih cepat",
 		"noSubmissionsLimit": "Tanpa batas kiriman"
@@ -318,7 +317,6 @@
 			"noTransferLimits": "Tanpa batas transfer",
 			"freeNote": "NeoAssets gratis untuk semua orang dan hanya dikelola melalui donasi.",
 			"openApp": "Buka aplikasi",
-			"supportKofi": "Dukung di Ko-fi",
 			"becomePatron": "Dukung di Patreon"
 		},
 		"categories": {
@@ -1031,7 +1029,6 @@
 		"hint": "Tempel email supporter, satu per baris. Yang ada diperbarui, bukan diduplikasi.",
 		"placeholder": "supporter@example.com",
 		"parsed": "{{count}} email",
-		"platform": "Platform",
 		"import": "Impor",
 		"importing": "Mengimpor...",
 		"preview": "Pratinjau",
@@ -1166,7 +1163,7 @@
 		"delete": "Hapus"
 	},
 	"adminMenu": {
-		"donationsBody": "Impor donasi Ko-fi historis.",
+		"donationsBody": "Impor donasi Patreon historis.",
 		"metadataBody": "Tinjau kontribusi metadata dan media game.",
 		"sapBody": "Tinjau, setujui, atau tolak kiriman System Art Pack.",
 		"subtitle": "Alat moderasi dan administrasi.",
@@ -1182,7 +1179,7 @@
 		"claimEmailPlaceholder": "Email donasi",
 		"claimSend": "Kirim kode",
 		"claimSent": "Kami mengirim kode ke email itu. Kode kedaluwarsa dalam 15 menit.",
-		"claimSubtitle": "Berdonasi di Ko-fi dengan email berbeda? Masukkan email itu untuk menautkan manfaat supporter ke akun ini.",
+		"claimSubtitle": "Berdonasi di Patreon dengan email berbeda? Masukkan email itu untuk menautkan manfaat supporter ke akun ini.",
 		"claimTitle": "Tautkan donasi",
 		"monthly_supporter": "Supporter Bulanan",
 		"none": "Tidak ada",

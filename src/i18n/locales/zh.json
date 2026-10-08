@@ -302,7 +302,6 @@
 		"gameMetadata": "游戏元数据",
 		"createAccount": "创建账户",
 		"signIn": "登录",
-		"supportKofi": "在 Ko-fi 上支持",
 		"becomePatron": "在 Patreon 上支持",
 		"fasterScraper": "快得多的抓取器",
 		"noSubmissionsLimit": "无提交限制"
@@ -318,7 +317,6 @@
 			"noTransferLimits": "无传输限制",
 			"freeNote": "NeoAssets 对所有人免费，仅靠捐赠维持。",
 			"openApp": "打开应用",
-			"supportKofi": "在 Ko-fi 上支持",
 			"becomePatron": "在 Patreon 上支持"
 		},
 		"categories": {
@@ -1031,7 +1029,6 @@
 		"hint": "粘贴支持者邮箱，每行一个。已存在的会被更新，而不会重复。",
 		"placeholder": "supporter@example.com",
 		"parsed": "{{count}} 个邮箱",
-		"platform": "平台",
 		"import": "导入",
 		"importing": "导入中……",
 		"preview": "预览",
@@ -1166,7 +1163,7 @@
 		"delete": "删除"
 	},
 	"adminMenu": {
-		"donationsBody": "导入历史 Ko-fi 捐赠。",
+		"donationsBody": "导入历史 Patreon 捐赠。",
 		"metadataBody": "审核游戏元数据和媒体贡献。",
 		"sapBody": "审核、批准或拒绝 System Art Pack 提交。",
 		"subtitle": "审核与管理工具。",
@@ -1182,7 +1179,7 @@
 		"claimEmailPlaceholder": "捐赠邮箱",
 		"claimSend": "发送验证码",
 		"claimSent": "我们已向该邮箱发送验证码。15 分钟内有效。",
-		"claimSubtitle": "用其他邮箱在 Ko-fi 捐赠过？输入该邮箱即可将支持者权益关联到此账户。",
+		"claimSubtitle": "用其他邮箱在 Patreon 捐赠过？输入该邮箱即可将支持者权益关联到此账户。",
 		"claimTitle": "关联捐赠",
 		"monthly_supporter": "月度支持者",
 		"none": "无",
