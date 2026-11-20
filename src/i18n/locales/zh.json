@@ -304,7 +304,49 @@
 		"signIn": "登录",
 		"becomePatron": "在 Patreon 上支持",
 		"fasterScraper": "快得多的抓取器",
-		"noSubmissionsLimit": "无提交限制"
+		"noSubmissionsLimit": "无提交限制",
+		"catalog": {
+			"title": "目录内容",
+			"metadataTitle": "游戏元数据",
+			"metadataBody": "简介、发行日期、类型、评分、封面、标志、截图、视频和 ROM 哈希，每一项贡献都经过审核。",
+			"browseGames": "浏览游戏",
+			"packsTitle": "系统美术包",
+			"packsBody": "社区为每个系统制作的背景、标志和主题，可直接用于你的前端。",
+			"browsePacks": "浏览美术包"
+		},
+		"steps": {
+			"title": "如何贡献",
+			"guide": "阅读奖励指南",
+			"find": {
+				"title": "找到游戏",
+				"body": "按系统搜索目录，如果没有就添加这款游戏。"
+			},
+			"submit": {
+				"title": "提交修改",
+				"body": "编辑文字、上传媒体或添加 ROM dump。图片会在审核通过时自动优化。"
+			},
+			"review": {
+				"title": "审核",
+				"body": "每项修改在发布前都会经过审核，保持目录整洁。"
+			},
+			"earn": {
+				"title": "获得 XP",
+				"body": "通过审核的贡献可获得 XP 和等级，解锁更多抓取线程。"
+			}
+		},
+		"api": {
+			"title": "面向前端开发者",
+			"body": "使用抓取 API 为用户的游戏收藏获取元数据和媒体。",
+			"point1": "按 ROM 哈希或名称查找游戏",
+			"point2": "封面、标志、截图、同人图和视频",
+			"point3": "在账户中免费获取开发者凭据",
+			"docs": "阅读 API 文档"
+		},
+		"community": {
+			"title": "主要贡献者",
+			"body": "按通过审核的贡献数排列，正在建设目录的人们。",
+			"seeAll": "查看仪表盘"
+		}
 	},
 	"landing": {
 		"hero": {

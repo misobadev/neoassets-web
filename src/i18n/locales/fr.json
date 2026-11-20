@@ -304,7 +304,49 @@
 		"signIn": "Se connecter",
 		"becomePatron": "Soutenir sur Patreon",
 		"fasterScraper": "Un scraper bien plus rapide",
-		"noSubmissionsLimit": "Aucune limite de soumissions"
+		"noSubmissionsLimit": "Aucune limite de soumissions",
+		"catalog": {
+			"title": "Ce que contient le catalogue",
+			"metadataTitle": "Métadonnées de jeux",
+			"metadataBody": "Descriptions, dates de sortie, genres, notes, jaquettes, logos, captures, vidéos et hashes de ROM, vérifiés contribution par contribution.",
+			"browseGames": "Parcourir les jeux",
+			"packsTitle": "Packs d'art système",
+			"packsBody": "Fonds, logos et thèmes pour chaque système, créés par la communauté et prêts pour ton frontend.",
+			"browsePacks": "Parcourir les packs"
+		},
+		"steps": {
+			"title": "Comment contribuer",
+			"guide": "Lire le guide des récompenses",
+			"find": {
+				"title": "Trouver un jeu",
+				"body": "Cherche dans le catalogue par système, ou ajoute le jeu s'il manque."
+			},
+			"submit": {
+				"title": "Proposer une modification",
+				"body": "Modifie le texte, envoie des médias ou ajoute des dumps de ROM. Les images sont optimisées à l'approbation."
+			},
+			"review": {
+				"title": "Un relecteur vérifie",
+				"body": "Chaque modification est relue avant publication, pour garder un catalogue propre."
+			},
+			"earn": {
+				"title": "Gagner de l'XP",
+				"body": "Les contributions approuvées donnent de l'XP et des niveaux, qui débloquent plus de threads de scraping."
+			}
+		},
+		"api": {
+			"title": "Pour les développeurs de frontends",
+			"body": "Utilise l'API de scraping pour récupérer métadonnées et médias des collections de tes utilisateurs.",
+			"point1": "Recherche par hash de ROM ou par nom",
+			"point2": "Jaquettes, logos, captures, fanart et vidéos",
+			"point3": "Identifiants développeur gratuits depuis ton compte",
+			"docs": "Lire la documentation de l'API"
+		},
+		"community": {
+			"title": "Principaux contributeurs",
+			"body": "Les personnes qui construisent le catalogue, par contributions approuvées.",
+			"seeAll": "Voir le tableau de bord"
+		}
 	},
 	"landing": {
 		"hero": {

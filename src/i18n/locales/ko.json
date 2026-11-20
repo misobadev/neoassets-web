@@ -304,7 +304,49 @@
 		"signIn": "로그인",
 		"becomePatron": "Patreon에서 후원하기",
 		"fasterScraper": "훨씬 빠른 스크레이퍼",
-		"noSubmissionsLimit": "제출 제한 없음"
+		"noSubmissionsLimit": "제출 제한 없음",
+		"catalog": {
+			"title": "카탈로그 구성",
+			"metadataTitle": "게임 메타데이터",
+			"metadataBody": "설명, 출시일, 장르, 평점, 커버, 로고, 스크린샷, 영상, ROM 해시. 모든 기여는 하나씩 검토됩니다.",
+			"browseGames": "게임 둘러보기",
+			"packsTitle": "시스템 아트 팩",
+			"packsBody": "커뮤니티가 만든 시스템별 배경, 로고, 테마를 프런트엔드에서 바로 사용할 수 있습니다.",
+			"browsePacks": "아트 팩 둘러보기"
+		},
+		"steps": {
+			"title": "기여 방법",
+			"guide": "보상 가이드 읽기",
+			"find": {
+				"title": "게임 찾기",
+				"body": "시스템별로 카탈로그를 검색하고, 없으면 게임을 추가하세요."
+			},
+			"submit": {
+				"title": "변경 제출",
+				"body": "텍스트를 수정하고 미디어나 ROM 덤프를 추가하세요. 이미지는 승인 시 최적화됩니다."
+			},
+			"review": {
+				"title": "검토",
+				"body": "모든 변경은 게시 전에 검토되어 카탈로그가 깔끔하게 유지됩니다."
+			},
+			"earn": {
+				"title": "XP 획득",
+				"body": "승인된 기여로 XP와 레벨을 얻고, 더 많은 스크래핑 스레드를 사용할 수 있습니다."
+			}
+		},
+		"api": {
+			"title": "프런트엔드 개발자용",
+			"body": "스크래핑 API로 사용자의 게임 컬렉션에 필요한 메타데이터와 미디어를 가져오세요.",
+			"point1": "ROM 해시 또는 이름으로 게임 검색",
+			"point2": "커버, 로고, 스크린샷, 팬아트, 영상",
+			"point3": "계정에서 무료 개발자 자격 증명 발급",
+			"docs": "API 문서 읽기"
+		},
+		"community": {
+			"title": "상위 기여자",
+			"body": "승인된 기여 수 기준, 카탈로그를 만드는 사람들.",
+			"seeAll": "대시보드 보기"
+		}
 	},
 	"landing": {
 		"hero": {

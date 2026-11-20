@@ -304,7 +304,49 @@
 		"signIn": "Accedi",
 		"becomePatron": "Sostieni su Patreon",
 		"fasterScraper": "Uno scraper molto più veloce",
-		"noSubmissionsLimit": "Nessun limite di invii"
+		"noSubmissionsLimit": "Nessun limite di invii",
+		"catalog": {
+			"title": "Cosa contiene il catalogo",
+			"metadataTitle": "Metadati dei giochi",
+			"metadataBody": "Descrizioni, date di uscita, generi, valutazioni, copertine, loghi, screenshot, video e hash delle ROM, revisionati un contributo alla volta.",
+			"browseGames": "Sfoglia i giochi",
+			"packsTitle": "Art pack di sistema",
+			"packsBody": "Sfondi, loghi e temi per ogni sistema, creati dalla community e pronti per il tuo frontend.",
+			"browsePacks": "Sfoglia gli art pack"
+		},
+		"steps": {
+			"title": "Come si contribuisce",
+			"guide": "Leggi la guida alle ricompense",
+			"find": {
+				"title": "Trova un gioco",
+				"body": "Cerca nel catalogo per sistema, o aggiungi il gioco se manca."
+			},
+			"submit": {
+				"title": "Invia una modifica",
+				"body": "Modifica il testo, carica media o aggiungi dump di ROM. Le immagini vengono ottimizzate all'approvazione."
+			},
+			"review": {
+				"title": "Un revisore la controlla",
+				"body": "Ogni modifica viene revisionata prima di essere pubblicata, così il catalogo resta pulito."
+			},
+			"earn": {
+				"title": "Guadagna XP",
+				"body": "I contributi approvati danno XP e livelli, che sbloccano più thread di scraping."
+			}
+		},
+		"api": {
+			"title": "Per sviluppatori di frontend",
+			"body": "Usa l'API di scraping per ottenere metadati e media per le collezioni dei tuoi utenti.",
+			"point1": "Cerca i giochi per hash della ROM o per nome",
+			"point2": "Copertine, loghi, screenshot, fanart e video",
+			"point3": "Credenziali da sviluppatore gratuite dal tuo account",
+			"docs": "Leggi la documentazione dell'API"
+		},
+		"community": {
+			"title": "Migliori contributori",
+			"body": "Le persone che costruiscono il catalogo, per contributi approvati.",
+			"seeAll": "Vai alla dashboard"
+		}
 	},
 	"landing": {
 		"hero": {
