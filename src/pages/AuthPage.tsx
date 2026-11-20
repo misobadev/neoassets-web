@@ -1,11 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import AuthForm from "../components/AuthForm";
+import { useNoIndex, usePageMeta } from "../lib/seo";
 
 // AuthPage renders the sign-in / register form inside the app shell. After a
 // successful auth it returns the user to the page they were trying to reach
 // (or the app home).
 export default function AuthPage({ mode }: { mode: "login" | "register" }) {
+	usePageMeta({ title: mode === "login" ? "Sign in - NeoAssets" : "Create account - NeoAssets" });
+	useNoIndex();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { t } = useTranslation();

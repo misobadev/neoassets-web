@@ -17,7 +17,7 @@ import Pagination from "../components/Pagination";
 import { genreLabel } from "../lib/genres";
 import { typeBadgeClass } from "../lib/gameTypes";
 import RegionLabel from "../components/RegionLabel";
-import { usePageTitle } from "../lib/seo";
+import { SITE_URL, usePageMeta, type PageMeta } from "../lib/seo";
 
 // FieldValue renders a metadata value, or a "Data needed" link to the submit
 // page for that field when it is missing, to motivate contributors to fill it.
@@ -91,7 +91,7 @@ export default function MetadataGameDetail() {
 	const [coverIdx, setCoverIdx] = useState(0);
 	const [romQuery, setRomQuery] = useState("");
 	const [romPage, setRomPage] = useState(1);
-	usePageTitle(game ? `${game.name} - NeoAssets` : "NeoAssets - Game Metadata");
+	usePageMeta(gameMeta(game));
 
 	useEffect(() => {
 		if (!gameId) return;
@@ -513,4 +513,33 @@ export default function MetadataGameDetail() {
 			</section>
 		</div>
 	);
+}
+
+// gameMeta is the title, description, social image and schema.org VideoGame
+// data for a game page.
+function gameMeta(game: GameDetail | null): PageMeta {
+	if (!game) return { title: "Game Metadata - NeoAssets" };
+	const year = game.release_year ? ` (${game.release_year})` : "";
+	const image = game.cover ? mediaUrl(game.cover, game.cover_updated) : undefined;
+	const description =
+		game.description ||
+		`${game.name}${year} for ${game.system_name}: covers, logos, screenshots, videos and ROM hashes on NeoAssets.`;
+	return {
+		title: `${game.name}${year} - ${game.system_name} - NeoAssets`,
+		description,
+		image,
+		jsonLd: {
+			"@context": "https://schema.org",
+			"@type": "VideoGame",
+			name: game.name,
+			url: `${SITE_URL}/app/metadata/${game.system_id}/game/${game.id}`,
+			description: game.description || undefined,
+			gamePlatform: game.system_name,
+			genre: game.genre || undefined,
+			publisher: game.publisher ? { "@type": "Organization", name: game.publisher } : undefined,
+			author: game.developer ? { "@type": "Organization", name: game.developer } : undefined,
+			datePublished: game.release_year ? String(game.release_year) : undefined,
+			image,
+		},
+	};
 }

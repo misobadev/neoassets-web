@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import CopyButton from "../components/CopyButton";
-import { usePageTitle } from "../lib/seo";
+import { usePageMeta } from "../lib/seo";
 
 const BASE_URL = "https://api.neoassets.dev";
 
@@ -112,7 +112,11 @@ function ParamTable({ params }: { params: Param[] }) {
 
 export default function ApiDocsPage() {
 	const { t } = useTranslation();
-	usePageTitle("NeoAssets - API Docs");
+	usePageMeta({
+		title: "Scraping API Docs - NeoAssets",
+		description:
+			"NeoAssets scraping API for emulation frontends: look up games by ROM hash or name and get metadata, covers, screenshots, logos and videos.",
+	});
 
 	const gameParams: Param[] = [
 		{ name: "system_id", type: "string", required: false, description: t("apiDocs.pSystemId") },

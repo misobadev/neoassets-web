@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import { api, CDN_BASE, type Pack, userUsername } from "../lib/api";
 import UserLink from "../components/UserLink";
 import DonateButton from "../components/DonateButton";
-import { usePageTitle } from "../lib/seo";
 import { useSession } from "../lib/session";
+import { usePageMeta } from "../lib/seo";
 
 // SubmissionsView is the community System Art Pack gallery: every user's
 // published contribution. The current user's own submissions (drafts and
@@ -15,7 +15,11 @@ export default function SubmissionsView() {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const { authed: signedIn } = useSession();
-	usePageTitle(t("nav.systemArtPack"));
+	usePageMeta({
+		title: `${t("nav.systemArtPack")} - NeoAssets`,
+		description:
+			"Browse community system art packs for emulation frontends: backgrounds, logos and themes for every system, ready to download.",
+	});
 	const [packs, setPacks] = useState<Pack[] | null>(null);
 	const [packsTotal, setPacksTotal] = useState(0);
 	const [page, setPage] = useState(0);

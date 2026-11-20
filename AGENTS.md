@@ -68,6 +68,11 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
 - `src/routes.tsx` the route table. Pages are `lazy()` (AppPage shows a
   fallback while one loads). Account pages use `RequireAuth`; review/admin
   pages use `RequireRole` (`components/RequireAuth.tsx`).
+- `src/lib/seo.ts` `usePageMeta()` (title, description, canonical = current
+  path, Open Graph/Twitter tags, schema.org JSON-LD) and `useNoIndex()`.
+  Every public page calls `usePageMeta`; `RequireAuth`, `RequireRole` and the
+  auth page call `useNoIndex`. `public/robots.txt` disallows the same private
+  paths; `public/og-image.png` is the default social card.
 - `src/lib/session.ts` `useSession()` (signed-in user and role, re-renders on
   login, logout, a 401 or another tab), `useRoleRefresh()`, `signOut()`.
   Components read the session with `useSession()`; login and profile changes
