@@ -353,7 +353,6 @@ export class ApiError extends Error {
 interface ApiOptions {
 	method?: string;
 	body?: unknown;
-	token?: string | null;
 	// signal aborts the request (e.g. when a search query changes before the
 	// previous response arrives).
 	signal?: AbortSignal;
@@ -361,7 +360,6 @@ interface ApiOptions {
 
 export async function api<T = unknown>(path: string, opts: ApiOptions = {}): Promise<T> {
 	const headers: Record<string, string> = { "Content-Type": "application/json" };
-	if (opts.token) headers.Authorization = `Bearer ${opts.token}`;
 	const res = await fetch(`${API_BASE}${path}`, {
 		method: opts.method || "GET",
 		headers,
@@ -386,7 +384,10 @@ export async function api<T = unknown>(path: string, opts: ApiOptions = {}): Pro
 		if (res.status === 401) clearStoredAuth();
 		throw new ApiError(detail, res.status, body);
 	}
-	return res.json() as Promise<T>;
+	// Some endpoints answer 204 / an empty body; resolve those to undefined
+	// instead of failing on JSON parsing.
+	const text = await res.text();
+	return (text ? JSON.parse(text) : undefined) as T;
 }
 
 export async function fetchSystems(): Promise<SystemMeta[]> {
@@ -424,11 +425,7 @@ export function fetchConfig(): Promise<PublicConfig> {
 
 // The browser session is carried in an httpOnly cookie, so no token is ever
 // read from (or written to) JavaScript-accessible storage. Requests authenticate
-// via `credentials: "include"`. These helpers return null for call sites that
-// still pass an explicit token; the cookie takes over.
-export function userToken(): string | null {
-	return null;
-}
+// via `credentials: "include"`.
 
 // isAuthed reports whether a session is believed to exist, based on the
 // non-secret profile cached after login. The server remains the source of truth
@@ -464,32 +461,31 @@ export function userId(): string | null {
 }
 
 export function fetchMe(): Promise<User> {
-	return api<User>("/api/v1/auth/me", { token: userToken() });
+	return api<User>("/api/v1/auth/me");
 }
 
 export function updateProfile(body: { username?: string; email?: string }): Promise<User> {
-	return api<User>("/api/v1/auth/me", { method: "PUT", token: userToken(), body });
+	return api<User>("/api/v1/auth/me", { method: "PUT", body });
 }
 
 export function changePassword(body: { current_password: string; new_password: string }): Promise<{ message: string }> {
-	return api<{ message: string }>("/api/v1/auth/password", { method: "POST", token: userToken(), body });
+	return api<{ message: string }>("/api/v1/auth/password", { method: "POST", body });
 }
 
 // Avatar: presign an upload (WebP or GIF), then confirm the stored object key.
 export function presignAvatarUpload(mimeType: string, size: number): Promise<UploadResponse> {
 	return api<UploadResponse>("/api/v1/auth/me/avatar/upload", {
 		method: "POST",
-		token: userToken(),
 		body: { mime_type: mimeType, size },
 	});
 }
 
 export function setAvatar(objectKey: string): Promise<User> {
-	return api<User>("/api/v1/auth/me/avatar", { method: "POST", token: userToken(), body: { object_key: objectKey } });
+	return api<User>("/api/v1/auth/me/avatar", { method: "POST", body: { object_key: objectKey } });
 }
 
 export function removeAvatar(): Promise<User> {
-	return api<User>("/api/v1/auth/me/avatar", { method: "DELETE", token: userToken() });
+	return api<User>("/api/v1/auth/me/avatar", { method: "DELETE" });
 }
 
 // ---------------------------------------------------------------------------
@@ -511,14 +507,13 @@ export interface Rewards {
 }
 
 export function fetchRewards(): Promise<Rewards> {
-	return api<Rewards>("/api/v1/rewards", { token: userToken() });
+	return api<Rewards>("/api/v1/rewards");
 }
 
 // startDonorClaim emails a code that proves ownership of a donation email.
 export function startDonorClaim(email: string): Promise<{ message: string }> {
 	return api<{ message: string }>("/api/v1/auth/donor/claim", {
 		method: "POST",
-		token: userToken(),
 		body: { email },
 	});
 }
@@ -527,7 +522,6 @@ export function startDonorClaim(email: string): Promise<{ message: string }> {
 export function verifyDonorClaim(email: string, code: string): Promise<{ linked: number }> {
 	return api<{ linked: number }>("/api/v1/auth/donor/claim/verify", {
 		method: "POST",
-		token: userToken(),
 		body: { email, code },
 	});
 }
@@ -555,33 +549,31 @@ export interface PublicProfile {
 }
 
 export function fetchPublicProfile(username: string): Promise<PublicProfile> {
-	return api<PublicProfile>(`/api/v1/users/${encodeURIComponent(username)}`, { token: userToken() });
+	return api<PublicProfile>(`/api/v1/users/${encodeURIComponent(username)}`);
 }
 
 export function followUser(username: string): Promise<{ following: boolean }> {
 	return api<{ following: boolean }>(`/api/v1/users/${encodeURIComponent(username)}/follow`, {
 		method: "POST",
-		token: userToken(),
 	});
 }
 
 export function unfollowUser(username: string): Promise<{ following: boolean }> {
 	return api<{ following: boolean }>(`/api/v1/users/${encodeURIComponent(username)}/follow`, {
 		method: "DELETE",
-		token: userToken(),
 	});
 }
 
 export function fetchFollowers(username: string): Promise<string[]> {
-	return api<{ usernames: string[] }>(`/api/v1/users/${encodeURIComponent(username)}/followers`, {
-		token: userToken(),
-	}).then((d) => d.usernames || []);
+	return api<{ usernames: string[] }>(`/api/v1/users/${encodeURIComponent(username)}/followers`, {}).then(
+		(d) => d.usernames || [],
+	);
 }
 
 export function fetchFollowing(username: string): Promise<string[]> {
-	return api<{ usernames: string[] }>(`/api/v1/users/${encodeURIComponent(username)}/following`, {
-		token: userToken(),
-	}).then((d) => d.usernames || []);
+	return api<{ usernames: string[] }>(`/api/v1/users/${encodeURIComponent(username)}/following`, {}).then(
+		(d) => d.usernames || [],
+	);
 }
 
 export interface UserSubmissionItem {
@@ -595,9 +587,10 @@ export interface UserSubmissionItem {
 }
 
 export function fetchUserSubmissions(username: string): Promise<UserSubmissionItem[]> {
-	return api<{ submissions: UserSubmissionItem[] }>(`/api/v1/users/${encodeURIComponent(username)}/submissions`, {
-		token: userToken(),
-	}).then((d) => d.submissions || []);
+	return api<{ submissions: UserSubmissionItem[] }>(
+		`/api/v1/users/${encodeURIComponent(username)}/submissions`,
+		{},
+	).then((d) => d.submissions || []);
 }
 
 export function userRole(): string | null {
@@ -610,16 +603,6 @@ export function isAdmin(): boolean {
 
 export function isReviewer(): boolean {
 	return userRole() === "admin" || userRole() === "reviewer";
-}
-
-// reviewToken/adminToken are kept for call-site compatibility but return null:
-// review and admin endpoints authenticate with the httpOnly session cookie.
-export function reviewToken(): string | null {
-	return null;
-}
-
-export function adminToken(): string | null {
-	return null;
 }
 
 // logoutRequest clears the httpOnly session cookies on the server.
@@ -757,9 +740,7 @@ export function fetchMetadataLanguages(): Promise<Language[]> {
 // fetchMetadataPendingKeys returns the fields/media kinds that already have a
 // pending submission from the current user for a game.
 export function fetchMetadataPendingKeys(gameId: string): Promise<string[]> {
-	return api<{ keys: string[] }>(`/api/v1/metadata/games/${gameId}/pending`, { token: userToken() }).then(
-		(d) => d.keys || [],
-	);
+	return api<{ keys: string[] }>(`/api/v1/metadata/games/${gameId}/pending`).then((d) => d.keys || []);
 }
 
 export function createMetadataSubmission(body: {
@@ -778,7 +759,7 @@ export function createMetadataSubmission(body: {
 		move?: boolean;
 	}[];
 }): Promise<MetadataSubmission> {
-	return api<MetadataSubmission>("/api/v1/metadata/submissions", { method: "POST", token: userToken(), body });
+	return api<MetadataSubmission>("/api/v1/metadata/submissions", { method: "POST", body });
 }
 
 export function requestMetadataUploadUrl(body: {
@@ -790,7 +771,7 @@ export function requestMetadataUploadUrl(body: {
 	size: number;
 	region?: string;
 }): Promise<UploadResponse> {
-	return api<UploadResponse>("/api/v1/metadata/submissions/upload-url", { method: "POST", token: userToken(), body });
+	return api<UploadResponse>("/api/v1/metadata/submissions/upload-url", { method: "POST", body });
 }
 
 export function requestMetadataUpload(
@@ -799,13 +780,12 @@ export function requestMetadataUpload(
 ): Promise<UploadResponse> {
 	return api<UploadResponse>(`/api/v1/metadata/submissions/${id}/upload`, {
 		method: "POST",
-		token: userToken(),
 		body,
 	});
 }
 
 export function submitMetadataSubmission(id: string): Promise<MetadataSubmission> {
-	return api<MetadataSubmission>(`/api/v1/metadata/submissions/${id}/submit`, { method: "POST", token: userToken() });
+	return api<MetadataSubmission>(`/api/v1/metadata/submissions/${id}/submit`, { method: "POST" });
 }
 
 export interface PagedList<T> {
@@ -830,7 +810,6 @@ export function fetchMyMetadataSubmissions(opts?: {
 }): Promise<PagedList<MetadataSubmission>> {
 	return api<{ submissions: MetadataSubmission[]; total: number; total_xp: number }>(
 		`/api/v1/auth/metadata/submissions${pagedQuery(opts)}`,
-		{ token: userToken() },
 	).then((d) => ({ items: d.submissions || [], total: d.total || 0, totalXP: d.total_xp || 0 }));
 }
 
@@ -843,20 +822,19 @@ export function fetchMySubmissions(opts?: {
 }): Promise<PagedList<SubmissionDetail>> {
 	return api<{ submissions: SubmissionDetail[]; total: number; total_xp: number }>(
 		`/api/v1/auth/submissions${pagedQuery(opts)}`,
-		{ token: userToken() },
 	).then((d) => ({ items: d.submissions || [], total: d.total || 0, totalXP: d.total_xp || 0 }));
 }
 
 // cancelMetadataSubmission deletes the current user's own metadata submission
 // (draft, pending or rejected) so a mistake can be cleared and submitted again.
 export function cancelMetadataSubmission(id: string): Promise<{ ok: boolean }> {
-	return api<{ ok: boolean }>(`/api/v1/metadata/submissions/${id}`, { method: "DELETE", token: userToken() });
+	return api<{ ok: boolean }>(`/api/v1/metadata/submissions/${id}`, { method: "DELETE" });
 }
 
 // trashSubmission moves the current user's own system art pack submission to the
 // trash (draft, pending or rejected) so it can be submitted again.
 export function trashSubmission(id: string): Promise<void> {
-	return api(`/api/v1/submissions/${id}/trash`, { method: "POST", token: userToken() });
+	return api(`/api/v1/submissions/${id}/trash`, { method: "POST" });
 }
 
 // ReviewSummaryItem is a lightweight notification entry (no payload/files/logs).
@@ -875,15 +853,15 @@ export interface ReviewSummary {
 // fetchReviewSummary powers the notification badge: the newest review keys and
 // the lifetime XP, without downloading the full review feed.
 export function fetchReviewSummary(limit = 20): Promise<ReviewSummary> {
-	return api<ReviewSummary>(`/api/v1/auth/reviews/summary?limit=${limit}`, { token: userToken() });
+	return api<ReviewSummary>(`/api/v1/auth/reviews/summary?limit=${limit}`);
 }
 
 // Admin
 export function fetchMetadataSubmissions(status = ""): Promise<MetadataSubmission[]> {
 	const q = status ? `?status=${status}` : "";
-	return api<{ submissions: MetadataSubmission[] }>(`/api/v1/admin/metadata/submissions${q}`, {
-		token: reviewToken(),
-	}).then((d) => d.submissions || []);
+	return api<{ submissions: MetadataSubmission[] }>(`/api/v1/admin/metadata/submissions${q}`, {}).then(
+		(d) => d.submissions || [],
+	);
 }
 
 export interface MetadataSubmissionDetail {
@@ -895,13 +873,12 @@ export interface MetadataSubmissionDetail {
 }
 
 export function fetchMetadataSubmissionDetail(id: string): Promise<MetadataSubmissionDetail> {
-	return api<MetadataSubmissionDetail>(`/api/v1/admin/metadata/submissions/${id}`, { token: reviewToken() });
+	return api<MetadataSubmissionDetail>(`/api/v1/admin/metadata/submissions/${id}`);
 }
 
 export function approveMetadataSubmission(id: string, comment = ""): Promise<MetadataSubmission> {
 	return api<MetadataSubmission>(`/api/v1/admin/metadata/submissions/${id}/approve`, {
 		method: "POST",
-		token: reviewToken(),
 		body: { comment },
 	});
 }
@@ -909,7 +886,6 @@ export function approveMetadataSubmission(id: string, comment = ""): Promise<Met
 export function rejectMetadataSubmission(id: string, comment = ""): Promise<MetadataSubmission> {
 	return api<MetadataSubmission>(`/api/v1/admin/metadata/submissions/${id}/reject`, {
 		method: "POST",
-		token: reviewToken(),
 		body: { comment },
 	});
 }
@@ -990,7 +966,7 @@ export interface DashboardData {
 }
 
 export function fetchDashboard(): Promise<DashboardData> {
-	return api<DashboardData>("/api/v1/dashboard", { token: userToken() });
+	return api<DashboardData>("/api/v1/dashboard");
 }
 
 export interface StorageUsage {
@@ -1001,21 +977,21 @@ export interface StorageUsage {
 }
 
 export function fetchStorageUsage(): Promise<StorageUsage> {
-	return api<StorageUsage>("/api/v1/admin/storage-usage", { token: reviewToken() });
+	return api<StorageUsage>("/api/v1/admin/storage-usage");
 }
 
 // Admin role management (admin only)
 export function fetchUsers(): Promise<User[]> {
-	return api<{ users: User[] }>("/api/v1/admin/users", { token: adminToken() }).then((d) => d.users || []);
+	return api<{ users: User[] }>("/api/v1/admin/users").then((d) => d.users || []);
 }
 
 export function setUserRole(id: string, role: string): Promise<User> {
-	return api<User>(`/api/v1/admin/users/${id}/role`, { method: "PUT", token: adminToken(), body: { role } });
+	return api<User>(`/api/v1/admin/users/${id}/role`, { method: "PUT", body: { role } });
 }
 
 // setDonorStatus updates a user's donor status (none | supporter | monthly_supporter).
 export function setDonorStatus(id: string, status: string): Promise<User> {
-	return api<User>(`/api/v1/admin/users/${id}/donor`, { method: "PUT", token: adminToken(), body: { status } });
+	return api<User>(`/api/v1/admin/users/${id}/donor`, { method: "PUT", body: { status } });
 }
 
 // DonationImportItem is one normalized supporter row for the historical import.
@@ -1037,7 +1013,7 @@ export interface DonationImportItem {
 export function importDonations(
 	donations: DonationImportItem[],
 ): Promise<{ imported: number; linked: number; skipped: number }> {
-	return api("/api/v1/admin/donations/import", { method: "POST", token: adminToken(), body: { donations } });
+	return api("/api/v1/admin/donations/import", { method: "POST", body: { donations } });
 }
 
 // ---------------------------------------------------------------------------
@@ -1095,9 +1071,7 @@ export interface CreatedUserAPIKey extends UserAPIKey {
 }
 
 export function fetchDeveloperApps(): Promise<DeveloperApp[]> {
-	return api<{ apps: DeveloperApp[] }>("/api/v1/auth/developer/apps", { token: userToken() }).then(
-		(d) => d.apps || [],
-	);
+	return api<{ apps: DeveloperApp[] }>("/api/v1/auth/developer/apps").then((d) => d.apps || []);
 }
 
 export function createDeveloperApp(body: {
@@ -1105,25 +1079,25 @@ export function createDeveloperApp(body: {
 	description?: string;
 	homepage_url?: string;
 }): Promise<CreatedDeveloperApp> {
-	return api<CreatedDeveloperApp>("/api/v1/auth/developer/apps", { method: "POST", token: userToken(), body });
+	return api<CreatedDeveloperApp>("/api/v1/auth/developer/apps", { method: "POST", body });
 }
 
 export function deleteDeveloperApp(id: string): Promise<{ revoked: boolean }> {
-	return api<{ revoked: boolean }>(`/api/v1/auth/developer/apps/${id}`, { method: "DELETE", token: userToken() });
+	return api<{ revoked: boolean }>(`/api/v1/auth/developer/apps/${id}`, { method: "DELETE" });
 }
 
 export function rotateDeveloperApp(id: string): Promise<CreatedDeveloperApp> {
-	return api<CreatedDeveloperApp>(`/api/v1/auth/developer/apps/${id}/rotate`, { method: "POST", token: userToken() });
+	return api<CreatedDeveloperApp>(`/api/v1/auth/developer/apps/${id}/rotate`, { method: "POST" });
 }
 
 export function fetchAPIKeys(): Promise<UserAPIKey[]> {
-	return api<{ keys: UserAPIKey[] }>("/api/v1/auth/api-keys", { token: userToken() }).then((d) => d.keys || []);
+	return api<{ keys: UserAPIKey[] }>("/api/v1/auth/api-keys").then((d) => d.keys || []);
 }
 
 export function createAPIKey(body: { name: string }): Promise<CreatedUserAPIKey> {
-	return api<CreatedUserAPIKey>("/api/v1/auth/api-keys", { method: "POST", token: userToken(), body });
+	return api<CreatedUserAPIKey>("/api/v1/auth/api-keys", { method: "POST", body });
 }
 
 export function deleteAPIKey(id: string): Promise<{ revoked: boolean }> {
-	return api<{ revoked: boolean }>(`/api/v1/auth/api-keys/${id}`, { method: "DELETE", token: userToken() });
+	return api<{ revoked: boolean }>(`/api/v1/auth/api-keys/${id}`, { method: "DELETE" });
 }

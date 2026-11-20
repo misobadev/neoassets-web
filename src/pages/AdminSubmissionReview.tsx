@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AlertTriangle, Check, ChevronLeft, Loader2, Trash2, X } from "lucide-react";
-import { api, reviewToken, cdnUrl, isAdmin, type SubmissionDetail, type SubmissionFile } from "../lib/api";
+import { api, cdnUrl, isAdmin, type SubmissionDetail, type SubmissionFile } from "../lib/api";
 import { formatDate } from "../lib/format";
 import { useSystems } from "../lib/systems";
 import { useReviews } from "../lib/reviews";
@@ -48,12 +48,28 @@ export default function AdminSubmissionReview() {
 	const { systems } = useSystems();
 	const { refresh: refreshReviews } = useReviews();
 	const sysName = (id: string) => systems.find((s) => s.id === id)?.name || id;
+	// pollRef holds the approve progress poll so it is always stopped, whether
+	// the approve request succeeds, fails or the page unmounts.
+	const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const stopPoll = () => {
+		if (pollRef.current) clearInterval(pollRef.current);
+		pollRef.current = null;
+	};
+	useEffect(() => stopPoll, []);
 
 	useEffect(() => {
 		if (!id) return;
-		api<SubmissionDetail>(`/api/v1/admin/submissions/${id}`, { token: reviewToken() })
-			.then(setDetail)
-			.catch((e: Error) => setMsg(e.message));
+		let ignore = false;
+		api<SubmissionDetail>(`/api/v1/admin/submissions/${id}`)
+			.then((d) => {
+				if (!ignore) setDetail(d);
+			})
+			.catch((e: Error) => {
+				if (!ignore) setMsg(e.message);
+			});
+		return () => {
+			ignore = true;
+		};
 	}, [id]);
 
 	async function approve() {
@@ -64,17 +80,15 @@ export default function AdminSubmissionReview() {
 		try {
 			const req = api(`/api/v1/admin/submissions/${detail.id}/approve`, {
 				method: "POST",
-				token: reviewToken(),
 				body: { comment },
 			});
 			// Poll the submission while it is being approved: each file row moves
 			// to its canonical key as the server progresses, so we can report a
 			// real percentage instead of an indeterminate spinner.
-			const poll = setInterval(async () => {
+			stopPoll();
+			pollRef.current = setInterval(async () => {
 				try {
-					const d = await api<SubmissionDetail>(`/api/v1/admin/submissions/${detail.id}`, {
-						token: reviewToken(),
-					});
+					const d = await api<SubmissionDetail>(`/api/v1/admin/submissions/${detail.id}`, {});
 					const files = d.files || [];
 					const total = files.length;
 					const moved = files.filter((f) => !f.object_key.includes("/review/")).length;
@@ -84,7 +98,7 @@ export default function AdminSubmissionReview() {
 				}
 			}, 700);
 			await req;
-			clearInterval(poll);
+			stopPoll();
 			setProgress(100);
 			setMsg(t("admin.approvedMsg"));
 			setDetail((d) => (d ? { ...d, status: "approved" } : d));
@@ -92,6 +106,7 @@ export default function AdminSubmissionReview() {
 		} catch (e) {
 			setMsg((e as Error).message);
 		} finally {
+			stopPoll();
 			setBusy(false);
 			setBusyAction(null);
 		}
@@ -102,7 +117,7 @@ export default function AdminSubmissionReview() {
 		setBusyAction("delete");
 		setBusy(true);
 		try {
-			await api(`/api/v1/admin/submissions/${detail.id}`, { method: "DELETE", token: reviewToken() });
+			await api(`/api/v1/admin/submissions/${detail.id}`, { method: "DELETE" });
 			navigate("/app/admin/sap");
 		} catch (e) {
 			setMsg((e as Error).message);
@@ -120,7 +135,6 @@ export default function AdminSubmissionReview() {
 		try {
 			await api(`/api/v1/admin/submissions/${detail.id}/reject`, {
 				method: "POST",
-				token: reviewToken(),
 				body: { comment },
 			});
 			setMsg(t("admin.rejectedMsg"));

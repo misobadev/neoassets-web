@@ -11,7 +11,6 @@ import {
 	type Submission,
 	type SubmissionLog,
 	type SubmissionStatus,
-	userToken,
 } from "../lib/api";
 import { formatDate } from "../lib/format";
 import { useSystems } from "../lib/systems";
@@ -187,7 +186,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 				});
 			return;
 		}
-		api<SubmissionDetail>(`/api/v1/auth/submissions/${id}`, { token: userToken() })
+		api<SubmissionDetail>(`/api/v1/auth/submissions/${id}`)
 			.then(async (d) => {
 				setSubId(d.id);
 				setPackID(d.pack_id);
@@ -338,7 +337,6 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 			try {
 				await api(`/api/v1/submissions/${subId}/files?object_key=${encodeURIComponent(file.objectKey)}`, {
 					method: "DELETE",
-					token: userToken(),
 				});
 			} catch (e) {
 				setStatus({
@@ -379,7 +377,6 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 	async function uploadFileToTemp(f: EditorFile) {
 		const resp = await api<{ upload_url: string; object_key: string }>("/api/v1/submissions/upload-url", {
 			method: "POST",
-			token: userToken(),
 			body: {
 				name,
 				kind: f.kind,
@@ -443,7 +440,6 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 		try {
 			await api(`/api/v1/submissions/${subId}`, {
 				method: "PUT",
-				token: userToken(),
 				body: { name, author, description, donation_url: donationUrl, ai },
 			});
 			const toUpload = files.filter((f) => f.blob && !f.objectKey);
@@ -453,7 +449,6 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 				for (const f of toUpload) uploaded.push(await uploadFileToTemp(f));
 				await api(`/api/v1/submissions/${subId}/files`, {
 					method: "POST",
-					token: userToken(),
 					body: { files: uploaded },
 				});
 				markUploaded(uploaded, false);
@@ -503,19 +498,16 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 				if (uploaded.length > 0) {
 					await api(`/api/v1/submissions/${subId}/files`, {
 						method: "POST",
-						token: userToken(),
 						body: { files: uploaded },
 					});
 					markUploaded(uploaded, true);
 				}
 				await api(`/api/v1/submissions/${subId}`, {
 					method: "PUT",
-					token: userToken(),
 					body: { name, author, description, donation_url: donationUrl, ai },
 				});
 				sub = await api<Submission>(`/api/v1/submissions/${subId}/submit`, {
 					method: "POST",
-					token: userToken(),
 				});
 				setSubId(sub.id);
 				persistBlockedRef.current = true;
@@ -525,7 +517,6 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 			} else {
 				sub = await api<Submission>("/api/v1/submissions", {
 					method: "POST",
-					token: userToken(),
 					body: {
 						name,
 						author,
@@ -573,7 +564,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 		setStatus({ text: t("submissions.editor.removing"), tone: "info" });
 		try {
 			if (subId) {
-				await api(`/api/v1/submissions/${subId}/trash`, { method: "POST", token: userToken() });
+				await api(`/api/v1/submissions/${subId}/trash`, { method: "POST" });
 				persistBlockedRef.current = true;
 				try {
 					await clearPackDraft(`pack-${subId}`);
@@ -603,7 +594,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 		setAdminDeleteBusy(true);
 		setStatus({ text: t("submissions.editor.deletingPermanent"), tone: "info" });
 		try {
-			await api(`/api/v1/admin/submissions/${subId}`, { method: "DELETE", token: userToken() });
+			await api(`/api/v1/admin/submissions/${subId}`, { method: "DELETE" });
 			setStatus({ text: t("submissions.editor.deleted"), tone: "success" });
 			setTimeout(() => navigate("/app/submissions"), 600);
 		} catch (e) {

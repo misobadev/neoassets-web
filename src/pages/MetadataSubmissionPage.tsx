@@ -242,12 +242,21 @@ export default function MetadataSubmissionPage() {
 
 	useEffect(() => {
 		if (!gameId) return;
+		// Ignore a response that arrives after the game or language changed, so
+		// an older request can't overwrite a newer one.
+		let ignore = false;
 		fetchMetadataGameDetail(gameId, lang === "en" ? "" : lang)
 			.then((g) => {
+				if (ignore) return;
 				setGame({ ...g, roms: g.roms || [], media: g.media || [] });
 				setError(null);
 			})
-			.catch((e: Error) => setError(e.message));
+			.catch((e: Error) => {
+				if (!ignore) setError(e.message);
+			});
+		return () => {
+			ignore = true;
+		};
 	}, [gameId, lang]);
 
 	useEffect(() => {

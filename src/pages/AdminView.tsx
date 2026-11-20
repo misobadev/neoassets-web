@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft } from "lucide-react";
-import { api, reviewToken, cdnUrl, type SubmissionDetail } from "../lib/api";
+import { api, cdnUrl, type SubmissionDetail } from "../lib/api";
 import { formatDate } from "../lib/format";
 import { useSystems } from "../lib/systems";
 import UserLink from "../components/UserLink";
@@ -33,9 +33,7 @@ export default function AdminView() {
 		setListMsg(null);
 		try {
 			const q = s ? `?status=${s}` : "";
-			const data = await api<{ submissions: SubmissionDetail[] }>(`/api/v1/admin/submissions${q}`, {
-				token: reviewToken(),
-			});
+			const data = await api<{ submissions: SubmissionDetail[] }>(`/api/v1/admin/submissions${q}`, {});
 			setSubmissions(data.submissions || []);
 		} catch (e) {
 			setSubmissions([]);

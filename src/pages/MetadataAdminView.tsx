@@ -21,6 +21,7 @@ import {
 } from "../lib/api";
 import { formatDate } from "../lib/format";
 import { regionLabel } from "../lib/regions";
+import { safeHttpUrl } from "../lib/url";
 import RegionLabel from "../components/RegionLabel";
 
 const BADGE: Record<MetadataStatus, string> = {
@@ -630,7 +631,7 @@ export default function MetadataAdminView() {
 								<div>
 									<p className="label-text">{t("metadataAdmin.duplicateOf")}</p>
 									<a
-										href={duplicateOf}
+										href={safeHttpUrl(duplicateOf)}
 										target="_blank"
 										rel="noreferrer"
 										className="link link-primary text-sm break-all"
