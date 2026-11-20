@@ -4,36 +4,22 @@ import { useTranslation } from "react-i18next";
 import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, Trash2, X, Zap } from "lucide-react";
 import {
 	cancelMetadataSubmission,
-	cdnUrl,
 	fetchMetadataGameDetail,
 	fetchPackDetail,
 	trashSubmission,
 	type MediaKind,
 	type MetadataMedia,
 	type PackDetail,
+	mediaUrl,
 } from "../lib/api";
-import { formatDate } from "../lib/format";
 import Pagination from "../components/Pagination";
 import RegionLabel from "../components/RegionLabel";
 import { useReviews, loadReviews, type ReviewItem, type ReviewStatus } from "../lib/reviews";
+import { formatDate } from "../lib/format";
+import { statusBadge } from "../lib/status";
+import { MEDIA_KIND_LABEL } from "../lib/media";
 
 const PER_PAGE = 20;
-
-const STATUS_BADGE: Record<ReviewStatus, string> = {
-	pending: "badge-warning",
-	approved: "badge-success",
-	rejected: "badge-error",
-};
-
-const MEDIA_LABEL: Record<MediaKind, string> = {
-	cover: "metadataSubmit.mediaKind.cover",
-	boxfront: "metadataSubmit.mediaKind.boxfront",
-	boxback: "metadataSubmit.mediaKind.boxback",
-	screenshot: "metadataSubmit.mediaKind.screenshot",
-	logo: "metadataSubmit.mediaKind.logo",
-	fanart: "metadataSubmit.mediaKind.fanart",
-	video: "metadataSubmit.mediaKind.video",
-};
 
 const TEXT_LABEL: Record<string, string> = {
 	name: "metadataSubmit.textTypes.name",
@@ -46,10 +32,6 @@ const TEXT_LABEL: Record<string, string> = {
 	rating: "metadataSubmit.textTypes.rating",
 	type: "metadataSubmit.textTypes.type",
 };
-
-function mediaUrl(objectKey: string, v?: string): string {
-	return cdnUrl(objectKey) + (v ? `?v=${encodeURIComponent(v)}` : "");
-}
 
 export default function ReviewsPage() {
 	const { t } = useTranslation();
@@ -134,7 +116,7 @@ export default function ReviewsPage() {
 
 	function kindLabel(key: string): string {
 		if (TEXT_LABEL[key]) return t(TEXT_LABEL[key]);
-		const media = MEDIA_LABEL[key as MediaKind];
+		const media = MEDIA_KIND_LABEL[key as MediaKind];
 		if (media) return t(media);
 		return key;
 	}
@@ -178,7 +160,7 @@ export default function ReviewsPage() {
 
 	const changeKinds = selected?.changeKinds || [];
 	const textKinds = changeKinds.filter((k) => TEXT_LABEL[k]);
-	const mediaKinds = changeKinds.filter((k) => MEDIA_LABEL[k as MediaKind]);
+	const mediaKinds = changeKinds.filter((k) => MEDIA_KIND_LABEL[k as MediaKind]);
 	const publishedMedia = gameMedia.filter((m) => mediaKinds.includes(m.kind));
 
 	return (
@@ -302,7 +284,7 @@ export default function ReviewsPage() {
 													</span>
 												)
 											) : null}
-											<span className={`badge ${STATUS_BADGE[r.status]} shrink-0`}>
+											<span className={`badge ${statusBadge(r.status)} shrink-0`}>
 												{t("metadataStatus." + r.status, { defaultValue: r.status })}
 											</span>
 										</div>
@@ -345,7 +327,7 @@ export default function ReviewsPage() {
 									) : null}
 								</div>
 							</div>
-							<span className={`badge ${STATUS_BADGE[selected.status]} shrink-0`}>
+							<span className={`badge ${statusBadge(selected.status)} shrink-0`}>
 								{t("metadataStatus." + selected.status, { defaultValue: selected.status })}
 							</span>
 						</div>

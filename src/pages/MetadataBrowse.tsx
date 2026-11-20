@@ -19,12 +19,12 @@ import {
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import {
-	cdnUrl,
 	fetchMetadataGamesBySystem,
 	fetchMetadataSystems,
 	searchMetadataGames,
 	type GameSummary,
 	type MetadataSystem,
+	mediaUrl,
 } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import Pagination from "../components/Pagination";
@@ -267,7 +267,7 @@ function GameCard({ g }: { g: GameSummary }) {
 			<div className="flex items-center gap-3 relative z-[1]">
 				{g.cover ? (
 					<img
-						src={cdnUrl(g.cover) + (g.cover_updated ? `?v=${encodeURIComponent(g.cover_updated)}` : "")}
+						src={mediaUrl(g.cover, g.cover_updated)}
 						alt=""
 						className="w-16 h-16 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
 						onError={(e) => (e.currentTarget.style.display = "none")}

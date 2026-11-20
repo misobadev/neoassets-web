@@ -25,16 +25,12 @@ import {
 	USER_NAME_KEY,
 	USER_EMAIL_KEY,
 } from "../lib/api";
+import { formatDate } from "../lib/format";
 
 // GIF avatars keep their animation and are capped at 5 MB; other images are
 // centre-cropped to a 512x512 WebP.
 const MAX_GIF_BYTES = 5 * 1024 * 1024;
 const AVATAR_SIZE = 512;
-
-function formatDate(value?: string | null, fallback?: string): string {
-	if (!value) return fallback || "";
-	return new Date(value).toLocaleString();
-}
 
 export default function ProfilePage() {
 	const { t } = useTranslation();

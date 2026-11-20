@@ -17,14 +17,7 @@ import {
 	type UserSubmissionItem,
 } from "../lib/api";
 import { formatDate } from "../lib/format";
-
-const STATUS_BADGE: Record<string, string> = {
-	created: "badge-info",
-	pending: "badge-warning",
-	approved: "badge-success",
-	rejected: "badge-error",
-	trashed: "badge-ghost",
-};
+import { statusBadge } from "../lib/status";
 
 export default function PublicProfilePage() {
 	const { t } = useTranslation();
@@ -188,9 +181,7 @@ export default function PublicProfilePage() {
 												· {formatDate(s.created_at)}
 											</p>
 										</div>
-										<span
-											className={`badge ${STATUS_BADGE[s.status] || "badge-info"} !px-2 shrink-0`}
-										>
+										<span className={`badge ${statusBadge(s.status, "badge-info")} !px-2 shrink-0`}>
 											{t("status." + s.status, { defaultValue: s.status })}
 										</span>
 									</div>

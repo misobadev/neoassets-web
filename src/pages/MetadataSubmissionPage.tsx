@@ -15,7 +15,6 @@ import {
 	Upload,
 } from "lucide-react";
 import {
-	cdnUrl,
 	createMetadataSubmission,
 	fetchGenres,
 	fetchMetadataGameDetail,
@@ -29,6 +28,7 @@ import {
 	type Language,
 	type MediaKind,
 	type Region,
+	mediaUrl,
 } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
@@ -52,6 +52,8 @@ import {
 	checkVideoMeasurement,
 	measureVideo,
 } from "../lib/media";
+import { formatBytes } from "../lib/format";
+import { MEDIA_KIND_LABEL } from "../lib/media";
 
 const TEXT_TYPES = [
 	{ key: "name", label: "metadataSubmit.textTypes.name" },
@@ -64,33 +66,10 @@ const TEXT_TYPES = [
 	{ key: "type", label: "metadataSubmit.textTypes.type" },
 ] as const;
 
-const MEDIA_LABEL: Record<MediaKind, string> = {
-	cover: "metadataSubmit.mediaKind.cover",
-	boxfront: "metadataSubmit.mediaKind.boxfront",
-	boxback: "metadataSubmit.mediaKind.boxback",
-	screenshot: "metadataSubmit.mediaKind.screenshot",
-	logo: "metadataSubmit.mediaKind.logo",
-	fanart: "metadataSubmit.mediaKind.fanart",
-	video: "metadataSubmit.mediaKind.video",
-};
-
 const IMAGE_KINDS: MediaKind[] = ["cover", "screenshot", "logo", "fanart"];
 const VIDEO_KIND: MediaKind = "video";
 // ROMS_KIND is a pseudo-type that opens the ROM dump editor instead of a field.
 const ROMS_KIND = "roms";
-
-function mediaUrl(m: { object_key: string; created_at?: string }): string {
-	const url = cdnUrl(m.object_key);
-	return m.created_at ? `${url}?v=${encodeURIComponent(m.created_at)}` : url;
-}
-
-// fmtBytes renders a byte count as a short human-readable size.
-function fmtBytes(bytes: number): string {
-	if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
-	if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(0)} MB`;
-	if (bytes >= 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-	return `${bytes} B`;
-}
 
 // parseYearMonth parses a "YYYY" or "YYYY-MM" release value.
 function parseYearMonth(v: string): { year: number; month?: number } | null {
@@ -435,7 +414,7 @@ export default function MetadataSubmissionPage() {
 	const textType = TEXT_TYPES.find((t) => t.key === type);
 	const textLabel = textType ? t(textType.label) : "";
 	const pendingLabels = pendingKeys.map((k) => {
-		const mediaKey = MEDIA_LABEL[k as MediaKind];
+		const mediaKey = MEDIA_KIND_LABEL[k as MediaKind];
 		if (mediaKey) return t(mediaKey);
 		const text = TEXT_TYPES.find((x) => x.key === k);
 		return text ? t(text.label) : k;
@@ -1064,7 +1043,7 @@ export default function MetadataSubmissionPage() {
 								<>
 									<div className="relative w-full h-72 flex items-start justify-center">
 										<img
-											src={mediaUrl(cover)}
+											src={mediaUrl(cover.object_key, cover.created_at)}
 											alt=""
 											className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]"
 											onError={(e) => (e.currentTarget.style.display = "none")}
@@ -1195,8 +1174,8 @@ export default function MetadataSubmissionPage() {
 				{game.media.filter((m) => m.kind !== "cover").length > 0 ? (
 					<MediaGrid
 						items={game.media.filter((m) => m.kind !== "cover")}
-						url={mediaUrl}
-						label={(k) => t(MEDIA_LABEL[k])}
+						url={(m) => mediaUrl(m.object_key, m.created_at)}
+						label={(k) => t(MEDIA_KIND_LABEL[k])}
 					/>
 				) : (
 					<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataSubmit.noMedia")}</p>
@@ -1228,7 +1207,7 @@ export default function MetadataSubmissionPage() {
 						<ImageIcon className="w-3.5 h-3.5" /> {t("metadataSubmit.images")}
 					</p>
 					<div className="flex flex-wrap gap-2">
-						{IMAGE_KINDS.map((k) => typeButton(k, t(MEDIA_LABEL[k])))}
+						{IMAGE_KINDS.map((k) => typeButton(k, t(MEDIA_KIND_LABEL[k])))}
 					</div>
 				</div>
 
@@ -1236,7 +1215,9 @@ export default function MetadataSubmissionPage() {
 					<p className="label-text mb-2 flex items-center gap-1.5">
 						<Clapperboard className="w-3.5 h-3.5" /> {t("metadataSubmit.video")}
 					</p>
-					<div className="flex flex-wrap gap-2">{typeButton(VIDEO_KIND, t(MEDIA_LABEL[VIDEO_KIND]))}</div>
+					<div className="flex flex-wrap gap-2">
+						{typeButton(VIDEO_KIND, t(MEDIA_KIND_LABEL[VIDEO_KIND]))}
+					</div>
 					<p className="text-xs text-[var(--color-base-content)]/50 mt-1.5">
 						{t("metadataSubmit.videoHint", {
 							min: VIDEO_MIN_SECONDS,
@@ -1403,7 +1384,7 @@ export default function MetadataSubmissionPage() {
 													<div className="flex items-baseline gap-2 min-w-0">
 														<span className="label-text shrink-0">{t("common.size")}</span>
 														<span className="font-mono truncate">
-															{row.size ? fmtBytes(Number(row.size)) : "—"}
+															{row.size ? formatBytes(Number(row.size)) : "—"}
 														</span>
 													</div>
 													<div className="flex items-baseline gap-2 min-w-0">
@@ -1467,7 +1448,7 @@ export default function MetadataSubmissionPage() {
 												{r.region ? <RegionLabel region={r.region} /> : null}
 												{r.size ? (
 													<span className="text-[var(--color-base-content)]/50">
-														{fmtBytes(r.size)}
+														{formatBytes(r.size)}
 													</span>
 												) : null}
 												{r.sha1 ? (
@@ -1643,7 +1624,7 @@ export default function MetadataSubmissionPage() {
 										<div>
 											<p className="label-text mb-2">
 												{t("metadataSubmit.form.currentMedia", {
-													media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+													media: t(MEDIA_KIND_LABEL[currentKind]).toLowerCase(),
 													count: existingMedia.length,
 												})}
 											</p>
@@ -1651,8 +1632,8 @@ export default function MetadataSubmissionPage() {
 												{existingMedia.map((m) => (
 													<div key={m.id} className="relative">
 														<img
-															src={mediaUrl(m)}
-															alt={t(MEDIA_LABEL[currentKind])}
+															src={mediaUrl(m.object_key, m.created_at)}
+															alt={t(MEDIA_KIND_LABEL[currentKind])}
 															className="w-full h-28 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]"
 															onError={(e) => (e.currentTarget.style.display = "none")}
 														/>
@@ -1798,15 +1779,18 @@ export default function MetadataSubmissionPage() {
 											<div>
 												<p className="label-text mb-2">
 													{t("metadataSubmit.form.currentMedia", {
-														media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+														media: t(MEDIA_KIND_LABEL[currentKind]).toLowerCase(),
 														count: currentMedia.length,
 													})}
 												</p>
 												{currentMedia.length > 0 ? (
 													<div className="relative">
 														<img
-															src={mediaUrl(currentMedia[0])}
-															alt={t(MEDIA_LABEL[currentKind])}
+															src={mediaUrl(
+																currentMedia[0].object_key,
+																currentMedia[0].created_at,
+															)}
+															alt={t(MEDIA_KIND_LABEL[currentKind])}
 															className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]"
 															onError={(e) => (e.currentTarget.style.display = "none")}
 														/>
@@ -1815,7 +1799,7 @@ export default function MetadataSubmissionPage() {
 													<div className="w-full h-44 flex items-center justify-center rounded-lg border border-dashed border-[var(--color-base-300)] bg-[var(--color-base-300)]/30 px-2">
 														<p className="text-sm text-[var(--color-base-content)]/50 text-center">
 															{t("metadataSubmit.form.noMediaKind", {
-																media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+																media: t(MEDIA_KIND_LABEL[currentKind]).toLowerCase(),
 															})}
 														</p>
 													</div>
@@ -1824,7 +1808,7 @@ export default function MetadataSubmissionPage() {
 											<div>
 												<p className="label-text mb-2">
 													{t("metadataSubmit.form.newField", {
-														field: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+														field: t(MEDIA_KIND_LABEL[currentKind]).toLowerCase(),
 													})}
 												</p>
 												<img
@@ -1838,7 +1822,7 @@ export default function MetadataSubmissionPage() {
 										<div>
 											<p className="label-text">
 												{t("metadataSubmit.form.currentMedia", {
-													media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+													media: t(MEDIA_KIND_LABEL[currentKind]).toLowerCase(),
 													count: currentMedia.length,
 												})}
 											</p>
@@ -1848,15 +1832,15 @@ export default function MetadataSubmissionPage() {
 														<div key={m.id} className="relative">
 															{isVideo ? (
 																<video
-																	src={mediaUrl(m)}
+																	src={mediaUrl(m.object_key, m.created_at)}
 																	className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-black"
 																	controls
 																	muted
 																/>
 															) : (
 																<img
-																	src={mediaUrl(m)}
-																	alt={t(MEDIA_LABEL[currentKind])}
+																	src={mediaUrl(m.object_key, m.created_at)}
+																	alt={t(MEDIA_KIND_LABEL[currentKind])}
 																	className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]"
 																	onError={(e) =>
 																		(e.currentTarget.style.display = "none")
@@ -1869,7 +1853,7 @@ export default function MetadataSubmissionPage() {
 											) : (
 												<p className="text-sm text-[var(--color-base-content)]/50">
 													{t("metadataSubmit.form.noMediaKind", {
-														media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+														media: t(MEDIA_KIND_LABEL[currentKind]).toLowerCase(),
 													})}
 												</p>
 											)}
@@ -1877,7 +1861,7 @@ export default function MetadataSubmissionPage() {
 									)}
 									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
 										{t("metadataSubmit.form.replaceMedia", {
-											media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+											media: t(MEDIA_KIND_LABEL[currentKind]).toLowerCase(),
 										})}
 									</p>
 

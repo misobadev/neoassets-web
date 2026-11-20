@@ -9,16 +9,12 @@ import {
 	rotateDeveloperApp,
 	type DeveloperApp,
 } from "../lib/api";
+import { formatDate } from "../lib/format";
 
 interface Revealed {
 	title: string;
 	value: string;
 	extra?: string;
-}
-
-function formatDate(value?: string | null, fallback?: string): string {
-	if (!value) return fallback || "";
-	return new Date(value).toLocaleString();
 }
 
 export default function DeveloperPage() {

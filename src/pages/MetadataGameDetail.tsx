@@ -3,13 +3,12 @@ import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, PenSquare, PlusCircle, Search } from "lucide-react";
 import {
-	cdnUrl,
 	fetchMetadataGameDetail,
 	isAuthed,
 	type GameDetail,
 	type Language,
 	type MediaKind,
-	type MetadataMedia,
+	mediaUrl,
 } from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
@@ -59,15 +58,6 @@ const KIND_LABEL: Record<MediaKind, string> = {
 	fanart: "metadataGame.mediaKind.fanart",
 	video: "metadataGame.mediaKind.video",
 };
-
-// mediaUrl builds an opaque CDN URL. The object key is a deterministic UUID
-// (media/games/{system}/{uuid}.webp) so it reveals nothing about the game. A
-// version param derived from created_at busts the browser cache when the asset
-// is replaced (a new media row gets a new created_at).
-function mediaUrl(m: MetadataMedia): string {
-	const url = cdnUrl(m.object_key);
-	return m.created_at ? `${url}?v=${encodeURIComponent(m.created_at)}` : url;
-}
 
 // gameCompletionPct is the share of the curated metadata the game already has
 // (full text, translations, cover/logo/screenshot/fanart/video), so the header
@@ -248,7 +238,7 @@ export default function MetadataGameDetail() {
 								<>
 									<div className="relative w-full h-72 flex items-start justify-center">
 										<img
-											src={mediaUrl(cover)}
+											src={mediaUrl(cover.object_key, cover.created_at)}
 											alt=""
 											className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]"
 											onError={(e) => (e.currentTarget.style.display = "none")}
@@ -399,7 +389,14 @@ export default function MetadataGameDetail() {
 							<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataGame.noMedia")}</p>
 						);
 					}
-					return <MediaGrid items={list} url={mediaUrl} label={(k) => t(KIND_LABEL[k] || k)} showMeta />;
+					return (
+						<MediaGrid
+							items={list}
+							url={(m) => mediaUrl(m.object_key, m.created_at)}
+							label={(k) => t(KIND_LABEL[k] || k)}
+							showMeta
+						/>
+					);
 				})()}
 			</section>
 
@@ -421,7 +418,7 @@ export default function MetadataGameDetail() {
 										{(r.media || []).map((m) => (
 											<img
 												key={m.id}
-												src={mediaUrl(m)}
+												src={mediaUrl(m.object_key, m.created_at)}
 												alt={t(KIND_LABEL[m.kind] || m.kind)}
 												className="w-24 h-24 object-contain rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30"
 												onError={(e) => (e.currentTarget.style.display = "none")}

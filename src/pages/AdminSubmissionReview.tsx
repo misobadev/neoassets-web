@@ -2,30 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AlertTriangle, Check, ChevronLeft, Loader2, Trash2, X } from "lucide-react";
-import { api, cdnUrl, isAdmin, type SubmissionDetail, type SubmissionFile } from "../lib/api";
-import { formatDate } from "../lib/format";
+import { api, isAdmin, type SubmissionDetail, type SubmissionFile, mediaUrl } from "../lib/api";
 import { useSystems } from "../lib/systems";
 import { useReviews } from "../lib/reviews";
 import UserLink from "../components/UserLink";
-
-const STATUS_BADGE: Record<string, string> = {
-	created: "badge-info",
-	pending: "badge-warning",
-	approved: "badge-success",
-	rejected: "badge-error",
-	trashed: "badge-ghost",
-};
-
-function fmtSize(bytes: number): string {
-	if (!bytes) return "—";
-	if (bytes < 1024) return `${bytes} B`;
-	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-	return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
-}
-
-function imgUrl(objectKey: string, v?: string): string {
-	return cdnUrl(objectKey) + (v ? `?v=${encodeURIComponent(v)}` : "");
-}
+import { formatDate, formatFileSize } from "../lib/format";
+import { statusBadge } from "../lib/status";
 
 export default function AdminSubmissionReview() {
 	const { t } = useTranslation();
@@ -166,7 +148,7 @@ export default function AdminSubmissionReview() {
 					<p className="text-sm text-[var(--color-base-content)]/60">
 						{t("admin.by")} <UserLink>{detail.submitted_by || detail.author}</UserLink> ·{" "}
 						{formatDate(detail.created_at)} ·{" "}
-						<span className={`badge ${STATUS_BADGE[detail.status] || "badge-warning"} !px-2`}>
+						<span className={`badge ${statusBadge(detail.status, "badge-warning")} !px-2`}>
 							{t("status." + detail.status)}
 						</span>
 						{detail.reviewed_by_name ? (
@@ -471,8 +453,8 @@ function BackgroundCard({
 	const sorted = [...group].sort((a, b) => (a.created_at > b.created_at ? 1 : -1));
 	const newest = sorted[sorted.length - 1];
 	const prior = sorted.length > 1 ? sorted[0] : null;
-	const olds: string[] = prior ? [imgUrl(prior.object_key, prior.created_at)] : [];
-	if (newest.replaces_object_key) olds.push(imgUrl(newest.replaces_object_key));
+	const olds: string[] = prior ? [mediaUrl(prior.object_key, prior.created_at)] : [];
+	if (newest.replaces_object_key) olds.push(mediaUrl(newest.replaces_object_key));
 	const oldSize = prior ? prior.size : 0;
 
 	return (
@@ -493,14 +475,14 @@ function BackgroundCard({
 						onClick={() =>
 							onOpen({
 								oldUrl: olds[0],
-								newUrl: imgUrl(newest.object_key, newest.created_at),
+								newUrl: mediaUrl(newest.object_key, newest.created_at),
 								label: name,
 								reason: newest.reason,
 							})
 						}
 					>
 						<span className="inline-block badge badge-ghost badge-xs mb-1">
-							{t("admin.old")} · {fmtSize(oldSize)}
+							{t("admin.old")} · {formatFileSize(oldSize)}
 						</span>
 						<img
 							src={olds[0]}
@@ -516,17 +498,17 @@ function BackgroundCard({
 					onClick={() =>
 						onOpen({
 							oldUrl: olds.length > 0 ? olds[0] : undefined,
-							newUrl: imgUrl(newest.object_key, newest.created_at),
+							newUrl: mediaUrl(newest.object_key, newest.created_at),
 							label: name,
 							reason: newest.reason,
 						})
 					}
 				>
 					<span className="inline-block badge badge-primary badge-xs mb-1">
-						{t("admin.new")} · {fmtSize(newest.size)}
+						{t("admin.new")} · {formatFileSize(newest.size)}
 					</span>
 					<img
-						src={imgUrl(newest.object_key, newest.created_at)}
+						src={mediaUrl(newest.object_key, newest.created_at)}
 						alt={t("admin.new")}
 						className="w-full h-28 object-contain rounded-md border border-[var(--color-primary)]/40 bg-[var(--color-base-300)]"
 						onError={(e) => (e.currentTarget.style.display = "none")}
@@ -573,13 +555,15 @@ function OtherCard({
 			<button
 				type="button"
 				className="text-left"
-				onClick={() => onOpen({ newUrl: imgUrl(file.object_key, file.created_at), label, reason: file.reason })}
+				onClick={() =>
+					onOpen({ newUrl: mediaUrl(file.object_key, file.created_at), label, reason: file.reason })
+				}
 			>
 				<span className="inline-block badge badge-primary badge-xs mb-2">
-					{t("admin.new")} · {fmtSize(file.size)}
+					{t("admin.new")} · {formatFileSize(file.size)}
 				</span>
 				<img
-					src={imgUrl(file.object_key, file.created_at)}
+					src={mediaUrl(file.object_key, file.created_at)}
 					alt={label}
 					className="w-full h-32 object-contain rounded-md border border-[var(--color-primary)]/40 bg-[var(--color-base-300)]"
 					onError={(e) => (e.currentTarget.style.display = "none")}
