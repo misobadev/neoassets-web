@@ -1173,12 +1173,12 @@
 		"packNotFound": "未找到资源包或尚未发布。"
 	},
 	"donor": {
-		"claimCodePlaceholder": "6 位验证码",
+		"claimCodePlaceholder": "8 位验证码",
 		"claimConfirm": "确认",
 		"claimDone": "完成！已将 {{count}} 笔捐赠关联到你的账户。",
 		"claimEmailPlaceholder": "捐赠邮箱",
 		"claimSend": "发送验证码",
-		"claimSent": "我们已向该邮箱发送验证码。15 分钟内有效。",
+		"claimSent": "如果该邮箱有捐赠记录，我们已向其发送验证码。15 分钟内有效。",
 		"claimSubtitle": "用其他邮箱在 Patreon 捐赠过？输入该邮箱即可将支持者权益关联到此账户。",
 		"claimTitle": "关联捐赠",
 		"monthly_supporter": "月度支持者",

@@ -856,9 +856,9 @@
 		"claimSubtitle": "Donated on Patreon with a different email? Enter that email to link your supporter benefits to this account.",
 		"claimEmailPlaceholder": "Donation email",
 		"claimSend": "Send code",
-		"claimCodePlaceholder": "6-digit code",
+		"claimCodePlaceholder": "8-digit code",
 		"claimConfirm": "Confirm",
-		"claimSent": "We sent a code to that email. It expires in 15 minutes.",
+		"claimSent": "If that email has donations, we sent it a code. It expires in 15 minutes.",
 		"claimDone": "Done! {{count}} donation(s) linked to your account."
 	},
 	"submissions": {

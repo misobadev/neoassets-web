@@ -1173,12 +1173,12 @@
 		"packNotFound": "Pack não encontrado ou ainda não publicado."
 	},
 	"donor": {
-		"claimCodePlaceholder": "Código de 6 dígitos",
+		"claimCodePlaceholder": "Código de 8 dígitos",
 		"claimConfirm": "Confirmar",
 		"claimDone": "Concluído! {{count}} doação(ões) associada(s) à sua conta.",
 		"claimEmailPlaceholder": "Email da doação",
 		"claimSend": "Enviar código",
-		"claimSent": "Enviámos um código para esse email. Expira em 15 minutos.",
+		"claimSent": "Se esse email tiver doações, enviámos-lhe um código. Expira em 15 minutos.",
 		"claimSubtitle": "Doou no Patreon com outro email? Introduza esse email para associar os seus benefícios de supporter a esta conta.",
 		"claimTitle": "Associar uma doação",
 		"monthly_supporter": "Supporter mensal",

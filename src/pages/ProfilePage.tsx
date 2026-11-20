@@ -350,7 +350,7 @@ export default function ProfilePage() {
 				</div>
 				{claimSent ? (
 					<div className="flex flex-wrap gap-2">
-						<input className="input input-bordered" inputMode="numeric" maxLength={6} placeholder={t("donor.claimCodePlaceholder")} value={claimCode} onChange={(e) => setClaimCode(e.target.value)} disabled={claimBusy} />
+						<input className="input input-bordered" inputMode="numeric" maxLength={8} placeholder={t("donor.claimCodePlaceholder")} value={claimCode} onChange={(e) => setClaimCode(e.target.value)} disabled={claimBusy} />
 						<button className="btn btn-primary btn-sm" onClick={confirmClaim} disabled={claimBusy || !claimCode.trim()}>{t("donor.claimConfirm")}</button>
 					</div>
 				) : null}

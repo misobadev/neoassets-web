@@ -1173,12 +1173,12 @@
 		"packNotFound": "パックが見つからないか、まだ公開されていません。"
 	},
 	"donor": {
-		"claimCodePlaceholder": "6桁のコード",
+		"claimCodePlaceholder": "8桁のコード",
 		"claimConfirm": "確認",
 		"claimDone": "完了！{{count}} 件の寄付をアカウントに紐付けました。",
 		"claimEmailPlaceholder": "寄付時のメール",
 		"claimSend": "コードを送信",
-		"claimSent": "そのメールにコードを送信しました。15分で有効期限が切れます。",
+		"claimSent": "そのメールに寄付履歴がある場合、コードを送信しました。15分で有効期限が切れます。",
 		"claimSubtitle": "Patreon に別のメールで寄付しましたか？そのメールを入力すると、サポーター特典をこのアカウントに紐付けられます。",
 		"claimTitle": "寄付を紐付ける",
 		"monthly_supporter": "月額サポーター",

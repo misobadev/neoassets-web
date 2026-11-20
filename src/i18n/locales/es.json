@@ -856,9 +856,9 @@
 		"claimSubtitle": "¿Donaste en Patreon con otro correo? Ingresa ese correo para vincular tus beneficios de supporter a esta cuenta.",
 		"claimEmailPlaceholder": "Correo de la donación",
 		"claimSend": "Enviar código",
-		"claimCodePlaceholder": "Código de 6 dígitos",
+		"claimCodePlaceholder": "Código de 8 dígitos",
 		"claimConfirm": "Confirmar",
-		"claimSent": "Enviamos un código a ese correo. Expira en 15 minutos.",
+		"claimSent": "Si ese correo tiene donaciones, le enviamos un código. Expira en 15 minutos.",
 		"claimDone": "¡Listo! {{count}} donación(es) vinculada(s) a tu cuenta."
 	},
 	"submissions": {

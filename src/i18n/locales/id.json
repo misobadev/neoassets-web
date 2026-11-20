@@ -1173,12 +1173,12 @@
 		"packNotFound": "Paket tidak ditemukan atau belum diterbitkan."
 	},
 	"donor": {
-		"claimCodePlaceholder": "Kode 6 digit",
+		"claimCodePlaceholder": "Kode 8 digit",
 		"claimConfirm": "Konfirmasi",
 		"claimDone": "Selesai! {{count}} donasi ditautkan ke akun Anda.",
 		"claimEmailPlaceholder": "Email donasi",
 		"claimSend": "Kirim kode",
-		"claimSent": "Kami mengirim kode ke email itu. Kode kedaluwarsa dalam 15 menit.",
+		"claimSent": "Jika email itu memiliki donasi, kami telah mengirim kode. Kode kedaluwarsa dalam 15 menit.",
 		"claimSubtitle": "Berdonasi di Patreon dengan email berbeda? Masukkan email itu untuk menautkan manfaat supporter ke akun ini.",
 		"claimTitle": "Tautkan donasi",
 		"monthly_supporter": "Supporter Bulanan",
