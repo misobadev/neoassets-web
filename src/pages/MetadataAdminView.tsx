@@ -8,7 +8,6 @@ import { useReviews } from "../lib/reviews";
 import {
 	ApiError,
 	approveMetadataSubmission,
-	cdnUrl,
 	rejectMetadataSubmission,
 	fetchMetadataSubmissionDetail,
 	fetchMetadataSubmissions,
@@ -18,28 +17,14 @@ import {
 	type MetadataSubmissionDetail,
 	type MetadataSubmissionFile,
 	type MetadataStatus,
+	mediaUrl,
 } from "../lib/api";
-import { formatDate } from "../lib/format";
 import { regionLabel } from "../lib/regions";
 import { safeHttpUrl } from "../lib/url";
 import RegionLabel from "../components/RegionLabel";
-
-const BADGE: Record<MetadataStatus, string> = {
-	created: "badge-info",
-	pending: "badge-warning",
-	approved: "badge-success",
-	rejected: "badge-error",
-};
-
-const MEDIA_LABEL: Record<MediaKind, string> = {
-	cover: "metadataSubmit.mediaKind.cover",
-	boxfront: "metadataSubmit.mediaKind.boxfront",
-	boxback: "metadataSubmit.mediaKind.boxback",
-	screenshot: "metadataSubmit.mediaKind.screenshot",
-	logo: "metadataSubmit.mediaKind.logo",
-	fanart: "metadataSubmit.mediaKind.fanart",
-	video: "metadataSubmit.mediaKind.video",
-};
+import { formatDate, formatFileSize } from "../lib/format";
+import { statusBadge } from "../lib/status";
+import { MEDIA_KIND_LABEL } from "../lib/media";
 
 // Text payload fields, in the order they are shown in the comparison. The
 // region is shown as a badge, not as a text change.
@@ -58,17 +43,6 @@ const TEXT_LABEL: Record<string, string> = {
 
 // PAGE_SIZE is the number of submissions shown per page in the review list.
 const PAGE_SIZE = 20;
-
-function fmtSize(bytes?: number): string {
-	if (!bytes) return "—";
-	if (bytes < 1024) return `${bytes} B`;
-	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-	return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
-}
-
-function mediaUrl(objectKey: string, v?: string): string {
-	return cdnUrl(objectKey) + (v ? `?v=${encodeURIComponent(v)}` : "");
-}
 
 export default function MetadataAdminView() {
 	const { t } = useTranslation();
@@ -298,7 +272,7 @@ export default function MetadataAdminView() {
 	function kindLabel(key: string): string {
 		if (key === "delete_game") return t("metadataAdmin.deleteGame");
 		if (TEXT_LABEL[key]) return t(TEXT_LABEL[key]);
-		const media = MEDIA_LABEL[key as MediaKind];
+		const media = MEDIA_KIND_LABEL[key as MediaKind];
 		if (media) return t(media);
 		return key;
 	}
@@ -476,12 +450,7 @@ export default function MetadataAdminView() {
 										<div className="flex items-center gap-3">
 											{s.cover ? (
 												<img
-													src={
-														cdnUrl(s.cover) +
-														(s.cover_updated
-															? `?v=${encodeURIComponent(s.cover_updated)}`
-															: "")
-													}
+													src={mediaUrl(s.cover, s.cover_updated)}
 													alt=""
 													className="w-14 h-14 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
 													onError={(e) => (e.currentTarget.style.display = "none")}
@@ -529,7 +498,7 @@ export default function MetadataAdminView() {
 													) : null}
 												</p>
 											</div>
-											<span className={`badge ${BADGE[s.status]} shrink-0`}>
+											<span className={`badge ${statusBadge(s.status)} shrink-0`}>
 												{t("metadataStatus." + s.status, { defaultValue: s.status })}
 											</span>
 										</div>
@@ -600,7 +569,7 @@ export default function MetadataAdminView() {
 							<div className="flex flex-wrap items-start gap-x-8 gap-y-3 text-sm">
 								<div>
 									<p className="label-text mb-1">{t("common.status")}</p>
-									<span className={`badge ${BADGE[detail.submission.status]}`}>
+									<span className={`badge ${statusBadge(detail.submission.status)}`}>
 										{t("metadataStatus." + detail.submission.status, {
 											defaultValue: detail.submission.status,
 										})}
@@ -815,7 +784,7 @@ export default function MetadataAdminView() {
 											return (
 												<div key={f.id} className="space-y-2">
 													<p className="font-medium text-sm flex items-center gap-2">
-														{t(MEDIA_LABEL[f.kind])}
+														{t(MEDIA_KIND_LABEL[f.kind])}
 														{f.region ? (
 															<span className="badge badge-solid-neutral badge-xs">
 																<RegionLabel region={f.region} />
@@ -1029,7 +998,7 @@ function CompareImage({
 				<span className={`badge badge-sm ${highlight ? "badge-primary" : "badge-ghost"}`}>{label}</span>
 				<span className="text-[11px] text-[var(--color-base-content)]/50">
 					{dim ? `${dim} · ` : ""}
-					{fmtSize(size)}
+					{formatFileSize(size)}
 				</span>
 			</div>
 			<button type="button" className="block w-full" onClick={() => onOpen({ url, label })}>
@@ -1067,7 +1036,7 @@ function CompareVideo({
 		>
 			<div className="flex items-center justify-between gap-2">
 				<span className={`badge badge-sm ${highlight ? "badge-primary" : "badge-ghost"}`}>{label}</span>
-				<span className="text-[11px] text-[var(--color-base-content)]/50">{fmtSize(size)}</span>
+				<span className="text-[11px] text-[var(--color-base-content)]/50">{formatFileSize(size)}</span>
 			</div>
 			<video src={url} controls className="w-full max-h-[34vh] rounded-lg bg-black" />
 			{file ? (

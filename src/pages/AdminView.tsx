@@ -2,16 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft } from "lucide-react";
-import { api, cdnUrl, type SubmissionDetail } from "../lib/api";
-import { formatDate } from "../lib/format";
+import { api, type SubmissionDetail, mediaUrl } from "../lib/api";
 import { useSystems } from "../lib/systems";
 import UserLink from "../components/UserLink";
-
-const STATUS_BADGE: Record<string, string> = {
-	pending: "badge-warning",
-	approved: "badge-success",
-	rejected: "badge-error",
-};
+import { formatDate } from "../lib/format";
+import { statusBadge } from "../lib/status";
 
 function coveredSystems(files: { kind: string; system_id: string }[], total: number): { covered: number; pct: number } {
 	const covered = new Set(files.filter((f) => f.kind === "background" && f.system_id).map((f) => f.system_id)).size;
@@ -89,11 +84,7 @@ export default function AdminView() {
 					{submissions.map((s) => {
 						const images = (s.files || [])
 							.filter((f) => f.kind === "preview" || f.kind === "background")
-							.map(
-								(f) =>
-									cdnUrl(f.object_key) +
-									(f.created_at ? `?v=${encodeURIComponent(f.created_at)}` : ""),
-							);
+							.map((f) => mediaUrl(f.object_key, f.created_at));
 						const { covered, pct } = coveredSystems(s.files || [], systems.length);
 						return (
 							<button
@@ -124,7 +115,7 @@ export default function AdminView() {
 								<div className="p-4 space-y-2 flex-1 flex flex-col">
 									<div className="flex items-center justify-between gap-2">
 										<h3 className="font-semibold truncate">{s.name || t("admin.untitledPack")}</h3>
-										<span className={`badge ${STATUS_BADGE[s.status] || "badge-info"} shrink-0`}>
+										<span className={`badge ${statusBadge(s.status, "badge-info")} shrink-0`}>
 											{t("status." + s.status)}
 										</span>
 									</div>

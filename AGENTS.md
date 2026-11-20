@@ -41,13 +41,22 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
 
 ## Key files
 
-- `src/lib/api.ts` `api()` fetch helper (`credentials: "include"`),
-  types, `isAuthed()`, `clearStoredAuth()`, `cdnUrl()`.
-  Auth is an httpOnly session cookie set by the API, so
-  no token is stored in JS: the cookie authenticates
-  every request.
-  Only the non-secret profile (`USER_ID/NAME/EMAIL/ROLE`)
-  is cached in `localStorage` for the UI.
+- `src/lib/api/` the API client, one module per domain, all re-exported by
+  `index.ts` (import from `lib/api`):
+    - `client.ts` `api()` fetch helper (`credentials: "include"`), `ApiError`,
+      `cdnUrl()`, `mediaUrl()` (CDN URL plus a cache-busting version),
+      `PagedList`.
+    - `session.ts` `isAuthed()`, `clearStoredAuth()`, `userRole()`,
+      `isAdmin()`, `isReviewer()`. Auth is an httpOnly session cookie set by
+      the API, so no token is stored in JS: the cookie authenticates every
+      request. Only the non-secret profile (`USER_ID/NAME/EMAIL/ROLE`) is
+      cached in `localStorage` for the UI.
+    - `account.ts`, `catalog.ts`, `submissions.ts` (art packs), `metadata.ts`,
+      `reviews.ts`, `community.ts` (rewards, profiles, follows), `admin.ts`,
+      `developer.ts`: types and calls for each area.
+- `src/lib/format.ts` `formatDate()`, `formatBytes()`, `formatFileSize()`.
+- `src/lib/status.ts` `statusBadge()`: the badge class for a submission or
+  review status.
 - `src/i18n/index.ts` i18next setup, `LANGUAGES`, `setLanguage()`, persisted
   in `localStorage` under `ns-language`.
 - `src/i18n/locales/*.json` all UI strings (en, de, es, fr, id, it, ja, ko, pt, ru, zh).
@@ -59,7 +68,7 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
   `loadPackDraft()`, `clearPackDraft()`. Holds metadata +
   the actual image `File` blobs; a single DB connection is
   reused.
-- `src/lib/media.ts` metadata media helpers: accepted formats,
+- `src/lib/media.ts` metadata media helpers: `MEDIA_KIND_LABEL`, accepted formats,
   `measureVideo()`, accepted aspect ratios and video
   limits. Submission images are uploaded as picked; the
   backend normalizes them to WebP (crop/scale/quality)

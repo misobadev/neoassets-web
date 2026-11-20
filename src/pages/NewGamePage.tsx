@@ -31,6 +31,8 @@ import {
 import { GAME_TYPES } from "../lib/gameTypes";
 import { uploadWithProgress } from "../lib/upload";
 import { hashRomFile } from "../lib/romhash";
+import { formatBytes } from "../lib/format";
+import { MEDIA_KIND_LABEL } from "../lib/media";
 
 // World is the default region for a ROM dump row.
 const DEFAULT_REGION = "World";
@@ -62,26 +64,9 @@ const newRomRow = (): RomRow => ({
 	sha256: "",
 });
 
-function fmtBytes(bytes: number): string {
-	if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
-	if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(0)} MB`;
-	if (bytes >= 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-	return `${bytes} B`;
-}
-
 const IMAGE_KINDS: MediaKind[] = ["cover", "screenshot", "fanart", "logo"];
 const REGION_KINDS: MediaKind[] = ["cover", "logo"];
 const VIDEO_KIND: MediaKind = "video";
-
-const MEDIA_LABEL: Record<MediaKind, string> = {
-	cover: "metadataSubmit.mediaKind.cover",
-	boxfront: "metadataSubmit.mediaKind.boxfront",
-	boxback: "metadataSubmit.mediaKind.boxback",
-	screenshot: "metadataSubmit.mediaKind.screenshot",
-	logo: "metadataSubmit.mediaKind.logo",
-	fanart: "metadataSubmit.mediaKind.fanart",
-	video: "metadataSubmit.mediaKind.video",
-};
 
 const MEDIA_HINT: Partial<Record<MediaKind, string>> = {
 	cover: "metadataSubmit.form.coverHint",
@@ -831,7 +816,7 @@ export default function NewGamePage() {
 					return (
 						<div key={kind} className="space-y-2">
 							<div className="flex items-center justify-between gap-2">
-								<p className="label-text">{t(MEDIA_LABEL[kind])}</p>
+								<p className="label-text">{t(MEDIA_KIND_LABEL[kind])}</p>
 								{isRegional ? (
 									<button
 										type="button"
@@ -918,7 +903,7 @@ export default function NewGamePage() {
 
 				<div className="space-y-2">
 					<div className="flex items-center justify-between gap-2">
-						<p className="label-text">{t(MEDIA_LABEL[VIDEO_KIND])}</p>
+						<p className="label-text">{t(MEDIA_KIND_LABEL[VIDEO_KIND])}</p>
 						{rowsFor(VIDEO_KIND)[0]?.file ? (
 							<button
 								type="button"
@@ -1063,7 +1048,7 @@ export default function NewGamePage() {
 								<div className="flex items-baseline gap-2 min-w-0">
 									<span className="label-text shrink-0">{t("common.size")}</span>
 									<span className="font-mono truncate">
-										{row.size ? fmtBytes(Number(row.size)) : "—"}
+										{row.size ? formatBytes(Number(row.size)) : "—"}
 									</span>
 								</div>
 								<div className="flex items-baseline gap-2 min-w-0">

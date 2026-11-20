@@ -14,10 +14,10 @@ import {
 	Server,
 	Users,
 } from "lucide-react";
-import { cdnUrl, fetchDashboard, type DashboardData } from "../lib/api";
-import { formatDate } from "../lib/format";
+import { cdnUrl, fetchDashboard, type DashboardData, mediaUrl } from "../lib/api";
 import UserLink from "../components/UserLink";
 import Avatar from "../components/Avatar";
+import { formatBytes, formatDate } from "../lib/format";
 
 export default function DashboardPage() {
 	const { t } = useTranslation();
@@ -80,7 +80,7 @@ export default function DashboardPage() {
 						tone="primary"
 						icon={<HardDrive className="w-5 h-5" />}
 						label={t("dashboard.usedSpace")}
-						value={fmtBytes(data.storage.total_bytes)}
+						value={formatBytes(data.storage.total_bytes)}
 					/>
 				) : null}
 			</div>
@@ -251,10 +251,7 @@ export default function DashboardPage() {
 						>
 							{m.cover ? (
 								<img
-									src={
-										cdnUrl(m.cover) +
-										(m.cover_updated ? `?v=${encodeURIComponent(m.cover_updated)}` : "")
-									}
+									src={mediaUrl(m.cover, m.cover_updated)}
 									alt=""
 									className="w-12 h-12 object-cover rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)] shrink-0"
 									onError={(e) => (e.currentTarget.style.display = "none")}
@@ -329,12 +326,6 @@ function RankIcon({ i }: { i: number }) {
 			{i + 1}
 		</span>
 	);
-}
-
-function fmtBytes(bytes: number): string {
-	if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
-	if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(0)} MB`;
-	return `${(bytes / 1024).toFixed(0)} KB`;
 }
 
 function LeaderCard({

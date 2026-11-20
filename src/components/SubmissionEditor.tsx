@@ -4,19 +4,20 @@ import { AlertTriangle, ChevronLeft, Loader2, Trash2, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
 	api,
-	cdnUrl,
 	isAdmin,
 	type PackDetail,
 	type SubmissionDetail,
 	type Submission,
 	type SubmissionLog,
 	type SubmissionStatus,
+	mediaUrl,
 } from "../lib/api";
-import { formatDate } from "../lib/format";
 import { useSystems } from "../lib/systems";
 import { uploadWithProgress } from "../lib/upload";
 import { clearPackDraft, loadPackDraft, savePackDraft, type PackDraft } from "../lib/draft";
 import UserLink from "./UserLink";
+import { formatDate } from "../lib/format";
+import { statusBadge } from "../lib/status";
 
 interface EditorFile {
 	fileName: string;
@@ -31,14 +32,6 @@ interface EditorFile {
 	isNew?: boolean;
 	blob?: File;
 }
-
-const STATUS_BADGE: Record<string, string> = {
-	created: "badge-info",
-	pending: "badge-warning",
-	approved: "badge-success",
-	rejected: "badge-error",
-	trashed: "badge-ghost",
-};
 
 // GIFs are stored as-is (animation preserved) and must not exceed 5 MB.
 const MAX_GIF_BYTES = 5 * 1024 * 1024;
@@ -627,7 +620,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 					{submissionStatus ? (
 						<p className="text-sm text-[var(--color-base-content)]/60 mt-1 flex items-center gap-2">
 							{t("submissions.editor.statusLabel")}{" "}
-							<span className={`badge ${STATUS_BADGE[submissionStatus] || "badge-info"} !px-2`}>
+							<span className={`badge ${statusBadge(submissionStatus, "badge-info")} !px-2`}>
 								{t("status." + submissionStatus)}
 							</span>
 						</p>
@@ -889,10 +882,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 															blob={file.blob}
 															src={
 																file.objectKey
-																	? cdnUrl(file.objectKey) +
-																		(file.createdAt
-																			? `?v=${encodeURIComponent(file.createdAt)}`
-																			: "")
+																	? mediaUrl(file.objectKey, file.createdAt)
 																	: ""
 															}
 														/>

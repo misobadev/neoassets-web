@@ -2,6 +2,19 @@
 // probing. Images are uploaded as picked; the backend normalizes them to WebP
 // (crop, scale, quality) on approval, so no client-side conversion is trusted.
 
+import type { MediaKind } from "./api";
+
+// i18n key for each media kind's label.
+export const MEDIA_KIND_LABEL: Record<MediaKind, string> = {
+	cover: "metadataSubmit.mediaKind.cover",
+	boxfront: "metadataSubmit.mediaKind.boxfront",
+	boxback: "metadataSubmit.mediaKind.boxback",
+	screenshot: "metadataSubmit.mediaKind.screenshot",
+	logo: "metadataSubmit.mediaKind.logo",
+	fanart: "metadataSubmit.mediaKind.fanart",
+	video: "metadataSubmit.mediaKind.video",
+};
+
 export const IMAGE_ACCEPT = ".webp,.png,.jpg,.jpeg,.gif";
 export const VIDEO_ACCEPT = ".webm,.mp4,.mov,.mkv,.avi,.m4v,.mpg,.mpeg,.ts,.ogv,.wmv,.flv";
 
