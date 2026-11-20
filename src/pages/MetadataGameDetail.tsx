@@ -86,8 +86,6 @@ export default function MetadataGameDetail() {
 	const [game, setGame] = useState<GameDetail | null>(null);
 	const [lang, setLang] = useState(() => i18n.resolvedLanguage || i18n.language || "en");
 	const [error, setError] = useState<string | null>(null);
-	const [holoMx, setHoloMx] = useState(0);
-	const [holoMy, setHoloMy] = useState(0);
 	const [coverIdx, setCoverIdx] = useState(0);
 	const [romQuery, setRomQuery] = useState("");
 	const [romPage, setRomPage] = useState(1);
@@ -160,54 +158,39 @@ export default function MetadataGameDetail() {
 
 	return (
 		<div className="space-y-6">
-			<div className="flex items-stretch gap-3">
-				<Link
-					to={`/app/metadata/${systemId || game.system_id}`}
-					className="btn btn-ghost !px-3 self-stretch"
-					aria-label={t("common.back")}
-				>
-					<ChevronLeft className="w-6 h-6" />
-				</Link>
-				<div className="min-w-0 flex-1 self-center">
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight break-words">{game.name}</h1>
-					<div
-						className="flex items-center gap-2 flex-wrap mt-1.5"
-						onPointerMove={(e) => {
-							const r = e.currentTarget.getBoundingClientRect();
-							setHoloMx((e.clientX - r.left) / r.width - 0.5);
-							setHoloMy((e.clientY - r.top) / r.height - 0.5);
-						}}
-						onPointerLeave={() => {
-							setHoloMx(0);
-							setHoloMy(0);
-						}}
-						style={{ "--mx": holoMx, "--my": holoMy } as React.CSSProperties}
+			{/* Header: a breadcrumb back to the system, the title, compact tags,
+			    and the contribute action (full width on phones). */}
+			<header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+				<div className="min-w-0">
+					<Link
+						to={`/app/metadata/${systemId || game.system_id}`}
+						className="inline-flex items-center gap-1 text-sm text-[var(--color-base-content)]/65 hover:text-[var(--color-base-content)] mb-2"
 					>
-						{game.system_name ? (
-							<span className="badge badge-lg border-0 bg-[var(--color-base-content)] text-[var(--color-base-100)]">
-								{game.system_name}
-							</span>
-						) : null}
-						<span className={`badge badge-lg ${typeBadgeClass(game.type)}`}>
+						<ChevronLeft className="w-4 h-4" aria-hidden="true" />
+						{game.system_name || t("common.back")}
+					</Link>
+					<h1 className="text-2xl md:text-3xl font-semibold break-words">{game.name}</h1>
+					<div className="flex items-center gap-1.5 flex-wrap mt-2">
+						<span className={`badge ${typeBadgeClass(game.type)}`}>
 							{t("metadata.type." + (game.type || "base"))}
 						</span>
 						{game.region ? (
-							<span className="badge badge-lg badge-solid-neutral">
+							<span className="badge badge-solid-neutral">
 								<RegionLabel region={game.region} />
 							</span>
 						) : null}
 						<span
 							title={completionPct === 100 ? t("metadataGame.completed") : t("metadata.completion")}
-							className={`badge badge-lg ${completionPct === 100 ? "holo-badge" : "badge-solid-neutral"}`}
+							className={`badge ${completionPct === 100 ? "holo-badge" : "badge-solid-neutral"}`}
 						>
-							{completionPct}%
+							{t("metadata.completePct", { pct: completionPct })}
 						</span>
 					</div>
 				</div>
 				{isAuthed() ? (
 					<Link
 						to={`/app/metadata/${systemId || game.system_id}/game/${game.id}/submit`}
-						className="btn btn-primary btn-sm shrink-0 self-center"
+						className="btn btn-primary shrink-0 w-full sm:w-auto"
 					>
 						<PenSquare className="w-4 h-4" />
 						{t("metadataGame.submitChanges")}
@@ -216,15 +199,15 @@ export default function MetadataGameDetail() {
 					<Link
 						to="/app/login"
 						state={{ from: `/app/metadata/${systemId || game.system_id}/game/${game.id}/submit` }}
-						className="btn btn-primary btn-sm shrink-0 self-center"
+						className="btn btn-primary shrink-0 w-full sm:w-auto"
 					>
 						<PenSquare className="w-4 h-4" />
 						{t("metadataGame.signInToSubmit")}
 					</Link>
 				)}
-			</div>
+			</header>
 
-			<div className="card p-6">
+			<div className="card p-4 sm:p-6">
 				<div className="flex flex-col sm:flex-row gap-6">
 					<div className="w-full sm:w-56 shrink-0 flex flex-col items-center gap-2">
 						{(() => {
@@ -279,7 +262,7 @@ export default function MetadataGameDetail() {
 						})()}
 					</div>
 					<div className="flex-1 min-w-0 space-y-4 text-sm">
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+						<div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-3">
 							<div>
 								<p className="label-text">{t("metadataGame.fields.ratings")}</p>
 								<RatingBadge rating={game.rating} />
@@ -378,7 +361,7 @@ export default function MetadataGameDetail() {
 				</div>
 			</div>
 
-			<section className="card p-6">
+			<section className="card p-4 sm:p-6">
 				<h2 className="font-semibold mb-3">
 					{t("metadataGame.mediaTitle", { count: game.media.filter((m) => m.kind !== "cover").length })}
 				</h2>
@@ -401,7 +384,7 @@ export default function MetadataGameDetail() {
 			</section>
 
 			{regions.some((r) => (r.media || []).length > 0) ? (
-				<section className="card p-6">
+				<section className="card p-4 sm:p-6">
 					<h2 className="font-semibold mb-3">{t("metadataGame.regionsTitle")}</h2>
 					<div className="space-y-3">
 						{regions
@@ -432,7 +415,7 @@ export default function MetadataGameDetail() {
 			) : null}
 
 			{contributors.length > 0 ? (
-				<section className="card p-6">
+				<section className="card p-4 sm:p-6">
 					<h2 className="font-semibold mb-3">{t("metadataGame.contributors")}</h2>
 					<p className="text-sm text-[var(--color-base-content)]/70 break-words">
 						{contributors.map((c, i) => (
@@ -445,7 +428,7 @@ export default function MetadataGameDetail() {
 				</section>
 			) : null}
 
-			<section className="card p-6">
+			<section className="card p-4 sm:p-6">
 				<h2 className="font-semibold mb-3">{t("metadataGame.romDumpsTitle", { count: game.roms.length })}</h2>
 				{game.roms.length > 0 ? (
 					<div className="relative mb-3">
