@@ -17,7 +17,7 @@ import {
 	type UserSubmissionItem,
 } from "../lib/api";
 import { formatDate } from "../lib/format";
-import { statusBadge } from "../lib/status";
+import StatusBadge from "../components/ui/StatusBadge";
 
 export default function PublicProfilePage() {
 	const { t } = useTranslation();
@@ -181,9 +181,9 @@ export default function PublicProfilePage() {
 												· {formatDate(s.created_at)}
 											</p>
 										</div>
-										<span className={`badge ${statusBadge(s.status, "badge-info")} !px-2 shrink-0`}>
+										<StatusBadge status={s.status} fallback="badge-info" className="!px-2 shrink-0">
 											{t("status." + s.status, { defaultValue: s.status })}
-										</span>
+										</StatusBadge>
 									</div>
 								</Link>
 							</li>

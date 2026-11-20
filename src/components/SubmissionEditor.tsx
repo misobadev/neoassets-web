@@ -17,7 +17,9 @@ import { uploadWithProgress } from "../lib/upload";
 import { clearPackDraft, loadPackDraft, savePackDraft, type PackDraft } from "../lib/draft";
 import UserLink from "./UserLink";
 import { formatDate } from "../lib/format";
-import { statusBadge } from "../lib/status";
+import Modal from "./ui/Modal";
+import DialogHeader from "./ui/DialogHeader";
+import StatusBadge from "./ui/StatusBadge";
 
 interface EditorFile {
 	fileName: string;
@@ -620,9 +622,9 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 					{submissionStatus ? (
 						<p className="text-sm text-[var(--color-base-content)]/60 mt-1 flex items-center gap-2">
 							{t("submissions.editor.statusLabel")}{" "}
-							<span className={`badge ${statusBadge(submissionStatus, "badge-info")} !px-2`}>
+							<StatusBadge status={submissionStatus} fallback="badge-info" className="!px-2">
 								{t("status." + submissionStatus)}
-							</span>
+							</StatusBadge>
 						</p>
 					) : null}
 				</div>
@@ -990,46 +992,26 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 			)}
 
 			{status && status.tone === "error" ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setStatus(null)}
-				>
+				<Modal onClose={() => setStatus(null)}>
 					<div className="card w-full max-w-md p-6 space-y-4">
-						<div className="flex items-start gap-3">
-							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
-								<AlertTriangle className="w-5 h-5 text-[var(--color-error)]" />
-							</div>
-							<div className="min-w-0">
-								<h2 className="text-lg font-bold">{t("submissions.error.title")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">{status.text}</p>
-							</div>
-						</div>
+						<DialogHeader tone="error" icon={AlertTriangle} title={t("submissions.error.title")}>
+							{status.text}
+						</DialogHeader>
 						<div className="flex justify-end">
 							<button className="btn btn-primary" type="button" onClick={() => setStatus(null)}>
 								{t("submissions.editor.ok")}
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{replaceDraft ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setReplaceDraft(null)}
-				>
+				<Modal onClose={() => setReplaceDraft(null)}>
 					<div className="card w-full max-w-md p-6 space-y-4">
-						<div className="flex items-start gap-3">
-							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-warning)]/15 shrink-0">
-								<AlertTriangle className="w-5 h-5 text-[var(--color-warning)]" />
-							</div>
-							<div className="min-w-0">
-								<h2 className="text-lg font-bold">{t("submissions.replace.title")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
-									{t("submissions.replace.body")}
-								</p>
-							</div>
-						</div>
+						<DialogHeader tone="warning" icon={AlertTriangle} title={t("submissions.replace.title")}>
+							{t("submissions.replace.body")}
+						</DialogHeader>
 						<div>
 							<label className="label-text" htmlFor="replace-reason">
 								{t("submissions.replace.reasonLabel")}
@@ -1056,26 +1038,15 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{confirmSubmit ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setConfirmSubmit(false)}
-				>
+				<Modal onClose={() => setConfirmSubmit(false)}>
 					<div className="card w-full max-w-md p-6 space-y-4">
-						<div className="flex items-start gap-3">
-							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-warning)]/15 shrink-0">
-								<AlertTriangle className="w-5 h-5 text-[var(--color-warning)]" />
-							</div>
-							<div className="min-w-0">
-								<h2 className="text-lg font-bold">{t("submissions.confirmSubmit.title")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
-									{t("submissions.confirmSubmit.body")}
-								</p>
-							</div>
-						</div>
+						<DialogHeader tone="warning" icon={AlertTriangle} title={t("submissions.confirmSubmit.title")}>
+							{t("submissions.confirmSubmit.body")}
+						</DialogHeader>
 						<div className="flex justify-end gap-2">
 							<button className="btn btn-ghost" type="button" onClick={() => setConfirmSubmit(false)}>
 								{t("common.cancel")}
@@ -1090,11 +1061,11 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{submitting ? (
-				<div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+				<Modal className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
 					<div className="card w-full max-w-md p-6 space-y-4">
 						<div className="flex items-center gap-3">
 							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-primary)]/15 shrink-0">
@@ -1121,26 +1092,15 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 							{progress.percent === null ? t("submissions.editor.working") : `${progress.percent}%`}
 						</p>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{confirmTrash ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setConfirmTrash(false)}
-				>
+				<Modal onClose={() => setConfirmTrash(false)}>
 					<div className="card w-full max-w-md p-6 space-y-4">
-						<div className="flex items-start gap-3">
-							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
-								<Trash2 className="w-5 h-5 text-[var(--color-error)]" />
-							</div>
-							<div className="min-w-0">
-								<h2 className="text-lg font-bold">{t("submissions.trash.title")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
-									{t("submissions.trash.body")}
-								</p>
-							</div>
-						</div>
+						<DialogHeader tone="error" icon={Trash2} title={t("submissions.trash.title")}>
+							{t("submissions.trash.body")}
+						</DialogHeader>
 						<div className="flex justify-end gap-2">
 							<button className="btn btn-ghost" type="button" onClick={() => setConfirmTrash(false)}>
 								{t("common.cancel")}
@@ -1150,26 +1110,15 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{confirmAdminDelete ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setConfirmAdminDelete(false)}
-				>
+				<Modal onClose={() => setConfirmAdminDelete(false)}>
 					<div className="card w-full max-w-md p-6 space-y-4">
-						<div className="flex items-start gap-3">
-							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
-								<Trash2 className="w-5 h-5 text-[var(--color-error)]" />
-							</div>
-							<div className="min-w-0">
-								<h2 className="text-lg font-bold">{t("submissions.adminDelete.title")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
-									{t("submissions.adminDelete.body")}
-								</p>
-							</div>
-						</div>
+						<DialogHeader tone="error" icon={Trash2} title={t("submissions.adminDelete.title")}>
+							{t("submissions.adminDelete.body")}
+						</DialogHeader>
 						<div className="flex justify-end gap-2">
 							<button
 								className="btn btn-ghost"
@@ -1188,7 +1137,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 		</div>
 	);

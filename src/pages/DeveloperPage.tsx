@@ -10,6 +10,7 @@ import {
 	type DeveloperApp,
 } from "../lib/api";
 import { formatDate } from "../lib/format";
+import Modal from "../components/ui/Modal";
 
 interface Revealed {
 	title: string;
@@ -264,11 +265,7 @@ export default function DeveloperPage() {
 			</section>
 
 			{revealed ? (
-				<div
-					className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
-					role="dialog"
-					aria-modal="true"
-				>
+				<Modal className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
 					<div className="card w-full max-w-lg p-6 space-y-3">
 						<p className="font-semibold">{revealed.title}</p>
 						<p className="text-xs text-red-500">{t("developer.secretOnce")}</p>
@@ -287,7 +284,7 @@ export default function DeveloperPage() {
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 		</div>
 	);

@@ -7,7 +7,9 @@ import { useSystems } from "../lib/systems";
 import { useReviews } from "../lib/reviews";
 import UserLink from "../components/UserLink";
 import { formatDate, formatFileSize } from "../lib/format";
-import { statusBadge } from "../lib/status";
+import Modal from "../components/ui/Modal";
+import DialogHeader from "../components/ui/DialogHeader";
+import StatusBadge from "../components/ui/StatusBadge";
 
 export default function AdminSubmissionReview() {
 	const { t } = useTranslation();
@@ -148,9 +150,9 @@ export default function AdminSubmissionReview() {
 					<p className="text-sm text-[var(--color-base-content)]/60">
 						{t("admin.by")} <UserLink>{detail.submitted_by || detail.author}</UserLink> ·{" "}
 						{formatDate(detail.created_at)} ·{" "}
-						<span className={`badge ${statusBadge(detail.status, "badge-warning")} !px-2`}>
+						<StatusBadge status={detail.status} fallback="badge-warning" className="!px-2">
 							{t("status." + detail.status)}
-						</span>
+						</StatusBadge>
 						{detail.reviewed_by_name ? (
 							<>
 								{" "}
@@ -296,9 +298,9 @@ export default function AdminSubmissionReview() {
 			) : null}
 
 			{lightbox ? (
-				<div
+				<Modal
+					onClose={() => setLightbox(null)}
 					className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setLightbox(null)}
 				>
 					<div className="w-full max-w-6xl space-y-3">
 						<div className="flex items-center justify-between text-white">
@@ -346,14 +348,11 @@ export default function AdminSubmissionReview() {
 							</div>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{busyAction ? (
-				<div
-					className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && null}
-				>
+				<Modal className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
 					<div className="card w-full max-w-md p-8 space-y-5 text-center">
 						<div className="mx-auto size-12 rounded-full bg-[var(--color-primary)]/15 grid place-items-center">
 							<Loader2 className="w-6 h-6 text-[var(--color-primary)] animate-spin" />
@@ -376,26 +375,15 @@ export default function AdminSubmissionReview() {
 						</div>
 						<p className="text-xs text-[var(--color-base-content)]/60">{progress}%</p>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{confirmReject ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setConfirmReject(false)}
-				>
+				<Modal onClose={() => setConfirmReject(false)}>
 					<div className="card w-full max-w-md p-6 space-y-4">
-						<div className="flex items-start gap-3">
-							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
-								<X className="w-5 h-5 text-[var(--color-error)]" />
-							</div>
-							<div className="min-w-0">
-								<h2 className="text-lg font-bold">{t("admin.confirmRejectTitle")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
-									{t("admin.confirmRejectBody")}
-								</p>
-							</div>
-						</div>
+						<DialogHeader tone="error" icon={X} title={t("admin.confirmRejectTitle")}>
+							{t("admin.confirmRejectBody")}
+						</DialogHeader>
 						<div className="flex justify-end gap-2">
 							<button className="btn btn-ghost" type="button" onClick={() => setConfirmReject(false)}>
 								{t("common.cancel")}
@@ -405,26 +393,15 @@ export default function AdminSubmissionReview() {
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{confirmDelete ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setConfirmDelete(false)}
-				>
+				<Modal onClose={() => setConfirmDelete(false)}>
 					<div className="card w-full max-w-md p-6 space-y-4">
-						<div className="flex items-start gap-3">
-							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
-								<Trash2 className="w-5 h-5 text-[var(--color-error)]" />
-							</div>
-							<div className="min-w-0">
-								<h2 className="text-lg font-bold">{t("admin.confirmDeleteTitle")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
-									{t("admin.confirmDeleteBody")}
-								</p>
-							</div>
-						</div>
+						<DialogHeader tone="error" icon={Trash2} title={t("admin.confirmDeleteTitle")}>
+							{t("admin.confirmDeleteBody")}
+						</DialogHeader>
 						<div className="flex justify-end gap-2">
 							<button className="btn btn-ghost" type="button" onClick={() => setConfirmDelete(false)}>
 								{t("common.cancel")}
@@ -434,7 +411,7 @@ export default function AdminSubmissionReview() {
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 		</div>
 	);

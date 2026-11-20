@@ -16,8 +16,10 @@ import Pagination from "../components/Pagination";
 import RegionLabel from "../components/RegionLabel";
 import { useReviews, loadReviews, type ReviewItem, type ReviewStatus } from "../lib/reviews";
 import { formatDate } from "../lib/format";
-import { statusBadge } from "../lib/status";
 import { MEDIA_KIND_LABEL } from "../lib/media";
+import Modal from "../components/ui/Modal";
+import DialogHeader from "../components/ui/DialogHeader";
+import StatusBadge from "../components/ui/StatusBadge";
 
 const PER_PAGE = 20;
 
@@ -284,9 +286,9 @@ export default function ReviewsPage() {
 													</span>
 												)
 											) : null}
-											<span className={`badge ${statusBadge(r.status)} shrink-0`}>
+											<StatusBadge status={r.status} className="shrink-0">
 												{t("metadataStatus." + r.status, { defaultValue: r.status })}
-											</span>
+											</StatusBadge>
 										</div>
 									</div>
 								</div>
@@ -298,9 +300,9 @@ export default function ReviewsPage() {
 			)}
 
 			{selected ? (
-				<div
+				<Modal
+					onClose={() => setSelected(null)}
 					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4"
-					onClick={(e) => e.target === e.currentTarget && setSelected(null)}
 				>
 					<div className="card w-full max-w-2xl my-8 p-6 space-y-4">
 						<div className="flex items-center justify-between gap-3">
@@ -327,9 +329,9 @@ export default function ReviewsPage() {
 									) : null}
 								</div>
 							</div>
-							<span className={`badge ${statusBadge(selected.status)} shrink-0`}>
+							<StatusBadge status={selected.status} className="shrink-0">
 								{t("metadataStatus." + selected.status, { defaultValue: selected.status })}
-							</span>
+							</StatusBadge>
 						</div>
 
 						<div className="grid grid-cols-2 gap-3 text-sm">
@@ -492,26 +494,18 @@ export default function ReviewsPage() {
 							) : null}
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{confirmCancel && selected ? (
-				<div
+				<Modal
+					onClose={() => !cancelling && setConfirmCancel(false)}
 					className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && !cancelling && setConfirmCancel(false)}
 				>
 					<div className="card w-full max-w-md p-6 space-y-4">
-						<div className="flex items-start gap-3">
-							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
-								<Trash2 className="w-5 h-5 text-[var(--color-error)]" />
-							</div>
-							<div className="min-w-0">
-								<h2 className="text-lg font-bold">{t("reviews.cancelConfirmTitle")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
-									{t("reviews.cancelConfirmBody")}
-								</p>
-							</div>
-						</div>
+						<DialogHeader tone="error" icon={Trash2} title={t("reviews.cancelConfirmTitle")}>
+							{t("reviews.cancelConfirmBody")}
+						</DialogHeader>
 						<div className="flex justify-end gap-2">
 							<button
 								className="btn btn-ghost"
@@ -531,7 +525,7 @@ export default function ReviewsPage() {
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 		</div>
 	);

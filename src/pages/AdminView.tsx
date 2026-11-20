@@ -6,7 +6,7 @@ import { api, type SubmissionDetail, mediaUrl } from "../lib/api";
 import { useSystems } from "../lib/systems";
 import UserLink from "../components/UserLink";
 import { formatDate } from "../lib/format";
-import { statusBadge } from "../lib/status";
+import StatusBadge from "../components/ui/StatusBadge";
 
 function coveredSystems(files: { kind: string; system_id: string }[], total: number): { covered: number; pct: number } {
 	const covered = new Set(files.filter((f) => f.kind === "background" && f.system_id).map((f) => f.system_id)).size;
@@ -115,9 +115,9 @@ export default function AdminView() {
 								<div className="p-4 space-y-2 flex-1 flex flex-col">
 									<div className="flex items-center justify-between gap-2">
 										<h3 className="font-semibold truncate">{s.name || t("admin.untitledPack")}</h3>
-										<span className={`badge ${statusBadge(s.status, "badge-info")} shrink-0`}>
+										<StatusBadge status={s.status} fallback="badge-info" className="shrink-0">
 											{t("status." + s.status)}
-										</span>
+										</StatusBadge>
 									</div>
 									<p className="text-xs text-[var(--color-base-content)]/50">
 										{t("admin.by")} <UserLink>{s.submitted_by || s.author}</UserLink> ·{" "}
