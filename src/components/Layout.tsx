@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { isAuthed } from "../lib/api";
+import { useSession } from "../lib/session";
 
 // Apply the persisted theme class to <html> before first render so the correct
 // light/dark scheme is active everywhere (including the landing page).
@@ -16,7 +16,7 @@ function applyStoredTheme() {
 }
 
 export default function Layout({ children }: { children: ReactNode }) {
-	const signedIn = isAuthed();
+	const { authed: signedIn } = useSession();
 	const { pathname } = useLocation();
 	const { t } = useTranslation();
 	useEffect(() => {

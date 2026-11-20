@@ -1,5 +1,5 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Link, NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
+import { Suspense, useEffect, useState, type ReactNode } from "react";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
 	Bell,
 	Gamepad2,
@@ -8,6 +8,7 @@ import {
 	KeyRound,
 	LayoutDashboard,
 	LayoutGrid,
+	Loader2,
 	ListChecks,
 	LogIn,
 	LogOut,
@@ -22,17 +23,7 @@ import {
 import { useTranslation } from "react-i18next";
 import LanguageSelect from "../components/LanguageSelect";
 import { useReviews } from "../lib/reviews";
-import {
-	userUsername,
-	userRole,
-	isAdmin,
-	isReviewer,
-	isAuthed,
-	fetchMe,
-	clearStoredAuth,
-	logoutRequest,
-	USER_ROLE_KEY,
-} from "../lib/api";
+import { signOut, useRoleRefresh, useSession } from "../lib/session";
 
 const THEME_KEY = "ns-theme";
 const SIDEBAR_KEY = "ns-sidebar-collapsed";
@@ -50,14 +41,6 @@ function applyTheme(theme: "dark" | "light") {
 	try {
 		localStorage.setItem(THEME_KEY, theme);
 	} catch {}
-}
-
-function logout() {
-	// Clear the server session cookies, then the cached profile. The local clear
-	// runs regardless so the UI logs out even if the request fails.
-	return logoutRequest()
-		.catch(() => {})
-		.finally(() => clearStoredAuth());
 }
 
 // SideLink renders a sidebar nav item. When the sidebar is collapsed only the
@@ -95,7 +78,7 @@ function SideLink({
 }
 
 export default function AppPage() {
-	const [authed, setAuthed] = useState(isAuthed());
+	const { authed, user, role, isReviewer: reviewer } = useSession();
 	const [theme, setTheme] = useState<"dark" | "light">(initialTheme);
 	const [collapsed, setCollapsed] = useState(() => {
 		try {
@@ -104,10 +87,7 @@ export default function AppPage() {
 			return false;
 		}
 	});
-	const username = userUsername() || "";
-	const role = userRole() || "user";
-	const reviewer = isReviewer();
-	const admin = isAdmin();
+	const username = user?.username || "";
 	const location = useLocation();
 	const { t } = useTranslation();
 	const path = location.pathname;
@@ -116,29 +96,11 @@ export default function AppPage() {
 		applyTheme(theme);
 	}, [theme]);
 
-	// Keep the auth state in sync when navigating (e.g. after login/logout).
-	useEffect(() => {
-		setAuthed(isAuthed());
-	}, [location.pathname]);
-
 	// Refresh the stored role from the server so a promotion to reviewer/admin
 	// (or a demotion) takes effect without logging out and back in. Reviewers
-	// get the admin overview menu; users/donations stay admin-only.
-	const [, setRoleTick] = useState(0);
-	useEffect(() => {
-		if (!authed) return;
-		let cancelled = false;
-		fetchMe()
-			.then((u) => {
-				if (cancelled || !u.role || userRole() === u.role) return;
-				localStorage.setItem(USER_ROLE_KEY, u.role);
-				setRoleTick((n) => n + 1);
-			})
-			.catch(() => {});
-		return () => {
-			cancelled = true;
-		};
-	}, [authed]);
+	// get the admin overview menu; users/donations stay admin-only (see
+	// RequireRole in the route config).
+	useRoleRefresh();
 
 	// Simple dark/light toggle: the theme class on <html> flips instantly and
 	// Tailwind's color variables repaint the whole app.
@@ -156,18 +118,6 @@ export default function AppPage() {
 			return next;
 		});
 	};
-
-	// Redirect non-reviewers away from the review section.
-	if (location.pathname.startsWith("/app/admin") && !reviewer) {
-		return <Navigate to="/app/home" replace />;
-	}
-	// Users and donations management are admin-only (reviewers must not see them).
-	if (
-		(location.pathname.startsWith("/app/admin/users") || location.pathname.startsWith("/app/admin/donations")) &&
-		!admin
-	) {
-		return <Navigate to="/app/admin" replace />;
-	}
 
 	return (
 		<div className="flex min-h-screen">
@@ -318,8 +268,7 @@ export default function AppPage() {
 								type="button"
 								title={t("nav.logout")}
 								onClick={() => {
-									setAuthed(false);
-									void logout();
+									void signOut();
 								}}
 							>
 								<LogOut className="w-4 h-4" />
@@ -358,7 +307,9 @@ export default function AppPage() {
 			{/* Content */}
 			<div className="flex-1 min-w-0 flex flex-col">
 				<main className="flex-1 w-full px-4 md:px-8 py-8 md:py-10 max-w-6xl mx-auto">
-					<Outlet />
+					<Suspense fallback={<PageFallback />}>
+						<Outlet />
+					</Suspense>
 				</main>
 
 				{/* App footer */}
@@ -416,5 +367,14 @@ function NotificationBell() {
 				</span>
 			) : null}
 		</NavLink>
+	);
+}
+
+// PageFallback is shown in the content area while a page's code loads.
+function PageFallback() {
+	return (
+		<div className="flex justify-center py-16" role="status" aria-live="polite">
+			<Loader2 className="w-6 h-6 animate-spin text-[var(--color-base-content)]/50" aria-hidden="true" />
+		</div>
 	);
 }

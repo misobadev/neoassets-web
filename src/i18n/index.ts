@@ -1,16 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./locales/en.json";
-import de from "./locales/de.json";
-import es from "./locales/es.json";
-import fr from "./locales/fr.json";
-import id from "./locales/id.json";
-import it from "./locales/it.json";
-import ja from "./locales/ja.json";
-import ko from "./locales/ko.json";
-import pt from "./locales/pt.json";
-import ru from "./locales/ru.json";
-import zh from "./locales/zh.json";
 
 export const LANGUAGE_STORAGE_KEY = "ns-language";
 
@@ -50,26 +40,34 @@ function detectLanguage(): string {
 
 const initialLanguage = detectLanguage();
 
-void i18n.use(initReactI18next).init({
-	resources: {
-		en: { translation: en },
-		de: { translation: de },
-		es: { translation: es },
-		fr: { translation: fr },
-		id: { translation: id },
-		it: { translation: it },
-		ja: { translation: ja },
-		ko: { translation: ko },
-		pt: { translation: pt },
-		ru: { translation: ru },
-		zh: { translation: zh },
-	},
+// English is bundled (it is the fallback); every other language is a separate
+// chunk loaded on demand, so a visitor only downloads the language they use.
+const loaders = import.meta.glob<{ default: Record<string, unknown> }>(["./locales/*.json", "!./locales/en.json"]);
+
+async function loadLanguage(language: string): Promise<void> {
+	if (language === "en" || i18n.hasResourceBundle(language, "translation")) return;
+	const load = loaders[`./locales/${language}.json`];
+	if (!load) return;
+	const mod = await load();
+	i18n.addResourceBundle(language, "translation", mod.default, true, true);
+}
+
+const initialized = i18n.use(initReactI18next).init({
+	resources: { en: { translation: en } },
+	partialBundledLanguages: true,
 	lng: initialLanguage,
 	fallbackLng: "en",
 	supportedLngs: SUPPORTED_LANGUAGES,
 	interpolation: { escapeValue: false },
 	returnNull: false,
 });
+
+// i18nReady resolves once the visitor's language is loaded; main renders the
+// app after it, so a non-English visitor never sees English text first.
+export const i18nReady: Promise<void> = Promise.all([initialized, loadLanguage(initialLanguage)])
+	.then(() => i18n.changeLanguage(initialLanguage))
+	.then(() => undefined)
+	.catch(() => undefined);
 
 if (typeof document !== "undefined") {
 	document.documentElement.lang = initialLanguage;
@@ -86,7 +84,7 @@ i18n.on("languageChanged", (language) => {
 
 export function setLanguage(language: string): void {
 	if (SUPPORTED_LANGUAGES.includes(language)) {
-		void i18n.changeLanguage(language);
+		void loadLanguage(language).then(() => i18n.changeLanguage(language));
 	}
 }
 

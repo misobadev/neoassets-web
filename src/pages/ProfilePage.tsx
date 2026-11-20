@@ -22,8 +22,7 @@ import {
 	type Rewards,
 	type User,
 	type UserAPIKey,
-	USER_NAME_KEY,
-	USER_EMAIL_KEY,
+	storeCachedUser,
 } from "../lib/api";
 import { formatDate } from "../lib/format";
 import Modal from "../components/ui/Modal";
@@ -204,8 +203,7 @@ export default function ProfilePage() {
 		try {
 			const u = await updateProfile({ username, email });
 			setMe(u);
-			if (u.username) localStorage.setItem(USER_NAME_KEY, u.username);
-			if (u.email) localStorage.setItem(USER_EMAIL_KEY, u.email);
+			storeCachedUser({ username: u.username || undefined, email: u.email || undefined });
 			setProfileMsg({ text: t("profile.updated"), tone: "success" });
 		} catch (e) {
 			setProfileMsg({ text: (e as Error).message, tone: "error" });

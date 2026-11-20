@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Download, Layers } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { api, CDN_BASE, type Pack, isAuthed, userUsername } from "../lib/api";
+import { api, CDN_BASE, type Pack, userUsername } from "../lib/api";
 import UserLink from "../components/UserLink";
 import DonateButton from "../components/DonateButton";
 import { usePageTitle } from "../lib/seo";
+import { useSession } from "../lib/session";
 
 // SubmissionsView is the community System Art Pack gallery: every user's
 // published contribution. The current user's own submissions (drafts and
@@ -13,7 +14,7 @@ import { usePageTitle } from "../lib/seo";
 export default function SubmissionsView() {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const signedIn = isAuthed();
+	const { authed: signedIn } = useSession();
 	usePageTitle(t("nav.systemArtPack"));
 	const [packs, setPacks] = useState<Pack[] | null>(null);
 	const [packsTotal, setPacksTotal] = useState(0);

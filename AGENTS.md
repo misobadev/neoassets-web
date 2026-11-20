@@ -63,7 +63,15 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
 - `src/lib/status.ts` `statusBadge()`: the badge class for a submission or
   review status.
 - `src/i18n/index.ts` i18next setup, `LANGUAGES`, `setLanguage()`, persisted
-  in `localStorage` under `ns-language`.
+  in `localStorage` under `ns-language`. English is bundled; other languages
+  are loaded on demand, and `main.tsx` renders after `i18nReady`.
+- `src/routes.tsx` the route table. Pages are `lazy()` (AppPage shows a
+  fallback while one loads). Account pages use `RequireAuth`; review/admin
+  pages use `RequireRole` (`components/RequireAuth.tsx`).
+- `src/lib/session.ts` `useSession()` (signed-in user and role, re-renders on
+  login, logout, a 401 or another tab), `useRoleRefresh()`, `signOut()`.
+  Components read the session with `useSession()`; login and profile changes
+  go through `storeCachedUser()`.
 - `src/i18n/locales/*.json` all UI strings (en, de, es, fr, id, it, ja, ko, pt, ru, zh).
 - `src/components/LanguageSelect.tsx` language dropdown in the sidebar footer.
 - `src/lib/image.ts` `toSafeBackground()` for avatars (center-crops to a
