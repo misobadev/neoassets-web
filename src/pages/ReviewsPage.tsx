@@ -178,9 +178,7 @@ export default function ReviewsPage() {
 				<div className="ml-auto card px-4 py-2 flex items-center gap-2 shrink-0">
 					<Sparkles className="w-5 h-5 text-[var(--color-primary)]" />
 					<div>
-						<p className="text-[11px] uppercase tracking-wider text-[var(--color-base-content)]/50">
-							{t("reviews.experienceEarned")}
-						</p>
+						<p className="text-xs r text-[var(--color-base-content)]/50">{t("reviews.experienceEarned")}</p>
 						<p className="text-lg font-bold leading-none">{totalXP.toLocaleString()}</p>
 					</div>
 				</div>

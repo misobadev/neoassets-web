@@ -1,13 +1,10 @@
 import { Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-// ratingColor maps a 0-10 rating to an hsl color interpolating red (low) to
-// green (high). A rating of 0 (no rating) returns a muted tone.
+// ratingColor is the color of a rating: the accent for a rated game, muted
+// when there is no rating yet.
 export function ratingColor(rating: number): string {
-	if (rating <= 0) return "hsl(0, 0%, 60%)";
-	const t = Math.min(1, rating / 10);
-	const hue = Math.round(t * 120);
-	return `hsl(${hue}, 75%, 45%)`;
+	return rating > 0 ? "var(--color-accent)" : "color-mix(in oklab, var(--color-base-content) 40%, transparent)";
 }
 
 export function RatingBadge({ rating }: { rating?: number | null }) {
@@ -19,19 +16,15 @@ export function RatingBadge({ rating }: { rating?: number | null }) {
 				className="inline-flex items-center gap-1 text-[var(--color-base-content)]/40"
 				title={t("rating.noRating")}
 			>
-				<Star className="w-6 h-6" fill="currentColor" />
+				<Star className="w-4 h-4" fill="currentColor" />
 			</span>
 		);
 	}
 	return (
-		<span
-			className="inline-flex items-baseline gap-1 font-bold"
-			style={{ color: ratingColor(r) }}
-			title={t("rating.rated", { rating: r })}
-		>
-			<Star className="w-6 h-6 self-center" fill="currentColor" stroke="none" />
-			<span className="text-2xl leading-none">{r}</span>
-			<span className="text-xs font-semibold opacity-70">/10</span>
+		<span className="inline-flex items-baseline gap-1" title={t("rating.rated", { rating: r })}>
+			<Star className="w-4 h-4 self-center" fill={ratingColor(r)} stroke="none" />
+			<span className="text-lg font-semibold leading-none tabular-nums">{r}</span>
+			<span className="text-xs text-[var(--color-base-content)]/50">/10</span>
 		</span>
 	);
 }

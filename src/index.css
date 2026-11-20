@@ -1,31 +1,37 @@
 @import "tailwindcss";
 
 /*
- * NeoAssets System Art design system (pure Tailwind, no daisyUI). The daisyUI
- * class names used by the pages are re-implemented here as Tailwind utilities so
- * the markup stays idiomatic while the look matches the brand aesthetic.
+ * NeoAssets design system (pure Tailwind, no daisyUI). DESIGN.md documents
+ * every token and component below; pages use these names, never raw values.
  */
 
 @theme {
 	/* Typography */
-	--font-sans: "Anta", ui-sans-serif, system-ui, sans-serif;
-	--font-mono: "Anta", ui-monospace, SFMono-Regular, Menlo, monospace;
+	--font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+	--font-brand: "Anta", ui-sans-serif, system-ui, sans-serif;
 
-	/* Brand + semantic colors */
-	--color-primary: #4a90e2;
-	--color-primary-soft: #7fb3f0;
-	--color-secondary: #e879f9;
-	--color-success: #34d399;
-	--color-warning: #fbbf24;
-	--color-error: #f87171;
-	--color-info: #38bdf8;
-	--color-accent: #4a90e2;
+	/* Brand + semantic colors (dark default; light values in html.light) */
+	--color-primary: #2f74c8;
+	--color-primary-soft: #7fb0ec;
+	--color-accent: #d9a03f;
+	--color-success: #3fae7b;
+	--color-warning: #d9a03f;
+	--color-error: #e2665e;
+	--color-info: #7fb0ec;
+	/* No second brand color: secondary maps to the neutral scale. */
+	--color-secondary: #9aa3af;
 
-	/* Surfaces (dark default): cool blue-gray with soft off-white content */
-	--color-base-100: #10151d;
-	--color-base-200: #171d27;
-	--color-base-300: #242c38;
-	--color-base-content: #dde5ee;
+	/* Neutral scale */
+	--color-base-100: #0f1216;
+	--color-base-200: #161a20;
+	--color-base-300: #272d36;
+	--color-base-content: #e4e7eb;
+
+	/* Radius and the single overlay shadow */
+	--radius-control: 0.375rem;
+	--radius-card: 0.625rem;
+	--shadow-overlay: 0 16px 48px -12px rgb(0 0 0 / 0.45);
 
 	/* Animations */
 	--animate-fade-in: fade-in 0.4s ease-out both;
@@ -73,30 +79,37 @@
 }
 
 :root {
-	--default-border-color: #242c38;
+	--default-border-color: var(--color-base-300);
 	color-scheme: dark;
-	font-family:
-		"Anta",
-		ui-sans-serif,
-		system-ui,
-		-apple-system,
-		"Segoe UI",
-		Roboto,
-		Helvetica,
-		Arial,
-		sans-serif;
-	font-feature-settings: "cv11", "ss01";
+	font-family: var(--font-sans);
 }
 
-/* Light theme: toggled by adding .light to <html>. Pale blue-gray surfaces
-   with dark navy text, matching the boarding-pass palette. */
+/* Light theme: toggled by adding .light to <html>. */
 html.light {
-	--color-base-100: #dde5e7;
-	--color-base-200: #e6ecee;
-	--color-base-300: #c5d1d5;
-	--color-base-content: #16232f;
-	--default-border-color: #c5d1d5;
+	--color-base-100: #f5f6f8;
+	--color-base-200: #ffffff;
+	--color-base-300: #dde1e6;
+	--color-base-content: #14181f;
+	--color-primary-soft: #225aa0;
+	--color-accent: #a66d0c;
+	--color-success: #1d7f53;
+	--color-warning: #9a6410;
+	--color-error: #c2372e;
+	--color-info: #225aa0;
+	--color-secondary: #5b6573;
+	--shadow-overlay: 0 16px 48px -12px rgb(15 18 22 / 0.25);
 	color-scheme: light;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+}
+
+/* The wordmark is the only place the brand face is used. */
+.font-brand {
+	font-family: var(--font-brand);
 }
 
 html.light body {
@@ -141,7 +154,7 @@ body {
 }
 
 :focus-visible {
-	outline: 2px solid color-mix(in oklab, var(--color-primary) 55%, transparent);
+	outline: 2px solid var(--color-primary);
 	outline-offset: 2px;
 }
 
@@ -177,7 +190,7 @@ body {
    Cards
    ------------------------------------------------------------------------- */
 @utility card {
-	border-radius: 1rem;
+	border-radius: var(--radius-card);
 	border: 1px solid var(--color-base-300);
 	background-color: var(--color-base-200);
 }
@@ -187,16 +200,10 @@ body {
 }
 
 @utility card-hover {
-	transition:
-		border-color 0.2s ease,
-		background-color 0.2s ease,
-		transform 0.2s ease,
-		box-shadow 0.2s ease;
+	transition: border-color 0.15s ease;
 
 	&:hover {
 		border-color: color-mix(in oklab, var(--color-primary) 45%, var(--color-base-300));
-		transform: translateY(-2px);
-		box-shadow: 0 12px 32px -16px rgb(0 0 0 / 0.5);
 	}
 }
 
@@ -212,8 +219,8 @@ body {
 	align-items: center;
 	gap: 0.5rem;
 	font-size: 1.125rem;
-	font-weight: 700;
-	line-height: 1.375rem;
+	font-weight: 600;
+	line-height: 1.75rem;
 	letter-spacing: -0.01em;
 }
 
@@ -225,7 +232,8 @@ body {
 	align-items: center;
 	justify-content: center;
 	gap: 0.5rem;
-	border-radius: 0.625rem;
+	min-height: 2.5rem;
+	border-radius: var(--radius-control);
 	font-size: 0.875rem;
 	font-weight: 600;
 	line-height: 1.25rem;
@@ -238,11 +246,8 @@ body {
 		color 0.15s ease,
 		box-shadow 0.15s ease,
 		transform 0.15s ease;
-	padding: 0.625rem 1rem;
+	padding: 0.5rem 1rem;
 
-	&:active {
-		transform: scale(0.98);
-	}
 	&:disabled {
 		pointer-events: none;
 		opacity: 0.5;
@@ -253,10 +258,9 @@ body {
 	background-color: var(--color-primary);
 	color: #fff;
 	border: 1px solid transparent;
-	box-shadow: 0 8px 24px -8px color-mix(in oklab, var(--color-primary) 55%, transparent);
 
 	&:hover {
-		background-color: color-mix(in oklab, var(--color-primary) 88%, #000);
+		background-color: color-mix(in oklab, var(--color-primary) 85%, #000);
 	}
 }
 
@@ -292,7 +296,7 @@ body {
 
 @utility btn-outline {
 	border: 1px solid var(--color-base-300);
-	background-color: transparent;
+	background-color: var(--color-base-200);
 	color: var(--color-base-content);
 
 	&:hover {
@@ -301,18 +305,21 @@ body {
 }
 
 @utility btn-lg {
+	min-height: 3rem;
 	height: 3rem;
 	padding-inline: 1.5rem;
 	font-size: 1rem;
 }
 
 @utility btn-sm {
+	min-height: 2rem;
 	height: 2rem;
 	padding-inline: 0.75rem;
 	font-size: 0.8125rem;
 }
 
 @utility btn-xs {
+	min-height: 1.5rem;
 	height: 1.5rem;
 	padding-inline: 0.5rem;
 	font-size: 0.75rem;
@@ -334,12 +341,12 @@ body {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.375rem;
-	border-radius: 9999px;
+	border-radius: var(--radius-control);
 	border: 1px solid var(--color-base-300);
 	background-color: var(--color-base-200);
-	padding: 0.25rem 0.625rem;
+	padding: 0.125rem 0.5rem;
 	font-size: 0.75rem;
-	font-weight: 600;
+	font-weight: 500;
 	line-height: 1.25rem;
 }
 
@@ -402,7 +409,7 @@ body {
 @utility badge-solid-primary {
 	border-color: var(--color-primary);
 	background-color: var(--color-primary);
-	color: var(--color-base-100);
+	color: #fff;
 }
 
 @utility badge-solid-secondary {
@@ -476,7 +483,7 @@ body {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
-	border-radius: 1rem;
+	border-radius: var(--radius-card);
 	border: 1px solid var(--color-base-300);
 	background-color: var(--color-base-200);
 	padding: 1rem;
@@ -511,9 +518,9 @@ body {
    Forms
    ------------------------------------------------------------------------- */
 @utility input {
-	height: 2.75rem;
+	height: 2.5rem;
 	width: 100%;
-	border-radius: 0.625rem;
+	border-radius: var(--radius-control);
 	border: 1px solid var(--color-base-300);
 	background-color: var(--color-base-100);
 	padding-inline: 0.875rem;
@@ -537,10 +544,10 @@ body {
 @utility select {
 	height: 2.5rem;
 	width: 100%;
-	border-radius: 0.625rem;
+	border-radius: var(--radius-control);
 	border: 1px solid var(--color-base-300);
 	background-color: var(--color-base-100);
-	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23f4f4f5' stroke-opacity='0.6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%239aa3af' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
 	background-repeat: no-repeat;
 	background-position: right 0.625rem center;
 	background-size: 1rem;
@@ -615,53 +622,62 @@ body {
 }
 
 /* -------------------------------------------------------------------------
-   Boarding-pass style sidebar (blue ticket look)
+   App sidebar: a neutral surface; the active item gets the brand tint.
    ------------------------------------------------------------------------- */
 .sap-sidebar {
-	background-color: #4a90e2;
-	color: #0f2145;
-	border-right: 1px solid #2f6bb0;
+	background-color: var(--color-base-200);
+	color: var(--color-base-content);
+	border-right: 1px solid var(--color-base-300);
 }
 
 .sap-section {
 	display: block;
 	padding-left: 0.75rem;
-	margin-bottom: 0.375rem;
-	font-size: 0.625rem;
-	font-weight: 700;
-	letter-spacing: 0.16em;
-	text-transform: uppercase;
-	color: color-mix(in oklab, #0f2145 60%, transparent);
+	margin: 0.75rem 0 0.25rem;
+	font-size: 0.75rem;
+	font-weight: 500;
+	color: color-mix(in oklab, var(--color-base-content) 50%, transparent);
 }
 
 .sap-nav {
+	position: relative;
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
-	padding: 0.5rem 0.75rem;
-	border-radius: 0.375rem;
-	font-size: 0.75rem;
-	font-weight: 700;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	color: #0f2145;
+	padding: 0.4375rem 0.75rem;
+	border-radius: var(--radius-control);
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: color-mix(in oklab, var(--color-base-content) 70%, transparent);
 	transition:
 		background-color 0.15s ease,
 		color 0.15s ease;
 }
 
 .sap-nav:hover {
-	background-color: color-mix(in oklab, #0f2145 14%, transparent);
+	background-color: var(--color-base-300);
+	color: var(--color-base-content);
 }
 
 .sap-nav-active {
-	background-color: #0f2145;
-	color: #ffffff;
+	background-color: color-mix(in oklab, var(--color-primary) 16%, transparent);
+	color: var(--color-base-content);
+}
+
+.sap-nav-active::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.375rem;
+	bottom: 0.375rem;
+	width: 2px;
+	border-radius: 2px;
+	background-color: var(--color-primary);
 }
 
 .sap-divider {
-	border-top: 1px dashed color-mix(in oklab, #0f2145 45%, transparent);
-	margin: 0.25rem 0;
+	border-top: 1px solid var(--color-base-300);
+	margin: 0.5rem 0;
 }
 
 .sap-icon-btn {
@@ -670,20 +686,21 @@ body {
 	justify-content: center;
 	flex: 1;
 	padding: 0.5rem;
-	border-radius: 0.375rem;
-	color: #0f2145;
+	border-radius: var(--radius-control);
+	color: color-mix(in oklab, var(--color-base-content) 70%, transparent);
 	transition:
 		background-color 0.15s ease,
 		color 0.15s ease;
 }
 
 .sap-icon-btn:hover {
-	background-color: color-mix(in oklab, #0f2145 14%, transparent);
+	background-color: var(--color-base-300);
+	color: var(--color-base-content);
 }
 
 .sap-icon-btn-active {
-	background-color: #0f2145;
-	color: #ffffff;
+	background-color: color-mix(in oklab, var(--color-primary) 16%, transparent);
+	color: var(--color-base-content);
 }
 
 /* Collapsed sidebar: icon-only buttons stack and never grow vertically. */
@@ -697,20 +714,20 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
-	gap: 0.375rem;
+	gap: 0.75rem;
 	width: 100%;
-	padding: 0.5rem 0.75rem;
-	border-radius: 0.375rem;
-	color: #0f2145;
-	font-size: 0.75rem;
-	font-weight: 700;
-	letter-spacing: 0.06em;
+	padding: 0.4375rem 0.75rem;
+	border-radius: var(--radius-control);
+	color: color-mix(in oklab, var(--color-base-content) 70%, transparent);
+	font-size: 0.875rem;
+	font-weight: 500;
 	cursor: pointer;
 	transition: background-color 0.15s ease;
 }
 
 .sap-lang:hover {
-	background-color: color-mix(in oklab, #0f2145 14%, transparent);
+	background-color: var(--color-base-300);
+	color: var(--color-base-content);
 }
 
 .sap-lang-select {
@@ -726,17 +743,17 @@ body {
 	flex: 1;
 	min-width: 0;
 	background-color: transparent;
-	color: #0f2145;
-	font-size: 0.75rem;
-	font-weight: 700;
-	letter-spacing: 0.06em;
+	color: inherit;
+	font-size: 0.875rem;
+	font-weight: 500;
 	border: none;
 	outline: none;
 	cursor: pointer;
 }
 
 .sap-lang-native option {
-	color: #0f2145;
+	color: var(--color-base-content);
+	background-color: var(--color-base-200);
 }
 
 .sap-sidebar.sap-collapsed .sap-lang {
@@ -752,19 +769,18 @@ body {
 	justify-content: center;
 	gap: 0.5rem;
 	width: 100%;
+	min-height: 2.25rem;
 	padding: 0.5rem 0.75rem;
-	border-radius: 0.375rem;
-	background-color: #0f2145;
+	border-radius: var(--radius-control);
+	background-color: var(--color-primary);
 	color: #ffffff;
-	font-size: 0.75rem;
-	font-weight: 700;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	transition: opacity 0.15s ease;
+	font-size: 0.875rem;
+	font-weight: 600;
+	transition: background-color 0.15s ease;
 }
 
 .sap-auth-btn:hover {
-	opacity: 0.9;
+	background-color: color-mix(in oklab, var(--color-primary) 85%, #000);
 }
 
 .sap-auth-btn-outline {
@@ -773,19 +789,18 @@ body {
 	justify-content: center;
 	gap: 0.5rem;
 	width: 100%;
+	min-height: 2.25rem;
 	padding: 0.5rem 0.75rem;
-	border-radius: 0.375rem;
-	border: 1px solid color-mix(in oklab, #0f2145 45%, transparent);
-	color: #0f2145;
-	font-size: 0.75rem;
-	font-weight: 700;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
+	border-radius: var(--radius-control);
+	border: 1px solid var(--color-base-300);
+	color: var(--color-base-content);
+	font-size: 0.875rem;
+	font-weight: 600;
 	transition: background-color 0.15s ease;
 }
 
 .sap-auth-btn-outline:hover {
-	background-color: color-mix(in oklab, #0f2145 14%, transparent);
+	background-color: var(--color-base-300);
 }
 
 @utility sidebar-item-disabled {
@@ -837,8 +852,9 @@ body {
 	flex-direction: column;
 	gap: 0.25rem;
 	padding: 0.5rem;
-	border-radius: 1rem;
+	border-radius: var(--radius-card);
 	background-color: var(--color-base-200);
+	box-shadow: var(--shadow-overlay);
 }
 
 @utility menu-horizontal {
@@ -892,13 +908,12 @@ body {
 }
 
 @utility link {
-	color: var(--color-primary);
+	color: var(--color-primary-soft);
 	cursor: pointer;
-	text-decoration: underline;
 	text-underline-offset: 2px;
 
 	&:hover {
-		opacity: 0.8;
+		text-decoration: underline;
 	}
 }
 
@@ -908,20 +923,17 @@ body {
 }
 
 @utility text-gradient {
-	background-image: linear-gradient(120deg, var(--color-primary-soft), var(--color-secondary));
-	background-clip: text;
-	-webkit-background-clip: text;
-	color: transparent;
+	color: var(--color-primary-soft);
 }
 
 @utility pill {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.375rem;
-	border-radius: 9999px;
+	border-radius: var(--radius-control);
 	border: 1px solid var(--color-base-300);
 	background-color: var(--color-base-200);
-	padding: 0.25rem 0.625rem;
+	padding: 0.125rem 0.5rem;
 	font-size: 0.75rem;
 	font-weight: 600;
 	line-height: 1.25rem;
@@ -935,8 +947,8 @@ body {
 }
 
 @utility stat-value {
-	font-size: 2rem;
-	font-weight: 800;
+	font-size: 1.75rem;
+	font-weight: 600;
 	letter-spacing: -0.02em;
 	line-height: 1;
 }
@@ -981,34 +993,15 @@ body {
 }
 
 /* -------------------------------------------------------------------------
-   Completed cards: 3D tilt + magnification on the card, and a holographic
-   "Completed" badge whose sheen follows the pointer.
+   Complete games: a success badge (the markup keeps the holo-* names).
    ------------------------------------------------------------------------- */
-.holo-card {
-	--rotation: rotateY(calc(var(--mx, 0) * 12deg)) rotateX(calc(var(--my, 0) * -12deg));
-	transform: var(--rotation) scale(1);
-	transform-style: preserve-3d;
-	transition: transform 100ms ease;
-}
-
-.holo-card:hover {
-	transform: var(--rotation) scale(1.02);
+/* Dialog panels float above the page. */
+[role="dialog"] > .card {
+	box-shadow: var(--shadow-overlay);
 }
 
 .holo-badge {
-	background-color: #f4f4f5;
-	background-image:
-		radial-gradient(
-			circle at calc(50% + var(--mx, 0) * 50%) calc(50% + var(--my, 0) * 50%),
-			#ffffffcc,
-			transparent 60%
-		),
-		repeating-linear-gradient(115deg, #f87171, #fef08a, #86efac, #5eead4, #60a5fa, #e879f9, #fb7185);
-	background-size:
-		100% 100%,
-		200% 200%;
-	background-position:
-		0 0,
-		calc(50% + var(--mx, 0) * 50%) calc(50% + var(--my, 0) * 50%);
-	color: #111827;
+	border-color: color-mix(in oklab, var(--color-success) 40%, transparent);
+	background-color: color-mix(in oklab, var(--color-success) 14%, transparent);
+	color: var(--color-success);
 }

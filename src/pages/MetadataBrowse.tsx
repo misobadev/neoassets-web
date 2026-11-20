@@ -572,7 +572,7 @@ export default function MetadataBrowse() {
 								className="mt-2 rounded-xl border border-[var(--color-base-300)] bg-[var(--color-base-200)]/50 p-2"
 							>
 								<div className="flex items-center justify-between px-1 pb-1">
-									<p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-primary)]">
+									<p className="text-xs font-semibold text-[var(--color-primary)]">
 										{kindLabel(g.family, t)}
 									</p>
 									<p className="text-[11px] text-[var(--color-base-content)]/40">
@@ -596,8 +596,8 @@ export default function MetadataBrowse() {
 			</div>
 
 			{/* Filters */}
-			<div className="flex flex-col sm:flex-row gap-2 items-center">
-				<div className="relative flex-1 min-w-0">
+			<div className="flex flex-col sm:flex-row gap-2 sm:items-center">
+				<div className="relative flex-1 min-w-0 w-full">
 					<Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-base-content)]/40" />
 					<input
 						className="input pl-9 w-full"
@@ -611,7 +611,7 @@ export default function MetadataBrowse() {
 					/>
 				</div>
 				<select
-					className="select select-sm shrink-0 w-44"
+					className="select shrink-0 w-full sm:w-44"
 					value={sort}
 					onChange={(e) => {
 						setSort(e.target.value);
@@ -629,7 +629,7 @@ export default function MetadataBrowse() {
 					<option value="completion_desc">{t("metadata.sort.completionDesc")}</option>
 				</select>
 				<select
-					className="select select-sm shrink-0 w-36"
+					className="select shrink-0 w-full sm:w-36"
 					value={typeFilter}
 					onChange={(e) => {
 						setTypeFilter(e.target.value as TypeFilter);

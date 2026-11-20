@@ -65,7 +65,7 @@ function Code({ children, lang = "json" }: { children: string; lang?: "json" | "
 	return (
 		<div className="overflow-hidden rounded-lg border border-[var(--color-base-300)] bg-[#0d1117]">
 			<div className="flex items-center justify-between border-b border-white/10 px-3 py-1">
-				<span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">{lang}</span>
+				<span className="text-xs font-semiboldr text-slate-400">{lang}</span>
 				<CopyButton value={body} className="text-slate-300 hover:text-white" />
 			</div>
 			<pre className="overflow-x-auto p-3 text-xs leading-relaxed text-slate-100">
