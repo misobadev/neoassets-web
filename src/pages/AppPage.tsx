@@ -13,6 +13,7 @@ import {
 	LogIn,
 	LogOut,
 	Menu,
+	X,
 	Moon,
 	Palette,
 	Sun,
@@ -24,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import LanguageSelect from "../components/LanguageSelect";
 import { useReviews } from "../lib/reviews";
 import { signOut, useRoleRefresh, useSession } from "../lib/session";
+import { useIsMobile } from "../lib/useMediaQuery";
 
 const THEME_KEY = "ns-theme";
 const SIDEBAR_KEY = "ns-sidebar-collapsed";
@@ -80,13 +82,18 @@ function SideLink({
 export default function AppPage() {
 	const { authed, user, role, isReviewer: reviewer } = useSession();
 	const [theme, setTheme] = useState<"dark" | "light">(initialTheme);
-	const [collapsed, setCollapsed] = useState(() => {
+	const [collapsedPref, setCollapsed] = useState(() => {
 		try {
 			return localStorage.getItem(SIDEBAR_KEY) === "1";
 		} catch {
 			return false;
 		}
 	});
+	// On phones the sidebar is a drawer opened from the top bar; it is never
+	// collapsed to icons there.
+	const isMobile = useIsMobile();
+	const [drawerOpen, setDrawerOpen] = useState(false);
+	const collapsed = collapsedPref && !isMobile;
 	const username = user?.username || "";
 	const location = useLocation();
 	const { t } = useTranslation();
@@ -95,6 +102,19 @@ export default function AppPage() {
 	useEffect(() => {
 		applyTheme(theme);
 	}, [theme]);
+
+	// Close the drawer after navigating, and on Escape.
+	useEffect(() => {
+		setDrawerOpen(false);
+	}, [path]);
+	useEffect(() => {
+		if (!drawerOpen) return;
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key === "Escape") setDrawerOpen(false);
+		};
+		document.addEventListener("keydown", onKey);
+		return () => document.removeEventListener("keydown", onKey);
+	}, [drawerOpen]);
 
 	// Refresh the stored role from the server so a promotion to reviewer/admin
 	// (or a demotion) takes effect without logging out and back in. Reviewers
@@ -120,16 +140,50 @@ export default function AppPage() {
 	};
 
 	return (
-		<div className="flex min-h-screen">
+		<div className="flex min-h-screen max-md:flex-col">
+			{/* Phone top bar: brand and the button that opens the sidebar drawer. */}
+			<header className="md:hidden sticky top-0 z-30 flex items-center justify-between h-14 px-4 border-b border-[var(--color-base-300)] bg-[var(--color-base-200)]">
+				<Link to="/app/home" className="flex items-center gap-2.5">
+					<span
+						className="isotype-mask h-6 w-6 shrink-0 text-[var(--color-primary-soft)]"
+						aria-hidden="true"
+					/>
+					<span className="font-brand uppercase tracking-tight text-lg leading-none">
+						<span className="font-bold">Neo</span>
+						<span className="font-normal">Assets</span>
+					</span>
+				</Link>
+				<button
+					type="button"
+					className="btn btn-ghost btn-sm btn-square"
+					onClick={() => setDrawerOpen(true)}
+					aria-label={t("nav.expandMenu")}
+					aria-expanded={drawerOpen}
+					aria-controls="app-sidebar"
+				>
+					<Menu className="w-5 h-5" />
+				</button>
+			</header>
+			{drawerOpen ? (
+				<div
+					className="md:hidden fixed inset-0 z-40 bg-black/50"
+					onClick={() => setDrawerOpen(false)}
+					aria-hidden="true"
+				/>
+			) : null}
 			{/* Sidebar */}
 			<aside
-				className={`sap-sidebar shrink-0 sticky top-0 h-screen flex flex-col gap-1 overflow-y-auto transition-[width] duration-200 ${collapsed ? "sap-collapsed w-16 p-2" : "w-64 p-4"}`}
+				id="app-sidebar"
+				className={`sap-sidebar shrink-0 sticky top-0 h-screen flex flex-col gap-1 overflow-y-auto transition-[width,transform] duration-200 max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-50 max-md:w-72 max-md:p-4 ${drawerOpen ? "" : "max-md:-translate-x-full"} ${collapsed ? "sap-collapsed w-16 p-2" : "w-64 p-4"}`}
 			>
 				<div className={`flex items-center gap-2 mb-4 ${collapsed ? "flex-col" : ""}`}>
 					<Link to="/app/home" className="flex items-center gap-2.5 min-w-0">
-						<span className="isotype-mask h-9 w-9 shrink-0" aria-hidden="true" />
+						<span
+							className="isotype-mask h-7 w-7 shrink-0 text-[var(--color-primary-soft)]"
+							aria-hidden="true"
+						/>
 						{!collapsed ? (
-							<span className="inline-block uppercase tracking-tight text-2xl leading-none">
+							<span className="font-brand inline-block uppercase tracking-tight text-xl leading-none">
 								<span className="font-bold">Neo</span>
 								<span className="font-normal">Assets</span>
 							</span>
@@ -137,11 +191,12 @@ export default function AppPage() {
 					</Link>
 					<button
 						type="button"
-						onClick={toggleCollapsed}
+						onClick={isMobile ? () => setDrawerOpen(false) : toggleCollapsed}
 						title={collapsed ? t("nav.expandMenu") : t("nav.collapseMenu")}
+						aria-label={collapsed ? t("nav.expandMenu") : t("nav.collapseMenu")}
 						className={`sap-icon-btn ${collapsed ? "" : "ml-auto w-10"}`}
 					>
-						<Menu className="w-4 h-4" />
+						{isMobile ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
 					</button>
 				</div>
 
@@ -240,9 +295,9 @@ export default function AppPage() {
 					<div className="space-y-2">
 						{!collapsed ? (
 							<div className="px-2">
-								<p className="text-sm font-bold truncate uppercase">{username}</p>
-								<p className="text-xs text-[#0f2145]/70 mt-0.5">
-									{t("common.role")}: <span className="font-bold uppercase">{role}</span>
+								<p className="text-sm font-semibold truncate">{username}</p>
+								<p className="text-xs text-[var(--color-base-content)]/60 mt-0.5">
+									{t("common.role")}: <span className="font-medium capitalize">{role}</span>
 								</p>
 							</div>
 						) : null}
@@ -278,7 +333,7 @@ export default function AppPage() {
 				) : (
 					<div className="space-y-2 pt-2">
 						{!collapsed ? (
-							<p className="text-[11px] font-bold uppercase tracking-wider text-[#0f2145]/70 px-2">
+							<p className="text-xs text-[var(--color-base-content)]/60 px-2">
 								{t("nav.signInToContribute")}
 							</p>
 						) : null}
@@ -313,7 +368,7 @@ export default function AppPage() {
 				</main>
 
 				{/* App footer */}
-				<footer className="sticky bottom-0 z-30 shrink-0 border-t border-base-300 bg-base-100/90 backdrop-blur py-4">
+				<footer className="shrink-0 border-t border-[var(--color-base-300)] py-4">
 					<div className="w-full px-4 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
 						<p className="text-xs text-base-content/60">{t("footer.tagline")}</p>
 						<div className="flex items-center gap-4 text-xs text-base-content/60">

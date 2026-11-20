@@ -286,7 +286,49 @@
 		"gameMetadata": "Metadatos de juegos",
 		"createAccount": "Crear una cuenta",
 		"signIn": "Iniciar sesión",
-		"becomePatron": "Apoya en Patreon"
+		"becomePatron": "Apoya en Patreon",
+		"catalog": {
+			"title": "Qué hay en el catálogo",
+			"metadataTitle": "Metadata de juegos",
+			"metadataBody": "Descripciones, fechas de lanzamiento, géneros, calificaciones, portadas, logos, capturas, videos y hashes de ROM, revisados contribución por contribución.",
+			"browseGames": "Ver juegos",
+			"packsTitle": "Art packs de sistemas",
+			"packsBody": "Fondos, logos y temas para cada sistema, hechos por la comunidad y listos para usar en tu frontend.",
+			"browsePacks": "Ver art packs"
+		},
+		"steps": {
+			"title": "Cómo se contribuye",
+			"guide": "Leer la guía de recompensas",
+			"find": {
+				"title": "Busca un juego",
+				"body": "Busca en el catálogo por sistema, o agrega el juego si no está."
+			},
+			"submit": {
+				"title": "Envía un cambio",
+				"body": "Edita el texto, sube media o agrega dumps de ROM. Las imágenes se optimizan al aprobarse."
+			},
+			"review": {
+				"title": "Un revisor lo verifica",
+				"body": "Cada cambio se revisa antes de publicarse, así el catálogo se mantiene limpio."
+			},
+			"earn": {
+				"title": "Gana XP",
+				"body": "Las contribuciones aprobadas dan XP y niveles, que desbloquean más hilos de scraping."
+			}
+		},
+		"api": {
+			"title": "Para desarrolladores de frontends",
+			"body": "Usa la API de scraping para obtener metadata y media de las colecciones de tus usuarios.",
+			"point1": "Busca juegos por hash de ROM o por nombre",
+			"point2": "Portadas, logos, capturas, fanart y videos",
+			"point3": "Credenciales de desarrollador gratis desde tu cuenta",
+			"docs": "Leer la documentación de la API"
+		},
+		"community": {
+			"title": "Principales contribuidores",
+			"body": "Las personas que construyen el catálogo, por contribuciones aprobadas.",
+			"seeAll": "Ver el panel"
+		}
 	},
 	"landing": {
 		"hero": {

@@ -55,6 +55,9 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
       `reviews.ts`, `community.ts` (rewards, profiles, follows), `admin.ts`,
       `developer.ts`: types and calls for each area.
 - `src/lib/format.ts` `formatDate()`, `formatBytes()`, `formatFileSize()`.
+- `DESIGN.md` the design system: colors with roles, type scale, spacing,
+  radius and component rules. Its tokens live in `src/index.css`; follow it
+  for any new UI.
 - `src/components/ui/` shared UI: `Modal` (every dialog overlay:
   `role="dialog"`, named by its first heading, focus trapped and restored,
   Escape/backdrop call `onClose`; omit `onClose` for a dialog that must not be

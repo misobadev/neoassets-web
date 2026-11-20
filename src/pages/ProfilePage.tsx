@@ -339,9 +339,7 @@ export default function ProfilePage() {
 						<div className="flex items-center justify-between gap-4 flex-wrap">
 							<div className="flex items-center gap-3">
 								<div className="rounded-xl bg-[var(--color-primary)]/15 px-3 py-2 text-center">
-									<p className="text-[10px] uppercase tracking-wide text-[var(--color-base-content)]/50">
-										{t("profile.level")}
-									</p>
+									<p className="text-xs text-[var(--color-base-content)]/50">{t("profile.level")}</p>
 									<p className="text-2xl font-bold text-[var(--color-primary-soft)]">
 										{rewards.level}
 									</p>

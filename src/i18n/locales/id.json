@@ -304,7 +304,49 @@
 		"signIn": "Masuk",
 		"becomePatron": "Dukung di Patreon",
 		"fasterScraper": "Scraper yang jauh lebih cepat",
-		"noSubmissionsLimit": "Tanpa batas kiriman"
+		"noSubmissionsLimit": "Tanpa batas kiriman",
+		"catalog": {
+			"title": "Isi katalog",
+			"metadataTitle": "Metadata game",
+			"metadataBody": "Deskripsi, tanggal rilis, genre, rating, sampul, logo, tangkapan layar, video, dan hash ROM, ditinjau satu per satu.",
+			"browseGames": "Jelajahi game",
+			"packsTitle": "Art pack sistem",
+			"packsBody": "Latar, logo, dan tema untuk setiap sistem, dibuat komunitas dan siap dipakai di frontend Anda.",
+			"browsePacks": "Jelajahi art pack"
+		},
+		"steps": {
+			"title": "Cara berkontribusi",
+			"guide": "Baca panduan hadiah",
+			"find": {
+				"title": "Cari game",
+				"body": "Cari di katalog berdasarkan sistem, atau tambahkan game jika belum ada."
+			},
+			"submit": {
+				"title": "Kirim perubahan",
+				"body": "Ubah teks, unggah media, atau tambahkan dump ROM. Gambar dioptimalkan saat disetujui."
+			},
+			"review": {
+				"title": "Peninjau memeriksanya",
+				"body": "Setiap perubahan ditinjau sebelum tayang, agar katalog tetap rapi."
+			},
+			"earn": {
+				"title": "Dapatkan XP",
+				"body": "Kontribusi yang disetujui memberi XP dan level, yang membuka lebih banyak thread scraping."
+			}
+		},
+		"api": {
+			"title": "Untuk pengembang frontend",
+			"body": "Gunakan API scraping untuk mengambil metadata dan media koleksi game pengguna Anda.",
+			"point1": "Cari game berdasarkan hash ROM atau nama",
+			"point2": "Sampul, logo, tangkapan layar, fanart, dan video",
+			"point3": "Kredensial pengembang gratis dari akun Anda",
+			"docs": "Baca dokumentasi API"
+		},
+		"community": {
+			"title": "Kontributor teratas",
+			"body": "Orang-orang yang membangun katalog, berdasarkan kontribusi yang disetujui.",
+			"seeAll": "Lihat dasbor"
+		}
 	},
 	"landing": {
 		"hero": {

@@ -304,7 +304,49 @@
 		"signIn": "Anmelden",
 		"becomePatron": "Auf Patreon unterstützen",
 		"fasterScraper": "Ein viel schnellerer Scraper",
-		"noSubmissionsLimit": "Kein Einreichungslimit"
+		"noSubmissionsLimit": "Kein Einreichungslimit",
+		"catalog": {
+			"title": "Was der Katalog enthält",
+			"metadataTitle": "Spiel-Metadaten",
+			"metadataBody": "Beschreibungen, Erscheinungsdaten, Genres, Bewertungen, Cover, Logos, Screenshots, Videos und ROM-Hashes, Beitrag für Beitrag geprüft.",
+			"browseGames": "Spiele durchsuchen",
+			"packsTitle": "System-Art-Packs",
+			"packsBody": "Hintergründe, Logos und Themes für jedes System, von der Community erstellt und bereit für dein Frontend.",
+			"browsePacks": "Art-Packs durchsuchen"
+		},
+		"steps": {
+			"title": "So funktioniert Mitmachen",
+			"guide": "Belohnungsleitfaden lesen",
+			"find": {
+				"title": "Spiel finden",
+				"body": "Durchsuche den Katalog nach System oder füge das Spiel hinzu, wenn es fehlt."
+			},
+			"submit": {
+				"title": "Änderung einreichen",
+				"body": "Text bearbeiten, Medien hochladen oder ROM-Dumps hinzufügen. Bilder werden bei der Freigabe optimiert."
+			},
+			"review": {
+				"title": "Eine Prüfung folgt",
+				"body": "Jede Änderung wird vor der Veröffentlichung geprüft, damit der Katalog sauber bleibt."
+			},
+			"earn": {
+				"title": "XP sammeln",
+				"body": "Freigegebene Beiträge bringen XP und Level, die mehr Scraping-Threads freischalten."
+			}
+		},
+		"api": {
+			"title": "Für Frontend-Entwickler",
+			"body": "Nutze die Scraping-API, um Metadaten und Medien für die Spielesammlungen deiner Nutzer abzurufen.",
+			"point1": "Spiele per ROM-Hash oder Name suchen",
+			"point2": "Cover, Logos, Screenshots, Fanart und Videos",
+			"point3": "Kostenlose Entwickler-Zugangsdaten in deinem Konto",
+			"docs": "API-Dokumentation lesen"
+		},
+		"community": {
+			"title": "Top-Beitragende",
+			"body": "Die Menschen, die den Katalog aufbauen, nach freigegebenen Beiträgen.",
+			"seeAll": "Zum Dashboard"
+		}
 	},
 	"landing": {
 		"hero": {

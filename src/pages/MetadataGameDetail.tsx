@@ -472,27 +472,19 @@ export default function MetadataGameDetail() {
 							</p>
 							<div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2">
 								<div>
-									<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">
-										SHA1
-									</p>
+									<p className="text-xs r text-[var(--color-base-content)]/40">SHA1</p>
 									<p className="font-mono text-[11px] break-all">{r.sha1 || "—"}</p>
 								</div>
 								<div>
-									<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">
-										CRC
-									</p>
+									<p className="text-xs r text-[var(--color-base-content)]/40">CRC</p>
 									<p className="font-mono text-[11px]">{r.crc || "—"}</p>
 								</div>
 								<div>
-									<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">
-										MD5
-									</p>
+									<p className="text-xs r text-[var(--color-base-content)]/40">MD5</p>
 									<p className="font-mono text-[11px] break-all">{r.md5 || "—"}</p>
 								</div>
 								<div>
-									<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/40">
-										{t("common.size")}
-									</p>
+									<p className="text-xs r text-[var(--color-base-content)]/40">{t("common.size")}</p>
 									<p className="font-mono text-[11px]">
 										{r.size ? `${(r.size / 1024 / 1024).toFixed(1)} MB` : "—"}
 									</p>

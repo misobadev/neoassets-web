@@ -286,7 +286,49 @@
 		"gameMetadata": "Game Metadata",
 		"createAccount": "Create an account",
 		"signIn": "Sign in",
-		"becomePatron": "Support on Patreon"
+		"becomePatron": "Support on Patreon",
+		"catalog": {
+			"title": "What's in the catalog",
+			"metadataTitle": "Game metadata",
+			"metadataBody": "Descriptions, release dates, genres, ratings, covers, logos, screenshots, videos and ROM hashes, reviewed one contribution at a time.",
+			"browseGames": "Browse games",
+			"packsTitle": "System art packs",
+			"packsBody": "Backgrounds, logos and themes for every system, made by the community and ready to use in your frontend.",
+			"browsePacks": "Browse art packs"
+		},
+		"steps": {
+			"title": "How contributing works",
+			"guide": "Read the rewards guide",
+			"find": {
+				"title": "Find a game",
+				"body": "Search the catalog by system, or add the game if it is missing."
+			},
+			"submit": {
+				"title": "Submit a change",
+				"body": "Edit the text, upload media or add ROM dumps. Images are optimized for you on approval."
+			},
+			"review": {
+				"title": "A reviewer checks it",
+				"body": "Every change is reviewed before it goes live, so the catalog stays clean."
+			},
+			"earn": {
+				"title": "Earn XP",
+				"body": "Approved contributions give XP and levels, which unlock more scraping threads."
+			}
+		},
+		"api": {
+			"title": "For frontend developers",
+			"body": "Use the scraping API to fetch metadata and media for your users' game collections.",
+			"point1": "Look games up by ROM hash or by name",
+			"point2": "Covers, logos, screenshots, fanart and videos",
+			"point3": "Free developer credentials from your account",
+			"docs": "Read the API docs"
+		},
+		"community": {
+			"title": "Top contributors",
+			"body": "The people building the catalog, by approved contributions.",
+			"seeAll": "See the dashboard"
+		}
 	},
 	"landing": {
 		"hero": {

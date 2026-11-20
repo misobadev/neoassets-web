@@ -284,14 +284,15 @@ export default function DashboardPage() {
 	);
 }
 
-// StatCard is one of the dashboard's headline metric tiles: a tinted, bordered
-// icon badge next to the label and value. Flat colors only (no gradients).
+// StatCard is one of the dashboard's headline metric tiles: a neutral icon
+// next to the label and value. The numbers carry the emphasis, so every tile
+// uses the same quiet icon style (see DESIGN.md).
 const STAT_TONES: Record<string, string> = {
-	primary: "bg-[var(--color-primary)]/12 text-[var(--color-primary)] border-[var(--color-primary)]/30",
-	info: "bg-[var(--color-info)]/12 text-[var(--color-info)] border-[var(--color-info)]/30",
-	success: "bg-[var(--color-success)]/12 text-[var(--color-success)] border-[var(--color-success)]/30",
-	warning: "bg-[var(--color-warning)]/12 text-[var(--color-warning)] border-[var(--color-warning)]/30",
-	secondary: "bg-[var(--color-secondary)]/12 text-[var(--color-secondary)] border-[var(--color-secondary)]/30",
+	primary: "",
+	info: "",
+	success: "",
+	warning: "",
+	secondary: "",
 };
 
 function StatCard({
@@ -306,15 +307,15 @@ function StatCard({
 	value: string;
 }) {
 	return (
-		<div className="card card-hover p-4 flex items-center gap-4">
-			<span className={`grid place-items-center w-12 h-12 rounded-2xl shrink-0 border ${STAT_TONES[tone]}`}>
+		<div className="card p-4 flex items-center gap-4">
+			<span
+				className={`grid place-items-center w-10 h-10 rounded-md shrink-0 bg-[var(--color-base-100)] border border-[var(--color-base-300)] text-[var(--color-base-content)]/60 ${STAT_TONES[tone]}`}
+			>
 				{icon}
 			</span>
 			<div className="min-w-0">
-				<p className="text-[0.7rem] font-semibold uppercase tracking-wider text-[var(--color-base-content)]/50 truncate">
-					{label}
-				</p>
-				<p className="text-2xl font-bold leading-tight tabular-nums truncate">{value}</p>
+				<p className="text-xs text-[var(--color-base-content)]/60 truncate">{label}</p>
+				<p className="text-2xl font-semibold leading-tight tabular-nums truncate">{value}</p>
 			</div>
 		</div>
 	);
@@ -348,7 +349,7 @@ function LeaderCard({
 	const items = Array.isArray(children) ? children : null;
 	return (
 		<section className="card p-5 space-y-3">
-			<h2 className="font-semibold flex items-center gap-2 text-sm uppercase tracking-wide text-[var(--color-base-content)]/70">
+			<h2 className="font-semibold flex items-center gap-2 text-base">
 				<span className="text-[var(--color-primary)]">{icon}</span>
 				{title}
 			</h2>
