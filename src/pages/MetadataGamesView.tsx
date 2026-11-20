@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { cdnUrl, fetchMetadataGamesBySystem, fetchMetadataSystems, searchMetadataGames, type GameSummary, type MetadataSystem } from "../lib/api";
+import {
+	cdnUrl,
+	fetchMetadataGamesBySystem,
+	fetchMetadataSystems,
+	searchMetadataGames,
+	type GameSummary,
+	type MetadataSystem,
+} from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import { typeBadgeClass } from "../lib/gameTypes";
 
@@ -51,19 +58,33 @@ export default function MetadataGamesView() {
 					<ChevronLeft className="w-5 h-5" />
 				</Link>
 				<div>
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{system?.name || t("common.games")}</h1>
+					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+						{system?.name || t("common.games")}
+					</h1>
 				</div>
 			</div>
 
 			{system ? (
 				<div className="card p-6 space-y-3">
 					<div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-						<div><p className="label-text">{t("metadata.games.systemId")}</p><p className="font-mono text-xs">{system.id}</p></div>
-						<div><p className="label-text">{t("metadata.games.shortName")}</p><p>{system.short_name || "—"}</p></div>
-						<div><p className="label-text">{t("metadata.games.region")}</p><p>{system.region || "—"}</p></div>
+						<div>
+							<p className="label-text">{t("metadata.games.systemId")}</p>
+							<p className="font-mono text-xs">{system.id}</p>
+						</div>
+						<div>
+							<p className="label-text">{t("metadata.games.shortName")}</p>
+							<p>{system.short_name || "—"}</p>
+						</div>
+						<div>
+							<p className="label-text">{t("metadata.games.region")}</p>
+							<p>{system.region || "—"}</p>
+						</div>
 					</div>
 					{system.description ? (
-						<div><p className="label-text">{t("common.description")}</p><p className="text-sm text-[var(--color-base-content)]/70">{system.description}</p></div>
+						<div>
+							<p className="label-text">{t("common.description")}</p>
+							<p className="text-sm text-[var(--color-base-content)]/70">{system.description}</p>
+						</div>
 					) : null}
 				</div>
 			) : null}
@@ -81,21 +102,36 @@ export default function MetadataGamesView() {
 						}}
 					/>
 				</div>
-				<p className="text-sm text-[var(--color-base-content)]/50 sm:shrink-0">{t("metadata.gamesCount", { count: total })}</p>
+				<p className="text-sm text-[var(--color-base-content)]/50 sm:shrink-0">
+					{t("metadata.gamesCount", { count: total })}
+				</p>
 			</div>
 
 			{error ? (
 				<p className="text-sm text-[var(--color-error)] py-6 text-center">{error}</p>
 			) : loading ? (
-				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("metadata.loadingGames")}</p>
+				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">
+					{t("metadata.loadingGames")}
+				</p>
 			) : games && games.length === 0 ? (
-				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("metadata.noGamesMatch")}</p>
+				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">
+					{t("metadata.noGamesMatch")}
+				</p>
 			) : games ? (
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
 					{games.map((g) => (
-						<Link key={g.id} to={`/app/metadata/games/${g.id}`} className="card card-hover p-3 flex items-center gap-3">
+						<Link
+							key={g.id}
+							to={`/app/metadata/games/${g.id}`}
+							className="card card-hover p-3 flex items-center gap-3"
+						>
 							{g.cover ? (
-								<img src={cdnUrl(g.cover)} alt="" className="w-16 h-16 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0" onError={(e) => (e.currentTarget.style.display = "none")} />
+								<img
+									src={cdnUrl(g.cover)}
+									alt=""
+									className="w-16 h-16 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
+									onError={(e) => (e.currentTarget.style.display = "none")}
+								/>
 							) : (
 								<div className="w-16 h-16 rounded-lg bg-[var(--color-base-300)] shrink-0" />
 							)}
@@ -117,14 +153,22 @@ export default function MetadataGamesView() {
 			) : null}
 
 			<div className="flex items-center justify-between gap-3">
-				<button className="btn btn-outline btn-sm" disabled={page <= 1 || loading} onClick={() => setPage((p) => p - 1)}>
+				<button
+					className="btn btn-outline btn-sm"
+					disabled={page <= 1 || loading}
+					onClick={() => setPage((p) => p - 1)}
+				>
 					<ChevronLeft className="w-4 h-4" />
 					{t("metadata.prev")}
 				</button>
 				<p className="text-sm text-[var(--color-base-content)]/50">
 					{t("metadata.pageOf", { page, totalPages })}
 				</p>
-				<button className="btn btn-outline btn-sm" disabled={page >= totalPages || loading} onClick={() => setPage((p) => p + 1)}>
+				<button
+					className="btn btn-outline btn-sm"
+					disabled={page >= totalPages || loading}
+					onClick={() => setPage((p) => p + 1)}
+				>
 					{t("metadata.next")}
 					<ChevronRight className="w-4 h-4" />
 				</button>

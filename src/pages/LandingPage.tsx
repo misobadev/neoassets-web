@@ -29,50 +29,58 @@ export default function LandingPage() {
 						<Image className="w-3.5 h-3.5 text-[var(--color-primary)]" />
 						NeoAssets
 					</span>
-				<h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 animate-fade-up">
-					{t("landing.hero.title")} <span className="text-gradient">{t("landing.hero.titleHighlight")}</span>
-				</h1>
-				<p className="text-lg md:text-xl text-[var(--color-base-content)]/60 max-w-2xl mx-auto mb-6 animate-fade-up">
-					{t("landing.hero.subtitle")}
-				</p>
-				<p className="text-sm md:text-base text-[var(--color-base-content)]/60 max-w-2xl mx-auto mb-2 animate-fade-up flex flex-wrap items-center justify-center gap-2">
-					<span className="badge badge-ghost badge-sm">{t("landing.hero.free")}</span>
-					<span className="badge badge-ghost badge-sm">{t("landing.hero.noRateLimits")}</span>
-					<span className="badge badge-ghost badge-sm">{t("landing.hero.noThreadCaps")}</span>
-					<span className="badge badge-ghost badge-sm">{t("landing.hero.noTransferLimits")}</span>
-				</p>
-				<p className="text-sm text-[var(--color-base-content)]/50 max-w-2xl mx-auto mb-8 animate-fade-up">
-					{t("landing.hero.freeNote")}
-				</p>
-				<div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4 animate-fade-up">
-					{signedIn ? (
-						<Link to="/app" className="btn btn-primary btn-lg">
-							{t("landing.hero.openApp")}
-						</Link>
-					) : (
-						<>
+					<h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 animate-fade-up">
+						{t("landing.hero.title")}{" "}
+						<span className="text-gradient">{t("landing.hero.titleHighlight")}</span>
+					</h1>
+					<p className="text-lg md:text-xl text-[var(--color-base-content)]/60 max-w-2xl mx-auto mb-6 animate-fade-up">
+						{t("landing.hero.subtitle")}
+					</p>
+					<p className="text-sm md:text-base text-[var(--color-base-content)]/60 max-w-2xl mx-auto mb-2 animate-fade-up flex flex-wrap items-center justify-center gap-2">
+						<span className="badge badge-ghost badge-sm">{t("landing.hero.free")}</span>
+						<span className="badge badge-ghost badge-sm">{t("landing.hero.noRateLimits")}</span>
+						<span className="badge badge-ghost badge-sm">{t("landing.hero.noThreadCaps")}</span>
+						<span className="badge badge-ghost badge-sm">{t("landing.hero.noTransferLimits")}</span>
+					</p>
+					<p className="text-sm text-[var(--color-base-content)]/50 max-w-2xl mx-auto mb-8 animate-fade-up">
+						{t("landing.hero.freeNote")}
+					</p>
+					<div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4 animate-fade-up">
+						{signedIn ? (
 							<Link to="/app" className="btn btn-primary btn-lg">
-								{t("nav.signIn")}
+								{t("landing.hero.openApp")}
 							</Link>
-							<Link to="/app" className="btn btn-outline btn-lg">
-								{t("nav.createAccount")}
-							</Link>
-						</>
-					)}
-				</div>
-				<div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-fade-up">
-					<a href="https://www.patreon.com/cw/NeoAssets" target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-sm">
-						<Heart className="w-4 h-4" />
-						{t("landing.hero.becomePatron")}
-					</a>
-				</div>
+						) : (
+							<>
+								<Link to="/app" className="btn btn-primary btn-lg">
+									{t("nav.signIn")}
+								</Link>
+								<Link to="/app" className="btn btn-outline btn-lg">
+									{t("nav.createAccount")}
+								</Link>
+							</>
+						)}
+					</div>
+					<div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-fade-up">
+						<a
+							href="https://www.patreon.com/cw/NeoAssets"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="btn btn-ghost btn-sm"
+						>
+							<Heart className="w-4 h-4" />
+							{t("landing.hero.becomePatron")}
+						</a>
+					</div>
 				</div>
 			</section>
 
 			{/* Categories */}
 			<section className="border-t border-base-300 py-16 md:py-20">
 				<div className="max-w-6xl mx-auto px-4">
-					<h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2 text-center">{t("landing.categories.title")}</h2>
+					<h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2 text-center">
+						{t("landing.categories.title")}
+					</h2>
 					<p className="text-[var(--color-base-content)]/60 text-center mb-10 max-w-2xl mx-auto">
 						{t("landing.categories.subtitle")}
 					</p>
@@ -101,12 +109,16 @@ export default function LandingPage() {
 								<div className="flex items-center justify-between gap-2 mb-3">
 									<h3 className="font-semibold">{t(c.titleKey)}</h3>
 									{c.status === "active" ? (
-										<span className="badge badge-success badge-sm">{t("landing.categories.available")}</span>
+										<span className="badge badge-success badge-sm">
+											{t("landing.categories.available")}
+										</span>
 									) : (
 										<span className="badge badge-ghost badge-sm">{t("common.comingSoon")}</span>
 									)}
 								</div>
-								<p className="text-sm text-[var(--color-base-content)]/60 leading-relaxed flex-1">{t(c.bodyKey)}</p>
+								<p className="text-sm text-[var(--color-base-content)]/60 leading-relaxed flex-1">
+									{t(c.bodyKey)}
+								</p>
 								<div className="mt-4">
 									{c.href ? (
 										<Link to={c.href} className="btn btn-primary btn-sm w-full">
@@ -147,7 +159,9 @@ export default function LandingPage() {
 						].map((f) => (
 							<div key={f.titleKey} className="card p-6 card-hover">
 								<h3 className="font-semibold mb-2">{t(f.titleKey)}</h3>
-								<p className="text-sm text-[var(--color-base-content)]/60 leading-relaxed">{t(f.bodyKey)}</p>
+								<p className="text-sm text-[var(--color-base-content)]/60 leading-relaxed">
+									{t(f.bodyKey)}
+								</p>
 							</div>
 						))}
 					</div>
@@ -159,7 +173,9 @@ export default function LandingPage() {
 				<div className="max-w-6xl mx-auto px-4">
 					<div className="flex items-end justify-between mb-8 gap-4 flex-wrap">
 						<div>
-							<h2 className="text-2xl md:text-3xl font-bold tracking-tight">{t("landing.community.title")}</h2>
+							<h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+								{t("landing.community.title")}
+							</h2>
 							<p className="text-[var(--color-base-content)]/60 mt-1">
 								{t("landing.community.subtitle")}
 							</p>
@@ -178,7 +194,9 @@ export default function LandingPage() {
 					{packsError ? (
 						<p className="text-center text-[var(--color-error)] py-10">{packsError}</p>
 					) : packs === null ? (
-						<p className="text-center text-[var(--color-base-content)]/50 py-10">{t("landing.community.loadingPacks")}</p>
+						<p className="text-center text-[var(--color-base-content)]/50 py-10">
+							{t("landing.community.loadingPacks")}
+						</p>
 					) : packs.length === 0 ? (
 						<p className="text-center text-[var(--color-base-content)]/50 py-10">
 							{t("landing.community.empty")}
@@ -191,7 +209,12 @@ export default function LandingPage() {
 									<div key={p.folder} className="card card-hover overflow-hidden">
 										<div className="h-32 bg-[var(--color-base-300)] flex items-center justify-center overflow-hidden">
 											{preview ? (
-												<img src={preview} alt={p.name} className="object-cover w-full h-full" onError={(e) => (e.currentTarget.style.display = "none")} />
+												<img
+													src={preview}
+													alt={p.name}
+													className="object-cover w-full h-full"
+													onError={(e) => (e.currentTarget.style.display = "none")}
+												/>
 											) : null}
 										</div>
 										<div className="p-4 space-y-2">
@@ -199,7 +222,9 @@ export default function LandingPage() {
 												<h3 className="font-semibold truncate">{p.name}</h3>
 												<span className="badge badge-success">v{p.version || "?"}</span>
 											</div>
-											<p className="text-sm text-[var(--color-base-content)]/60 line-clamp-2 min-h-[2.5rem]">{p.description}</p>
+											<p className="text-sm text-[var(--color-base-content)]/60 line-clamp-2 min-h-[2.5rem]">
+												{p.description}
+											</p>
 											<div className="flex items-center justify-between gap-2 pt-2 border-t border-[var(--color-base-300)]">
 												<span className="text-sm text-[var(--color-base-content)]/50 flex items-center gap-1">
 													{p.downloads ? (

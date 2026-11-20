@@ -52,7 +52,11 @@ export default function DeveloperPage() {
 		if (!appName.trim()) return;
 		setError("");
 		try {
-			const app = await createDeveloperApp({ name: appName.trim(), description: appDesc.trim(), homepage_url: appHome.trim() });
+			const app = await createDeveloperApp({
+				name: appName.trim(),
+				description: appDesc.trim(),
+				homepage_url: appHome.trim(),
+			});
 			setAppName("");
 			setAppDesc("");
 			setAppHome("");
@@ -84,7 +88,9 @@ export default function DeveloperPage() {
 			setRevealed({
 				title: `${rotated.name} - ${t("developer.clientSecret")}`,
 				value: rotated.client_secret,
-				extra: rotated.debug_password ? `${t("developer.debugPassword")}: ${rotated.debug_password}` : undefined,
+				extra: rotated.debug_password
+					? `${t("developer.debugPassword")}: ${rotated.debug_password}`
+					: undefined,
 			});
 			await load();
 		} catch (e) {
@@ -139,11 +145,31 @@ export default function DeveloperPage() {
 				</h2>
 
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-					<input className="input input-bordered" placeholder={t("developer.appName")} value={appName} onChange={(e) => setAppName(e.target.value)} />
-					<input className="input input-bordered" placeholder={t("developer.appDescription")} value={appDesc} onChange={(e) => setAppDesc(e.target.value)} />
-					<input className="input input-bordered" placeholder={t("developer.appHomepage")} value={appHome} onChange={(e) => setAppHome(e.target.value)} />
+					<input
+						className="input input-bordered"
+						placeholder={t("developer.appName")}
+						value={appName}
+						onChange={(e) => setAppName(e.target.value)}
+					/>
+					<input
+						className="input input-bordered"
+						placeholder={t("developer.appDescription")}
+						value={appDesc}
+						onChange={(e) => setAppDesc(e.target.value)}
+					/>
+					<input
+						className="input input-bordered"
+						placeholder={t("developer.appHomepage")}
+						value={appHome}
+						onChange={(e) => setAppHome(e.target.value)}
+					/>
 				</div>
-				<button type="button" className="btn btn-primary btn-sm gap-1" onClick={handleCreateApp} disabled={!appName.trim()}>
+				<button
+					type="button"
+					className="btn btn-primary btn-sm gap-1"
+					onClick={handleCreateApp}
+					disabled={!appName.trim()}
+				>
 					<Plus className="w-4 h-4" /> {t("developer.createApp")}
 				</button>
 				<p className="text-xs text-[var(--color-base-content)]/60">{t("developer.debugHint")}</p>
@@ -166,10 +192,18 @@ export default function DeveloperPage() {
 									</p>
 								</div>
 								<div className="flex items-center gap-1">
-									<button type="button" className="btn btn-ghost btn-sm gap-1" onClick={() => handleRotateApp(app)}>
+									<button
+										type="button"
+										className="btn btn-ghost btn-sm gap-1"
+										onClick={() => handleRotateApp(app)}
+									>
 										<RotateCw className="w-3.5 h-3.5" /> {t("developer.rotate")}
 									</button>
-									<button type="button" className="btn btn-ghost btn-sm gap-1 text-red-500" onClick={() => handleDeleteApp(app)}>
+									<button
+										type="button"
+										className="btn btn-ghost btn-sm gap-1 text-red-500"
+										onClick={() => handleDeleteApp(app)}
+									>
 										<Trash2 className="w-3.5 h-3.5" /> {t("developer.revoke")}
 									</button>
 								</div>
@@ -234,13 +268,21 @@ export default function DeveloperPage() {
 			</section>
 
 			{revealed ? (
-				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" role="dialog" aria-modal="true">
+				<div
+					className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+					role="dialog"
+					aria-modal="true"
+				>
 					<div className="card w-full max-w-lg p-6 space-y-3">
 						<p className="font-semibold">{revealed.title}</p>
 						<p className="text-xs text-red-500">{t("developer.secretOnce")}</p>
-						<code className="block break-all rounded bg-[var(--color-base-200)] px-3 py-2 text-xs">{revealed.value}</code>
+						<code className="block break-all rounded bg-[var(--color-base-200)] px-3 py-2 text-xs">
+							{revealed.value}
+						</code>
 						{revealed.extra ? (
-							<code className="block break-all rounded bg-[var(--color-base-200)] px-3 py-2 text-xs">{revealed.extra}</code>
+							<code className="block break-all rounded bg-[var(--color-base-200)] px-3 py-2 text-xs">
+								{revealed.extra}
+							</code>
 						) : null}
 						<div className="flex items-center justify-end gap-2">
 							<CopyButton value={revealed.value} />

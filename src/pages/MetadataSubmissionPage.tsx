@@ -1,7 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AlertTriangle, Check, ChevronLeft, ChevronRight, Clapperboard, Copy, FileText, HardDrive, Image as ImageIcon, Trash2, Upload } from "lucide-react";
+import {
+	AlertTriangle,
+	Check,
+	ChevronLeft,
+	ChevronRight,
+	Clapperboard,
+	Copy,
+	FileText,
+	HardDrive,
+	Image as ImageIcon,
+	Trash2,
+	Upload,
+} from "lucide-react";
 import {
 	cdnUrl,
 	createMetadataSubmission,
@@ -27,7 +39,19 @@ import RegionLabel from "../components/RegionLabel";
 import { uploadWithProgress } from "../lib/upload";
 import { hashRomFile } from "../lib/romhash";
 import { GAME_TYPES, typeBadgeClass } from "../lib/gameTypes";
-import { IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, checkVideoMeasurement, measureVideo } from "../lib/media";
+import {
+	IMAGE_ACCEPT,
+	MAX_DESCRIPTION_LENGTH,
+	VIDEO_ACCEPT,
+	VIDEO_FPS,
+	VIDEO_FPS_MAX,
+	VIDEO_FPS_MIN,
+	VIDEO_MAX_SECONDS,
+	VIDEO_MIN_SECONDS,
+	aspectLabel,
+	checkVideoMeasurement,
+	measureVideo,
+} from "../lib/media";
 
 const TEXT_TYPES = [
 	{ key: "name", label: "metadataSubmit.textTypes.name" },
@@ -113,8 +137,20 @@ const DEFAULT_REGION = "World";
 
 let rowSeq = 0;
 const nextRowKey = () => `row-${++rowSeq}`;
-const newTextRow = (): RegionTextRow => ({ key: nextRowKey(), action: "set", region: DEFAULT_REGION, value: "", fromRegion: "" });
-const newMediaRow = (): RegionMediaRow => ({ key: nextRowKey(), action: "new", region: DEFAULT_REGION, fromRegion: "", file: null });
+const newTextRow = (): RegionTextRow => ({
+	key: nextRowKey(),
+	action: "set",
+	region: DEFAULT_REGION,
+	value: "",
+	fromRegion: "",
+});
+const newMediaRow = (): RegionMediaRow => ({
+	key: nextRowKey(),
+	action: "new",
+	region: DEFAULT_REGION,
+	fromRegion: "",
+	file: null,
+});
 
 // One ROM dump change: add a new dump, edit an existing one, or delete it.
 interface RomRow {
@@ -131,7 +167,18 @@ interface RomRow {
 	hashing?: boolean;
 	duplicate?: boolean;
 }
-const newRomRow = (): RomRow => ({ key: nextRowKey(), action: "add", id: "", name: "", size: "", region: DEFAULT_REGION, crc: "", md5: "", sha1: "", sha256: "" });
+const newRomRow = (): RomRow => ({
+	key: nextRowKey(),
+	action: "add",
+	id: "",
+	name: "",
+	size: "",
+	region: DEFAULT_REGION,
+	crc: "",
+	md5: "",
+	sha1: "",
+	sha256: "",
+});
 
 export default function MetadataSubmissionPage() {
 	const { t } = useTranslation();
@@ -161,7 +208,13 @@ export default function MetadataSubmissionPage() {
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-	const [videoMeta, setVideoMeta] = useState<{ duration: number; width: number; height: number; fps: number; aspect: string } | null>(null);
+	const [videoMeta, setVideoMeta] = useState<{
+		duration: number;
+		width: number;
+		height: number;
+		fps: number;
+		aspect: string;
+	} | null>(null);
 	const [fileError, setFileError] = useState<string | null>(null);
 	const [fpsWarning, setFpsWarning] = useState<string | null>(null);
 	const [status, setStatus] = useState<{ text: string; tone: string } | null>(null);
@@ -198,8 +251,12 @@ export default function MetadataSubmissionPage() {
 	}, [gameId, lang]);
 
 	useEffect(() => {
-		fetchGenres().then(setGenres).catch(() => {});
-		fetchRegions().then(setRegions).catch(() => {});
+		fetchGenres()
+			.then(setGenres)
+			.catch(() => {});
+		fetchRegions()
+			.then(setRegions)
+			.catch(() => {});
 	}, []);
 
 	// Restore a client-side draft once (drafts never hit the DB).
@@ -283,7 +340,12 @@ export default function MetadataSubmissionPage() {
 	}
 
 	if (error) return <p className="text-sm text-[var(--color-error)] text-center py-10">{error}</p>;
-	if (!game) return <p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("metadataSubmit.loadingGame")}</p>;
+	if (!game)
+		return (
+			<p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">
+				{t("metadataSubmit.loadingGame")}
+			</p>
+		);
 
 	const currentKind = type as MediaKind;
 	const isRegionalKind = currentKind === "logo" || currentKind === "cover";
@@ -311,7 +373,9 @@ export default function MetadataSubmissionPage() {
 							: type === "release_year"
 								? regionRelease(game)
 								: type === "rating"
-									? game.rating ? String(game.rating) : ""
+									? game.rating
+										? String(game.rating)
+										: ""
 									: type === "type"
 										? game.type || ""
 										: "";
@@ -341,7 +405,11 @@ export default function MetadataSubmissionPage() {
 				? (game.regions || []).filter((r) => r.release_year)
 				: [];
 	const textValueOf = (r: GameRegion): string =>
-		type === "name" ? r.name || "" : r.release_year ? `${r.release_year}${r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}` : "";
+		type === "name"
+			? r.name || ""
+			: r.release_year
+				? `${r.release_year}${r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}`
+				: "";
 
 	// ROM dump list pagination (15 per page, controls above and below).
 	const romList = game.roms || [];
@@ -369,16 +437,26 @@ export default function MetadataSubmissionPage() {
 	function hasData(key: string): boolean {
 		if (!game) return false;
 		switch (key) {
-			case "name": return Boolean(game.name);
-			case "description": return Boolean(game.description);
-			case "genre": return Boolean(game.genre);
-			case "developer": return Boolean(game.developer);
-			case "publisher": return Boolean(game.publisher);
-			case "release_year": return Boolean(game.release_year);
-			case "rating": return (game.rating ?? 0) > 0;
-			case "type": return Boolean(game.type);
-			case "roms": return (game.roms || []).length > 0;
-			default: return game.media.some((m) => m.kind === key);
+			case "name":
+				return Boolean(game.name);
+			case "description":
+				return Boolean(game.description);
+			case "genre":
+				return Boolean(game.genre);
+			case "developer":
+				return Boolean(game.developer);
+			case "publisher":
+				return Boolean(game.publisher);
+			case "release_year":
+				return Boolean(game.release_year);
+			case "rating":
+				return (game.rating ?? 0) > 0;
+			case "type":
+				return Boolean(game.type);
+			case "roms":
+				return (game.roms || []).length > 0;
+			default:
+				return game.media.some((m) => m.kind === key);
 		}
 	}
 
@@ -393,7 +471,13 @@ export default function MetadataSubmissionPage() {
 				key={key}
 				type="button"
 				disabled={pending}
-				title={pending ? t("metadataSubmit.pendingTitle") : filled ? t("metadataSubmit.hasData") : t("metadataSubmit.noData")}
+				title={
+					pending
+						? t("metadataSubmit.pendingTitle")
+						: filled
+							? t("metadataSubmit.hasData")
+							: t("metadataSubmit.noData")
+				}
 				onClick={() => {
 					if (pending) return;
 					setType(key);
@@ -403,7 +487,10 @@ export default function MetadataSubmissionPage() {
 				}}
 				className={`btn btn-sm gap-1.5 ${type === key ? "btn-primary" : "btn-outline"} ${pending ? "opacity-50 cursor-not-allowed" : ""}`}
 			>
-				<span className={`w-2.5 h-2.5 rounded-full shrink-0 ${filled ? "bg-[var(--color-success)]" : "bg-[var(--color-base-content)]/30"}`} aria-hidden />
+				<span
+					className={`w-2.5 h-2.5 rounded-full shrink-0 ${filled ? "bg-[var(--color-success)]" : "bg-[var(--color-base-content)]/30"}`}
+					aria-hidden
+				/>
 				{label}
 				{pending ? t("metadataSubmit.pendingSuffix") : ""}
 			</button>
@@ -415,44 +502,86 @@ export default function MetadataSubmissionPage() {
 		<>
 			{type === "description" ? (
 				<>
-					<textarea className="input w-full min-h-32" maxLength={MAX_DESCRIPTION_LENGTH} value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder={t("metadataSubmit.form.newDescriptionPlaceholder")} />
+					<textarea
+						className="input w-full min-h-32"
+						maxLength={MAX_DESCRIPTION_LENGTH}
+						value={textValue}
+						onChange={(e) => setTextValue(e.target.value)}
+						placeholder={t("metadataSubmit.form.newDescriptionPlaceholder")}
+					/>
 					<div className="flex items-center justify-between gap-2 mt-1">
 						<p className="text-xs text-[var(--color-base-content)]/50">
 							{t("metadataSubmit.form.descriptionNote", { max: MAX_DESCRIPTION_LENGTH })}
 						</p>
-						<span className={`text-xs shrink-0 ${textValue.length >= MAX_DESCRIPTION_LENGTH ? "text-[var(--color-error)]" : "text-[var(--color-base-content)]/50"}`}>
-							{t("metadataSubmit.form.charCount", { count: textValue.length, max: MAX_DESCRIPTION_LENGTH })}
+						<span
+							className={`text-xs shrink-0 ${textValue.length >= MAX_DESCRIPTION_LENGTH ? "text-[var(--color-error)]" : "text-[var(--color-base-content)]/50"}`}
+						>
+							{t("metadataSubmit.form.charCount", {
+								count: textValue.length,
+								max: MAX_DESCRIPTION_LENGTH,
+							})}
 						</span>
 					</div>
 				</>
 			) : type === "release_year" ? (
 				<>
-					<input type="month" min="1950-01" max="2100-12" className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} />
-					<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.releaseHint")}</p>
+					<input
+						type="month"
+						min="1950-01"
+						max="2100-12"
+						className="input w-full"
+						value={textValue}
+						onChange={(e) => setTextValue(e.target.value)}
+					/>
+					<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
+						{t("metadataSubmit.form.releaseHint")}
+					</p>
 				</>
 			) : type === "rating" ? (
 				<>
-					<input type="number" min={1} max={10} step={1} className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder="1-10" />
-					<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.ratingHint")}</p>
+					<input
+						type="number"
+						min={1}
+						max={10}
+						step={1}
+						className="input w-full"
+						value={textValue}
+						onChange={(e) => setTextValue(e.target.value)}
+						placeholder="1-10"
+					/>
+					<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
+						{t("metadataSubmit.form.ratingHint")}
+					</p>
 				</>
 			) : type === "type" ? (
 				<>
 					<select className="select w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)}>
 						{GAME_TYPES.map((g) => (
-							<option key={g} value={g}>{g}</option>
+							<option key={g} value={g}>
+								{g}
+							</option>
 						))}
 					</select>
-					<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.typeHint")}</p>
+					<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
+						{t("metadataSubmit.form.typeHint")}
+					</p>
 				</>
 			) : type === "genre" ? (
 				<select className="select w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)}>
 					<option value="">{t("metadataSubmit.form.genrePlaceholder")}</option>
 					{genres.map((g) => (
-						<option key={g.id} value={g.name}>{t("metadata.genres." + g.id, { defaultValue: g.name })}</option>
+						<option key={g.id} value={g.name}>
+							{t("metadata.genres." + g.id, { defaultValue: g.name })}
+						</option>
 					))}
 				</select>
 			) : (
-				<input className="input w-full" value={textValue} onChange={(e) => setTextValue(e.target.value)} placeholder={t("metadataSubmit.form.newFieldPlaceholder", { field: textLabel.toLowerCase() })} />
+				<input
+					className="input w-full"
+					value={textValue}
+					onChange={(e) => setTextValue(e.target.value)}
+					placeholder={t("metadataSubmit.form.newFieldPlaceholder", { field: textLabel.toLowerCase() })}
+				/>
 			)}
 		</>
 	);
@@ -483,9 +612,24 @@ export default function MetadataSubmissionPage() {
 		// no size or hashes are computed for them.
 		const isArchive =
 			/\.(zip|rar|7z)$/i.test(file.name) ||
-			["application/zip", "application/x-zip-compressed", "application/x-rar-compressed", "application/vnd.rar", "application/x-7z-compressed"].includes(file.type);
+			[
+				"application/zip",
+				"application/x-zip-compressed",
+				"application/x-rar-compressed",
+				"application/vnd.rar",
+				"application/x-7z-compressed",
+			].includes(file.type);
 		if (isArchive) {
-			updateRomRow(key, { hashing: false, duplicate: false, name: file.name, size: "", crc: "", md5: "", sha1: "", sha256: "" });
+			updateRomRow(key, {
+				hashing: false,
+				duplicate: false,
+				name: file.name,
+				size: "",
+				crc: "",
+				md5: "",
+				sha1: "",
+				sha256: "",
+			});
 			setStatus({ text: t("metadataSubmit.form.romZipNote"), tone: "info" });
 			return;
 		}
@@ -502,7 +646,16 @@ export default function MetadataSubmissionPage() {
 					(h.sha256 && r.sha256 === h.sha256)
 				);
 			});
-			updateRomRow(key, { hashing: false, duplicate, name: h.name, size: String(h.size), crc: h.crc, md5: h.md5, sha1: h.sha1, sha256: h.sha256 });
+			updateRomRow(key, {
+				hashing: false,
+				duplicate,
+				name: h.name,
+				size: String(h.size),
+				crc: h.crc,
+				md5: h.md5,
+				sha1: h.sha1,
+				sha256: h.sha256,
+			});
 			if (duplicate) setStatus({ text: t("metadataSubmit.form.romDuplicate"), tone: "error" });
 		} catch {
 			updateRomRow(key, { hashing: false });
@@ -582,7 +735,10 @@ export default function MetadataSubmissionPage() {
 				return;
 			}
 			if (textType?.key === "description" && textValue.trim().length > MAX_DESCRIPTION_LENGTH) {
-				setStatus({ text: t("metadataSubmit.status.descriptionTooLong", { max: MAX_DESCRIPTION_LENGTH }), tone: "error" });
+				setStatus({
+					text: t("metadataSubmit.status.descriptionTooLong", { max: MAX_DESCRIPTION_LENGTH }),
+					tone: "error",
+				});
 				return;
 			}
 		}
@@ -619,7 +775,10 @@ export default function MetadataSubmissionPage() {
 			}
 		}
 		if (!isText && !isRoms && !isRegionalKind && !file) {
-			setStatus({ text: isVideo ? t("metadataSubmit.status.pickVideo") : t("metadataSubmit.status.pickImage"), tone: "error" });
+			setStatus({
+				text: isVideo ? t("metadataSubmit.status.pickVideo") : t("metadataSubmit.status.pickImage"),
+				tone: "error",
+			});
 			return;
 		}
 		if (isVideo && fileError) {
@@ -696,7 +855,16 @@ export default function MetadataSubmissionPage() {
 			if (isText || isRoms) {
 				await createMetadataSubmission({ game_id: game.id, payload });
 			} else {
-				const files: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region: string; delete?: boolean; move?: boolean }[] = [];
+				const files: {
+					kind: MediaKind;
+					object_key: string;
+					file_name: string;
+					mime_type: string;
+					size: number;
+					region: string;
+					delete?: boolean;
+					move?: boolean;
+				}[] = [];
 				if (isRegionalKind) {
 					// One entry per region: new upload, move (from another region)
 					// or delete. A submission replaces the media of that region.
@@ -706,26 +874,59 @@ export default function MetadataSubmissionPage() {
 							const m = existingMedia.find((x) => (x.region || "") === r.region);
 							if (m) {
 								const fileName = m.object_key.split("/").pop() || m.object_key;
-								files.push({ kind: currentKind, object_key: m.object_key, file_name: fileName, mime_type: m.mime, size: m.size, region: r.region, delete: true });
+								files.push({
+									kind: currentKind,
+									object_key: m.object_key,
+									file_name: fileName,
+									mime_type: m.mime,
+									size: m.size,
+									region: r.region,
+									delete: true,
+								});
 							}
 						} else if (r.action === "move") {
 							const m = existingMedia.find((x) => (x.region || "") === r.fromRegion);
 							if (m) {
 								const fileName = m.object_key.split("/").pop() || m.object_key;
-								files.push({ kind: currentKind, object_key: m.object_key, file_name: fileName, mime_type: m.mime, size: m.size, region: r.region, move: true });
+								files.push({
+									kind: currentKind,
+									object_key: m.object_key,
+									file_name: fileName,
+									mime_type: m.mime,
+									size: m.size,
+									region: r.region,
+									move: true,
+								});
 							}
 						} else if (r.file) {
 							const mime = r.file.type || "application/octet-stream";
 							setStatus({ text: t("metadataSubmit.uploadingImage"), tone: "info" });
-							const resp = await requestMetadataUploadUrl({ game_id: game.id, kind: currentKind, file_name: r.file.name, mime_type: mime, size: r.file.size, region: r.region });
+							const resp = await requestMetadataUploadUrl({
+								game_id: game.id,
+								kind: currentKind,
+								file_name: r.file.name,
+								mime_type: mime,
+								size: r.file.size,
+								region: r.region,
+							});
 							await uploadWithProgress(resp.upload_url, r.file, mime, (p) => setProgress(p));
 							setProgress(100);
-							files.push({ kind: currentKind, object_key: resp.object_key, file_name: r.file.name, mime_type: mime, size: r.file.size, region: r.region });
+							files.push({
+								kind: currentKind,
+								object_key: resp.object_key,
+								file_name: r.file.name,
+								mime_type: mime,
+								size: r.file.size,
+								region: r.region,
+							});
 						}
 					}
 				} else if (file) {
 					const mime = file.type || "application/octet-stream";
-					setStatus({ text: isVideo ? t("metadataSubmit.uploadingVideo") : t("metadataSubmit.uploadingImage"), tone: "info" });
+					setStatus({
+						text: isVideo ? t("metadataSubmit.uploadingVideo") : t("metadataSubmit.uploadingImage"),
+						tone: "info",
+					});
 					const resp = await requestMetadataUploadUrl({
 						game_id: game.id,
 						kind: currentKind,
@@ -736,7 +937,14 @@ export default function MetadataSubmissionPage() {
 					});
 					await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(p));
 					setProgress(100);
-					files.push({ kind: currentKind, object_key: resp.object_key, file_name: file.name, mime_type: mime, size: file.size, region: "" });
+					files.push({
+						kind: currentKind,
+						object_key: resp.object_key,
+						file_name: file.name,
+						mime_type: mime,
+						size: file.size,
+						region: "",
+					});
 				}
 				await createMetadataSubmission({ game_id: game.id, payload, files });
 			}
@@ -797,21 +1005,35 @@ export default function MetadataSubmissionPage() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-3">
-				<Link to={`/app/metadata/${game.system_id}/game/${game.id}`} className="btn btn-ghost !p-2" aria-label={t("common.back")}>
+				<Link
+					to={`/app/metadata/${game.system_id}/game/${game.id}`}
+					className="btn btn-ghost !p-2"
+					aria-label={t("common.back")}
+				>
 					<ChevronLeft className="w-5 h-5" />
 				</Link>
 				<div className="min-w-0">
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{t("metadataSubmit.submitChanges")}</h1>
+					<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">
+						{t("metadataSubmit.submitChanges")}
+					</h1>
 					<p className="text-sm text-[var(--color-base-content)]/60 flex items-center gap-2">
-						<span className="truncate">{game.name} · {game.system_name}</span>
-						<span className={`badge badge-sm shrink-0 ${typeBadgeClass(game.type)}`}>{t("metadata.type." + (game.type || "base"))}</span>
+						<span className="truncate">
+							{game.name} · {game.system_name}
+						</span>
+						<span className={`badge badge-sm shrink-0 ${typeBadgeClass(game.type)}`}>
+							{t("metadata.type." + (game.type || "base"))}
+						</span>
 					</p>
 				</div>
 				{/* Game-level action: report this game as a duplicate of another one.
 				    Kept in the header so it does not mix with the field/media form. */}
 				<button
 					type="button"
-					onClick={() => { setDupStatus(null); setDupDone(false); setDupOpen(true); }}
+					onClick={() => {
+						setDupStatus(null);
+						setDupDone(false);
+						setDupOpen(true);
+					}}
 					className="btn btn-sm ml-auto shrink-0 border border-[var(--color-error)]/40 text-[var(--color-error)] hover:bg-[var(--color-error)]/10"
 				>
 					<Copy className="w-4 h-4" />
@@ -832,42 +1054,91 @@ export default function MetadataSubmissionPage() {
 							return (
 								<>
 									<div className="relative w-full h-72 flex items-start justify-center">
-										<img src={mediaUrl(cover)} alt="" className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+										<img
+											src={mediaUrl(cover)}
+											alt=""
+											className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]"
+											onError={(e) => (e.currentTarget.style.display = "none")}
+										/>
 										{covers.length > 1 ? (
 											<>
-												<button type="button" onClick={() => setCoverIdx((idx - 1 + covers.length) % covers.length)} aria-label={t("metadata.prev")} className="btn btn-circle btn-xs absolute left-1 top-1/2 -translate-y-1/2 bg-black/50 border-0 text-white hover:bg-black/70">
+												<button
+													type="button"
+													onClick={() =>
+														setCoverIdx((idx - 1 + covers.length) % covers.length)
+													}
+													aria-label={t("metadata.prev")}
+													className="btn btn-circle btn-xs absolute left-1 top-1/2 -translate-y-1/2 bg-black/50 border-0 text-white hover:bg-black/70"
+												>
 													<ChevronLeft className="w-4 h-4" />
 												</button>
-												<button type="button" onClick={() => setCoverIdx((idx + 1) % covers.length)} aria-label={t("metadata.next")} className="btn btn-circle btn-xs absolute right-1 top-1/2 -translate-y-1/2 bg-black/50 border-0 text-white hover:bg-black/70">
+												<button
+													type="button"
+													onClick={() => setCoverIdx((idx + 1) % covers.length)}
+													aria-label={t("metadata.next")}
+													className="btn btn-circle btn-xs absolute right-1 top-1/2 -translate-y-1/2 bg-black/50 border-0 text-white hover:bg-black/70"
+												>
 													<ChevronRight className="w-4 h-4" />
 												</button>
-												<span className="badge badge-sm absolute top-2 right-2 bg-black/50 border-0 text-white">{idx + 1}/{covers.length}</span>
+												<span className="badge badge-sm absolute top-2 right-2 bg-black/50 border-0 text-white">
+													{idx + 1}/{covers.length}
+												</span>
 											</>
 										) : null}
 									</div>
-									{cover.region ? <span className="badge badge-solid-neutral badge-sm"><RegionLabel region={cover.region} /></span> : null}
+									{cover.region ? (
+										<span className="badge badge-solid-neutral badge-sm">
+											<RegionLabel region={cover.region} />
+										</span>
+									) : null}
 								</>
 							);
 						})()}
 					</div>
 					<div className="flex-1 min-w-0 space-y-4 text-sm">
 						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-							<div><p className="label-text">{t("metadataGame.fields.ratings")}</p><RatingBadge rating={game.rating} /></div>
-							<div><p className="label-text">{t("metadataGame.fields.publisher")}</p><p>{game.publisher || "—"}</p></div>
-							<div><p className="label-text">{t("metadataGame.fields.developer")}</p><p>{game.developer || "—"}</p></div>
-							<div><p className="label-text">{t("metadataGame.fields.genre")}</p><p className="text-[var(--color-base-content)]/70">{game.genre ? genreLabel(t, game.genre) : "—"}</p></div>
+							<div>
+								<p className="label-text">{t("metadataGame.fields.ratings")}</p>
+								<RatingBadge rating={game.rating} />
+							</div>
+							<div>
+								<p className="label-text">{t("metadataGame.fields.publisher")}</p>
+								<p>{game.publisher || "—"}</p>
+							</div>
+							<div>
+								<p className="label-text">{t("metadataGame.fields.developer")}</p>
+								<p>{game.developer || "—"}</p>
+							</div>
+							<div>
+								<p className="label-text">{t("metadataGame.fields.genre")}</p>
+								<p className="text-[var(--color-base-content)]/70">
+									{game.genre ? genreLabel(t, game.genre) : "—"}
+								</p>
+							</div>
 						</div>
 						{namedRegions.length > 0 ? (
 							<div>
 								<p className="label-text mb-1">{t("metadataGame.regionalNames")}</p>
 								<div className="space-y-1">
 									{namedRegions.map((r) => (
-										<p key={r.region} className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap">
-											<span className="badge badge-solid-neutral badge-xs"><RegionLabel region={r.region} /></span>
-											<span>{r.name || <span className="italic opacity-60">{t("metadataAdmin.none")}</span>}</span>
+										<p
+											key={r.region}
+											className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap"
+										>
+											<span className="badge badge-solid-neutral badge-xs">
+												<RegionLabel region={r.region} />
+											</span>
+											<span>
+												{r.name || (
+													<span className="italic opacity-60">{t("metadataAdmin.none")}</span>
+												)}
+											</span>
 											{r.release_year ? (
 												<span className="text-xs text-[var(--color-base-content)]/50">
-													{r.release_year}{r.release_month ? `-${String(r.release_month).padStart(2, "0")}` : ""}
+													{r.release_year}
+													{r.release_month
+														? `-${String(r.release_month).padStart(2, "0")}`
+														: ""}
 												</span>
 											) : null}
 										</p>
@@ -880,15 +1151,28 @@ export default function MetadataSubmissionPage() {
 								<div className="flex items-center justify-between gap-3 mb-1">
 									<p className="label-text">{t("common.description")}</p>
 									{langOptions.length > 1 ? (
-										<select value={lang} onChange={(e) => setLang(e.target.value)} className="select select-sm shrink-0 w-44" aria-label={t("common.language")}>
+										<select
+											value={lang}
+											onChange={(e) => setLang(e.target.value)}
+											className="select select-sm shrink-0 w-44"
+											aria-label={t("common.language")}
+										>
 											{langOptions.map((l) => (
-												<option key={l.code} value={l.code}>{l.native_name} ({l.name})</option>
+												<option key={l.code} value={l.code}>
+													{l.native_name} ({l.name})
+												</option>
 											))}
 										</select>
 									) : null}
 								</div>
-								<p className="text-[var(--color-base-content)]/70 max-h-40 overflow-y-auto pr-2">{game.description}</p>
-								{lang !== "en" && activeLang ? <p className="text-xs text-[var(--color-base-content)]/40 mt-1">{t("metadataSubmit.translatedIn", { language: activeLang.name })}</p> : null}
+								<p className="text-[var(--color-base-content)]/70 max-h-40 overflow-y-auto pr-2">
+									{game.description}
+								</p>
+								{lang !== "en" && activeLang ? (
+									<p className="text-xs text-[var(--color-base-content)]/40 mt-1">
+										{t("metadataSubmit.translatedIn", { language: activeLang.name })}
+									</p>
+								) : null}
 							</div>
 						) : null}
 					</div>
@@ -896,9 +1180,15 @@ export default function MetadataSubmissionPage() {
 			</section>
 
 			<section className="card p-6">
-				<h2 className="font-semibold mb-3">{t("metadataSubmit.mediaTitle", { count: game.media.filter((m) => m.kind !== "cover").length })}</h2>
+				<h2 className="font-semibold mb-3">
+					{t("metadataSubmit.mediaTitle", { count: game.media.filter((m) => m.kind !== "cover").length })}
+				</h2>
 				{game.media.filter((m) => m.kind !== "cover").length > 0 ? (
-					<MediaGrid items={game.media.filter((m) => m.kind !== "cover")} url={mediaUrl} label={(k) => t(MEDIA_LABEL[k])} />
+					<MediaGrid
+						items={game.media.filter((m) => m.kind !== "cover")}
+						url={mediaUrl}
+						label={(k) => t(MEDIA_LABEL[k])}
+					/>
 				) : (
 					<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataSubmit.noMedia")}</p>
 				)}
@@ -937,11 +1227,15 @@ export default function MetadataSubmissionPage() {
 					<p className="label-text mb-2 flex items-center gap-1.5">
 						<Clapperboard className="w-3.5 h-3.5" /> {t("metadataSubmit.video")}
 					</p>
-					<div className="flex flex-wrap gap-2">
-						{typeButton(VIDEO_KIND, t(MEDIA_LABEL[VIDEO_KIND]))}
-					</div>
+					<div className="flex flex-wrap gap-2">{typeButton(VIDEO_KIND, t(MEDIA_LABEL[VIDEO_KIND]))}</div>
 					<p className="text-xs text-[var(--color-base-content)]/50 mt-1.5">
-						{t("metadataSubmit.videoHint", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS, fpsMin: VIDEO_FPS_MIN, fpsMax: VIDEO_FPS_MAX, fps: VIDEO_FPS })}
+						{t("metadataSubmit.videoHint", {
+							min: VIDEO_MIN_SECONDS,
+							max: VIDEO_MAX_SECONDS,
+							fpsMin: VIDEO_FPS_MIN,
+							fpsMax: VIDEO_FPS_MAX,
+							fps: VIDEO_FPS,
+						})}
 					</p>
 				</div>
 
@@ -949,10 +1243,10 @@ export default function MetadataSubmissionPage() {
 					<p className="label-text mb-2 flex items-center gap-1.5">
 						<HardDrive className="w-3.5 h-3.5" /> {t("metadataSubmit.form.roms")}
 					</p>
-					<div className="flex flex-wrap gap-2">
-						{typeButton(ROMS_KIND, t("metadataSubmit.form.roms"))}
-					</div>
-					<p className="text-xs text-[var(--color-base-content)]/50 mt-1.5">{t("metadataSubmit.form.romHint")}</p>
+					<div className="flex flex-wrap gap-2">{typeButton(ROMS_KIND, t("metadataSubmit.form.roms"))}</div>
+					<p className="text-xs text-[var(--color-base-content)]/50 mt-1.5">
+						{t("metadataSubmit.form.romHint")}
+					</p>
 				</div>
 			</section>
 
@@ -964,26 +1258,62 @@ export default function MetadataSubmissionPage() {
 						<div className="space-y-3">
 							<div className="space-y-2">
 								{romRows.map((row) => (
-									<div key={row.key} className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2">
+									<div
+										key={row.key}
+										className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2"
+									>
 										{romRows.length > 1 ? (
-											<button type="button" className="btn btn-ghost btn-xs absolute top-2 right-2" onClick={() => removeRomRow(row.key)} aria-label={t("common.delete")}>
+											<button
+												type="button"
+												className="btn btn-ghost btn-xs absolute top-2 right-2"
+												onClick={() => removeRomRow(row.key)}
+												aria-label={t("common.delete")}
+											>
 												<Trash2 className="w-3.5 h-3.5" />
 											</button>
 										) : null}
 										<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
 											<div>
-												<label className="label-text">{t("metadataSubmit.form.actionLabel")}</label>
-												<select className="select select-sm w-full" value={row.action} onChange={(e) => updateRomRow(row.key, { action: e.target.value as RomRow["action"] })}>
+												<label className="label-text">
+													{t("metadataSubmit.form.actionLabel")}
+												</label>
+												<select
+													className="select select-sm w-full"
+													value={row.action}
+													onChange={(e) =>
+														updateRomRow(row.key, {
+															action: e.target.value as RomRow["action"],
+														})
+													}
+												>
 													<option value="add">{t("common.add")}</option>
-													<option value="edit" disabled={!game.roms || game.roms.length === 0}>{t("common.edit")}</option>
-													<option value="delete" disabled={!game.roms || game.roms.length === 0}>{t("common.delete")}</option>
+													<option
+														value="edit"
+														disabled={!game.roms || game.roms.length === 0}
+													>
+														{t("common.edit")}
+													</option>
+													<option
+														value="delete"
+														disabled={!game.roms || game.roms.length === 0}
+													>
+														{t("common.delete")}
+													</option>
 												</select>
 											</div>
 											<div>
-												<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
-												<select className="select select-sm w-full" value={row.region} onChange={(e) => updateRomRow(row.key, { region: e.target.value })}>
+												<label className="label-text">
+													{t("metadataSubmit.form.regionLabel")}
+												</label>
+												<select
+													className="select select-sm w-full"
+													value={row.region}
+													onChange={(e) => updateRomRow(row.key, { region: e.target.value })}
+												>
 													{regions.map((r) => (
-														<option key={r.id} value={r.name}>{regionLabel(t, r.name)}</option>
+														<option key={r.id} value={r.name}>
+															{regionLabel(t, r.name)}
+														</option>
 													))}
 												</select>
 											</div>
@@ -998,79 +1328,152 @@ export default function MetadataSubmissionPage() {
 														const id = e.target.value;
 														const rom = (game.roms || []).find((x) => x.id === id);
 														if (rom) {
-															updateRomRow(row.key, { id, name: rom.name, size: rom.size ? String(rom.size) : "", region: rom.region || DEFAULT_REGION, crc: rom.crc || "", md5: rom.md5 || "", sha1: rom.sha1 || "", sha256: rom.sha256 || "" });
+															updateRomRow(row.key, {
+																id,
+																name: rom.name,
+																size: rom.size ? String(rom.size) : "",
+																region: rom.region || DEFAULT_REGION,
+																crc: rom.crc || "",
+																md5: rom.md5 || "",
+																sha1: rom.sha1 || "",
+																sha256: rom.sha256 || "",
+															});
 														} else {
 															updateRomRow(row.key, { id: "" });
 														}
 													}}
 												>
 													<option value="">—</option>
-													{(game.roms || []).map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
+													{(game.roms || []).map((r) => (
+														<option key={r.id} value={r.id}>
+															{r.name}
+														</option>
+													))}
 												</select>
 											</div>
 										) : null}
 										{row.action !== "delete" ? (
 											<>
-											<label
-												className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[var(--color-base-300)] px-4 py-10 text-sm text-[var(--color-base-content)]/60 cursor-pointer text-center transition-colors hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-primary)]/5 ${row.hashing ? "opacity-60" : ""}`}
-												onDragOver={(e) => e.preventDefault()}
-												onDrop={(e) => {
-													e.preventDefault();
-													const f = e.dataTransfer.files?.[0];
-													if (f) void onPickRomFile(row.key, f);
-												}}
-											>
-												<Upload className="w-8 h-8" />
-												<span className="max-w-md">{row.hashing ? t("metadataSubmit.form.romHashing") : t("metadataSubmit.form.romDrop")}</span>
-												<input
-													type="file"
-													className="hidden"
-													disabled={busy || row.hashing}
-													onChange={(e) => {
-														const f = e.target.files?.[0] || null;
+												<label
+													className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[var(--color-base-300)] px-4 py-10 text-sm text-[var(--color-base-content)]/60 cursor-pointer text-center transition-colors hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-primary)]/5 ${row.hashing ? "opacity-60" : ""}`}
+													onDragOver={(e) => e.preventDefault()}
+													onDrop={(e) => {
+														e.preventDefault();
+														const f = e.dataTransfer.files?.[0];
 														if (f) void onPickRomFile(row.key, f);
-														e.target.value = "";
 													}}
-												/>
-											</label>
-											<div>
-												<label className="label-text">{t("common.name")}</label>
-												<input className="input input-sm w-full" value={row.name} onChange={(e) => updateRomRow(row.key, { name: e.target.value })} />
-											</div>
-											<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
-												<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">{t("common.size")}</span><span className="font-mono truncate">{row.size ? fmtBytes(Number(row.size)) : "—"}</span></div>
-												<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">CRC</span><span className="font-mono truncate">{row.crc || "—"}</span></div>
-												<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">MD5</span><span className="font-mono truncate">{row.md5 || "—"}</span></div>
-												<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">SHA1</span><span className="font-mono truncate">{row.sha1 || "—"}</span></div>
-												<div className="flex items-baseline gap-2 min-w-0 sm:col-span-2"><span className="label-text shrink-0">SHA256</span><span className="font-mono truncate">{row.sha256 || "—"}</span></div>
-											</div>
-											{row.duplicate ? <p className="text-xs text-[var(--color-error)]">{t("metadataSubmit.form.romDuplicate")}</p> : null}
+												>
+													<Upload className="w-8 h-8" />
+													<span className="max-w-md">
+														{row.hashing
+															? t("metadataSubmit.form.romHashing")
+															: t("metadataSubmit.form.romDrop")}
+													</span>
+													<input
+														type="file"
+														className="hidden"
+														disabled={busy || row.hashing}
+														onChange={(e) => {
+															const f = e.target.files?.[0] || null;
+															if (f) void onPickRomFile(row.key, f);
+															e.target.value = "";
+														}}
+													/>
+												</label>
+												<div>
+													<label className="label-text">{t("common.name")}</label>
+													<input
+														className="input input-sm w-full"
+														value={row.name}
+														onChange={(e) =>
+															updateRomRow(row.key, { name: e.target.value })
+														}
+													/>
+												</div>
+												<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
+													<div className="flex items-baseline gap-2 min-w-0">
+														<span className="label-text shrink-0">{t("common.size")}</span>
+														<span className="font-mono truncate">
+															{row.size ? fmtBytes(Number(row.size)) : "—"}
+														</span>
+													</div>
+													<div className="flex items-baseline gap-2 min-w-0">
+														<span className="label-text shrink-0">CRC</span>
+														<span className="font-mono truncate">{row.crc || "—"}</span>
+													</div>
+													<div className="flex items-baseline gap-2 min-w-0">
+														<span className="label-text shrink-0">MD5</span>
+														<span className="font-mono truncate">{row.md5 || "—"}</span>
+													</div>
+													<div className="flex items-baseline gap-2 min-w-0">
+														<span className="label-text shrink-0">SHA1</span>
+														<span className="font-mono truncate">{row.sha1 || "—"}</span>
+													</div>
+													<div className="flex items-baseline gap-2 min-w-0 sm:col-span-2">
+														<span className="label-text shrink-0">SHA256</span>
+														<span className="font-mono truncate">{row.sha256 || "—"}</span>
+													</div>
+												</div>
+												{row.duplicate ? (
+													<p className="text-xs text-[var(--color-error)]">
+														{t("metadataSubmit.form.romDuplicate")}
+													</p>
+												) : null}
 											</>
 										) : null}
 									</div>
 								))}
 							</div>
-							<button type="button" className="btn btn-outline btn-sm w-fit" onClick={() => setRomRows((rows) => [...rows, newRomRow()])}>
+							<button
+								type="button"
+								className="btn btn-outline btn-sm w-fit"
+								onClick={() => setRomRows((rows) => [...rows, newRomRow()])}
+							>
 								{t("metadataSubmit.form.addRom")}
 							</button>
-							<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.form.romHint")}</p>
-							<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.form.romZipNote")}</p>
+							<p className="text-xs text-[var(--color-base-content)]/50">
+								{t("metadataSubmit.form.romHint")}
+							</p>
+							<p className="text-xs text-[var(--color-base-content)]/50">
+								{t("metadataSubmit.form.romZipNote")}
+							</p>
 
 							{romList.length > 0 ? (
 								<div className="space-y-3 border-t border-[var(--color-base-300)] pt-4">
-									<p className="label-text">{t("metadataGame.romDumpsTitle", { count: romList.length })}</p>
-									<Pagination page={romPageClamped} totalPages={romTotalPages} onChange={setRomPage} />
+									<p className="label-text">
+										{t("metadataGame.romDumpsTitle", { count: romList.length })}
+									</p>
+									<Pagination
+										page={romPageClamped}
+										totalPages={romTotalPages}
+										onChange={setRomPage}
+									/>
 									<div className="space-y-1.5">
 										{romPageItems.map((r) => (
-											<div key={r.id} className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap">
+											<div
+												key={r.id}
+												className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap"
+											>
 												<span className="font-medium">{r.name}</span>
 												{r.region ? <RegionLabel region={r.region} /> : null}
-												{r.size ? <span className="text-[var(--color-base-content)]/50">{fmtBytes(r.size)}</span> : null}
-												{r.sha1 ? <span className="font-mono text-[11px] text-[var(--color-base-content)]/40 break-all">SHA1 {r.sha1}</span> : null}
+												{r.size ? (
+													<span className="text-[var(--color-base-content)]/50">
+														{fmtBytes(r.size)}
+													</span>
+												) : null}
+												{r.sha1 ? (
+													<span className="font-mono text-[11px] text-[var(--color-base-content)]/40 break-all">
+														SHA1 {r.sha1}
+													</span>
+												) : null}
 											</div>
 										))}
 									</div>
-									<Pagination page={romPageClamped} totalPages={romTotalPages} onChange={setRomPage} />
+									<Pagination
+										page={romPageClamped}
+										totalPages={romTotalPages}
+										onChange={setRomPage}
+									/>
 								</div>
 							) : null}
 						</div>
@@ -1082,8 +1485,13 @@ export default function MetadataSubmissionPage() {
 										<p className="label-text mb-1">{t("metadataSubmit.form.existingByRegion")}</p>
 										<div className="space-y-1">
 											{existingText.map((r) => (
-												<p key={r.region} className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2">
-													<span className="badge badge-solid-neutral badge-xs"><RegionLabel region={r.region} /></span>
+												<p
+													key={r.region}
+													className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2"
+												>
+													<span className="badge badge-solid-neutral badge-xs">
+														<RegionLabel region={r.region} />
+													</span>
 													<span>{textValueOf(r) || "—"}</span>
 												</p>
 											))}
@@ -1092,36 +1500,85 @@ export default function MetadataSubmissionPage() {
 								) : null}
 								<div className="space-y-2">
 									{textRows.map((row) => (
-										<div key={row.key} className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2">
+										<div
+											key={row.key}
+											className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2"
+										>
 											{textRows.length > 1 ? (
-												<button type="button" className="btn btn-ghost btn-xs absolute top-2 right-2" onClick={() => removeTextRow(row.key)} aria-label={t("common.delete")}>
+												<button
+													type="button"
+													className="btn btn-ghost btn-xs absolute top-2 right-2"
+													onClick={() => removeTextRow(row.key)}
+													aria-label={t("common.delete")}
+												>
 													<Trash2 className="w-3.5 h-3.5" />
 												</button>
 											) : null}
 											<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
 												<div>
-													<label className="label-text">{t("metadataSubmit.form.actionLabel")}</label>
-													<select className="select select-sm w-full" value={row.action} onChange={(e) => updateTextRow(row.key, { action: e.target.value as RegionTextRow["action"] })}>
-														<option value="set">{t("metadataSubmit.form.addNewValue")}</option>
-														<option value="move" disabled={existingText.length === 0}>{t("metadataSubmit.form.changeRegion")}</option>
-														<option value="delete" disabled={existingText.length === 0}>{t("metadataSubmit.form.deleteRegion")}</option>
+													<label className="label-text">
+														{t("metadataSubmit.form.actionLabel")}
+													</label>
+													<select
+														className="select select-sm w-full"
+														value={row.action}
+														onChange={(e) =>
+															updateTextRow(row.key, {
+																action: e.target.value as RegionTextRow["action"],
+															})
+														}
+													>
+														<option value="set">
+															{t("metadataSubmit.form.addNewValue")}
+														</option>
+														<option value="move" disabled={existingText.length === 0}>
+															{t("metadataSubmit.form.changeRegion")}
+														</option>
+														<option value="delete" disabled={existingText.length === 0}>
+															{t("metadataSubmit.form.deleteRegion")}
+														</option>
 													</select>
 												</div>
 												<div>
-													<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
-													<select className="select select-sm w-full" value={row.region} onChange={(e) => updateTextRow(row.key, { region: e.target.value })}>
+													<label className="label-text">
+														{t("metadataSubmit.form.regionLabel")}
+													</label>
+													<select
+														className="select select-sm w-full"
+														value={row.region}
+														onChange={(e) =>
+															updateTextRow(row.key, { region: e.target.value })
+														}
+													>
 														{regions.map((r) => (
-															<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
+															<option key={r.id} value={r.name}>
+																{regionLabel(t, r.name)}
+																{regionHasData(r) ? " •" : ""}
+															</option>
 														))}
 													</select>
 												</div>
 											</div>
 											{row.action === "move" ? (
 												<div>
-													<label className="label-text">{t("metadataSubmit.form.moveFromRegion")}</label>
-													<select className="select select-sm w-full" value={row.fromRegion} onChange={(e) => updateTextRow(row.key, { fromRegion: e.target.value })}>
-														<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
-														{existingText.map((r) => <option key={r.region} value={r.region}>{regionLabel(t, r.region)}</option>)}
+													<label className="label-text">
+														{t("metadataSubmit.form.moveFromRegion")}
+													</label>
+													<select
+														className="select select-sm w-full"
+														value={row.fromRegion}
+														onChange={(e) =>
+															updateTextRow(row.key, { fromRegion: e.target.value })
+														}
+													>
+														<option value="">
+															{t("metadataSubmit.form.regionPlaceholder")}
+														</option>
+														{existingText.map((r) => (
+															<option key={r.region} value={r.region}>
+																{regionLabel(t, r.region)}
+															</option>
+														))}
 													</select>
 												</div>
 											) : null}
@@ -1130,27 +1587,41 @@ export default function MetadataSubmissionPage() {
 													className="input input-sm w-full"
 													value={row.value}
 													onChange={(e) => updateTextRow(row.key, { value: e.target.value })}
-													placeholder={type === "release_year" ? "YYYY-MM" : t("metadataSubmit.form.newField", { field: textLabel.toLowerCase() })}
+													placeholder={
+														type === "release_year"
+															? "YYYY-MM"
+															: t("metadataSubmit.form.newField", {
+																	field: textLabel.toLowerCase(),
+																})
+													}
 												/>
 											) : null}
 										</div>
 									))}
 								</div>
-								<button type="button" className="btn btn-outline btn-sm w-fit" onClick={() => setTextRows((rows) => [...rows, newTextRow()])}>
+								<button
+									type="button"
+									className="btn btn-outline btn-sm w-fit"
+									onClick={() => setTextRows((rows) => [...rows, newTextRow()])}
+								>
 									{t("metadataSubmit.form.addRegion")}
 								</button>
-								<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.form.moveHint")}</p>
+								<p className="text-xs text-[var(--color-base-content)]/50">
+									{t("metadataSubmit.form.moveHint")}
+								</p>
 							</div>
 						) : (
 							<div className="space-y-3">
 								<div>
-									<p className="label-text">{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}</p>
-									<p className="text-sm text-[var(--color-base-content)]/70">
-										{currentText || "—"}
+									<p className="label-text">
+										{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}
 									</p>
+									<p className="text-sm text-[var(--color-base-content)]/70">{currentText || "—"}</p>
 								</div>
 								<div>
-									<label className="label-text">{t("metadataSubmit.form.newField", { field: textLabel.toLowerCase() })}</label>
+									<label className="label-text">
+										{t("metadataSubmit.form.newField", { field: textLabel.toLowerCase() })}
+									</label>
 									{renderTextInput()}
 								</div>
 							</div>
@@ -1161,12 +1632,26 @@ export default function MetadataSubmissionPage() {
 								<>
 									{existingMedia.length > 0 ? (
 										<div>
-											<p className="label-text mb-2">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: existingMedia.length })}</p>
+											<p className="label-text mb-2">
+												{t("metadataSubmit.form.currentMedia", {
+													media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+													count: existingMedia.length,
+												})}
+											</p>
 											<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
 												{existingMedia.map((m) => (
 													<div key={m.id} className="relative">
-														<img src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-28 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
-														{m.region ? <span className="badge badge-solid-neutral badge-sm absolute bottom-1 right-1"><RegionLabel region={m.region} /></span> : null}
+														<img
+															src={mediaUrl(m)}
+															alt={t(MEDIA_LABEL[currentKind])}
+															className="w-full h-28 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]"
+															onError={(e) => (e.currentTarget.style.display = "none")}
+														/>
+														{m.region ? (
+															<span className="badge badge-solid-neutral badge-sm absolute bottom-1 right-1">
+																<RegionLabel region={m.region} />
+															</span>
+														) : null}
 													</div>
 												))}
 											</div>
@@ -1174,43 +1659,97 @@ export default function MetadataSubmissionPage() {
 									) : null}
 									<div className="space-y-2">
 										{mediaRows.map((row) => (
-											<div key={row.key} className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2">
+											<div
+												key={row.key}
+												className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2"
+											>
 												{mediaRows.length > 1 ? (
-													<button type="button" className="btn btn-ghost btn-xs absolute top-2 right-2" onClick={() => removeMediaRow(row.key)} aria-label={t("common.delete")}>
+													<button
+														type="button"
+														className="btn btn-ghost btn-xs absolute top-2 right-2"
+														onClick={() => removeMediaRow(row.key)}
+														aria-label={t("common.delete")}
+													>
 														<Trash2 className="w-3.5 h-3.5" />
 													</button>
 												) : null}
 												<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
 													<div>
-														<label className="label-text">{t("metadataSubmit.form.actionLabel")}</label>
-														<select className="select select-sm w-full" value={row.action} onChange={(e) => updateMediaRow(row.key, { action: e.target.value as RegionMediaRow["action"] })}>
-															<option value="new">{t("metadataSubmit.form.addNewImage")}</option>
-															<option value="move" disabled={existingMedia.length === 0}>{t("metadataSubmit.form.changeRegion")}</option>
-															<option value="delete" disabled={existingMedia.length === 0}>{t("metadataSubmit.form.deleteRegion")}</option>
+														<label className="label-text">
+															{t("metadataSubmit.form.actionLabel")}
+														</label>
+														<select
+															className="select select-sm w-full"
+															value={row.action}
+															onChange={(e) =>
+																updateMediaRow(row.key, {
+																	action: e.target.value as RegionMediaRow["action"],
+																})
+															}
+														>
+															<option value="new">
+																{t("metadataSubmit.form.addNewImage")}
+															</option>
+															<option value="move" disabled={existingMedia.length === 0}>
+																{t("metadataSubmit.form.changeRegion")}
+															</option>
+															<option
+																value="delete"
+																disabled={existingMedia.length === 0}
+															>
+																{t("metadataSubmit.form.deleteRegion")}
+															</option>
 														</select>
 													</div>
 													<div>
-														<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
-														<select className="select select-sm w-full" value={row.region} onChange={(e) => updateMediaRow(row.key, { region: e.target.value })}>
+														<label className="label-text">
+															{t("metadataSubmit.form.regionLabel")}
+														</label>
+														<select
+															className="select select-sm w-full"
+															value={row.region}
+															onChange={(e) =>
+																updateMediaRow(row.key, { region: e.target.value })
+															}
+														>
 															{regions.map((r) => (
-																<option key={r.id} value={r.name}>{regionLabel(t, r.name)}{regionHasData(r) ? " •" : ""}</option>
+																<option key={r.id} value={r.name}>
+																	{regionLabel(t, r.name)}
+																	{regionHasData(r) ? " •" : ""}
+																</option>
 															))}
 														</select>
 													</div>
 												</div>
 												{row.action === "move" ? (
 													<div>
-														<label className="label-text">{t("metadataSubmit.form.moveFromRegion")}</label>
-														<select className="select select-sm w-full" value={row.fromRegion} onChange={(e) => updateMediaRow(row.key, { fromRegion: e.target.value })}>
-															<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
-															{existingMedia.map((m) => <option key={m.id} value={m.region || ""}>{regionLabel(t, m.region || "")}</option>)}
+														<label className="label-text">
+															{t("metadataSubmit.form.moveFromRegion")}
+														</label>
+														<select
+															className="select select-sm w-full"
+															value={row.fromRegion}
+															onChange={(e) =>
+																updateMediaRow(row.key, { fromRegion: e.target.value })
+															}
+														>
+															<option value="">
+																{t("metadataSubmit.form.regionPlaceholder")}
+															</option>
+															{existingMedia.map((m) => (
+																<option key={m.id} value={m.region || ""}>
+																	{regionLabel(t, m.region || "")}
+																</option>
+															))}
 														</select>
 													</div>
 												) : null}
 												{row.action === "new" ? (
 													<label className="btn btn-outline btn-sm w-fit cursor-pointer">
 														<Upload className="w-3.5 h-3.5" />
-														{row.file ? row.file.name : t("metadataSubmit.form.chooseImage")}
+														{row.file
+															? row.file.name
+															: t("metadataSubmit.form.chooseImage")}
 														<input
 															type="file"
 															accept={IMAGE_ACCEPT}
@@ -1227,12 +1766,20 @@ export default function MetadataSubmissionPage() {
 											</div>
 										))}
 									</div>
-									<button type="button" className="btn btn-outline btn-sm w-fit" onClick={() => setMediaRows((rows) => [...rows, newMediaRow()])}>
+									<button
+										type="button"
+										className="btn btn-outline btn-sm w-fit"
+										onClick={() => setMediaRows((rows) => [...rows, newMediaRow()])}
+									>
 										{t("metadataSubmit.form.addRegion")}
 									</button>
 									<p className="text-xs text-[var(--color-base-content)]/50">
 										{t("metadataSubmit.form.imageHint")}
-										{currentKind === "logo" ? ` ${t("metadataSubmit.form.logoHint")}` : currentKind === "cover" ? ` ${t("metadataSubmit.form.coverHint")}` : ""}
+										{currentKind === "logo"
+											? ` ${t("metadataSubmit.form.logoHint")}`
+											: currentKind === "cover"
+												? ` ${t("metadataSubmit.form.coverHint")}`
+												: ""}
 									</p>
 								</>
 							) : (
@@ -1240,47 +1787,102 @@ export default function MetadataSubmissionPage() {
 									{!isVideo && file && previewUrl ? (
 										<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 											<div>
-												<p className="label-text mb-2">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
+												<p className="label-text mb-2">
+													{t("metadataSubmit.form.currentMedia", {
+														media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+														count: currentMedia.length,
+													})}
+												</p>
 												{currentMedia.length > 0 ? (
 													<div className="relative">
-														<img src={mediaUrl(currentMedia[0])} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+														<img
+															src={mediaUrl(currentMedia[0])}
+															alt={t(MEDIA_LABEL[currentKind])}
+															className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]"
+															onError={(e) => (e.currentTarget.style.display = "none")}
+														/>
 													</div>
 												) : (
 													<div className="w-full h-44 flex items-center justify-center rounded-lg border border-dashed border-[var(--color-base-300)] bg-[var(--color-base-300)]/30 px-2">
-														<p className="text-sm text-[var(--color-base-content)]/50 text-center">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+														<p className="text-sm text-[var(--color-base-content)]/50 text-center">
+															{t("metadataSubmit.form.noMediaKind", {
+																media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+															})}
+														</p>
 													</div>
 												)}
 											</div>
 											<div>
-												<p className="label-text mb-2">{t("metadataSubmit.form.newField", { field: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
-												<img src={previewUrl} alt="" className="w-full h-44 object-contain rounded-lg border border-[var(--color-primary)] bg-[var(--color-base-300)]" />
+												<p className="label-text mb-2">
+													{t("metadataSubmit.form.newField", {
+														field: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+													})}
+												</p>
+												<img
+													src={previewUrl}
+													alt=""
+													className="w-full h-44 object-contain rounded-lg border border-[var(--color-primary)] bg-[var(--color-base-300)]"
+												/>
 											</div>
 										</div>
 									) : (
 										<div>
-											<p className="label-text">{t("metadataSubmit.form.currentMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase(), count: currentMedia.length })}</p>
+											<p className="label-text">
+												{t("metadataSubmit.form.currentMedia", {
+													media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+													count: currentMedia.length,
+												})}
+											</p>
 											{currentMedia.length > 0 ? (
 												<div className="grid grid-cols-2 gap-3 mt-2">
 													{currentMedia.map((m) => (
 														<div key={m.id} className="relative">
 															{isVideo ? (
-																<video src={mediaUrl(m)} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-black" controls muted />
+																<video
+																	src={mediaUrl(m)}
+																	className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-black"
+																	controls
+																	muted
+																/>
 															) : (
-																<img src={mediaUrl(m)} alt={t(MEDIA_LABEL[currentKind])} className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]" onError={(e) => (e.currentTarget.style.display = "none")} />
+																<img
+																	src={mediaUrl(m)}
+																	alt={t(MEDIA_LABEL[currentKind])}
+																	className="w-full h-44 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]"
+																	onError={(e) =>
+																		(e.currentTarget.style.display = "none")
+																	}
+																/>
 															)}
 														</div>
 													))}
 												</div>
 											) : (
-												<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataSubmit.form.noMediaKind", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+												<p className="text-sm text-[var(--color-base-content)]/50">
+													{t("metadataSubmit.form.noMediaKind", {
+														media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+													})}
+												</p>
 											)}
 										</div>
 									)}
-									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{t("metadataSubmit.form.replaceMedia", { media: t(MEDIA_LABEL[currentKind]).toLowerCase() })}</p>
+									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
+										{t("metadataSubmit.form.replaceMedia", {
+											media: t(MEDIA_LABEL[currentKind]).toLowerCase(),
+										})}
+									</p>
 
 									<label className="btn btn-outline cursor-pointer">
-										{isVideo ? <Clapperboard className="w-4 h-4" /> : <Upload className="w-4 h-4" />}
-										{file ? file.name : isVideo ? t("metadataSubmit.form.chooseVideo") : t("metadataSubmit.form.chooseImage")}
+										{isVideo ? (
+											<Clapperboard className="w-4 h-4" />
+										) : (
+											<Upload className="w-4 h-4" />
+										)}
+										{file
+											? file.name
+											: isVideo
+												? t("metadataSubmit.form.chooseVideo")
+												: t("metadataSubmit.form.chooseImage")}
 										<input
 											type="file"
 											accept={isVideo ? VIDEO_ACCEPT : IMAGE_ACCEPT}
@@ -1296,21 +1898,69 @@ export default function MetadataSubmissionPage() {
 										</p>
 									) : null}
 									{!isVideo && currentKind === "screenshot" ? (
-										<p className="text-xs text-[var(--color-warning)] leading-relaxed">{t("metadataSubmit.form.screenshotHint")}</p>
+										<p className="text-xs text-[var(--color-warning)] leading-relaxed">
+											{t("metadataSubmit.form.screenshotHint")}
+										</p>
 									) : null}
-									{fileError ? <p className="text-xs text-[var(--color-error)]">{fileError}</p> : null}
-									{isVideo ? <p className="text-xs text-[var(--color-warning)] leading-relaxed">{t("metadataSubmit.form.videoAspectHint")}</p> : null}
+									{fileError ? (
+										<p className="text-xs text-[var(--color-error)]">{fileError}</p>
+									) : null}
+									{isVideo ? (
+										<p className="text-xs text-[var(--color-warning)] leading-relaxed">
+											{t("metadataSubmit.form.videoAspectHint")}
+										</p>
+									) : null}
 
 									{isVideo && file && videoMeta ? (
 										<div className="text-xs space-y-1 text-[var(--color-base-content)]/60">
 											<div className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1 bg-[var(--color-base-300)]/30">
-												<p>{t("metadataSubmit.form.resolution", { width: videoMeta.width, height: videoMeta.height, aspect: videoMeta.aspect })}</p>
-												<p>{t("metadataSubmit.form.duration", { duration: videoMeta.duration.toFixed(1) })} {videoMeta.duration < VIDEO_MIN_SECONDS || videoMeta.duration > VIDEO_MAX_SECONDS ? <span className="text-[var(--color-error)]">{t("metadataSubmit.form.durationRange", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS })}</span> : null}</p>
-												<p>{t("metadataSubmit.form.frameRate", { fps: videoMeta.fps > 0 ? `${videoMeta.fps} fps` : t("metadataSubmit.form.frameRateUnknown") })}</p>
-												{fpsWarning ? <p className="text-[var(--color-warning)]">{fpsWarning}</p> : null}
+												<p>
+													{t("metadataSubmit.form.resolution", {
+														width: videoMeta.width,
+														height: videoMeta.height,
+														aspect: videoMeta.aspect,
+													})}
+												</p>
+												<p>
+													{t("metadataSubmit.form.duration", {
+														duration: videoMeta.duration.toFixed(1),
+													})}{" "}
+													{videoMeta.duration < VIDEO_MIN_SECONDS ||
+													videoMeta.duration > VIDEO_MAX_SECONDS ? (
+														<span className="text-[var(--color-error)]">
+															{t("metadataSubmit.form.durationRange", {
+																min: VIDEO_MIN_SECONDS,
+																max: VIDEO_MAX_SECONDS,
+															})}
+														</span>
+													) : null}
+												</p>
+												<p>
+													{t("metadataSubmit.form.frameRate", {
+														fps:
+															videoMeta.fps > 0
+																? `${videoMeta.fps} fps`
+																: t("metadataSubmit.form.frameRateUnknown"),
+													})}
+												</p>
+												{fpsWarning ? (
+													<p className="text-[var(--color-warning)]">{fpsWarning}</p>
+												) : null}
 											</div>
-											<video ref={videoRef} src={URL.createObjectURL(file)} controls className="w-full max-h-64 rounded-lg border border-[var(--color-base-300)] bg-black" muted />
-											{fileError ? <p className="text-[var(--color-error)]">{fileError}</p> : <p className="text-[var(--color-success)]">{t("metadataSubmit.form.videoOk")}</p>}
+											<video
+												ref={videoRef}
+												src={URL.createObjectURL(file)}
+												controls
+												className="w-full max-h-64 rounded-lg border border-[var(--color-base-300)] bg-black"
+												muted
+											/>
+											{fileError ? (
+												<p className="text-[var(--color-error)]">{fileError}</p>
+											) : (
+												<p className="text-[var(--color-success)]">
+													{t("metadataSubmit.form.videoOk")}
+												</p>
+											)}
 										</div>
 									) : null}
 								</>
@@ -1323,7 +1973,13 @@ export default function MetadataSubmissionPage() {
 							{deleting ? t("metadataSubmit.form.whyLabelRequired") : t("metadataSubmit.form.whyLabel")}
 							{deleting ? <span className="text-[var(--color-error)]"> *</span> : null}
 						</label>
-						<textarea className="input w-full min-h-20" value={note} onChange={(e) => setNote(e.target.value)} placeholder={t("metadataSubmit.form.whyPlaceholder")} disabled={busy} />
+						<textarea
+							className="input w-full min-h-20"
+							value={note}
+							onChange={(e) => setNote(e.target.value)}
+							placeholder={t("metadataSubmit.form.whyPlaceholder")}
+							disabled={busy}
+						/>
 					</div>
 				</section>
 			) : null}
@@ -1331,7 +1987,9 @@ export default function MetadataSubmissionPage() {
 			{progress !== null ? (
 				<div className="card p-3">
 					<div className="flex justify-between text-xs mb-1">
-						<span className="text-[var(--color-base-content)]/60">{isVideo ? t("metadataSubmit.uploadingVideo") : t("metadataSubmit.uploadingImage")}</span>
+						<span className="text-[var(--color-base-content)]/60">
+							{isVideo ? t("metadataSubmit.uploadingVideo") : t("metadataSubmit.uploadingImage")}
+						</span>
 						<span className="text-[var(--color-base-content)]/60">{progress}%</span>
 					</div>
 					<progress className="progress progress-primary w-full" value={progress} max="100" />
@@ -1340,19 +1998,48 @@ export default function MetadataSubmissionPage() {
 
 			{status ? (
 				<div className="card p-3 text-sm">
-					<span className={status.tone === "error" ? "text-[var(--color-error)]" : status.tone === "success" ? "text-[var(--color-success)]" : "text-[var(--color-info)]"}>{status.text}</span>
+					<span
+						className={
+							status.tone === "error"
+								? "text-[var(--color-error)]"
+								: status.tone === "success"
+									? "text-[var(--color-success)]"
+									: "text-[var(--color-info)]"
+						}
+					>
+						{status.text}
+					</span>
 				</div>
 			) : null}
 
 			<div className="flex justify-end gap-2">
-				<button className="btn btn-ghost" onClick={() => navigate(`/app/metadata/${game.system_id}/game/${game.id}`)} disabled={busy}>{t("common.cancel")}</button>
-				<button className="btn btn-primary" onClick={() => setConfirmSubmit(true)} disabled={busy || (isVideo && !!fileError)}>
-					{busy ? t("metadataSubmit.working") : <><Check className="w-4 h-4" /> {t("metadataSubmit.submitForReview")}</>}
+				<button
+					className="btn btn-ghost"
+					onClick={() => navigate(`/app/metadata/${game.system_id}/game/${game.id}`)}
+					disabled={busy}
+				>
+					{t("common.cancel")}
+				</button>
+				<button
+					className="btn btn-primary"
+					onClick={() => setConfirmSubmit(true)}
+					disabled={busy || (isVideo && !!fileError)}
+				>
+					{busy ? (
+						t("metadataSubmit.working")
+					) : (
+						<>
+							<Check className="w-4 h-4" /> {t("metadataSubmit.submitForReview")}
+						</>
+					)}
 				</button>
 			</div>
 
 			{confirmSubmit ? (
-				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && setConfirmSubmit(false)}>
+				<div
+					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+					onClick={(e) => e.target === e.currentTarget && setConfirmSubmit(false)}
+				>
 					<div className="card w-full max-w-md p-6 space-y-4">
 						<div className="flex items-start gap-3">
 							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-warning)]/15 shrink-0">
@@ -1360,12 +2047,18 @@ export default function MetadataSubmissionPage() {
 							</div>
 							<div className="min-w-0">
 								<h2 className="text-lg font-bold">{t("metadataSubmit.confirmSubmit.title")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">{t("metadataSubmit.confirmSubmit.body")}</p>
+								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
+									{t("metadataSubmit.confirmSubmit.body")}
+								</p>
 							</div>
 						</div>
 						<div className="flex justify-end gap-2">
-							<button className="btn btn-ghost" type="button" onClick={() => setConfirmSubmit(false)}>{t("common.cancel")}</button>
-							<button className="btn btn-primary" type="button" disabled={busy} onClick={submit}>{t("metadataSubmit.submitForReview")}</button>
+							<button className="btn btn-ghost" type="button" onClick={() => setConfirmSubmit(false)}>
+								{t("common.cancel")}
+							</button>
+							<button className="btn btn-primary" type="button" disabled={busy} onClick={submit}>
+								{t("metadataSubmit.submitForReview")}
+							</button>
 						</div>
 					</div>
 				</div>
@@ -1374,8 +2067,13 @@ export default function MetadataSubmissionPage() {
 			{/* Duplicate report: requests the deletion of this game in favor of a
 			    more complete one. Red-toned because it is a deletion request. */}
 			{dupOpen ? (
-				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && closeDuplicate()}>
-					<div className={`card w-full max-w-lg p-6 space-y-4 border ${dupDone ? "border-[var(--color-success)]/40" : "border-[var(--color-error)]/40"}`}>
+				<div
+					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+					onClick={(e) => e.target === e.currentTarget && closeDuplicate()}
+				>
+					<div
+						className={`card w-full max-w-lg p-6 space-y-4 border ${dupDone ? "border-[var(--color-success)]/40" : "border-[var(--color-error)]/40"}`}
+					>
 						{dupDone ? (
 							<>
 								<div className="flex items-start gap-3">
@@ -1384,11 +2082,15 @@ export default function MetadataSubmissionPage() {
 									</div>
 									<div className="min-w-0">
 										<h2 className="text-lg font-bold">{t("metadataSubmit.duplicate.title")}</h2>
-										<p className="text-sm text-[var(--color-base-content)]/70 mt-1">{t("metadataSubmit.duplicate.sent")}</p>
+										<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
+											{t("metadataSubmit.duplicate.sent")}
+										</p>
 									</div>
 								</div>
 								<div className="flex justify-end">
-									<button className="btn btn-primary" type="button" onClick={closeDuplicate}>{t("common.close")}</button>
+									<button className="btn btn-primary" type="button" onClick={closeDuplicate}>
+										{t("common.close")}
+									</button>
 								</div>
 							</>
 						) : (
@@ -1398,29 +2100,74 @@ export default function MetadataSubmissionPage() {
 										<Copy className="w-5 h-5 text-[var(--color-error)]" />
 									</div>
 									<div className="min-w-0">
-										<h2 className="text-lg font-bold text-[var(--color-error)]">{t("metadataSubmit.duplicate.title")}</h2>
-										<p className="text-sm text-[var(--color-base-content)]/70 mt-1">{t("metadataSubmit.duplicate.subtitle")}</p>
+										<h2 className="text-lg font-bold text-[var(--color-error)]">
+											{t("metadataSubmit.duplicate.title")}
+										</h2>
+										<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
+											{t("metadataSubmit.duplicate.subtitle")}
+										</p>
 									</div>
 								</div>
 
 								<div>
-									<label className="label-text">{t("metadataSubmit.duplicate.linkLabel")} <span className="text-[var(--color-error)]">*</span></label>
-									<input className="input w-full" type="url" value={dupLink} onChange={(e) => setDupLink(e.target.value)} placeholder={t("metadataSubmit.duplicate.linkPlaceholder")} disabled={dupBusy} />
+									<label className="label-text">
+										{t("metadataSubmit.duplicate.linkLabel")}{" "}
+										<span className="text-[var(--color-error)]">*</span>
+									</label>
+									<input
+										className="input w-full"
+										type="url"
+										value={dupLink}
+										onChange={(e) => setDupLink(e.target.value)}
+										placeholder={t("metadataSubmit.duplicate.linkPlaceholder")}
+										disabled={dupBusy}
+									/>
 								</div>
 
 								<div>
-									<label className="label-text">{t("metadataSubmit.duplicate.noteLabel")} <span className="text-[var(--color-error)]">*</span></label>
-									<textarea className="input w-full min-h-20" value={dupNote} onChange={(e) => setDupNote(e.target.value)} placeholder={t("metadataSubmit.duplicate.notePlaceholder")} disabled={dupBusy} />
+									<label className="label-text">
+										{t("metadataSubmit.duplicate.noteLabel")}{" "}
+										<span className="text-[var(--color-error)]">*</span>
+									</label>
+									<textarea
+										className="input w-full min-h-20"
+										value={dupNote}
+										onChange={(e) => setDupNote(e.target.value)}
+										placeholder={t("metadataSubmit.duplicate.notePlaceholder")}
+										disabled={dupBusy}
+									/>
 								</div>
 
 								{dupStatus ? (
-									<p className={`text-sm ${dupStatus.tone === "error" ? "text-[var(--color-error)]" : "text-[var(--color-info)]"}`}>{dupStatus.text}</p>
+									<p
+										className={`text-sm ${dupStatus.tone === "error" ? "text-[var(--color-error)]" : "text-[var(--color-info)]"}`}
+									>
+										{dupStatus.text}
+									</p>
 								) : null}
 
 								<div className="flex justify-end gap-2">
-									<button className="btn btn-ghost" type="button" onClick={closeDuplicate} disabled={dupBusy}>{t("common.cancel")}</button>
-									<button className="btn btn-error" type="button" onClick={submitDuplicate} disabled={dupBusy}>
-										{dupBusy ? t("metadataSubmit.working") : <><Trash2 className="w-4 h-4" /> {t("metadataSubmit.duplicate.request")}</>}
+									<button
+										className="btn btn-ghost"
+										type="button"
+										onClick={closeDuplicate}
+										disabled={dupBusy}
+									>
+										{t("common.cancel")}
+									</button>
+									<button
+										className="btn btn-error"
+										type="button"
+										onClick={submitDuplicate}
+										disabled={dupBusy}
+									>
+										{dupBusy ? (
+											t("metadataSubmit.working")
+										) : (
+											<>
+												<Trash2 className="w-4 h-4" /> {t("metadataSubmit.duplicate.request")}
+											</>
+										)}
 									</button>
 								</div>
 							</>

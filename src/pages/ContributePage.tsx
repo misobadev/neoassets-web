@@ -31,6 +31,7 @@ export default function ContributePage() {
 			</div>
 		);
 	}
-	if (!pack) return <p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("common.loading")}</p>;
+	if (!pack)
+		return <p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("common.loading")}</p>;
 	return <SubmissionEditor basePack={pack} />;
 }

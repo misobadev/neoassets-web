@@ -22,9 +22,7 @@ export default function MetadataSystemsView() {
 		<div className="space-y-6">
 			<div>
 				<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("metadata.systems.title")}</h1>
-				<p className="text-[var(--color-base-content)]/60 text-sm pt-2">
-					{t("metadata.systems.subtitle")}
-				</p>
+				<p className="text-[var(--color-base-content)]/60 text-sm pt-2">{t("metadata.systems.subtitle")}</p>
 			</div>
 
 			<div className="flex items-center gap-2">
@@ -42,7 +40,9 @@ export default function MetadataSystemsView() {
 			{error ? (
 				<p className="text-sm text-[var(--color-error)] py-6 text-center">{error}</p>
 			) : systems === null ? (
-				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("metadata.loadingSystems")}</p>
+				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">
+					{t("metadata.loadingSystems")}
+				</p>
 			) : systems.length === 0 ? (
 				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">
 					{t("metadata.systems.empty")}

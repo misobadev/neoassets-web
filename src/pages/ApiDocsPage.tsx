@@ -196,16 +196,28 @@ X-Quota-Reset: 2026-09-12T00:00:00Z`}</Code>
 
 				<div className="grid gap-3 sm:grid-cols-3">
 					<div className="rounded-lg border border-[var(--color-base-300)] p-3">
-						<p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">{t("apiDocs.conceptsFamilyTitle")}</p>
-						<p className="mt-1 text-xs text-[var(--color-base-content)]/70">{t("apiDocs.conceptsFamilyDesc")}</p>
+						<p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
+							{t("apiDocs.conceptsFamilyTitle")}
+						</p>
+						<p className="mt-1 text-xs text-[var(--color-base-content)]/70">
+							{t("apiDocs.conceptsFamilyDesc")}
+						</p>
 					</div>
 					<div className="rounded-lg border border-[var(--color-base-300)] p-3">
-						<p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">{t("apiDocs.conceptsGroupTitle")}</p>
-						<p className="mt-1 text-xs text-[var(--color-base-content)]/70">{t("apiDocs.conceptsGroupDesc")}</p>
+						<p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
+							{t("apiDocs.conceptsGroupTitle")}
+						</p>
+						<p className="mt-1 text-xs text-[var(--color-base-content)]/70">
+							{t("apiDocs.conceptsGroupDesc")}
+						</p>
 					</div>
 					<div className="rounded-lg border border-[var(--color-base-300)] p-3">
-						<p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">{t("apiDocs.conceptsSystemTitle")}</p>
-						<p className="mt-1 text-xs text-[var(--color-base-content)]/70">{t("apiDocs.conceptsSystemDesc")}</p>
+						<p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
+							{t("apiDocs.conceptsSystemTitle")}
+						</p>
+						<p className="mt-1 text-xs text-[var(--color-base-content)]/70">
+							{t("apiDocs.conceptsSystemDesc")}
+						</p>
 					</div>
 				</div>
 
@@ -217,8 +229,12 @@ X-Quota-Reset: 2026-09-12T00:00:00Z`}</Code>
   '-- virtual system: arc -> every board above (no duplicates)`}</Code>
 
 				<div className="rounded-lg border border-[var(--color-primary)]/30 bg-[var(--color-primary)]/5 p-3">
-					<p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">{t("apiDocs.conceptsVirtualTitle")}</p>
-					<p className="mt-1 text-xs text-[var(--color-base-content)]/70">{t("apiDocs.conceptsVirtualDesc")}</p>
+					<p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
+						{t("apiDocs.conceptsVirtualTitle")}
+					</p>
+					<p className="mt-1 text-xs text-[var(--color-base-content)]/70">
+						{t("apiDocs.conceptsVirtualDesc")}
+					</p>
 				</div>
 
 				<h3 className="text-sm font-semibold pt-1">{t("apiDocs.conceptsPickTitle")}</h3>
@@ -383,7 +399,8 @@ curl "${BASE_URL}/api/v1/scrape/games?group=mame-fbneo&name=sfa3.zip"`}</Code>
 
 				<div className="space-y-2 pt-2 border-t border-[var(--color-base-300)]">
 					<p className="font-mono text-sm">
-						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/packs/{"{folder}"}/download
+						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/packs/{"{folder}"}
+						/download
 						<span className="badge badge-ghost badge-sm ml-2">{t("apiDocs.publicBadge")}</span>
 					</p>
 					<p className="text-sm text-[var(--color-base-content)]/70">{t("apiDocs.packDownloadDesc")}</p>

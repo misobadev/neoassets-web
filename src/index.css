@@ -1003,17 +1003,10 @@ body {
 			#ffffffcc,
 			transparent 60%
 		),
-		repeating-linear-gradient(
-			115deg,
-			#f87171,
-			#fef08a,
-			#86efac,
-			#5eead4,
-			#60a5fa,
-			#e879f9,
-			#fb7185
-		);
-	background-size: 100% 100%, 200% 200%;
+		repeating-linear-gradient(115deg, #f87171, #fef08a, #86efac, #5eead4, #60a5fa, #e879f9, #fb7185);
+	background-size:
+		100% 100%,
+		200% 200%;
 	background-position:
 		0 0,
 		calc(50% + var(--mx, 0) * 50%) calc(50% + var(--my, 0) * 50%);

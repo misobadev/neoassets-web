@@ -40,7 +40,9 @@ export default function PublicProfilePage() {
 	const self = profile ? profile.id === myId : false;
 
 	useEffect(() => {
-		fetchMe().then((u) => setMyId(u.id)).catch(() => {});
+		fetchMe()
+			.then((u) => setMyId(u.id))
+			.catch(() => {});
 	}, []);
 
 	useEffect(() => {
@@ -49,7 +51,11 @@ export default function PublicProfilePage() {
 		fetchPublicProfile(username)
 			.then((p) => {
 				setProfile(p);
-				return Promise.all([fetchFollowers(username), fetchFollowing(username), fetchUserSubmissions(username)]);
+				return Promise.all([
+					fetchFollowers(username),
+					fetchFollowing(username),
+					fetchUserSubmissions(username),
+				]);
 			})
 			.then(([foll, folling, subs]) => {
 				setFollowers(foll);
@@ -78,7 +84,12 @@ export default function PublicProfilePage() {
 	}
 
 	if (error && !profile) return <p className="text-sm text-[var(--color-error)] text-center py-10">{error}</p>;
-	if (!profile) return <p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("publicProfile.loading")}</p>;
+	if (!profile)
+		return (
+			<p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">
+				{t("publicProfile.loading")}
+			</p>
+		);
 
 	return (
 		<div className="space-y-6">
@@ -94,20 +105,39 @@ export default function PublicProfilePage() {
 					<div className="min-w-0 flex-1">
 						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{profile.username}</h1>
 						<p className="text-sm text-[var(--color-base-content)]/60 flex items-center gap-2 flex-wrap">
-							<span className={`badge ${profile.role === "admin" ? "badge-rose" : profile.role === "reviewer" ? "badge-purple" : "badge-outline"} !px-2`}>{t("role." + profile.role, { defaultValue: profile.role })}</span>
+							<span
+								className={`badge ${profile.role === "admin" ? "badge-rose" : profile.role === "reviewer" ? "badge-purple" : "badge-outline"} !px-2`}
+							>
+								{t("role." + profile.role, { defaultValue: profile.role })}
+							</span>
 							<DonorBadge status={profile.donor_status} />
 							<span>{t("publicProfile.joined", { date: formatDate(profile.created_at) })}</span>
 						</p>
 					</div>
 					{!self ? (
-						<button className={`btn ${profile.is_following ? "btn-outline" : "btn-primary"} shrink-0`} onClick={toggleFollow} disabled={busy}>
-							{profile.is_following ? <><Check className="w-4 h-4" /> {t("publicProfile.following")}</> : <><UserPlus className="w-4 h-4" /> {t("publicProfile.follow")}</>}
+						<button
+							className={`btn ${profile.is_following ? "btn-outline" : "btn-primary"} shrink-0`}
+							onClick={toggleFollow}
+							disabled={busy}
+						>
+							{profile.is_following ? (
+								<>
+									<Check className="w-4 h-4" /> {t("publicProfile.following")}
+								</>
+							) : (
+								<>
+									<UserPlus className="w-4 h-4" /> {t("publicProfile.follow")}
+								</>
+							)}
 						</button>
 					) : null}
 				</div>
 
 				<div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-					<Stat n={t("guide.ranks." + profile.rank, { defaultValue: profile.rank })} label={t("publicProfile.rank")} />
+					<Stat
+						n={t("guide.ranks." + profile.rank, { defaultValue: profile.rank })}
+						label={t("publicProfile.rank")}
+					/>
 					<Stat n={profile.level} label={t("profile.level")} />
 					<Stat n={`${profile.xp.toLocaleString()}`} label={t("common.xp")} />
 					<Stat n={profile.threads} label={t("common.threads")} />
@@ -134,13 +164,35 @@ export default function PublicProfilePage() {
 					<ul className="space-y-2">
 						{submissions.map((s) => (
 							<li key={`${s.kind}-${s.id}`}>
-								<Link to={s.kind === "sap" ? `/app/submissions/${s.id}` : s.game_id && s.system_id ? `/app/metadata/${s.system_id}/game/${s.game_id}` : "/app/metadata"}>
+								<Link
+									to={
+										s.kind === "sap"
+											? `/app/submissions/${s.id}`
+											: s.game_id && s.system_id
+												? `/app/metadata/${s.system_id}/game/${s.game_id}`
+												: "/app/metadata"
+									}
+								>
 									<div className="flex items-center justify-between gap-3 rounded-lg border border-[var(--color-base-300)] px-3 py-2 hover:bg-base-300">
 										<div className="min-w-0">
-											<p className="font-medium text-sm truncate">{s.title || (s.kind === "sap" ? t("publicProfile.untitledPack") : t("publicProfile.untitled"))}</p>
-											<p className="text-[11px] text-[var(--color-base-content)]/50">{s.kind === "sap" ? t("nav.systemArtPack") : t("publicProfile.metadata")} · {formatDate(s.created_at)}</p>
+											<p className="font-medium text-sm truncate">
+												{s.title ||
+													(s.kind === "sap"
+														? t("publicProfile.untitledPack")
+														: t("publicProfile.untitled"))}
+											</p>
+											<p className="text-[11px] text-[var(--color-base-content)]/50">
+												{s.kind === "sap"
+													? t("nav.systemArtPack")
+													: t("publicProfile.metadata")}{" "}
+												· {formatDate(s.created_at)}
+											</p>
 										</div>
-										<span className={`badge ${STATUS_BADGE[s.status] || "badge-info"} !px-2 shrink-0`}>{t("status." + s.status, { defaultValue: s.status })}</span>
+										<span
+											className={`badge ${STATUS_BADGE[s.status] || "badge-info"} !px-2 shrink-0`}
+										>
+											{t("status." + s.status, { defaultValue: s.status })}
+										</span>
 									</div>
 								</Link>
 							</li>
@@ -171,7 +223,9 @@ function UserList({ title, usernames }: { title: string; usernames: string[] }) 
 			) : (
 				<ul className="space-y-1">
 					{usernames.map((u) => (
-						<li key={u}><UserLink>{u}</UserLink></li>
+						<li key={u}>
+							<UserLink>{u}</UserLink>
+						</li>
 					))}
 				</ul>
 			)}

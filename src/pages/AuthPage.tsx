@@ -18,9 +18,7 @@ export default function AuthPage({ mode }: { mode: "login" | "register" }) {
 					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">
 						{mode === "register" ? t("auth.pageTitleRegister") : t("auth.pageTitleSignIn")}
 					</h1>
-					<p className="text-[var(--color-base-content)]/60 mt-1">
-						{t("auth.pageSubtitle")}
-					</p>
+					<p className="text-[var(--color-base-content)]/60 mt-1">{t("auth.pageSubtitle")}</p>
 				</div>
 				<div className="card p-6 md:p-8">
 					{/* key forces a remount when navigating between /app/login and

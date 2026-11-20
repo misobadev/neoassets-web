@@ -16,7 +16,12 @@ export default function CopyButton({ value, className = "" }: { value: string; c
 		}
 	};
 	return (
-		<button type="button" onClick={copy} className={`btn btn-ghost btn-sm gap-1 ${className}`} title={t("common.copy")}>
+		<button
+			type="button"
+			onClick={copy}
+			className={`btn btn-ghost btn-sm gap-1 ${className}`}
+			title={t("common.copy")}
+		>
 			{copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
 			{copied ? t("common.copied") : t("common.copy")}
 		</button>

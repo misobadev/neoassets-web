@@ -2,7 +2,16 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, Trash2, X, Zap } from "lucide-react";
-import { cancelMetadataSubmission, cdnUrl, fetchMetadataGameDetail, fetchPackDetail, trashSubmission, type MediaKind, type MetadataMedia, type PackDetail } from "../lib/api";
+import {
+	cancelMetadataSubmission,
+	cdnUrl,
+	fetchMetadataGameDetail,
+	fetchPackDetail,
+	trashSubmission,
+	type MediaKind,
+	type MetadataMedia,
+	type PackDetail,
+} from "../lib/api";
 import { formatDate } from "../lib/format";
 import Pagination from "../components/Pagination";
 import RegionLabel from "../components/RegionLabel";
@@ -185,7 +194,9 @@ export default function ReviewsPage() {
 				<div className="ml-auto card px-4 py-2 flex items-center gap-2 shrink-0">
 					<Sparkles className="w-5 h-5 text-[var(--color-primary)]" />
 					<div>
-						<p className="text-[11px] uppercase tracking-wider text-[var(--color-base-content)]/50">{t("reviews.experienceEarned")}</p>
+						<p className="text-[11px] uppercase tracking-wider text-[var(--color-base-content)]/50">
+							{t("reviews.experienceEarned")}
+						</p>
 						<p className="text-lg font-bold leading-none">{totalXP.toLocaleString()}</p>
 					</div>
 				</div>
@@ -226,54 +237,77 @@ export default function ReviewsPage() {
 							const boosted = r.status === "approved" && (r.baseXP ?? 0) > 0 && r.xp > (r.baseXP ?? 0);
 							const boostPct = boosted ? Math.round((r.xp / (r.baseXP as number) - 1) * 100) : 0;
 							return (
-						<div key={r.key} className="card card-hover p-4 cursor-pointer" onClick={() => setSelected(r)}>
-							<div className="flex items-center gap-3">
-								{r.cover ? (
-									<img
-										src={mediaUrl(r.cover, r.coverUpdated)}
-										alt=""
-										className="w-14 h-14 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
-										onError={(e) => (e.currentTarget.style.display = "none")}
-									/>
-								) : (
-									<div className="w-14 h-14 rounded-lg bg-[var(--color-base-300)] grid place-items-center shrink-0 text-[var(--color-base-content)]/30">
-										<ImageIcon className="w-6 h-6" />
-									</div>
-								)}
-								<div className="min-w-0 flex-1">
-									<div className="flex items-center gap-2 flex-wrap">
-										<p className="font-semibold truncate text-sm">{r.title}</p>
-										{r.systemName ? <span className="badge badge-ghost badge-sm shrink-0">{r.systemName}</span> : null}
-										<span className="badge badge-ghost badge-sm shrink-0">{t(r.kind === "metadata" ? "reviews.metadata" : "reviews.sap")}</span>
-										{r.newGame ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
-									</div>
-									{(r.changeKinds || []).length > 0 ? (
-										<div className="flex flex-wrap gap-1 mt-1">
-											{(r.changeKinds || []).map((k) => (
-												<span key={k} className="badge badge-outline badge-xs">{kindLabel(k)}</span>
-											))}
-										</div>
-									) : null}
-									<p className="text-xs text-[var(--color-base-content)]/50 mt-1">{formatDate(r.at)}</p>
-								</div>
-								<div className="flex items-center gap-2 shrink-0">
-									{r.status === "approved" && r.xp > 0 ? (
-										boosted ? (
-											<span className="badge badge-lime badge-sm gap-1" title={t("reviews.boostTitle", { pct: boostPct })}>
-												<Zap className="w-3 h-3" />
-												+{r.xp} {t("reviews.experience")} · +{boostPct}%
-											</span>
+								<div
+									key={r.key}
+									className="card card-hover p-4 cursor-pointer"
+									onClick={() => setSelected(r)}
+								>
+									<div className="flex items-center gap-3">
+										{r.cover ? (
+											<img
+												src={mediaUrl(r.cover, r.coverUpdated)}
+												alt=""
+												className="w-14 h-14 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
+												onError={(e) => (e.currentTarget.style.display = "none")}
+											/>
 										) : (
-											<span className="badge badge-primary badge-sm gap-1">
-												<Sparkles className="w-3 h-3" />
-												+{r.xp} {t("reviews.experience")}
+											<div className="w-14 h-14 rounded-lg bg-[var(--color-base-300)] grid place-items-center shrink-0 text-[var(--color-base-content)]/30">
+												<ImageIcon className="w-6 h-6" />
+											</div>
+										)}
+										<div className="min-w-0 flex-1">
+											<div className="flex items-center gap-2 flex-wrap">
+												<p className="font-semibold truncate text-sm">{r.title}</p>
+												{r.systemName ? (
+													<span className="badge badge-ghost badge-sm shrink-0">
+														{r.systemName}
+													</span>
+												) : null}
+												<span className="badge badge-ghost badge-sm shrink-0">
+													{t(r.kind === "metadata" ? "reviews.metadata" : "reviews.sap")}
+												</span>
+												{r.newGame ? (
+													<span className="badge badge-primary badge-sm shrink-0">
+														{t("metadataAdmin.newGame")}
+													</span>
+												) : null}
+											</div>
+											{(r.changeKinds || []).length > 0 ? (
+												<div className="flex flex-wrap gap-1 mt-1">
+													{(r.changeKinds || []).map((k) => (
+														<span key={k} className="badge badge-outline badge-xs">
+															{kindLabel(k)}
+														</span>
+													))}
+												</div>
+											) : null}
+											<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
+												{formatDate(r.at)}
+											</p>
+										</div>
+										<div className="flex items-center gap-2 shrink-0">
+											{r.status === "approved" && r.xp > 0 ? (
+												boosted ? (
+													<span
+														className="badge badge-lime badge-sm gap-1"
+														title={t("reviews.boostTitle", { pct: boostPct })}
+													>
+														<Zap className="w-3 h-3" />+{r.xp} {t("reviews.experience")} · +
+														{boostPct}%
+													</span>
+												) : (
+													<span className="badge badge-primary badge-sm gap-1">
+														<Sparkles className="w-3 h-3" />+{r.xp}{" "}
+														{t("reviews.experience")}
+													</span>
+												)
+											) : null}
+											<span className={`badge ${STATUS_BADGE[r.status]} shrink-0`}>
+												{t("metadataStatus." + r.status, { defaultValue: r.status })}
 											</span>
-										)
-									) : null}
-									<span className={`badge ${STATUS_BADGE[r.status]} shrink-0`}>{t("metadataStatus." + r.status, { defaultValue: r.status })}</span>
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
 							);
 						})}
 					</div>
@@ -282,7 +316,10 @@ export default function ReviewsPage() {
 			)}
 
 			{selected ? (
-				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4" onClick={(e) => e.target === e.currentTarget && setSelected(null)}>
+				<div
+					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4"
+					onClick={(e) => e.target === e.currentTarget && setSelected(null)}
+				>
 					<div className="card w-full max-w-2xl my-8 p-6 space-y-4">
 						<div className="flex items-center justify-between gap-3">
 							<div className="flex items-center gap-2 min-w-0">
@@ -301,10 +338,16 @@ export default function ReviewsPage() {
 								)}
 								<div className="min-w-0">
 									<h2 className="text-lg font-bold truncate">{selected.title}</h2>
-									{selected.systemName ? <p className="text-xs text-[var(--color-base-content)]/60">{selected.systemName}</p> : null}
+									{selected.systemName ? (
+										<p className="text-xs text-[var(--color-base-content)]/60">
+											{selected.systemName}
+										</p>
+									) : null}
 								</div>
 							</div>
-							<span className={`badge ${STATUS_BADGE[selected.status]} shrink-0`}>{t("metadataStatus." + selected.status, { defaultValue: selected.status })}</span>
+							<span className={`badge ${STATUS_BADGE[selected.status]} shrink-0`}>
+								{t("metadataStatus." + selected.status, { defaultValue: selected.status })}
+							</span>
 						</div>
 
 						<div className="grid grid-cols-2 gap-3 text-sm">
@@ -325,21 +368,32 @@ export default function ReviewsPage() {
 							{selected.status === "approved" ? (
 								<div>
 									<p className="label-text">{t("reviews.experienceEarned")}</p>
-									<p className="font-semibold text-[var(--color-primary)]">+{selected.xp} {t("reviews.experience")}</p>
+									<p className="font-semibold text-[var(--color-primary)]">
+										+{selected.xp} {t("reviews.experience")}
+									</p>
 								</div>
 							) : null}
 						</div>
 
 						{/* Submitted / approved text and media. */}
-						{textKinds.length > 0 || publishedMedia.length > 0 || (selected.media || []).length > 0 || (selected.kind === "sap" && pack) ? (
+						{textKinds.length > 0 ||
+						publishedMedia.length > 0 ||
+						(selected.media || []).length > 0 ||
+						(selected.kind === "sap" && pack) ? (
 							<div className="space-y-3">
-								<p className="label-text">{selected.status === "approved" ? t("reviews.approvedContent") : t("reviews.submittedContent")}</p>
+								<p className="label-text">
+									{selected.status === "approved"
+										? t("reviews.approvedContent")
+										: t("reviews.submittedContent")}
+								</p>
 
 								{textKinds.map((k) => (
 									<div key={k} className="rounded-lg border border-[var(--color-base-300)] p-3">
 										<p className="font-medium text-sm mb-1">{kindLabel(k)}</p>
 										<p className="text-sm text-[var(--color-base-content)]/70 whitespace-pre-wrap break-words max-h-64 overflow-y-auto">
-											{textValue(k) || <span className="italic opacity-60">{t("reviews.noComment")}</span>}
+											{textValue(k) || (
+												<span className="italic opacity-60">{t("reviews.noComment")}</span>
+											)}
 										</p>
 									</div>
 								))}
@@ -347,9 +401,16 @@ export default function ReviewsPage() {
 								{/* Submitted media, shown while the item is not yet published. */}
 								{selected.status !== "approved"
 									? (selected.media || []).map((m, i) => (
-											<div key={i} className="rounded-lg border border-[var(--color-base-300)] p-2 space-y-1">
+											<div
+												key={i}
+												className="rounded-lg border border-[var(--color-base-300)] p-2 space-y-1"
+											>
 												{m.kind === "video" ? (
-													<video src={mediaUrl(m.object_key)} controls className="w-full max-h-[45vh] rounded-lg bg-black" />
+													<video
+														src={mediaUrl(m.object_key)}
+														controls
+														className="w-full max-h-[45vh] rounded-lg bg-black"
+													/>
 												) : (
 													<img
 														src={mediaUrl(m.object_key)}
@@ -359,8 +420,14 @@ export default function ReviewsPage() {
 													/>
 												)}
 												<div className="flex items-center gap-2">
-													<span className="text-xs font-medium text-[var(--color-base-content)]/70">{kindLabel(m.kind)}</span>
-													{m.region ? <span className="badge badge-solid-neutral badge-xs"><RegionLabel region={m.region} /></span> : null}
+													<span className="text-xs font-medium text-[var(--color-base-content)]/70">
+														{kindLabel(m.kind)}
+													</span>
+													{m.region ? (
+														<span className="badge badge-solid-neutral badge-xs">
+															<RegionLabel region={m.region} />
+														</span>
+													) : null}
 												</div>
 											</div>
 										))
@@ -368,7 +435,12 @@ export default function ReviewsPage() {
 
 								{publishedMedia.map((m) =>
 									m.kind === "video" ? (
-										<video key={m.id} src={mediaUrl(m.object_key, m.created_at)} controls className="w-full max-h-[45vh] rounded-lg border border-[var(--color-base-300)] bg-black" />
+										<video
+											key={m.id}
+											src={mediaUrl(m.object_key, m.created_at)}
+											controls
+											className="w-full max-h-[45vh] rounded-lg border border-[var(--color-base-300)] bg-black"
+										/>
 									) : (
 										<img
 											key={m.id}
@@ -406,19 +478,31 @@ export default function ReviewsPage() {
 							<div>
 								<p className="label-text">{t("reviews.reviewerComment")}</p>
 								<p className="text-sm text-[var(--color-base-content)]/70 whitespace-pre-wrap">
-									{selected.comment ? selected.comment : <span className="italic text-[var(--color-base-content)]/40">{t("reviews.noComment")}</span>}
+									{selected.comment ? (
+										selected.comment
+									) : (
+										<span className="italic text-[var(--color-base-content)]/40">
+											{t("reviews.noComment")}
+										</span>
+									)}
 								</p>
 							</div>
 						) : null}
 
 						<div className="flex justify-end gap-2">
 							{selected.status === "pending" ? (
-								<button type="button" className="btn btn-error btn-outline mr-auto" onClick={() => setConfirmCancel(true)}>
+								<button
+									type="button"
+									className="btn btn-error btn-outline mr-auto"
+									onClick={() => setConfirmCancel(true)}
+								>
 									<Trash2 className="w-4 h-4" />
 									{t("reviews.cancel")}
 								</button>
 							) : null}
-							<button className="btn btn-ghost" type="button" onClick={() => setSelected(null)}>{t("common.close")}</button>
+							<button className="btn btn-ghost" type="button" onClick={() => setSelected(null)}>
+								{t("common.close")}
+							</button>
 							{selected.status === "approved" && selected.href ? (
 								<Link to={selected.href} className="btn btn-primary" onClick={() => setSelected(null)}>
 									{selected.kind === "metadata" ? t("reviews.viewGame") : t("reviews.viewPack")}
@@ -430,7 +514,10 @@ export default function ReviewsPage() {
 			) : null}
 
 			{confirmCancel && selected ? (
-				<div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && !cancelling && setConfirmCancel(false)}>
+				<div
+					className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+					onClick={(e) => e.target === e.currentTarget && !cancelling && setConfirmCancel(false)}
+				>
 					<div className="card w-full max-w-md p-6 space-y-4">
 						<div className="flex items-start gap-3">
 							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-error)]/15 shrink-0">
@@ -438,12 +525,26 @@ export default function ReviewsPage() {
 							</div>
 							<div className="min-w-0">
 								<h2 className="text-lg font-bold">{t("reviews.cancelConfirmTitle")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">{t("reviews.cancelConfirmBody")}</p>
+								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
+									{t("reviews.cancelConfirmBody")}
+								</p>
 							</div>
 						</div>
 						<div className="flex justify-end gap-2">
-							<button className="btn btn-ghost" type="button" onClick={() => setConfirmCancel(false)} disabled={cancelling}>{t("common.cancel")}</button>
-							<button className="btn btn-error" type="button" onClick={cancelSelected} disabled={cancelling}>
+							<button
+								className="btn btn-ghost"
+								type="button"
+								onClick={() => setConfirmCancel(false)}
+								disabled={cancelling}
+							>
+								{t("common.cancel")}
+							</button>
+							<button
+								className="btn btn-error"
+								type="button"
+								onClick={cancelSelected}
+								disabled={cancelling}
+							>
 								{cancelling ? t("common.loading") : t("reviews.cancel")}
 							</button>
 						</div>

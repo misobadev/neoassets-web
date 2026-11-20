@@ -45,9 +45,13 @@ export default function MediaGrid({
 				const m = g.items[i];
 				const isVideo = m.kind === "video";
 				const d = dims[m.id];
-				const go = (delta: number) => setIndex((prev) => ({ ...prev, [g.kind]: (i + delta + g.items.length) % g.items.length }));
+				const go = (delta: number) =>
+					setIndex((prev) => ({ ...prev, [g.kind]: (i + delta + g.items.length) % g.items.length }));
 				return (
-					<div key={g.kind} className="rounded-xl border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30 overflow-hidden">
+					<div
+						key={g.kind}
+						className="rounded-xl border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30 overflow-hidden"
+					>
 						<div className="relative">
 							{isVideo ? (
 								<video
@@ -57,7 +61,11 @@ export default function MediaGrid({
 									className="w-full h-56 object-contain bg-black"
 									onLoadedMetadata={(e) => {
 										const el = e.currentTarget;
-										if (el) setDims((prev) => ({ ...prev, [m.id]: { w: el.videoWidth, h: el.videoHeight } }));
+										if (el)
+											setDims((prev) => ({
+												...prev,
+												[m.id]: { w: el.videoWidth, h: el.videoHeight },
+											}));
 									}}
 								/>
 							) : (
@@ -69,7 +77,11 @@ export default function MediaGrid({
 									className="w-full h-56 object-contain"
 									onLoad={(e) => {
 										const el = e.currentTarget;
-										if (el) setDims((prev) => ({ ...prev, [m.id]: { w: el.naturalWidth, h: el.naturalHeight } }));
+										if (el)
+											setDims((prev) => ({
+												...prev,
+												[m.id]: { w: el.naturalWidth, h: el.naturalHeight },
+											}));
 									}}
 									onError={(e) => (e.currentTarget.style.display = "none")}
 								/>
@@ -101,12 +113,18 @@ export default function MediaGrid({
 						<div className="px-3 py-2 text-center border-t border-[var(--color-base-300)]">
 							<p className="text-[10px] uppercase tracking-wider text-[var(--color-base-content)]/50">
 								{label(m.kind)}
-								{m.region ? <span className="ml-1 badge badge-solid-neutral badge-xs align-middle"><RegionLabel region={m.region} /></span> : null}
+								{m.region ? (
+									<span className="ml-1 badge badge-solid-neutral badge-xs align-middle">
+										<RegionLabel region={m.region} />
+									</span>
+								) : null}
 							</p>
 							{showMeta ? (
 								<p className="text-[10px] text-[var(--color-base-content)]/40">
 									{d ? `${d.w}×${d.h} · ` : ""}
-									{t("metadataGame.mediaBy", { name: m.submitted_by_name || t("metadataGame.mediaSystem") })}
+									{t("metadataGame.mediaBy", {
+										name: m.submitted_by_name || t("metadataGame.mediaSystem"),
+									})}
 								</p>
 							) : null}
 						</div>

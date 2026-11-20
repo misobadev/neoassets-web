@@ -1,10 +1,38 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
-import { Bell, Gamepad2, HelpCircle, Home, KeyRound, LayoutDashboard, LayoutGrid, ListChecks, LogIn, LogOut, Menu, Moon, Palette, Sun, Terminal, User, UserPlus } from "lucide-react";
+import {
+	Bell,
+	Gamepad2,
+	HelpCircle,
+	Home,
+	KeyRound,
+	LayoutDashboard,
+	LayoutGrid,
+	ListChecks,
+	LogIn,
+	LogOut,
+	Menu,
+	Moon,
+	Palette,
+	Sun,
+	Terminal,
+	User,
+	UserPlus,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSelect from "../components/LanguageSelect";
 import { useReviews } from "../lib/reviews";
-import { userUsername, userRole, isAdmin, isReviewer, isAuthed, fetchMe, clearStoredAuth, logoutRequest, USER_ROLE_KEY } from "../lib/api";
+import {
+	userUsername,
+	userRole,
+	isAdmin,
+	isReviewer,
+	isAuthed,
+	fetchMe,
+	clearStoredAuth,
+	logoutRequest,
+	USER_ROLE_KEY,
+} from "../lib/api";
 
 const THEME_KEY = "ns-theme";
 const SIDEBAR_KEY = "ns-sidebar-collapsed";
@@ -36,13 +64,29 @@ function logout() {
 // icon is shown (with a tooltip for its label). `active` overrides NavLink's
 // prefix matching so overlapping routes (e.g. /app/admin vs /app/admin/users)
 // never highlight two items at once.
-function SideLink({ to, icon, label, end, collapsed, active }: { to: string; icon: ReactNode; label: string; end?: boolean; collapsed: boolean; active?: boolean }) {
+function SideLink({
+	to,
+	icon,
+	label,
+	end,
+	collapsed,
+	active,
+}: {
+	to: string;
+	icon: ReactNode;
+	label: string;
+	end?: boolean;
+	collapsed: boolean;
+	active?: boolean;
+}) {
 	return (
 		<NavLink
 			to={to}
 			end={end}
 			title={collapsed ? label : undefined}
-			className={({ isActive }) => `sap-nav ${(active ?? isActive) ? "sap-nav-active" : ""} ${collapsed ? "justify-center" : ""}`}
+			className={({ isActive }) =>
+				`sap-nav ${(active ?? isActive) ? "sap-nav-active" : ""} ${collapsed ? "justify-center" : ""}`
+			}
 		>
 			{icon}
 			{!collapsed ? <span>{label}</span> : null}
@@ -118,18 +162,28 @@ export default function AppPage() {
 		return <Navigate to="/app/home" replace />;
 	}
 	// Users and donations management are admin-only (reviewers must not see them).
-	if ((location.pathname.startsWith("/app/admin/users") || location.pathname.startsWith("/app/admin/donations")) && !admin) {
+	if (
+		(location.pathname.startsWith("/app/admin/users") || location.pathname.startsWith("/app/admin/donations")) &&
+		!admin
+	) {
 		return <Navigate to="/app/admin" replace />;
 	}
 
 	return (
 		<div className="flex min-h-screen">
 			{/* Sidebar */}
-			<aside className={`sap-sidebar shrink-0 sticky top-0 h-screen flex flex-col gap-1 overflow-y-auto transition-[width] duration-200 ${collapsed ? "sap-collapsed w-16 p-2" : "w-64 p-4"}`}>
+			<aside
+				className={`sap-sidebar shrink-0 sticky top-0 h-screen flex flex-col gap-1 overflow-y-auto transition-[width] duration-200 ${collapsed ? "sap-collapsed w-16 p-2" : "w-64 p-4"}`}
+			>
 				<div className={`flex items-center gap-2 mb-4 ${collapsed ? "flex-col" : ""}`}>
 					<Link to="/app/home" className="flex items-center gap-2.5 min-w-0">
 						<span className="isotype-mask h-9 w-9 shrink-0" aria-hidden="true" />
-						{!collapsed ? <span className="inline-block uppercase tracking-tight text-2xl leading-none"><span className="font-bold">Neo</span><span className="font-normal">Assets</span></span> : null}
+						{!collapsed ? (
+							<span className="inline-block uppercase tracking-tight text-2xl leading-none">
+								<span className="font-bold">Neo</span>
+								<span className="font-normal">Assets</span>
+							</span>
+						) : null}
 					</Link>
 					<button
 						type="button"
@@ -143,26 +197,72 @@ export default function AppPage() {
 
 				<div className="space-y-1">
 					{!collapsed ? <p className="sap-section">{t("nav.menu")}</p> : null}
-					<SideLink to="/app/home" icon={<Home className="w-4 h-4 shrink-0" />} label={t("nav.home")} collapsed={collapsed} />
-					<SideLink to="/app/dashboard" icon={<LayoutDashboard className="w-4 h-4 shrink-0" />} label={t("nav.dashboard")} collapsed={collapsed} />
+					<SideLink
+						to="/app/home"
+						icon={<Home className="w-4 h-4 shrink-0" />}
+						label={t("nav.home")}
+						collapsed={collapsed}
+					/>
+					<SideLink
+						to="/app/dashboard"
+						icon={<LayoutDashboard className="w-4 h-4 shrink-0" />}
+						label={t("nav.dashboard")}
+						collapsed={collapsed}
+					/>
 				</div>
 
 				<div className="sap-divider" />
 
 				<div className="space-y-1">
 					{!collapsed ? <p className="sap-section">{t("nav.submissions")}</p> : null}
-					<SideLink to="/app/metadata" icon={<Gamepad2 className="w-4 h-4 shrink-0" />} label={t("nav.gameMetadata")} active={path === "/app/metadata" || path.startsWith("/app/metadata/")} collapsed={collapsed} />
-					<SideLink to="/app/sap" icon={<Palette className="w-4 h-4 shrink-0" />} label={t("nav.systemArtPack")} end collapsed={collapsed} />
-					{authed ? <SideLink to="/app/contributions" icon={<ListChecks className="w-4 h-4 shrink-0" />} label={t("nav.myReviews")} collapsed={collapsed} /> : null}
+					<SideLink
+						to="/app/metadata"
+						icon={<Gamepad2 className="w-4 h-4 shrink-0" />}
+						label={t("nav.gameMetadata")}
+						active={path === "/app/metadata" || path.startsWith("/app/metadata/")}
+						collapsed={collapsed}
+					/>
+					<SideLink
+						to="/app/sap"
+						icon={<Palette className="w-4 h-4 shrink-0" />}
+						label={t("nav.systemArtPack")}
+						end
+						collapsed={collapsed}
+					/>
+					{authed ? (
+						<SideLink
+							to="/app/contributions"
+							icon={<ListChecks className="w-4 h-4 shrink-0" />}
+							label={t("nav.myReviews")}
+							collapsed={collapsed}
+						/>
+					) : null}
 				</div>
 
 				{/* Help */}
 				<div className="sap-divider" />
 				<div className="space-y-1">
 					{!collapsed ? <p className="sap-section">{t("nav.help")}</p> : null}
-					<SideLink to="/app/guide" icon={<HelpCircle className="w-4 h-4 shrink-0" />} label={t("nav.rewardsGuide")} collapsed={collapsed} />
-					<SideLink to="/app/docs" icon={<Terminal className="w-4 h-4 shrink-0" />} label={t("nav.apiDocs")} collapsed={collapsed} />
-					{authed ? <SideLink to="/app/developer" icon={<KeyRound className="w-4 h-4 shrink-0" />} label={t("nav.developer")} collapsed={collapsed} /> : null}
+					<SideLink
+						to="/app/guide"
+						icon={<HelpCircle className="w-4 h-4 shrink-0" />}
+						label={t("nav.rewardsGuide")}
+						collapsed={collapsed}
+					/>
+					<SideLink
+						to="/app/docs"
+						icon={<Terminal className="w-4 h-4 shrink-0" />}
+						label={t("nav.apiDocs")}
+						collapsed={collapsed}
+					/>
+					{authed ? (
+						<SideLink
+							to="/app/developer"
+							icon={<KeyRound className="w-4 h-4 shrink-0" />}
+							label={t("nav.developer")}
+							collapsed={collapsed}
+						/>
+					) : null}
 					<LanguageSelect collapsed={collapsed} />
 				</div>
 
@@ -174,7 +274,12 @@ export default function AppPage() {
 						<div className="sap-divider" />
 						<div className="space-y-1">
 							{!collapsed ? <p className="sap-section">{t("nav.admin")}</p> : null}
-							<SideLink to="/app/admin" icon={<LayoutGrid className="w-4 h-4 shrink-0" />} label={t("nav.adminOverview")} collapsed={collapsed} />
+							<SideLink
+								to="/app/admin"
+								icon={<LayoutGrid className="w-4 h-4 shrink-0" />}
+								label={t("nav.adminOverview")}
+								collapsed={collapsed}
+							/>
 						</div>
 					</>
 				) : null}
@@ -223,7 +328,11 @@ export default function AppPage() {
 					</div>
 				) : (
 					<div className="space-y-2 pt-2">
-						{!collapsed ? <p className="text-[11px] font-bold uppercase tracking-wider text-[#0f2145]/70 px-2">{t("nav.signInToContribute")}</p> : null}
+						{!collapsed ? (
+							<p className="text-[11px] font-bold uppercase tracking-wider text-[#0f2145]/70 px-2">
+								{t("nav.signInToContribute")}
+							</p>
+						) : null}
 						<Link to="/app/register" className="sap-auth-btn" title={t("nav.createAccount")}>
 							<UserPlus className="w-4 h-4 shrink-0" />
 							{!collapsed ? t("nav.createAccount") : null}
@@ -255,17 +364,30 @@ export default function AppPage() {
 				{/* App footer */}
 				<footer className="sticky bottom-0 z-30 shrink-0 border-t border-base-300 bg-base-100/90 backdrop-blur py-4">
 					<div className="w-full px-4 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
-						<p className="text-xs text-base-content/60">
-							{t("footer.tagline")}
-						</p>
+						<p className="text-xs text-base-content/60">{t("footer.tagline")}</p>
 						<div className="flex items-center gap-4 text-xs text-base-content/60">
-							<a href="https://neostation.dev" target="_blank" rel="noopener noreferrer" className="hover:text-base-content">
+							<a
+								href="https://neostation.dev"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="hover:text-base-content"
+							>
 								NeoStation Frontend
 							</a>
-							<a href="https://discord.gg/xE2kgKsRVq" target="_blank" rel="noopener noreferrer" className="hover:text-base-content">
+							<a
+								href="https://discord.gg/xE2kgKsRVq"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="hover:text-base-content"
+							>
 								Discord
 							</a>
-							<a href="https://www.patreon.com/cw/NeoAssets" target="_blank" rel="noopener noreferrer" className="hover:text-base-content">
+							<a
+								href="https://www.patreon.com/cw/NeoAssets"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="hover:text-base-content"
+							>
 								Patreon
 							</a>
 						</div>

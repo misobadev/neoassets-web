@@ -21,7 +21,10 @@ export default function Avatar({
 			{avatarKey ? (
 				<img src={cdnUrl(avatarKey)} alt="" className="w-full h-full object-cover" />
 			) : (
-				<span className="font-bold text-[var(--color-primary-soft)]" style={{ fontSize: Math.round(size * 0.45) }}>
+				<span
+					className="font-bold text-[var(--color-primary-soft)]"
+					style={{ fontSize: Math.round(size * 0.45) }}
+				>
 					{(name || "?").slice(0, 1).toUpperCase()}
 				</span>
 			)}

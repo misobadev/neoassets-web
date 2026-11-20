@@ -20,26 +20,26 @@ npm run typecheck  # tsc -b --noEmit
 
 ## Environment (Vite)
 
-| var                   | default                                        | purpose                     |
-|-----------------------|------------------------------------------------|-----------------------------|
-| `VITE_ASSETS_API_URL` | `https://neoassets.dev`                        | base URL of the Go API      |
-| `VITE_CDN_BASE`       | `https://cdn.neoassets.dev`                    | R2 public custom domain     |
+| var                   | default                     | purpose                 |
+| --------------------- | --------------------------- | ----------------------- |
+| `VITE_ASSETS_API_URL` | `https://neoassets.dev`     | base URL of the Go API  |
+| `VITE_CDN_BASE`       | `https://cdn.neoassets.dev` | R2 public custom domain |
 
 `VITE_CDN_BASE` is used to build the public URL of every uploaded object:
 `<CDN_BASE>/<object_key>`. The custom domain is public; objects are not signed.
 
 ## Routes
 
-| path                         | view                              |
-|------------------------------|-----------------------------------|
-| `/`                          | LandingPage (approved packs)      |
-| `/app`                       | AppPage shell (auth required)     |
-| `/app/submissions`           | SubmissionsView (list of cards)   |
-| `/app/submissions/new`       | SubmissionEditor (new)            |
-| `/app/submissions/:id`       | SubmissionEditor (edit)           |
-| `/app/admin`                 | AdminView (admin only)            |
-| `/app/docs`                  | ApiDocsPage (scraping API docs)   |
-| `/app/developer`             | DeveloperPage (apps + API keys)   |
+| path                   | view                            |
+| ---------------------- | ------------------------------- |
+| `/`                    | LandingPage (approved packs)    |
+| `/app`                 | AppPage shell (auth required)   |
+| `/app/submissions`     | SubmissionsView (list of cards) |
+| `/app/submissions/new` | SubmissionEditor (new)          |
+| `/app/submissions/:id` | SubmissionEditor (edit)         |
+| `/app/admin`           | AdminView (admin only)          |
+| `/app/docs`            | ApiDocsPage (scraping API docs) |
+| `/app/developer`       | DeveloperPage (apps + API keys) |
 
 ## Submission lifecycle
 

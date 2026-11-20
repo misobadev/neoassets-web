@@ -15,7 +15,19 @@ import {
 	type MetadataSystem,
 	type Region,
 } from "../lib/api";
-import { IMAGE_ACCEPT, MAX_DESCRIPTION_LENGTH, VIDEO_ACCEPT, VIDEO_FPS, VIDEO_FPS_MAX, VIDEO_FPS_MIN, VIDEO_MAX_SECONDS, VIDEO_MIN_SECONDS, aspectLabel, checkVideoMeasurement, measureVideo } from "../lib/media";
+import {
+	IMAGE_ACCEPT,
+	MAX_DESCRIPTION_LENGTH,
+	VIDEO_ACCEPT,
+	VIDEO_FPS,
+	VIDEO_FPS_MAX,
+	VIDEO_FPS_MIN,
+	VIDEO_MAX_SECONDS,
+	VIDEO_MIN_SECONDS,
+	aspectLabel,
+	checkVideoMeasurement,
+	measureVideo,
+} from "../lib/media";
 import { GAME_TYPES } from "../lib/gameTypes";
 import { uploadWithProgress } from "../lib/upload";
 import { hashRomFile } from "../lib/romhash";
@@ -39,7 +51,16 @@ interface RomRow {
 }
 
 let romSeq = 0;
-const newRomRow = (): RomRow => ({ key: `rom-${++romSeq}`, region: DEFAULT_REGION, name: "", size: "", crc: "", md5: "", sha1: "", sha256: "" });
+const newRomRow = (): RomRow => ({
+	key: `rom-${++romSeq}`,
+	region: DEFAULT_REGION,
+	name: "",
+	size: "",
+	crc: "",
+	md5: "",
+	sha1: "",
+	sha256: "",
+});
 
 function fmtBytes(bytes: number): string {
 	if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
@@ -96,9 +117,18 @@ function FilePreview({ file }: { file: File }) {
 	}, [file]);
 	if (!url) return null;
 	return file.type.startsWith("video/") ? (
-		<video src={url} controls muted className="w-full max-h-56 rounded-lg border border-[var(--color-base-300)] bg-black" />
+		<video
+			src={url}
+			controls
+			muted
+			className="w-full max-h-56 rounded-lg border border-[var(--color-base-300)] bg-black"
+		/>
 	) : (
-		<img src={url} alt="" className="w-full max-h-56 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]/40" />
+		<img
+			src={url}
+			alt=""
+			className="w-full max-h-56 object-contain rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]/40"
+		/>
 	);
 }
 
@@ -127,7 +157,13 @@ export default function NewGamePage() {
 
 	const [mediaRows, setMediaRows] = useState<Partial<Record<MediaKind, MediaRow[]>>>({});
 	const [romRows, setRomRows] = useState<RomRow[]>([newRomRow()]);
-	const [videoMeta, setVideoMeta] = useState<{ duration: number; width: number; height: number; fps: number; aspect: string } | null>(null);
+	const [videoMeta, setVideoMeta] = useState<{
+		duration: number;
+		width: number;
+		height: number;
+		fps: number;
+		aspect: string;
+	} | null>(null);
 	const [videoError, setVideoError] = useState<string | null>(null);
 	const [fpsWarning, setFpsWarning] = useState<string | null>(null);
 
@@ -172,7 +208,10 @@ export default function NewGamePage() {
 		return mediaRows[kind] ?? [newMediaRow()];
 	}
 	function updateMediaRow(kind: MediaKind, index: number, patch: Partial<MediaRow>) {
-		setMediaRows((prev) => ({ ...prev, [kind]: (prev[kind] ?? [newMediaRow()]).map((r, i) => (i === index ? { ...r, ...patch } : r)) }));
+		setMediaRows((prev) => ({
+			...prev,
+			[kind]: (prev[kind] ?? [newMediaRow()]).map((r, i) => (i === index ? { ...r, ...patch } : r)),
+		}));
 	}
 	function addMediaRow(kind: MediaKind) {
 		setMediaRows((prev) => ({ ...prev, [kind]: [...(prev[kind] ?? [newMediaRow()]), newMediaRow()] }));
@@ -194,9 +233,24 @@ export default function NewGamePage() {
 	async function onPickRomFile(key: string, file: File) {
 		const isArchive =
 			/\.(zip|rar|7z)$/i.test(file.name) ||
-			["application/zip", "application/x-zip-compressed", "application/x-rar-compressed", "application/vnd.rar", "application/x-7z-compressed"].includes(file.type);
+			[
+				"application/zip",
+				"application/x-zip-compressed",
+				"application/x-rar-compressed",
+				"application/vnd.rar",
+				"application/x-7z-compressed",
+			].includes(file.type);
 		if (isArchive) {
-			updateRomRow(key, { hashing: false, duplicate: false, name: file.name, size: "", crc: "", md5: "", sha1: "", sha256: "" });
+			updateRomRow(key, {
+				hashing: false,
+				duplicate: false,
+				name: file.name,
+				size: "",
+				crc: "",
+				md5: "",
+				sha1: "",
+				sha256: "",
+			});
 			setStatus({ text: t("metadataSubmit.form.romZipNote"), tone: "info" });
 			return;
 		}
@@ -205,9 +259,23 @@ export default function NewGamePage() {
 			const h = await hashRomFile(file);
 			const duplicate = romRows.some((r) => {
 				if (r.key === key) return false;
-				return (h.crc && r.crc === h.crc) || (h.md5 && r.md5 === h.md5) || (h.sha1 && r.sha1 === h.sha1) || (h.sha256 && r.sha256 === h.sha256);
+				return (
+					(h.crc && r.crc === h.crc) ||
+					(h.md5 && r.md5 === h.md5) ||
+					(h.sha1 && r.sha1 === h.sha1) ||
+					(h.sha256 && r.sha256 === h.sha256)
+				);
 			});
-			updateRomRow(key, { hashing: false, duplicate, name: h.name, size: String(h.size), crc: h.crc, md5: h.md5, sha1: h.sha1, sha256: h.sha256 });
+			updateRomRow(key, {
+				hashing: false,
+				duplicate,
+				name: h.name,
+				size: String(h.size),
+				crc: h.crc,
+				md5: h.md5,
+				sha1: h.sha1,
+				sha256: h.sha256,
+			});
 			if (duplicate) setStatus({ text: t("metadataSubmit.form.romDuplicate"), tone: "error" });
 		} catch {
 			updateRomRow(key, { hashing: false });
@@ -290,7 +358,10 @@ export default function NewGamePage() {
 
 		// Merge the name and release rows by region so each region carries its
 		// own name and/or release date.
-		const byRegion = new Map<string, { region: string; name?: string; release_year?: number; release_month?: number }>();
+		const byRegion = new Map<
+			string,
+			{ region: string; name?: string; release_year?: number; release_month?: number }
+		>();
 		for (const row of nameRows) {
 			const region = row.region.trim();
 			const value = row.value.trim();
@@ -312,7 +383,9 @@ export default function NewGamePage() {
 		// The canonical name/release come from the highest-priority region (the
 		// catalog order), matching how the backend resolves the primary.
 		const priority = new Map(regions.map((r, i) => [r.name, i]));
-		const canonical = [...regionList].sort((a, b) => (priority.get(a.region) ?? 999) - (priority.get(b.region) ?? 999))[0];
+		const canonical = [...regionList].sort(
+			(a, b) => (priority.get(a.region) ?? 999) - (priority.get(b.region) ?? 999),
+		)[0];
 		payload.name = canonical?.name || primaryName;
 		if (canonical?.release_year) {
 			payload.release_year = canonical.release_year;
@@ -342,15 +415,27 @@ export default function NewGamePage() {
 		if (!primaryName) return setStatus({ text: t("metadata.newGame.needName"), tone: "error" });
 		if (existing) return setStatus({ text: t("metadata.newGame.existingBody"), tone: "error" });
 		if (description.trim().length > MAX_DESCRIPTION_LENGTH) {
-			return setStatus({ text: t("metadataSubmit.status.descriptionTooLong", { max: MAX_DESCRIPTION_LENGTH }), tone: "error" });
+			return setStatus({
+				text: t("metadataSubmit.status.descriptionTooLong", { max: MAX_DESCRIPTION_LENGTH }),
+				tone: "error",
+			});
 		}
-		if (rowsFor(VIDEO_KIND)[0]?.file && videoError) return setStatus({ text: t("metadataSubmit.status.fixVideo"), tone: "error" });
-		if (romRows.some((r) => r.duplicate)) return setStatus({ text: t("metadataSubmit.form.romDuplicate"), tone: "error" });
+		if (rowsFor(VIDEO_KIND)[0]?.file && videoError)
+			return setStatus({ text: t("metadataSubmit.status.fixVideo"), tone: "error" });
+		if (romRows.some((r) => r.duplicate))
+			return setStatus({ text: t("metadataSubmit.form.romDuplicate"), tone: "error" });
 
 		setBusy(true);
 		setStatus({ text: t("metadataSubmit.status.creating"), tone: "info" });
 		try {
-			const uploaded: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region?: string }[] = [];
+			const uploaded: {
+				kind: MediaKind;
+				object_key: string;
+				file_name: string;
+				mime_type: string;
+				size: number;
+				region?: string;
+			}[] = [];
 			for (const kind of Object.keys(mediaRows) as MediaKind[]) {
 				const isRegional = REGION_KINDS.includes(kind);
 				for (const row of mediaRows[kind] ?? []) {
@@ -358,13 +443,32 @@ export default function NewGamePage() {
 					if (!file) continue;
 					const mime = file.type || "application/octet-stream";
 					const fileRegion = isRegional ? row.region.trim() : "";
-					const resp = await requestMetadataUploadUrl({ system_id: systemId, kind, file_name: file.name, mime_type: mime, size: file.size, region: fileRegion });
+					const resp = await requestMetadataUploadUrl({
+						system_id: systemId,
+						kind,
+						file_name: file.name,
+						mime_type: mime,
+						size: file.size,
+						region: fileRegion,
+					});
 					await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(p));
 					setProgress(100);
-					uploaded.push({ kind, object_key: resp.object_key, file_name: file.name, mime_type: mime, size: file.size, region: fileRegion });
+					uploaded.push({
+						kind,
+						object_key: resp.object_key,
+						file_name: file.name,
+						mime_type: mime,
+						size: file.size,
+						region: fileRegion,
+					});
 				}
 			}
-			await createMetadataSubmission({ system_id: systemId, kind: "new_game", payload: buildPayload(), files: uploaded });
+			await createMetadataSubmission({
+				system_id: systemId,
+				kind: "new_game",
+				payload: buildPayload(),
+				files: uploaded,
+			});
 			setStatus({ text: t("metadata.newGame.submitted"), tone: "success" });
 			setProgress(null);
 			setDone(true);
@@ -386,8 +490,18 @@ export default function NewGamePage() {
 					<h1 className="text-xl font-bold">{t("metadata.newGame.submittedTitle")}</h1>
 					<p className="text-sm text-[var(--color-base-content)]/70">{t("metadata.newGame.submittedBody")}</p>
 					<div className="flex justify-center gap-2">
-						<button className="btn btn-outline" onClick={() => { setDone(false); resetForm(); }}>{t("metadata.newGame.addAnother")}</button>
-						<Link to="/app/contributions" className="btn btn-primary">{t("reviews.title")}</Link>
+						<button
+							className="btn btn-outline"
+							onClick={() => {
+								setDone(false);
+								resetForm();
+							}}
+						>
+							{t("metadata.newGame.addAnother")}
+						</button>
+						<Link to="/app/contributions" className="btn btn-primary">
+							{t("reviews.title")}
+						</Link>
 					</div>
 				</div>
 			</div>
@@ -397,7 +511,11 @@ export default function NewGamePage() {
 	return (
 		<div className="space-y-6 max-w-3xl mx-auto">
 			<div className="flex items-center gap-3">
-				<Link to={systemId ? `/app/metadata/${systemId}` : "/app/metadata"} className="btn btn-ghost !p-2" aria-label={t("common.back")}>
+				<Link
+					to={systemId ? `/app/metadata/${systemId}` : "/app/metadata"}
+					className="btn btn-ghost !p-2"
+					aria-label={t("common.back")}
+				>
 					<ChevronLeft className="w-5 h-5" />
 				</Link>
 				<div>
@@ -410,19 +528,42 @@ export default function NewGamePage() {
 			<section className="card p-6 space-y-4">
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<div>
-						<label className="label-text" htmlFor="ng-system">{t("metadata.newGame.system")}</label>
-						<select id="ng-system" className="select w-full" value={systemId} onChange={(e) => { setSystemId(e.target.value); setExisting(null); }} disabled={busy}>
+						<label className="label-text" htmlFor="ng-system">
+							{t("metadata.newGame.system")}
+						</label>
+						<select
+							id="ng-system"
+							className="select w-full"
+							value={systemId}
+							onChange={(e) => {
+								setSystemId(e.target.value);
+								setExisting(null);
+							}}
+							disabled={busy}
+						>
 							<option value="">{t("metadata.newGame.systemPlaceholder")}</option>
 							{(systems || []).map((s) => (
-								<option key={s.id} value={s.id}>{s.name}</option>
+								<option key={s.id} value={s.id}>
+									{s.name}
+								</option>
 							))}
 						</select>
 					</div>
 					<div>
-						<label className="label-text" htmlFor="ng-type">{t("metadataSubmit.textTypes.type")}</label>
-						<select id="ng-type" className="select w-full" value={type} onChange={(e) => setType(e.target.value as (typeof GAME_TYPES)[number])} disabled={busy}>
+						<label className="label-text" htmlFor="ng-type">
+							{t("metadataSubmit.textTypes.type")}
+						</label>
+						<select
+							id="ng-type"
+							className="select w-full"
+							value={type}
+							onChange={(e) => setType(e.target.value as (typeof GAME_TYPES)[number])}
+							disabled={busy}
+						>
 							{GAME_TYPES.map((g) => (
-								<option key={g} value={g}>{g}</option>
+								<option key={g} value={g}>
+									{g}
+								</option>
 							))}
 						</select>
 					</div>
@@ -431,7 +572,12 @@ export default function NewGamePage() {
 				<div className="space-y-2">
 					<div className="flex items-center justify-between gap-2">
 						<label className="label-text">{t("metadataSubmit.textTypes.name")}</label>
-						<button type="button" className="btn btn-ghost btn-xs" onClick={() => setNameRows((rows) => [...rows, { region: "", value: "" }])} disabled={busy}>
+						<button
+							type="button"
+							className="btn btn-ghost btn-xs"
+							onClick={() => setNameRows((rows) => [...rows, { region: "", value: "" }])}
+							disabled={busy}
+						>
 							<Plus className="w-3.5 h-3.5" />
 							{t("metadataSubmit.form.addAnotherRegion")}
 						</button>
@@ -448,7 +594,9 @@ export default function NewGamePage() {
 								>
 									<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
 									{regions.map((r) => (
-										<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
+										<option key={r.id} value={r.name}>
+											{t("metadata.regions." + r.id, { defaultValue: r.name })}
+										</option>
 									))}
 								</select>
 							</div>
@@ -458,7 +606,10 @@ export default function NewGamePage() {
 									value={row.value}
 									placeholder={t("metadata.newGame.namePlaceholder")}
 									disabled={busy}
-									onChange={(e) => { updateNameRow(i, { value: e.target.value }); setShowSuggestions(true); }}
+									onChange={(e) => {
+										updateNameRow(i, { value: e.target.value });
+										setShowSuggestions(true);
+									}}
 									onFocus={() => i === 0 && setShowSuggestions(true)}
 									onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
 								/>
@@ -478,20 +629,30 @@ export default function NewGamePage() {
 												}}
 											>
 												<p className="text-sm font-medium truncate">{g.name}</p>
-												<p className="text-xs text-[var(--color-base-content)]/50">{g.release_year ? `${g.release_year}` : t("metadata.na")}</p>
+												<p className="text-xs text-[var(--color-base-content)]/50">
+													{g.release_year ? `${g.release_year}` : t("metadata.na")}
+												</p>
 											</button>
 										))}
 									</div>
 								) : null}
 							</div>
 							{nameRows.length > 1 ? (
-								<button type="button" className="btn btn-ghost btn-sm !px-2 shrink-0" onClick={() => setNameRows((rows) => rows.filter((_, idx) => idx !== i))} disabled={busy} aria-label={t("common.delete")}>
+								<button
+									type="button"
+									className="btn btn-ghost btn-sm !px-2 shrink-0"
+									onClick={() => setNameRows((rows) => rows.filter((_, idx) => idx !== i))}
+									disabled={busy}
+									aria-label={t("common.delete")}
+								>
 									<Trash2 className="w-4 h-4" />
 								</button>
 							) : null}
 						</div>
 					))}
-					<p className="text-xs text-[var(--color-base-content)]/50">{t("metadata.newGame.nameSearchHint")}</p>
+					<p className="text-xs text-[var(--color-base-content)]/50">
+						{t("metadata.newGame.nameSearchHint")}
+					</p>
 				</div>
 
 				{existing ? (
@@ -499,8 +660,13 @@ export default function NewGamePage() {
 						<AlertTriangle className="w-4 h-4 text-[var(--color-warning)] shrink-0 mt-0.5" />
 						<div className="min-w-0 space-y-1">
 							<p className="text-sm font-semibold">{t("metadata.newGame.existingTitle")}</p>
-							<p className="text-xs text-[var(--color-base-content)]/70">{t("metadata.newGame.existingBody")}</p>
-							<Link to={`/app/metadata/${systemId}/game/${existing.id}`} className="btn btn-warning btn-sm w-fit">
+							<p className="text-xs text-[var(--color-base-content)]/70">
+								{t("metadata.newGame.existingBody")}
+							</p>
+							<Link
+								to={`/app/metadata/${systemId}/game/${existing.id}`}
+								className="btn btn-warning btn-sm w-fit"
+							>
 								{t("metadata.newGame.openGame")}
 							</Link>
 						</div>
@@ -512,43 +678,103 @@ export default function NewGamePage() {
 			<section className="card p-6 space-y-4">
 				<h2 className="font-semibold">{t("metadata.newGame.fieldsTitle")}</h2>
 				<div>
-					<label className="label-text" htmlFor="ng-description">{t("metadataSubmit.textTypes.description")}</label>
-					<textarea id="ng-description" className="input w-full min-h-32" maxLength={MAX_DESCRIPTION_LENGTH} value={description} onChange={(e) => setDescription(e.target.value)} disabled={busy} />
+					<label className="label-text" htmlFor="ng-description">
+						{t("metadataSubmit.textTypes.description")}
+					</label>
+					<textarea
+						id="ng-description"
+						className="input w-full min-h-32"
+						maxLength={MAX_DESCRIPTION_LENGTH}
+						value={description}
+						onChange={(e) => setDescription(e.target.value)}
+						disabled={busy}
+					/>
 					<div className="flex items-center justify-between gap-2 mt-1">
-						<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.form.descriptionNote", { max: MAX_DESCRIPTION_LENGTH })}</p>
-						<span className={`text-xs shrink-0 ${description.length >= MAX_DESCRIPTION_LENGTH ? "text-[var(--color-error)]" : "text-[var(--color-base-content)]/50"}`}>
-							{t("metadataSubmit.form.charCount", { count: description.length, max: MAX_DESCRIPTION_LENGTH })}
+						<p className="text-xs text-[var(--color-base-content)]/50">
+							{t("metadataSubmit.form.descriptionNote", { max: MAX_DESCRIPTION_LENGTH })}
+						</p>
+						<span
+							className={`text-xs shrink-0 ${description.length >= MAX_DESCRIPTION_LENGTH ? "text-[var(--color-error)]" : "text-[var(--color-base-content)]/50"}`}
+						>
+							{t("metadataSubmit.form.charCount", {
+								count: description.length,
+								max: MAX_DESCRIPTION_LENGTH,
+							})}
 						</span>
 					</div>
 				</div>
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<div>
-						<label className="label-text" htmlFor="ng-genre">{t("metadataSubmit.textTypes.genre")}</label>
-						<select id="ng-genre" className="select w-full" value={genre} onChange={(e) => setGenre(e.target.value)} disabled={busy}>
+						<label className="label-text" htmlFor="ng-genre">
+							{t("metadataSubmit.textTypes.genre")}
+						</label>
+						<select
+							id="ng-genre"
+							className="select w-full"
+							value={genre}
+							onChange={(e) => setGenre(e.target.value)}
+							disabled={busy}
+						>
 							<option value="">{t("metadataSubmit.form.genrePlaceholder")}</option>
 							{genres.map((g) => (
-								<option key={g.id} value={g.name}>{t("metadata.genres." + g.id, { defaultValue: g.name })}</option>
+								<option key={g.id} value={g.name}>
+									{t("metadata.genres." + g.id, { defaultValue: g.name })}
+								</option>
 							))}
 						</select>
 					</div>
 					<div>
-						<label className="label-text" htmlFor="ng-developer">{t("metadataSubmit.textTypes.developer")}</label>
-						<input id="ng-developer" className="input w-full" value={developer} onChange={(e) => setDeveloper(e.target.value)} disabled={busy} />
+						<label className="label-text" htmlFor="ng-developer">
+							{t("metadataSubmit.textTypes.developer")}
+						</label>
+						<input
+							id="ng-developer"
+							className="input w-full"
+							value={developer}
+							onChange={(e) => setDeveloper(e.target.value)}
+							disabled={busy}
+						/>
 					</div>
 					<div>
-						<label className="label-text" htmlFor="ng-publisher">{t("metadataSubmit.textTypes.publisher")}</label>
-						<input id="ng-publisher" className="input w-full" value={publisher} onChange={(e) => setPublisher(e.target.value)} disabled={busy} />
+						<label className="label-text" htmlFor="ng-publisher">
+							{t("metadataSubmit.textTypes.publisher")}
+						</label>
+						<input
+							id="ng-publisher"
+							className="input w-full"
+							value={publisher}
+							onChange={(e) => setPublisher(e.target.value)}
+							disabled={busy}
+						/>
 					</div>
 					<div>
-						<label className="label-text" htmlFor="ng-rating">{t("metadataSubmit.textTypes.rating")}</label>
-						<input id="ng-rating" type="number" min={1} max={10} step={1} className="input w-full" value={rating} onChange={(e) => setRating(e.target.value)} placeholder="1-10" disabled={busy} />
+						<label className="label-text" htmlFor="ng-rating">
+							{t("metadataSubmit.textTypes.rating")}
+						</label>
+						<input
+							id="ng-rating"
+							type="number"
+							min={1}
+							max={10}
+							step={1}
+							className="input w-full"
+							value={rating}
+							onChange={(e) => setRating(e.target.value)}
+							placeholder="1-10"
+							disabled={busy}
+						/>
 					</div>
 				</div>
 
 				<div className="space-y-2">
 					<div className="flex items-center justify-between gap-2">
 						<label className="label-text">{t("metadataSubmit.textTypes.release")}</label>
-						<button type="button" className="btn btn-ghost btn-xs" onClick={() => setReleaseRows((rows) => [...rows, { region: "", value: "" }])} disabled={busy}>
+						<button
+							type="button"
+							className="btn btn-ghost btn-xs"
+							onClick={() => setReleaseRows((rows) => [...rows, { region: "", value: "" }])}
+							disabled={busy}
+						>
 							<Plus className="w-3.5 h-3.5" />
 							{t("metadataSubmit.form.addAnotherRegion")}
 						</button>
@@ -565,7 +791,9 @@ export default function NewGamePage() {
 								>
 									<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
 									{regions.map((r) => (
-										<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
+										<option key={r.id} value={r.name}>
+											{t("metadata.regions." + r.id, { defaultValue: r.name })}
+										</option>
 									))}
 								</select>
 							</div>
@@ -579,7 +807,13 @@ export default function NewGamePage() {
 								disabled={busy}
 							/>
 							{releaseRows.length > 1 ? (
-								<button type="button" className="btn btn-ghost btn-sm !px-2 shrink-0" onClick={() => setReleaseRows((rows) => rows.filter((_, idx) => idx !== i))} disabled={busy} aria-label={t("common.delete")}>
+								<button
+									type="button"
+									className="btn btn-ghost btn-sm !px-2 shrink-0"
+									onClick={() => setReleaseRows((rows) => rows.filter((_, idx) => idx !== i))}
+									disabled={busy}
+									aria-label={t("common.delete")}
+								>
 									<Trash2 className="w-4 h-4" />
 								</button>
 							) : null}
@@ -599,7 +833,12 @@ export default function NewGamePage() {
 							<div className="flex items-center justify-between gap-2">
 								<p className="label-text">{t(MEDIA_LABEL[kind])}</p>
 								{isRegional ? (
-									<button type="button" className="btn btn-ghost btn-xs" onClick={() => addMediaRow(kind)} disabled={busy}>
+									<button
+										type="button"
+										className="btn btn-ghost btn-xs"
+										onClick={() => addMediaRow(kind)}
+										disabled={busy}
+									>
 										<Plus className="w-3.5 h-3.5" />
 										{t("metadataSubmit.form.addAnotherRegion")}
 									</button>
@@ -618,7 +857,9 @@ export default function NewGamePage() {
 											>
 												<option value="">{t("metadataSubmit.form.regionPlaceholder")}</option>
 												{regions.map((r) => (
-													<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
+													<option key={r.id} value={r.name}>
+														{t("metadata.regions." + r.id, { defaultValue: r.name })}
+													</option>
 												))}
 											</select>
 										</div>
@@ -627,7 +868,12 @@ export default function NewGamePage() {
 										{row.file ? (
 											<>
 												<FilePreview file={row.file} />
-												<button type="button" className="btn btn-ghost btn-xs" onClick={() => updateMediaRow(kind, i, { file: null })} disabled={busy}>
+												<button
+													type="button"
+													className="btn btn-ghost btn-xs"
+													onClick={() => updateMediaRow(kind, i, { file: null })}
+													disabled={busy}
+												>
 													{t("common.delete")}
 												</button>
 											</>
@@ -635,12 +881,28 @@ export default function NewGamePage() {
 											<label className="btn btn-outline cursor-pointer">
 												<Upload className="w-4 h-4" />
 												{t("metadataSubmit.form.chooseImage")}
-												<input type="file" accept={IMAGE_ACCEPT} className="hidden" disabled={busy} onChange={(e) => { const f = e.target.files?.[0] || null; if (f) updateMediaRow(kind, i, { file: f }); e.target.value = ""; }} />
+												<input
+													type="file"
+													accept={IMAGE_ACCEPT}
+													className="hidden"
+													disabled={busy}
+													onChange={(e) => {
+														const f = e.target.files?.[0] || null;
+														if (f) updateMediaRow(kind, i, { file: f });
+														e.target.value = "";
+													}}
+												/>
 											</label>
 										)}
 									</div>
 									{isRegional && rows.length > 1 ? (
-										<button type="button" className="btn btn-ghost btn-sm !px-2 shrink-0" onClick={() => removeMediaRow(kind, i)} disabled={busy} aria-label={t("common.delete")}>
+										<button
+											type="button"
+											className="btn btn-ghost btn-sm !px-2 shrink-0"
+											onClick={() => removeMediaRow(kind, i)}
+											disabled={busy}
+											aria-label={t("common.delete")}
+										>
 											<Trash2 className="w-4 h-4" />
 										</button>
 									) : null}
@@ -658,7 +920,12 @@ export default function NewGamePage() {
 					<div className="flex items-center justify-between gap-2">
 						<p className="label-text">{t(MEDIA_LABEL[VIDEO_KIND])}</p>
 						{rowsFor(VIDEO_KIND)[0]?.file ? (
-							<button type="button" className="btn btn-ghost btn-xs" onClick={() => updateMediaRow(VIDEO_KIND, 0, { file: null })} disabled={busy}>
+							<button
+								type="button"
+								className="btn btn-ghost btn-xs"
+								onClick={() => updateMediaRow(VIDEO_KIND, 0, { file: null })}
+								disabled={busy}
+							>
 								{t("common.delete")}
 							</button>
 						) : null}
@@ -669,20 +936,53 @@ export default function NewGamePage() {
 						<label className="btn btn-outline cursor-pointer">
 							<Clapperboard className="w-4 h-4" />
 							{t("metadataSubmit.form.chooseVideo")}
-							<input type="file" accept={VIDEO_ACCEPT} className="hidden" disabled={busy} onChange={(e) => { const f = e.target.files?.[0] || null; if (f) updateMediaRow(VIDEO_KIND, 0, { file: f }); e.target.value = ""; }} />
+							<input
+								type="file"
+								accept={VIDEO_ACCEPT}
+								className="hidden"
+								disabled={busy}
+								onChange={(e) => {
+									const f = e.target.files?.[0] || null;
+									if (f) updateMediaRow(VIDEO_KIND, 0, { file: f });
+									e.target.value = "";
+								}}
+							/>
 						</label>
 					)}
-					<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.videoHint", { min: VIDEO_MIN_SECONDS, max: VIDEO_MAX_SECONDS, fpsMin: VIDEO_FPS_MIN, fpsMax: VIDEO_FPS_MAX, fps: VIDEO_FPS })}</p>
+					<p className="text-xs text-[var(--color-base-content)]/50">
+						{t("metadataSubmit.videoHint", {
+							min: VIDEO_MIN_SECONDS,
+							max: VIDEO_MAX_SECONDS,
+							fpsMin: VIDEO_FPS_MIN,
+							fpsMax: VIDEO_FPS_MAX,
+							fps: VIDEO_FPS,
+						})}
+					</p>
 					{rowsFor(VIDEO_KIND)[0]?.file && videoMeta ? (
 						<div className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1 text-xs text-[var(--color-base-content)]/60">
-							<p>{t("metadataSubmit.form.resolution", { width: videoMeta.width, height: videoMeta.height, aspect: videoMeta.aspect })}</p>
+							<p>
+								{t("metadataSubmit.form.resolution", {
+									width: videoMeta.width,
+									height: videoMeta.height,
+									aspect: videoMeta.aspect,
+								})}
+							</p>
 							<p>{t("metadataSubmit.form.duration", { duration: videoMeta.duration.toFixed(1) })}</p>
-							<p>{t("metadataSubmit.form.frameRate", { fps: videoMeta.fps > 0 ? `${videoMeta.fps} fps` : t("metadataSubmit.form.frameRateUnknown") })}</p>
+							<p>
+								{t("metadataSubmit.form.frameRate", {
+									fps:
+										videoMeta.fps > 0
+											? `${videoMeta.fps} fps`
+											: t("metadataSubmit.form.frameRateUnknown"),
+								})}
+							</p>
 							{fpsWarning ? <p className="text-[var(--color-warning)]">{fpsWarning}</p> : null}
 						</div>
 					) : null}
 					{videoError ? <p className="text-xs text-[var(--color-error)]">{videoError}</p> : null}
-					<p className="text-xs text-[var(--color-warning)] leading-relaxed">{t("metadataSubmit.form.videoAspectHint")}</p>
+					<p className="text-xs text-[var(--color-warning)] leading-relaxed">
+						{t("metadataSubmit.form.videoAspectHint")}
+					</p>
 				</div>
 			</section>
 
@@ -694,17 +994,33 @@ export default function NewGamePage() {
 				</h2>
 				<div className="space-y-3">
 					{romRows.map((row) => (
-						<div key={row.key} className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2">
+						<div
+							key={row.key}
+							className="relative rounded-lg border border-[var(--color-base-300)] p-3 pr-10 space-y-2"
+						>
 							{romRows.length > 1 ? (
-								<button type="button" className="btn btn-ghost btn-xs absolute top-2 right-2" onClick={() => removeRomRow(row.key)} disabled={busy} aria-label={t("common.delete")}>
+								<button
+									type="button"
+									className="btn btn-ghost btn-xs absolute top-2 right-2"
+									onClick={() => removeRomRow(row.key)}
+									disabled={busy}
+									aria-label={t("common.delete")}
+								>
 									<Trash2 className="w-3.5 h-3.5" />
 								</button>
 							) : null}
 							<div>
 								<label className="label-text">{t("metadataSubmit.form.regionLabel")}</label>
-								<select className="select select-sm w-full" value={row.region} onChange={(e) => updateRomRow(row.key, { region: e.target.value })} disabled={busy}>
+								<select
+									className="select select-sm w-full"
+									value={row.region}
+									onChange={(e) => updateRomRow(row.key, { region: e.target.value })}
+									disabled={busy}
+								>
 									{regions.map((r) => (
-										<option key={r.id} value={r.name}>{t("metadata.regions." + r.id, { defaultValue: r.name })}</option>
+										<option key={r.id} value={r.name}>
+											{t("metadata.regions." + r.id, { defaultValue: r.name })}
+										</option>
 									))}
 								</select>
 							</div>
@@ -718,7 +1034,11 @@ export default function NewGamePage() {
 								}}
 							>
 								<Upload className="w-8 h-8" />
-								<span className="max-w-md">{row.hashing ? t("metadataSubmit.form.romHashing") : t("metadataSubmit.form.romDrop")}</span>
+								<span className="max-w-md">
+									{row.hashing
+										? t("metadataSubmit.form.romHashing")
+										: t("metadataSubmit.form.romDrop")}
+								</span>
 								<input
 									type="file"
 									className="hidden"
@@ -732,20 +1052,51 @@ export default function NewGamePage() {
 							</label>
 							<div>
 								<label className="label-text">{t("common.name")}</label>
-								<input className="input input-sm w-full" value={row.name} onChange={(e) => updateRomRow(row.key, { name: e.target.value })} disabled={busy} />
+								<input
+									className="input input-sm w-full"
+									value={row.name}
+									onChange={(e) => updateRomRow(row.key, { name: e.target.value })}
+									disabled={busy}
+								/>
 							</div>
 							<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
-								<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">{t("common.size")}</span><span className="font-mono truncate">{row.size ? fmtBytes(Number(row.size)) : "—"}</span></div>
-								<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">CRC</span><span className="font-mono truncate">{row.crc || "—"}</span></div>
-								<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">MD5</span><span className="font-mono truncate">{row.md5 || "—"}</span></div>
-								<div className="flex items-baseline gap-2 min-w-0"><span className="label-text shrink-0">SHA1</span><span className="font-mono truncate">{row.sha1 || "—"}</span></div>
-								<div className="flex items-baseline gap-2 min-w-0 sm:col-span-2"><span className="label-text shrink-0">SHA256</span><span className="font-mono truncate">{row.sha256 || "—"}</span></div>
+								<div className="flex items-baseline gap-2 min-w-0">
+									<span className="label-text shrink-0">{t("common.size")}</span>
+									<span className="font-mono truncate">
+										{row.size ? fmtBytes(Number(row.size)) : "—"}
+									</span>
+								</div>
+								<div className="flex items-baseline gap-2 min-w-0">
+									<span className="label-text shrink-0">CRC</span>
+									<span className="font-mono truncate">{row.crc || "—"}</span>
+								</div>
+								<div className="flex items-baseline gap-2 min-w-0">
+									<span className="label-text shrink-0">MD5</span>
+									<span className="font-mono truncate">{row.md5 || "—"}</span>
+								</div>
+								<div className="flex items-baseline gap-2 min-w-0">
+									<span className="label-text shrink-0">SHA1</span>
+									<span className="font-mono truncate">{row.sha1 || "—"}</span>
+								</div>
+								<div className="flex items-baseline gap-2 min-w-0 sm:col-span-2">
+									<span className="label-text shrink-0">SHA256</span>
+									<span className="font-mono truncate">{row.sha256 || "—"}</span>
+								</div>
 							</div>
-							{row.duplicate ? <p className="text-xs text-[var(--color-error)]">{t("metadataSubmit.form.romDuplicate")}</p> : null}
+							{row.duplicate ? (
+								<p className="text-xs text-[var(--color-error)]">
+									{t("metadataSubmit.form.romDuplicate")}
+								</p>
+							) : null}
 						</div>
 					))}
 				</div>
-				<button type="button" className="btn btn-outline btn-sm w-fit" onClick={() => setRomRows((rows) => [...rows, newRomRow()])} disabled={busy}>
+				<button
+					type="button"
+					className="btn btn-outline btn-sm w-fit"
+					onClick={() => setRomRows((rows) => [...rows, newRomRow()])}
+					disabled={busy}
+				>
 					{t("metadataSubmit.form.addRom")}
 				</button>
 				<p className="text-xs text-[var(--color-base-content)]/50">{t("metadataSubmit.form.romHint")}</p>
@@ -753,14 +1104,25 @@ export default function NewGamePage() {
 			</section>
 
 			<section className="card p-6">
-				<label className="label-text" htmlFor="ng-note">{t("metadataSubmit.form.whyLabel")}</label>
-				<textarea id="ng-note" className="input w-full min-h-20" value={note} onChange={(e) => setNote(e.target.value)} placeholder={t("metadataSubmit.form.whyPlaceholder")} disabled={busy} />
+				<label className="label-text" htmlFor="ng-note">
+					{t("metadataSubmit.form.whyLabel")}
+				</label>
+				<textarea
+					id="ng-note"
+					className="input w-full min-h-20"
+					value={note}
+					onChange={(e) => setNote(e.target.value)}
+					placeholder={t("metadataSubmit.form.whyPlaceholder")}
+					disabled={busy}
+				/>
 			</section>
 
 			{progress !== null ? (
 				<div className="card p-3">
 					<div className="flex justify-between text-xs mb-1">
-						<span className="text-[var(--color-base-content)]/60">{t("metadataSubmit.status.creating")}</span>
+						<span className="text-[var(--color-base-content)]/60">
+							{t("metadataSubmit.status.creating")}
+						</span>
 						<span className="text-[var(--color-base-content)]/60">{progress}%</span>
 					</div>
 					<progress className="progress progress-primary w-full" value={progress} max="100" />
@@ -769,20 +1131,43 @@ export default function NewGamePage() {
 
 			{status ? (
 				<div className="card p-3 text-sm">
-					<span className={status.tone === "error" ? "text-[var(--color-error)]" : status.tone === "success" ? "text-[var(--color-success)]" : "text-[var(--color-info)]"}>{status.text}</span>
+					<span
+						className={
+							status.tone === "error"
+								? "text-[var(--color-error)]"
+								: status.tone === "success"
+									? "text-[var(--color-success)]"
+									: "text-[var(--color-info)]"
+						}
+					>
+						{status.text}
+					</span>
 				</div>
 			) : null}
 
 			<div className="flex justify-end gap-2">
-				<button className="btn btn-ghost" onClick={() => navigate(systemId ? `/app/metadata/${systemId}` : "/app/metadata")} disabled={busy}>{t("common.cancel")}</button>
-				<button className="btn btn-primary" onClick={() => setConfirmSubmit(true)} disabled={busy || !!existing || !systemId || !primaryName}>
+				<button
+					className="btn btn-ghost"
+					onClick={() => navigate(systemId ? `/app/metadata/${systemId}` : "/app/metadata")}
+					disabled={busy}
+				>
+					{t("common.cancel")}
+				</button>
+				<button
+					className="btn btn-primary"
+					onClick={() => setConfirmSubmit(true)}
+					disabled={busy || !!existing || !systemId || !primaryName}
+				>
 					<Plus className="w-4 h-4" />
 					{t("metadata.newGame.submit")}
 				</button>
 			</div>
 
 			{confirmSubmit ? (
-				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && setConfirmSubmit(false)}>
+				<div
+					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+					onClick={(e) => e.target === e.currentTarget && setConfirmSubmit(false)}
+				>
 					<div className="card w-full max-w-md p-6 space-y-4">
 						<div className="flex items-start gap-3">
 							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-warning)]/15 shrink-0">
@@ -790,12 +1175,18 @@ export default function NewGamePage() {
 							</div>
 							<div className="min-w-0">
 								<h2 className="text-lg font-bold">{t("metadataSubmit.confirmSubmit.title")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">{t("metadataSubmit.confirmSubmit.body")}</p>
+								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
+									{t("metadataSubmit.confirmSubmit.body")}
+								</p>
 							</div>
 						</div>
 						<div className="flex justify-end gap-2">
-							<button className="btn btn-ghost" type="button" onClick={() => setConfirmSubmit(false)}>{t("common.cancel")}</button>
-							<button className="btn btn-primary" type="button" disabled={busy} onClick={submit}>{t("metadata.newGame.submit")}</button>
+							<button className="btn btn-ghost" type="button" onClick={() => setConfirmSubmit(false)}>
+								{t("common.cancel")}
+							</button>
+							<button className="btn btn-primary" type="button" disabled={busy} onClick={submit}>
+								{t("metadata.newGame.submit")}
+							</button>
 						</div>
 					</div>
 				</div>

@@ -1,5 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { fetchMyMetadataSubmissions, fetchMySubmissions, fetchReviewSummary, isAuthed, type MetadataSubmission, type SubmissionDetail } from "./api";
+import {
+	fetchMyMetadataSubmissions,
+	fetchMySubmissions,
+	fetchReviewSummary,
+	isAuthed,
+	type MetadataSubmission,
+	type SubmissionDetail,
+} from "./api";
 
 // A review item is one of the current user's contributions (metadata or system
 // art pack) with its review state. There is no notifications table: the list is
@@ -77,7 +84,10 @@ export function buildReviewItems(meta: MetadataSubmission[], sap: SubmissionDeta
 			comment: m.review_comment,
 			reviewer: m.reviewed_by_name,
 			at: m.reviewed_at || m.created_at,
-			href: m.status === "approved" && m.game_id && m.system_id ? `/app/metadata/${m.system_id}/game/${m.game_id}` : undefined,
+			href:
+				m.status === "approved" && m.game_id && m.system_id
+					? `/app/metadata/${m.system_id}/game/${m.game_id}`
+					: undefined,
 			xp: m.points_earned || 0,
 			baseXP: m.base_points_earned,
 			changeKinds: m.change_kinds,
@@ -219,9 +229,16 @@ export function ReviewsProvider({ children }: { children: ReactNode }) {
 		saveSeen(ks);
 	}, [keys]);
 
-	const unread = useMemo(() => keys.filter((i) => i.status !== "pending" && !seen.includes(i.key)).length, [keys, seen]);
+	const unread = useMemo(
+		() => keys.filter((i) => i.status !== "pending" && !seen.includes(i.key)).length,
+		[keys, seen],
+	);
 
-	return <ReviewsContext.Provider value={{ unread, totalXP, loading, refresh, markAllSeen }}>{children}</ReviewsContext.Provider>;
+	return (
+		<ReviewsContext.Provider value={{ unread, totalXP, loading, refresh, markAllSeen }}>
+			{children}
+		</ReviewsContext.Provider>
+	);
 }
 
 export function useReviews(): ReviewsContextValue {

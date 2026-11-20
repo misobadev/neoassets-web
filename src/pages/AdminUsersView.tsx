@@ -51,7 +51,10 @@ export default function AdminUsersView() {
 	}
 
 	if (error && !users) return <p className="text-sm text-[var(--color-error)] text-center py-10">{error}</p>;
-	if (!users) return <p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("admin.loadingUsers")}</p>;
+	if (!users)
+		return (
+			<p className="text-sm text-[var(--color-base-content)]/50 text-center py-10">{t("admin.loadingUsers")}</p>
+		);
 
 	return (
 		<div className="space-y-6">
@@ -70,13 +73,18 @@ export default function AdminUsersView() {
 			<section className="card p-6">
 				<div className="grid grid-cols-1 gap-3">
 					{users.map((u) => (
-						<div key={u.id} className="flex items-center justify-between gap-3 p-3 rounded-lg border border-[var(--color-base-300)]">
+						<div
+							key={u.id}
+							className="flex items-center justify-between gap-3 p-3 rounded-lg border border-[var(--color-base-300)]"
+						>
 							<div className="flex items-center gap-3 min-w-0">
 								<Avatar name={u.username} avatarKey={u.avatar_key} size={40} />
 								<div className="min-w-0">
 									<p className="font-medium truncate flex items-center gap-2">
 										{u.username}
-										{u.role === "admin" || u.role === "reviewer" ? <ShieldCheck className="w-4 h-4 text-[var(--color-primary)]" /> : null}
+										{u.role === "admin" || u.role === "reviewer" ? (
+											<ShieldCheck className="w-4 h-4 text-[var(--color-primary)]" />
+										) : null}
 									</p>
 									<p className="text-xs text-[var(--color-base-content)]/50 truncate">{u.email}</p>
 								</div>
@@ -90,7 +98,9 @@ export default function AdminUsersView() {
 									title={t("admin.donorLabel")}
 								>
 									{["none", "supporter", "monthly_supporter"].map((s) => (
-										<option key={s} value={s}>{t("donor." + s, { defaultValue: s })}</option>
+										<option key={s} value={s}>
+											{t("donor." + s, { defaultValue: s })}
+										</option>
 									))}
 								</select>
 								<select
@@ -101,7 +111,9 @@ export default function AdminUsersView() {
 									title={u.protected ? t("admin.protectedAccount") : undefined}
 								>
 									{["user", "reviewer", "admin"].map((r) => (
-										<option key={r} value={r}>{t("role." + r, { defaultValue: r })}</option>
+										<option key={r} value={r}>
+											{t("role." + r, { defaultValue: r })}
+										</option>
 									))}
 								</select>
 							</div>

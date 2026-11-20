@@ -8,10 +8,38 @@ export default function AdminMenu() {
 	const { t } = useTranslation();
 	const admin = isAdmin();
 	const items = [
-		...(admin ? [{ to: "/app/admin/users", icon: <Tag className="w-5 h-5" />, titleKey: "nav.users", bodyKey: "adminMenu.usersBody" }] : []),
-		...(admin ? [{ to: "/app/admin/donations", icon: <HeartHandshake className="w-5 h-5" />, titleKey: "nav.donations", bodyKey: "adminMenu.donationsBody" }] : []),
-		{ to: "/app/admin/metadata", icon: <ShieldCheck className="w-5 h-5" />, titleKey: "nav.metadataReview", bodyKey: "adminMenu.metadataBody" },
-		{ to: "/app/admin/sap", icon: <ShieldCheck className="w-5 h-5" />, titleKey: "nav.sapReview", bodyKey: "adminMenu.sapBody" },
+		...(admin
+			? [
+					{
+						to: "/app/admin/users",
+						icon: <Tag className="w-5 h-5" />,
+						titleKey: "nav.users",
+						bodyKey: "adminMenu.usersBody",
+					},
+				]
+			: []),
+		...(admin
+			? [
+					{
+						to: "/app/admin/donations",
+						icon: <HeartHandshake className="w-5 h-5" />,
+						titleKey: "nav.donations",
+						bodyKey: "adminMenu.donationsBody",
+					},
+				]
+			: []),
+		{
+			to: "/app/admin/metadata",
+			icon: <ShieldCheck className="w-5 h-5" />,
+			titleKey: "nav.metadataReview",
+			bodyKey: "adminMenu.metadataBody",
+		},
+		{
+			to: "/app/admin/sap",
+			icon: <ShieldCheck className="w-5 h-5" />,
+			titleKey: "nav.sapReview",
+			bodyKey: "adminMenu.sapBody",
+		},
 	];
 
 	return (

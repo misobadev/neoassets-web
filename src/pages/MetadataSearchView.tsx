@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { fetchMetadataSystems, lookupMetadataGames, searchMetadataGames, type GameSummary, type MetadataSystem } from "../lib/api";
+import {
+	fetchMetadataSystems,
+	lookupMetadataGames,
+	searchMetadataGames,
+	type GameSummary,
+	type MetadataSystem,
+} from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 
 export default function MetadataSearchView() {
@@ -27,13 +33,14 @@ export default function MetadataSearchView() {
 		setError(null);
 		const trimmed = query.trim();
 		const h = hash.trim();
-		const req = trimmed || h
-			? trimmed
-				? searchMetadataGames(trimmed, systemId).then((r) => r.games)
-				: lookupMetadataGames({ crc: h, md5: h, sha1: h, sha256: h })
-			: systemId
-				? searchMetadataGames("", systemId).then((r) => r.games)
-				: Promise.resolve<GameSummary[]>([]);
+		const req =
+			trimmed || h
+				? trimmed
+					? searchMetadataGames(trimmed, systemId).then((r) => r.games)
+					: lookupMetadataGames({ crc: h, md5: h, sha1: h, sha256: h })
+				: systemId
+					? searchMetadataGames("", systemId).then((r) => r.games)
+					: Promise.resolve<GameSummary[]>([]);
 		req.then((games) => {
 			setResults(games);
 			setSearched(true);
@@ -46,9 +53,7 @@ export default function MetadataSearchView() {
 		<div className="space-y-6">
 			<div>
 				<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("metadata.search.title")}</h1>
-				<p className="text-[var(--color-base-content)]/60 text-sm pt-2">
-					{t("metadata.search.subtitle")}
-				</p>
+				<p className="text-[var(--color-base-content)]/60 text-sm pt-2">{t("metadata.search.subtitle")}</p>
 			</div>
 
 			<div className="card p-6 space-y-4">
@@ -59,7 +64,10 @@ export default function MetadataSearchView() {
 							className="input flex-1"
 							placeholder={t("metadata.search.gameNamePlaceholder")}
 							value={query}
-							onChange={(e) => { setQuery(e.target.value); setHash(""); }}
+							onChange={(e) => {
+								setQuery(e.target.value);
+								setHash("");
+							}}
 							onKeyDown={(e) => e.key === "Enter" && doSearch()}
 						/>
 						<select
@@ -69,7 +77,9 @@ export default function MetadataSearchView() {
 						>
 							<option value="">{t("metadata.allSystems")}</option>
 							{systems.map((s) => (
-								<option key={s.id} value={s.id}>{s.name}</option>
+								<option key={s.id} value={s.id}>
+									{s.name}
+								</option>
 							))}
 						</select>
 						<button
@@ -88,7 +98,10 @@ export default function MetadataSearchView() {
 						className="input"
 						placeholder={t("metadata.search.hashPlaceholder")}
 						value={hash}
-						onChange={(e) => { setHash(e.target.value); setQuery(""); }}
+						onChange={(e) => {
+							setHash(e.target.value);
+							setQuery("");
+						}}
 						onKeyDown={(e) => e.key === "Enter" && doSearch()}
 					/>
 				</div>
@@ -97,9 +110,13 @@ export default function MetadataSearchView() {
 			{error ? (
 				<p className="text-sm text-[var(--color-error)] text-center">{error}</p>
 			) : loading ? (
-				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-4">{t("metadata.search.searching")}</p>
+				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-4">
+					{t("metadata.search.searching")}
+				</p>
 			) : searched && results && results.length === 0 ? (
-				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-4">{t("metadata.search.noGames")}</p>
+				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-4">
+					{t("metadata.search.noGames")}
+				</p>
 			) : results && results.length > 0 ? (
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 					{results.map((g) => (
@@ -108,9 +125,7 @@ export default function MetadataSearchView() {
 								<h3 className="font-semibold truncate min-w-0">{g.name}</h3>
 								<RatingBadge rating={g.rating} />
 							</div>
-							<p className="text-xs text-[var(--color-base-content)]/50 mt-0.5">
-								{g.system_name}
-							</p>
+							<p className="text-xs text-[var(--color-base-content)]/50 mt-0.5">{g.system_name}</p>
 						</Link>
 					))}
 				</div>

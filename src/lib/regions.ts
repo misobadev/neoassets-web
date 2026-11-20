@@ -3,18 +3,18 @@ import type { TFunction } from "i18next";
 // REGION_SLUGS maps the canonical region name stored in the database to its
 // i18n slug under `metadata.regions.*`, so the UI can show it translated.
 const REGION_SLUGS: Record<string, string> = {
-	"World": "world",
-	"USA": "usa",
-	"Europe": "europe",
-	"Japan": "japan",
-	"Spain": "spain",
-	"France": "france",
-	"Germany": "germany",
-	"Italy": "italy",
-	"Korea": "korea",
-	"China": "china",
-	"Brazil": "brazil",
-	"Asia": "asia",
+	World: "world",
+	USA: "usa",
+	Europe: "europe",
+	Japan: "japan",
+	Spain: "spain",
+	France: "france",
+	Germany: "germany",
+	Italy: "italy",
+	Korea: "korea",
+	China: "china",
+	Brazil: "brazil",
+	Asia: "asia",
 };
 
 // regionLabel resolves a stored region name to its translated label, falling
@@ -28,17 +28,17 @@ export function regionLabel(t: TFunction, name: string): string {
 // REGION_FLAGS maps a canonical region name to its flag-icons country code.
 // World uses the United Nations flag.
 const REGION_FLAGS: Record<string, string> = {
-	"World": "un",
-	"USA": "us",
-	"Europe": "eu",
-	"Japan": "jp",
-	"Spain": "es",
-	"France": "fr",
-	"Germany": "de",
-	"Italy": "it",
-	"Korea": "kr",
-	"China": "cn",
-	"Brazil": "br",
+	World: "un",
+	USA: "us",
+	Europe: "eu",
+	Japan: "jp",
+	Spain: "es",
+	France: "fr",
+	Germany: "de",
+	Italy: "it",
+	Korea: "kr",
+	China: "cn",
+	Brazil: "br",
 	// Asia has no single country flag, so it is shown without one.
 };
 

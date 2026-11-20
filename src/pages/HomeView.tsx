@@ -53,7 +53,12 @@ export default function HomeView() {
 					)}
 				</div>
 				<div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-fade-up">
-					<a href="https://www.patreon.com/cw/NeoAssets" target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-sm">
+					<a
+						href="https://www.patreon.com/cw/NeoAssets"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="btn btn-ghost btn-sm"
+					>
 						<Heart className="w-4 h-4" />
 						{t("home.becomePatron")}
 					</a>

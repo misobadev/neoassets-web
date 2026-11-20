@@ -92,7 +92,8 @@ export interface SubmissionDetail {
 	pack_id: string;
 	name: string;
 	author: string;
-	description: string;	donation_url: string;
+	description: string;
+	donation_url: string;
 	ai: boolean;
 	version: string;
 	status: SubmissionStatus;
@@ -476,7 +477,11 @@ export function changePassword(body: { current_password: string; new_password: s
 
 // Avatar: presign an upload (WebP or GIF), then confirm the stored object key.
 export function presignAvatarUpload(mimeType: string, size: number): Promise<UploadResponse> {
-	return api<UploadResponse>("/api/v1/auth/me/avatar/upload", { method: "POST", token: userToken(), body: { mime_type: mimeType, size } });
+	return api<UploadResponse>("/api/v1/auth/me/avatar/upload", {
+		method: "POST",
+		token: userToken(),
+		body: { mime_type: mimeType, size },
+	});
 }
 
 export function setAvatar(objectKey: string): Promise<User> {
@@ -511,12 +516,20 @@ export function fetchRewards(): Promise<Rewards> {
 
 // startDonorClaim emails a code that proves ownership of a donation email.
 export function startDonorClaim(email: string): Promise<{ message: string }> {
-	return api<{ message: string }>("/api/v1/auth/donor/claim", { method: "POST", token: userToken(), body: { email } });
+	return api<{ message: string }>("/api/v1/auth/donor/claim", {
+		method: "POST",
+		token: userToken(),
+		body: { email },
+	});
 }
 
 // verifyDonorClaim links the donations made with the email to the account.
 export function verifyDonorClaim(email: string, code: string): Promise<{ linked: number }> {
-	return api<{ linked: number }>("/api/v1/auth/donor/claim/verify", { method: "POST", token: userToken(), body: { email, code } });
+	return api<{ linked: number }>("/api/v1/auth/donor/claim/verify", {
+		method: "POST",
+		token: userToken(),
+		body: { email, code },
+	});
 }
 
 // ---------------------------------------------------------------------------
@@ -546,19 +559,29 @@ export function fetchPublicProfile(username: string): Promise<PublicProfile> {
 }
 
 export function followUser(username: string): Promise<{ following: boolean }> {
-	return api<{ following: boolean }>(`/api/v1/users/${encodeURIComponent(username)}/follow`, { method: "POST", token: userToken() });
+	return api<{ following: boolean }>(`/api/v1/users/${encodeURIComponent(username)}/follow`, {
+		method: "POST",
+		token: userToken(),
+	});
 }
 
 export function unfollowUser(username: string): Promise<{ following: boolean }> {
-	return api<{ following: boolean }>(`/api/v1/users/${encodeURIComponent(username)}/follow`, { method: "DELETE", token: userToken() });
+	return api<{ following: boolean }>(`/api/v1/users/${encodeURIComponent(username)}/follow`, {
+		method: "DELETE",
+		token: userToken(),
+	});
 }
 
 export function fetchFollowers(username: string): Promise<string[]> {
-	return api<{ usernames: string[] }>(`/api/v1/users/${encodeURIComponent(username)}/followers`, { token: userToken() }).then((d) => d.usernames || []);
+	return api<{ usernames: string[] }>(`/api/v1/users/${encodeURIComponent(username)}/followers`, {
+		token: userToken(),
+	}).then((d) => d.usernames || []);
 }
 
 export function fetchFollowing(username: string): Promise<string[]> {
-	return api<{ usernames: string[] }>(`/api/v1/users/${encodeURIComponent(username)}/following`, { token: userToken() }).then((d) => d.usernames || []);
+	return api<{ usernames: string[] }>(`/api/v1/users/${encodeURIComponent(username)}/following`, {
+		token: userToken(),
+	}).then((d) => d.usernames || []);
 }
 
 export interface UserSubmissionItem {
@@ -572,7 +595,9 @@ export interface UserSubmissionItem {
 }
 
 export function fetchUserSubmissions(username: string): Promise<UserSubmissionItem[]> {
-	return api<{ submissions: UserSubmissionItem[] }>(`/api/v1/users/${encodeURIComponent(username)}/submissions`, { token: userToken() }).then((d) => d.submissions || []);
+	return api<{ submissions: UserSubmissionItem[] }>(`/api/v1/users/${encodeURIComponent(username)}/submissions`, {
+		token: userToken(),
+	}).then((d) => d.submissions || []);
 }
 
 export function userRole(): string | null {
@@ -674,14 +699,32 @@ export function fetchRegions(): Promise<Region[]> {
 		.catch(() => REGION_FALLBACK);
 }
 
-export function fetchMetadataGamesBySystem(systemId: string, limit = 48, offset = 0, type = "", sort = "", signal?: AbortSignal): Promise<{ games: GameSummary[]; total: number }> {
+export function fetchMetadataGamesBySystem(
+	systemId: string,
+	limit = 48,
+	offset = 0,
+	type = "",
+	sort = "",
+	signal?: AbortSignal,
+): Promise<{ games: GameSummary[]; total: number }> {
 	const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
 	if (type) params.set("type", type);
 	if (sort) params.set("sort", sort);
-	return api<{ games: GameSummary[]; total: number }>(`/api/v1/metadata/systems/${systemId}/games?${params.toString()}`, { signal });
+	return api<{ games: GameSummary[]; total: number }>(
+		`/api/v1/metadata/systems/${systemId}/games?${params.toString()}`,
+		{ signal },
+	);
 }
 
-export function searchMetadataGames(q: string, systemId = "", limit = 48, offset = 0, type = "", sort = "", signal?: AbortSignal): Promise<{ games: GameSummary[]; total: number }> {
+export function searchMetadataGames(
+	q: string,
+	systemId = "",
+	limit = 48,
+	offset = 0,
+	type = "",
+	sort = "",
+	signal?: AbortSignal,
+): Promise<{ games: GameSummary[]; total: number }> {
 	const params = new URLSearchParams({ q, limit: String(limit), offset: String(offset) });
 	if (systemId) params.set("system_id", systemId);
 	if (type) params.set("type", type);
@@ -689,10 +732,17 @@ export function searchMetadataGames(q: string, systemId = "", limit = 48, offset
 	return api<{ games: GameSummary[]; total: number }>(`/api/v1/metadata/games?${params.toString()}`, { signal });
 }
 
-export function lookupMetadataGames(hashes: { crc?: string; md5?: string; sha1?: string; sha256?: string }): Promise<GameSummary[]> {
+export function lookupMetadataGames(hashes: {
+	crc?: string;
+	md5?: string;
+	sha1?: string;
+	sha256?: string;
+}): Promise<GameSummary[]> {
 	const params = new URLSearchParams();
 	Object.entries(hashes).forEach(([k, v]) => v && params.set(k, v));
-	return api<{ games: GameSummary[] }>(`/api/v1/metadata/games/lookup?${params.toString()}`).then((d) => d.games || []);
+	return api<{ games: GameSummary[] }>(`/api/v1/metadata/games/lookup?${params.toString()}`).then(
+		(d) => d.games || [],
+	);
 }
 
 export function fetchMetadataGameDetail(id: string, lang = ""): Promise<GameDetail> {
@@ -707,7 +757,9 @@ export function fetchMetadataLanguages(): Promise<Language[]> {
 // fetchMetadataPendingKeys returns the fields/media kinds that already have a
 // pending submission from the current user for a game.
 export function fetchMetadataPendingKeys(gameId: string): Promise<string[]> {
-	return api<{ keys: string[] }>(`/api/v1/metadata/games/${gameId}/pending`, { token: userToken() }).then((d) => d.keys || []);
+	return api<{ keys: string[] }>(`/api/v1/metadata/games/${gameId}/pending`, { token: userToken() }).then(
+		(d) => d.keys || [],
+	);
 }
 
 export function createMetadataSubmission(body: {
@@ -715,7 +767,16 @@ export function createMetadataSubmission(body: {
 	system_id?: string;
 	kind?: "edit" | "new_game";
 	payload: Record<string, unknown>;
-	files?: { kind: MediaKind; object_key: string; file_name: string; mime_type: string; size: number; region?: string; delete?: boolean; move?: boolean }[];
+	files?: {
+		kind: MediaKind;
+		object_key: string;
+		file_name: string;
+		mime_type: string;
+		size: number;
+		region?: string;
+		delete?: boolean;
+		move?: boolean;
+	}[];
 }): Promise<MetadataSubmission> {
 	return api<MetadataSubmission>("/api/v1/metadata/submissions", { method: "POST", token: userToken(), body });
 }
@@ -732,8 +793,15 @@ export function requestMetadataUploadUrl(body: {
 	return api<UploadResponse>("/api/v1/metadata/submissions/upload-url", { method: "POST", token: userToken(), body });
 }
 
-export function requestMetadataUpload(id: string, body: { kind: MediaKind; file_name: string; mime_type: string; size: number }): Promise<UploadResponse> {
-	return api<UploadResponse>(`/api/v1/metadata/submissions/${id}/upload`, { method: "POST", token: userToken(), body });
+export function requestMetadataUpload(
+	id: string,
+	body: { kind: MediaKind; file_name: string; mime_type: string; size: number },
+): Promise<UploadResponse> {
+	return api<UploadResponse>(`/api/v1/metadata/submissions/${id}/upload`, {
+		method: "POST",
+		token: userToken(),
+		body,
+	});
 }
 
 export function submitMetadataSubmission(id: string): Promise<MetadataSubmission> {
@@ -755,7 +823,11 @@ function pagedQuery(opts?: { limit?: number; offset?: number; status?: string })
 	return q ? `?${q}` : "";
 }
 
-export function fetchMyMetadataSubmissions(opts?: { limit?: number; offset?: number; status?: string }): Promise<PagedList<MetadataSubmission>> {
+export function fetchMyMetadataSubmissions(opts?: {
+	limit?: number;
+	offset?: number;
+	status?: string;
+}): Promise<PagedList<MetadataSubmission>> {
 	return api<{ submissions: MetadataSubmission[]; total: number; total_xp: number }>(
 		`/api/v1/auth/metadata/submissions${pagedQuery(opts)}`,
 		{ token: userToken() },
@@ -764,7 +836,11 @@ export function fetchMyMetadataSubmissions(opts?: { limit?: number; offset?: num
 
 // fetchMySubmissions returns the current user's system art pack submissions
 // (including their files and review logs).
-export function fetchMySubmissions(opts?: { limit?: number; offset?: number; status?: string }): Promise<PagedList<SubmissionDetail>> {
+export function fetchMySubmissions(opts?: {
+	limit?: number;
+	offset?: number;
+	status?: string;
+}): Promise<PagedList<SubmissionDetail>> {
 	return api<{ submissions: SubmissionDetail[]; total: number; total_xp: number }>(
 		`/api/v1/auth/submissions${pagedQuery(opts)}`,
 		{ token: userToken() },
@@ -805,7 +881,9 @@ export function fetchReviewSummary(limit = 20): Promise<ReviewSummary> {
 // Admin
 export function fetchMetadataSubmissions(status = ""): Promise<MetadataSubmission[]> {
 	const q = status ? `?status=${status}` : "";
-	return api<{ submissions: MetadataSubmission[] }>(`/api/v1/admin/metadata/submissions${q}`, { token: reviewToken() }).then((d) => d.submissions || []);
+	return api<{ submissions: MetadataSubmission[] }>(`/api/v1/admin/metadata/submissions${q}`, {
+		token: reviewToken(),
+	}).then((d) => d.submissions || []);
 }
 
 export interface MetadataSubmissionDetail {
@@ -821,11 +899,19 @@ export function fetchMetadataSubmissionDetail(id: string): Promise<MetadataSubmi
 }
 
 export function approveMetadataSubmission(id: string, comment = ""): Promise<MetadataSubmission> {
-	return api<MetadataSubmission>(`/api/v1/admin/metadata/submissions/${id}/approve`, { method: "POST", token: reviewToken(), body: { comment } });
+	return api<MetadataSubmission>(`/api/v1/admin/metadata/submissions/${id}/approve`, {
+		method: "POST",
+		token: reviewToken(),
+		body: { comment },
+	});
 }
 
 export function rejectMetadataSubmission(id: string, comment = ""): Promise<MetadataSubmission> {
-	return api<MetadataSubmission>(`/api/v1/admin/metadata/submissions/${id}/reject`, { method: "POST", token: reviewToken(), body: { comment } });
+	return api<MetadataSubmission>(`/api/v1/admin/metadata/submissions/${id}/reject`, {
+		method: "POST",
+		token: reviewToken(),
+		body: { comment },
+	});
 }
 
 // ---------------------------------------------------------------------------
@@ -948,7 +1034,9 @@ export interface DonationImportItem {
 
 // importDonations backfills historical donations (admin only). Idempotent by
 // external_id, so re-importing the same export does not duplicate events.
-export function importDonations(donations: DonationImportItem[]): Promise<{ imported: number; linked: number; skipped: number }> {
+export function importDonations(
+	donations: DonationImportItem[],
+): Promise<{ imported: number; linked: number; skipped: number }> {
 	return api("/api/v1/admin/donations/import", { method: "POST", token: adminToken(), body: { donations } });
 }
 
@@ -1007,10 +1095,16 @@ export interface CreatedUserAPIKey extends UserAPIKey {
 }
 
 export function fetchDeveloperApps(): Promise<DeveloperApp[]> {
-	return api<{ apps: DeveloperApp[] }>("/api/v1/auth/developer/apps", { token: userToken() }).then((d) => d.apps || []);
+	return api<{ apps: DeveloperApp[] }>("/api/v1/auth/developer/apps", { token: userToken() }).then(
+		(d) => d.apps || [],
+	);
 }
 
-export function createDeveloperApp(body: { name: string; description?: string; homepage_url?: string }): Promise<CreatedDeveloperApp> {
+export function createDeveloperApp(body: {
+	name: string;
+	description?: string;
+	homepage_url?: string;
+}): Promise<CreatedDeveloperApp> {
 	return api<CreatedDeveloperApp>("/api/v1/auth/developer/apps", { method: "POST", token: userToken(), body });
 }
 
