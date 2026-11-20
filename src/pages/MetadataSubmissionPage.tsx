@@ -20,7 +20,6 @@ import {
 	fetchMetadataGameDetail,
 	fetchMetadataPendingKeys,
 	fetchRegions,
-	requestMetadataUploadUrl,
 	isAuthed,
 	type GameDetail,
 	type GameRegion,
@@ -36,8 +35,6 @@ import Pagination from "../components/Pagination";
 import { genreLabel } from "../lib/genres";
 import { DEFAULT_REGION, regionLabel } from "../lib/regions";
 import RegionLabel from "../components/RegionLabel";
-import { uploadWithProgress } from "../lib/upload";
-import { hashRomFile } from "../lib/romhash";
 import { GAME_TYPES, typeBadgeClass } from "../lib/gameTypes";
 import {
 	IMAGE_ACCEPT,
@@ -48,14 +45,15 @@ import {
 	VIDEO_FPS_MIN,
 	VIDEO_MAX_SECONDS,
 	VIDEO_MIN_SECONDS,
-	aspectLabel,
-	checkVideoMeasurement,
-	measureVideo,
 } from "../lib/media";
 import { formatBytes } from "../lib/format";
 import { MEDIA_KIND_LABEL } from "../lib/media";
 import Modal from "../components/ui/Modal";
 import DialogHeader from "../components/ui/DialogHeader";
+import { readRomFile, sharesHash } from "../features/metadata/romFiles";
+import { useVideoCheck } from "../features/metadata/useVideoCheck";
+import { uploadMedia } from "../features/metadata/uploadMedia";
+import { RomDetails, RomDropZone } from "../features/metadata/RomFields";
 
 const TEXT_TYPES = [
 	{ key: "name", label: "metadataSubmit.textTypes.name" },
@@ -185,15 +183,6 @@ export default function MetadataSubmissionPage() {
 	const [note, setNote] = useState("");
 	const [file, setFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-	const [videoMeta, setVideoMeta] = useState<{
-		duration: number;
-		width: number;
-		height: number;
-		fps: number;
-		aspect: string;
-	} | null>(null);
-	const [fileError, setFileError] = useState<string | null>(null);
-	const [fpsWarning, setFpsWarning] = useState<string | null>(null);
 	const [status, setStatus] = useState<{ text: string; tone: string } | null>(null);
 	const [busy, setBusy] = useState(false);
 	const [confirmSubmit, setConfirmSubmit] = useState(false);
@@ -212,6 +201,8 @@ export default function MetadataSubmissionPage() {
 	const isText = TEXT_TYPES.some((t) => t.key === type);
 	const isVideo = type === VIDEO_KIND;
 	const isRoms = type === ROMS_KIND;
+	// Validate a picked video (format, duration, size) before upload.
+	const { meta: videoMeta, error: fileError, warning: fpsWarning } = useVideoCheck(isVideo ? file : null);
 
 	const translations: Language[] = game?.translations || [];
 	const langOptions: Language[] = [{ code: "en", name: "English", native_name: "English" }, ...translations];
@@ -274,36 +265,6 @@ export default function MetadataSubmissionPage() {
 		} catch {}
 	}, [draftKey, type, textValue, note]);
 
-	useEffect(() => {
-		if (!isVideo || !file) {
-			setVideoMeta(null);
-			setFileError(null);
-			setFpsWarning(null);
-			return;
-		}
-		// Load the video to validate format / duration / dimensions before upload.
-		// FPS is only a warning (the browser measurement is unreliable; the server
-		// validates it authoritatively on submit). Aspect ratio is not restricted.
-		let cancelled = false;
-		measureVideo(file)
-			.then((m) => {
-				if (cancelled) return;
-				const { errors, warnings } = checkVideoMeasurement(file.name, m);
-				setVideoMeta({ ...m, aspect: aspectLabel(m.width, m.height) });
-				setFileError(errors.length ? errors.map((e) => t(e.key, e.params)).join(" ") : null);
-				setFpsWarning(warnings.length ? warnings.map((e) => t(e.key, e.params)).join(" ") : null);
-			})
-			.catch(() => {
-				if (cancelled) return;
-				setFileError(t("metadataSubmit.errors.readVideo"));
-				setFpsWarning(null);
-				setVideoMeta(null);
-			});
-		return () => {
-			cancelled = true;
-		};
-	}, [isVideo, file]);
-
 	// Object URL for the freshly picked image so it can be shown next to the
 	// current one (old left, new right) before submitting.
 	useEffect(() => {
@@ -321,7 +282,6 @@ export default function MetadataSubmissionPage() {
 	// longer trusted. Videos are validated here for fast feedback and re-encoded
 	// to MP4/HEVC by the backend on approval.
 	function onPickFile(f: File | null) {
-		setFileError(null);
 		setFile(f);
 	}
 
@@ -469,7 +429,6 @@ export default function MetadataSubmissionPage() {
 					setType(key);
 					setTextValue("");
 					setFile(null);
-					setFileError(null);
 				}}
 				className={`btn btn-sm gap-1.5 ${type === key ? "btn-primary" : "btn-outline"} ${pending ? "opacity-50 cursor-not-allowed" : ""}`}
 			>
@@ -594,55 +553,15 @@ export default function MetadataSubmissionPage() {
 	// row's name, size and hashes so they never have to be typed by hand. If any
 	// hash already belongs to another dump of this game it is flagged.
 	async function onPickRomFile(key: string, file: File) {
-		// Arcade ROM sets are archives (ZIP/RAR/7z) contributed by name only, so
-		// no size or hashes are computed for them.
-		const isArchive =
-			/\.(zip|rar|7z)$/i.test(file.name) ||
-			[
-				"application/zip",
-				"application/x-zip-compressed",
-				"application/x-rar-compressed",
-				"application/vnd.rar",
-				"application/x-7z-compressed",
-			].includes(file.type);
-		if (isArchive) {
-			updateRomRow(key, {
-				hashing: false,
-				duplicate: false,
-				name: file.name,
-				size: "",
-				crc: "",
-				md5: "",
-				sha1: "",
-				sha256: "",
-			});
-			setStatus({ text: t("metadataSubmit.form.romZipNote"), tone: "info" });
-			return;
-		}
 		updateRomRow(key, { hashing: true });
 		try {
-			const h = await hashRomFile(file);
+			const { archive, fields } = await readRomFile(file);
 			const row = romRows.find((r) => r.key === key);
-			const duplicate = (game?.roms || []).some((r) => {
-				if (row?.id && r.id === row.id) return false;
-				return (
-					(h.crc && r.crc === h.crc) ||
-					(h.md5 && r.md5 === h.md5) ||
-					(h.sha1 && r.sha1 === h.sha1) ||
-					(h.sha256 && r.sha256 === h.sha256)
-				);
-			});
-			updateRomRow(key, {
-				hashing: false,
-				duplicate,
-				name: h.name,
-				size: String(h.size),
-				crc: h.crc,
-				md5: h.md5,
-				sha1: h.sha1,
-				sha256: h.sha256,
-			});
-			if (duplicate) setStatus({ text: t("metadataSubmit.form.romDuplicate"), tone: "error" });
+			const duplicate =
+				!archive && (game?.roms || []).some((r) => !(row?.id && r.id === row.id) && sharesHash(fields, r));
+			updateRomRow(key, { ...fields, hashing: false, duplicate });
+			if (archive) setStatus({ text: t("metadataSubmit.form.romZipNote"), tone: "info" });
+			else if (duplicate) setStatus({ text: t("metadataSubmit.form.romDuplicate"), tone: "error" });
 		} catch {
 			updateRomRow(key, { hashing: false });
 			setStatus({ text: t("metadataSubmit.form.romHashFailed"), tone: "error" });
@@ -659,9 +578,6 @@ export default function MetadataSubmissionPage() {
 		setNote("");
 		setFile(null);
 		setPreviewUrl(null);
-		setVideoMeta(null);
-		setFileError(null);
-		setFpsWarning(null);
 		setRomPage(1);
 	}
 
@@ -885,52 +801,18 @@ export default function MetadataSubmissionPage() {
 								});
 							}
 						} else if (r.file) {
-							const mime = r.file.type || "application/octet-stream";
 							setStatus({ text: t("metadataSubmit.uploadingImage"), tone: "info" });
-							const resp = await requestMetadataUploadUrl({
-								game_id: game.id,
-								kind: currentKind,
-								file_name: r.file.name,
-								mime_type: mime,
-								size: r.file.size,
-								region: r.region,
-							});
-							await uploadWithProgress(resp.upload_url, r.file, mime, (p) => setProgress(p));
-							setProgress(100);
-							files.push({
-								kind: currentKind,
-								object_key: resp.object_key,
-								file_name: r.file.name,
-								mime_type: mime,
-								size: r.file.size,
-								region: r.region,
-							});
+							files.push(
+								await uploadMedia({ game_id: game.id }, currentKind, r.file, r.region, setProgress),
+							);
 						}
 					}
 				} else if (file) {
-					const mime = file.type || "application/octet-stream";
 					setStatus({
 						text: isVideo ? t("metadataSubmit.uploadingVideo") : t("metadataSubmit.uploadingImage"),
 						tone: "info",
 					});
-					const resp = await requestMetadataUploadUrl({
-						game_id: game.id,
-						kind: currentKind,
-						file_name: file.name,
-						mime_type: mime,
-						size: file.size,
-						region: "",
-					});
-					await uploadWithProgress(resp.upload_url, file, mime, (p) => setProgress(p));
-					setProgress(100);
-					files.push({
-						kind: currentKind,
-						object_key: resp.object_key,
-						file_name: file.name,
-						mime_type: mime,
-						size: file.size,
-						region: "",
-					});
+					files.push(await uploadMedia({ game_id: game.id }, currentKind, file, "", setProgress));
 				}
 				await createMetadataSubmission({ game_id: game.id, payload, files });
 			}
@@ -1342,71 +1224,15 @@ export default function MetadataSubmissionPage() {
 										) : null}
 										{row.action !== "delete" ? (
 											<>
-												<label
-													className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[var(--color-base-300)] px-4 py-10 text-sm text-[var(--color-base-content)]/60 cursor-pointer text-center transition-colors hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-primary)]/5 ${row.hashing ? "opacity-60" : ""}`}
-													onDragOver={(e) => e.preventDefault()}
-													onDrop={(e) => {
-														e.preventDefault();
-														const f = e.dataTransfer.files?.[0];
-														if (f) void onPickRomFile(row.key, f);
-													}}
-												>
-													<Upload className="w-8 h-8" />
-													<span className="max-w-md">
-														{row.hashing
-															? t("metadataSubmit.form.romHashing")
-															: t("metadataSubmit.form.romDrop")}
-													</span>
-													<input
-														type="file"
-														className="hidden"
-														disabled={busy || row.hashing}
-														onChange={(e) => {
-															const f = e.target.files?.[0] || null;
-															if (f) void onPickRomFile(row.key, f);
-															e.target.value = "";
-														}}
-													/>
-												</label>
-												<div>
-													<label className="label-text">{t("common.name")}</label>
-													<input
-														className="input input-sm w-full"
-														value={row.name}
-														onChange={(e) =>
-															updateRomRow(row.key, { name: e.target.value })
-														}
-													/>
-												</div>
-												<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
-													<div className="flex items-baseline gap-2 min-w-0">
-														<span className="label-text shrink-0">{t("common.size")}</span>
-														<span className="font-mono truncate">
-															{row.size ? formatBytes(Number(row.size)) : "—"}
-														</span>
-													</div>
-													<div className="flex items-baseline gap-2 min-w-0">
-														<span className="label-text shrink-0">CRC</span>
-														<span className="font-mono truncate">{row.crc || "—"}</span>
-													</div>
-													<div className="flex items-baseline gap-2 min-w-0">
-														<span className="label-text shrink-0">MD5</span>
-														<span className="font-mono truncate">{row.md5 || "—"}</span>
-													</div>
-													<div className="flex items-baseline gap-2 min-w-0">
-														<span className="label-text shrink-0">SHA1</span>
-														<span className="font-mono truncate">{row.sha1 || "—"}</span>
-													</div>
-													<div className="flex items-baseline gap-2 min-w-0 sm:col-span-2">
-														<span className="label-text shrink-0">SHA256</span>
-														<span className="font-mono truncate">{row.sha256 || "—"}</span>
-													</div>
-												</div>
-												{row.duplicate ? (
-													<p className="text-xs text-[var(--color-error)]">
-														{t("metadataSubmit.form.romDuplicate")}
-													</p>
-												) : null}
+												<RomDropZone
+													hashing={row.hashing}
+													disabled={busy}
+													onFile={(f) => void onPickRomFile(row.key, f)}
+												/>
+												<RomDetails
+													row={row}
+													onNameChange={(name) => updateRomRow(row.key, { name })}
+												/>
 											</>
 										) : null}
 									</div>
