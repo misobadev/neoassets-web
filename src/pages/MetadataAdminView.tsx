@@ -23,8 +23,9 @@ import { regionLabel } from "../lib/regions";
 import { safeHttpUrl } from "../lib/url";
 import RegionLabel from "../components/RegionLabel";
 import { formatDate, formatFileSize } from "../lib/format";
-import { statusBadge } from "../lib/status";
 import { MEDIA_KIND_LABEL } from "../lib/media";
+import Modal from "../components/ui/Modal";
+import StatusBadge from "../components/ui/StatusBadge";
 
 // Text payload fields, in the order they are shown in the comparison. The
 // region is shown as a badge, not as a text change.
@@ -498,9 +499,9 @@ export default function MetadataAdminView() {
 													) : null}
 												</p>
 											</div>
-											<span className={`badge ${statusBadge(s.status)} shrink-0`}>
+											<StatusBadge status={s.status} className="shrink-0">
 												{t("metadataStatus." + s.status, { defaultValue: s.status })}
-											</span>
+											</StatusBadge>
 										</div>
 									</div>
 								))}
@@ -512,10 +513,7 @@ export default function MetadataAdminView() {
 			)}
 
 			{detail ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setDetail(null)}
-				>
+				<Modal onClose={() => setDetail(null)}>
 					<div className="card w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
 						{/* Header */}
 						<div className="flex items-start justify-between gap-3 p-5 border-b border-[var(--color-base-300)] bg-[var(--color-base-100)]/40">
@@ -569,11 +567,11 @@ export default function MetadataAdminView() {
 							<div className="flex flex-wrap items-start gap-x-8 gap-y-3 text-sm">
 								<div>
 									<p className="label-text mb-1">{t("common.status")}</p>
-									<span className={`badge ${statusBadge(detail.submission.status)}`}>
+									<StatusBadge status={detail.submission.status}>
 										{t("metadataStatus." + detail.submission.status, {
 											defaultValue: detail.submission.status,
 										})}
-									</span>
+									</StatusBadge>
 								</div>
 								<div>
 									<p className="label-text mb-1">{t("metadataAdmin.submittedBy")}</p>
@@ -909,13 +907,13 @@ export default function MetadataAdminView() {
 							</div>
 						) : null}
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{lightbox ? (
-				<div
+				<Modal
+					onClose={() => setLightbox(null)}
 					className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setLightbox(null)}
 				>
 					<div className="w-full max-w-6xl space-y-3">
 						<div className="flex items-center justify-between text-white">
@@ -935,11 +933,11 @@ export default function MetadataAdminView() {
 							className="w-full max-h-[85vh] object-contain rounded-lg bg-black/40"
 						/>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{approved ? (
-				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+				<Modal>
 					<div className="card w-full max-w-md p-6 space-y-4 text-center">
 						<ShieldCheck className="w-10 h-10 mx-auto text-[var(--color-success)]" />
 						<h2 className="text-xl font-bold">{t("metadataAdmin.approvedTitle")}</h2>
@@ -954,7 +952,7 @@ export default function MetadataAdminView() {
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 		</div>
 	);

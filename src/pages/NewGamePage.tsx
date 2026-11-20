@@ -33,9 +33,9 @@ import { uploadWithProgress } from "../lib/upload";
 import { hashRomFile } from "../lib/romhash";
 import { formatBytes } from "../lib/format";
 import { MEDIA_KIND_LABEL } from "../lib/media";
-
-// World is the default region for a ROM dump row.
-const DEFAULT_REGION = "World";
+import Modal from "../components/ui/Modal";
+import DialogHeader from "../components/ui/DialogHeader";
+import { DEFAULT_REGION } from "../lib/regions";
 
 // One ROM dump to add with the new game: its region and (when not an archive)
 // the name/size/hashes read from the dropped file.
@@ -1149,22 +1149,15 @@ export default function NewGamePage() {
 			</div>
 
 			{confirmSubmit ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setConfirmSubmit(false)}
-				>
+				<Modal onClose={() => setConfirmSubmit(false)}>
 					<div className="card w-full max-w-md p-6 space-y-4">
-						<div className="flex items-start gap-3">
-							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-warning)]/15 shrink-0">
-								<AlertTriangle className="w-5 h-5 text-[var(--color-warning)]" />
-							</div>
-							<div className="min-w-0">
-								<h2 className="text-lg font-bold">{t("metadataSubmit.confirmSubmit.title")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
-									{t("metadataSubmit.confirmSubmit.body")}
-								</p>
-							</div>
-						</div>
+						<DialogHeader
+							tone="warning"
+							icon={AlertTriangle}
+							title={t("metadataSubmit.confirmSubmit.title")}
+						>
+							{t("metadataSubmit.confirmSubmit.body")}
+						</DialogHeader>
 						<div className="flex justify-end gap-2">
 							<button className="btn btn-ghost" type="button" onClick={() => setConfirmSubmit(false)}>
 								{t("common.cancel")}
@@ -1174,7 +1167,7 @@ export default function NewGamePage() {
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 		</div>
 	);

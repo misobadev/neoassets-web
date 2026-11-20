@@ -55,6 +55,11 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
       `reviews.ts`, `community.ts` (rewards, profiles, follows), `admin.ts`,
       `developer.ts`: types and calls for each area.
 - `src/lib/format.ts` `formatDate()`, `formatBytes()`, `formatFileSize()`.
+- `src/components/ui/` shared UI: `Modal` (every dialog overlay:
+  `role="dialog"`, named by its first heading, focus trapped and restored,
+  Escape/backdrop call `onClose`; omit `onClose` for a dialog that must not be
+  dismissed), `DialogHeader` (icon + title + description), `StatusBadge`.
+  New dialogs use these instead of a hand-written `fixed inset-0` overlay.
 - `src/lib/status.ts` `statusBadge()`: the badge class for a submission or
   review status.
 - `src/i18n/index.ts` i18next setup, `LANGUAGES`, `setLanguage()`, persisted

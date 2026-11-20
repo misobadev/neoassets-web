@@ -26,6 +26,7 @@ import {
 	USER_EMAIL_KEY,
 } from "../lib/api";
 import { formatDate } from "../lib/format";
+import Modal from "../components/ui/Modal";
 
 // GIF avatars keep their animation and are capped at 5 MB; other images are
 // centre-cropped to a 512x512 WebP.
@@ -547,11 +548,7 @@ export default function ProfilePage() {
 			</section>
 
 			{revealed ? (
-				<div
-					className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
-					role="dialog"
-					aria-modal="true"
-				>
+				<Modal className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
 					<div className="card w-full max-w-lg p-6 space-y-3">
 						<p className="font-semibold">{revealed.title}</p>
 						<p className="text-xs text-red-500">{t("apiKeys.shownOnce")}</p>
@@ -565,7 +562,7 @@ export default function ProfilePage() {
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 		</div>
 	);

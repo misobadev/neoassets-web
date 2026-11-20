@@ -1,5 +1,9 @@
 import type { TFunction } from "i18next";
 
+// World is the default region for a ROM dump or media row: a row always
+// targets a region, so the region select never has an empty placeholder.
+export const DEFAULT_REGION = "World";
+
 // REGION_SLUGS maps the canonical region name stored in the database to its
 // i18n slug under `metadata.regions.*`, so the UI can show it translated.
 const REGION_SLUGS: Record<string, string> = {

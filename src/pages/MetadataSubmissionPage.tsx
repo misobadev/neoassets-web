@@ -34,7 +34,7 @@ import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import Pagination from "../components/Pagination";
 import { genreLabel } from "../lib/genres";
-import { regionLabel } from "../lib/regions";
+import { DEFAULT_REGION, regionLabel } from "../lib/regions";
 import RegionLabel from "../components/RegionLabel";
 import { uploadWithProgress } from "../lib/upload";
 import { hashRomFile } from "../lib/romhash";
@@ -54,6 +54,8 @@ import {
 } from "../lib/media";
 import { formatBytes } from "../lib/format";
 import { MEDIA_KIND_LABEL } from "../lib/media";
+import Modal from "../components/ui/Modal";
+import DialogHeader from "../components/ui/DialogHeader";
 
 const TEXT_TYPES = [
 	{ key: "name", label: "metadataSubmit.textTypes.name" },
@@ -109,10 +111,6 @@ interface RegionMediaRow {
 	fromRegion: string;
 	file: File | null;
 }
-
-// World is the default region: a row always targets a region, so the region
-// select never has an empty placeholder.
-const DEFAULT_REGION = "World";
 
 let rowSeq = 0;
 const nextRowKey = () => `row-${++rowSeq}`;
@@ -2029,22 +2027,15 @@ export default function MetadataSubmissionPage() {
 			</div>
 
 			{confirmSubmit ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && setConfirmSubmit(false)}
-				>
+				<Modal onClose={() => setConfirmSubmit(false)}>
 					<div className="card w-full max-w-md p-6 space-y-4">
-						<div className="flex items-start gap-3">
-							<div className="grid size-9 place-items-center rounded-full bg-[var(--color-warning)]/15 shrink-0">
-								<AlertTriangle className="w-5 h-5 text-[var(--color-warning)]" />
-							</div>
-							<div className="min-w-0">
-								<h2 className="text-lg font-bold">{t("metadataSubmit.confirmSubmit.title")}</h2>
-								<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
-									{t("metadataSubmit.confirmSubmit.body")}
-								</p>
-							</div>
-						</div>
+						<DialogHeader
+							tone="warning"
+							icon={AlertTriangle}
+							title={t("metadataSubmit.confirmSubmit.title")}
+						>
+							{t("metadataSubmit.confirmSubmit.body")}
+						</DialogHeader>
 						<div className="flex justify-end gap-2">
 							<button className="btn btn-ghost" type="button" onClick={() => setConfirmSubmit(false)}>
 								{t("common.cancel")}
@@ -2054,32 +2045,21 @@ export default function MetadataSubmissionPage() {
 							</button>
 						</div>
 					</div>
-				</div>
+				</Modal>
 			) : null}
 
 			{/* Duplicate report: requests the deletion of this game in favor of a
 			    more complete one. Red-toned because it is a deletion request. */}
 			{dupOpen ? (
-				<div
-					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
-					onClick={(e) => e.target === e.currentTarget && closeDuplicate()}
-				>
+				<Modal onClose={() => closeDuplicate()}>
 					<div
 						className={`card w-full max-w-lg p-6 space-y-4 border ${dupDone ? "border-[var(--color-success)]/40" : "border-[var(--color-error)]/40"}`}
 					>
 						{dupDone ? (
 							<>
-								<div className="flex items-start gap-3">
-									<div className="grid size-9 place-items-center rounded-full bg-[var(--color-success)]/15 shrink-0">
-										<Check className="w-5 h-5 text-[var(--color-success)]" />
-									</div>
-									<div className="min-w-0">
-										<h2 className="text-lg font-bold">{t("metadataSubmit.duplicate.title")}</h2>
-										<p className="text-sm text-[var(--color-base-content)]/70 mt-1">
-											{t("metadataSubmit.duplicate.sent")}
-										</p>
-									</div>
-								</div>
+								<DialogHeader tone="success" icon={Check} title={t("metadataSubmit.duplicate.title")}>
+									{t("metadataSubmit.duplicate.sent")}
+								</DialogHeader>
 								<div className="flex justify-end">
 									<button className="btn btn-primary" type="button" onClick={closeDuplicate}>
 										{t("common.close")}
@@ -2166,7 +2146,7 @@ export default function MetadataSubmissionPage() {
 							</>
 						)}
 					</div>
-				</div>
+				</Modal>
 			) : null}
 		</div>
 	);
