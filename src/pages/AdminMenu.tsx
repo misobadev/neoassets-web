@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LayoutGrid, ShieldCheck, Tag, HeartHandshake } from "lucide-react";
-import { isAdmin } from "../lib/api";
+import { useSession } from "../lib/session";
 
 // AdminMenu is the /app/admin landing: cards that link to the review sections.
 export default function AdminMenu() {
 	const { t } = useTranslation();
-	const admin = isAdmin();
+	const { isAdmin: admin } = useSession();
 	const items = [
 		...(admin
 			? [

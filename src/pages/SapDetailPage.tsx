@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ChevronLeft, Download, Layers, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { fetchPackDetail, isAuthed, type PackDetail } from "../lib/api";
+import { fetchPackDetail, type PackDetail } from "../lib/api";
 import UserLink from "../components/UserLink";
 import DonateButton from "../components/DonateButton";
 import { usePageTitle } from "../lib/seo";
+import { useSession } from "../lib/session";
 
 // SapDetailPage shows a published System Art Pack: its metadata, every image and
 // a Contribute button, mirroring the game metadata detail page. Browsing is
@@ -15,7 +16,7 @@ export default function SapDetailPage() {
 	const { t } = useTranslation();
 	const [pack, setPack] = useState<PackDetail | null>(null);
 	const [error, setError] = useState<string | null>(null);
-	const signedIn = isAuthed();
+	const { authed: signedIn } = useSession();
 	usePageTitle(pack ? pack.name : t("nav.systemArtPack"));
 
 	useEffect(() => {
