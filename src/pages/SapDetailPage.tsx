@@ -7,6 +7,7 @@ import UserLink from "../components/UserLink";
 import DonateButton from "../components/DonateButton";
 import { useSession } from "../lib/session";
 import { usePageMeta } from "../lib/seo";
+import { useSystems } from "../lib/systems";
 
 // SapDetailPage shows a published System Art Pack: its metadata, every image and
 // a Contribute button, mirroring the game metadata detail page. Browsing is
@@ -17,6 +18,7 @@ export default function SapDetailPage() {
 	const [pack, setPack] = useState<PackDetail | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const { authed: signedIn } = useSession();
+	const { systems } = useSystems();
 	usePageMeta({
 		title: pack ? `${pack.name} - ${t("nav.systemArtPack")} - NeoAssets` : `${t("nav.systemArtPack")} - NeoAssets`,
 		description: pack
@@ -46,7 +48,16 @@ export default function SapDetailPage() {
 	if (!pack)
 		return <p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("common.loading")}</p>;
 
-	const images = (pack.files || []).filter((f) => f.kind === "background" || f.kind === "preview");
+	const systemNames = new Map(systems.map((s) => [s.id, s.name]));
+	// Each image is labelled with its system (the pack's preview has none).
+	const imageLabel = (f: { kind: string; system_id?: string }) =>
+		f.system_id ? systemNames.get(f.system_id) || f.system_id : t("common.preview");
+	// The pack preview first, then the systems in alphabetical order.
+	const images = (pack.files || [])
+		.filter((f) => f.kind === "background" || f.kind === "preview")
+		.sort((a, b) =>
+			a.kind !== b.kind ? (a.kind === "preview" ? -1 : 1) : imageLabel(a).localeCompare(imageLabel(b)),
+		);
 
 	return (
 		<div className="space-y-6">
@@ -113,14 +124,21 @@ export default function SapDetailPage() {
 				) : (
 					<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
 						{images.map((f) => (
-							<img
-								key={f.object_key}
-								src={f.url}
-								alt=""
-								loading="lazy"
-								className="w-full aspect-square object-cover rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30"
-								onError={(e) => (e.currentTarget.style.display = "none")}
-							/>
+							<figure key={f.object_key} className="min-w-0">
+								<img
+									src={f.url}
+									alt={imageLabel(f)}
+									loading="lazy"
+									className="w-full aspect-square object-cover rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30"
+									onError={(e) => (e.currentTarget.style.visibility = "hidden")}
+								/>
+								<figcaption
+									className="mt-1.5 text-xs text-[var(--color-base-content)]/70 truncate"
+									title={imageLabel(f)}
+								>
+									{imageLabel(f)}
+								</figcaption>
+							</figure>
 						))}
 					</div>
 				)}
