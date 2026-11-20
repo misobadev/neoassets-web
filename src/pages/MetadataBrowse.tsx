@@ -29,7 +29,7 @@ import {
 import { RatingBadge } from "../components/Rating";
 import Pagination from "../components/Pagination";
 import { GAME_TYPES, typeBadgeClass, type GameType } from "../lib/gameTypes";
-import { usePageTitle } from "../lib/seo";
+import { usePageMeta } from "../lib/seo";
 
 // LIMIT is a multiple of 3 so the 3-column grid always fills its last row.
 const LIMIT = 15;
@@ -364,7 +364,6 @@ function GameCard({ g }: { g: GameSummary }) {
 // the games grid so the user does not have to scroll back to the top.
 export default function MetadataBrowse() {
 	const { t } = useTranslation();
-	usePageTitle(t("metadata.title"));
 	const navigate = useNavigate();
 	const { systemId } = useParams<{ systemId: string }>();
 	const [systems, setSystems] = useState<MetadataSystem[] | null>(null);
@@ -385,6 +384,12 @@ export default function MetadataBrowse() {
 	const [error, setError] = useState<string | null>(null);
 
 	const selected = (systems || []).find((s) => s.id === systemId) || null;
+	usePageMeta({
+		title: selected ? `${selected.name} games - NeoAssets` : `${t("metadata.title")} - NeoAssets`,
+		description: selected
+			? `Browse ${selected.name} game metadata on NeoAssets: covers, logos, screenshots, videos, descriptions and ROM hashes.`
+			: "Browse game metadata by system: covers, logos, screenshots, videos, descriptions and ROM hashes for emulation frontends.",
+	});
 
 	// The selector is grouped by family (arcade, console, computer, ...). The
 	// arcade family keeps its boards flat (no mame-fbneo/flycast labels) and the

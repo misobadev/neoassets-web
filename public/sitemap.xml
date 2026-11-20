@@ -16,16 +16,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://neoassets.dev/app/login</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://neoassets.dev/app/register</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
     <loc>https://neoassets.dev/app/docs</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -34,5 +24,10 @@
     <loc>https://neoassets.dev/app/guide</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://neoassets.dev/app/dashboard</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>

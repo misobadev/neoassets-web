@@ -18,11 +18,16 @@ import {
 } from "../lib/api";
 import { formatDate } from "../lib/format";
 import StatusBadge from "../components/ui/StatusBadge";
+import { usePageMeta } from "../lib/seo";
 
 export default function PublicProfilePage() {
 	const { t } = useTranslation();
 	const { username } = useParams<{ username: string }>();
 	const [profile, setProfile] = useState<PublicProfile | null>(null);
+	usePageMeta({
+		title: `${username || "Profile"} - NeoAssets`,
+		description: `${username || "A"} contributor profile on NeoAssets: level, approved contributions and recent submissions.`,
+	});
 	const [followers, setFollowers] = useState<string[]>([]);
 	const [following, setFollowing] = useState<string[]>([]);
 	const [submissions, setSubmissions] = useState<UserSubmissionItem[]>([]);

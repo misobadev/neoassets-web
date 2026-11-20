@@ -18,8 +18,14 @@ import { cdnUrl, fetchDashboard, type DashboardData, mediaUrl } from "../lib/api
 import UserLink from "../components/UserLink";
 import Avatar from "../components/Avatar";
 import { formatBytes, formatDate } from "../lib/format";
+import { usePageMeta } from "../lib/seo";
 
 export default function DashboardPage() {
+	usePageMeta({
+		title: "Dashboard - NeoAssets",
+		description:
+			"NeoAssets community dashboard: top contributors, recent art packs and metadata, popular games and systems.",
+	});
 	const { t } = useTranslation();
 	const [data, setData] = useState<DashboardData | null>(null);
 	const [error, setError] = useState<string | null>(null);

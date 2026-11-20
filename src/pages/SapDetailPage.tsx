@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import { fetchPackDetail, type PackDetail } from "../lib/api";
 import UserLink from "../components/UserLink";
 import DonateButton from "../components/DonateButton";
-import { usePageTitle } from "../lib/seo";
 import { useSession } from "../lib/session";
+import { usePageMeta } from "../lib/seo";
 
 // SapDetailPage shows a published System Art Pack: its metadata, every image and
 // a Contribute button, mirroring the game metadata detail page. Browsing is
@@ -17,7 +17,13 @@ export default function SapDetailPage() {
 	const [pack, setPack] = useState<PackDetail | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const { authed: signedIn } = useSession();
-	usePageTitle(pack ? pack.name : t("nav.systemArtPack"));
+	usePageMeta({
+		title: pack ? `${pack.name} - ${t("nav.systemArtPack")} - NeoAssets` : `${t("nav.systemArtPack")} - NeoAssets`,
+		description: pack
+			? pack.description ||
+				`${pack.name}, a system art pack by ${pack.author} for emulation frontends on NeoAssets.`
+			: undefined,
+	});
 
 	useEffect(() => {
 		if (!packID) return;

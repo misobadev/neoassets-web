@@ -3,11 +3,15 @@ import { BookOpen, Gauge, HeartHandshake, HelpCircle, Star } from "lucide-react"
 import { useTranslation } from "react-i18next";
 import { fetchConfig, type PublicConfig } from "../lib/api";
 import DonorBadge from "../components/DonorBadge";
-import { usePageTitle } from "../lib/seo";
+import { usePageMeta } from "../lib/seo";
 
 export default function GuidePage() {
 	const { t } = useTranslation();
-	usePageTitle("NeoAssets - Guide");
+	usePageMeta({
+		title: "Rewards Guide - NeoAssets",
+		description:
+			"How NeoAssets rewards contributors: XP for approved metadata, media and system art packs, levels, ranks and scraping threads.",
+	});
 	const [cfg, setCfg] = useState<PublicConfig | null>(null);
 
 	useEffect(() => {
