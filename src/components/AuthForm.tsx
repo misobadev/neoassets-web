@@ -4,7 +4,13 @@ import { api, type AuthResult, USER_EMAIL_KEY, USER_ROLE_KEY, USER_NAME_KEY, USE
 
 type AuthMode = "login" | "register" | "forgot" | "reset";
 
-export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed?: () => void; initialMode?: AuthMode }) {
+export default function AuthForm({
+	onAuthed,
+	initialMode = "login",
+}: {
+	onAuthed?: () => void;
+	initialMode?: AuthMode;
+}) {
 	const { t } = useTranslation();
 	const [authMode, setAuthMode] = useState<AuthMode>(initialMode);
 	const [authMsg, setAuthMsg] = useState<{ text?: string; key?: string; tone: string } | null>(null);
@@ -101,7 +107,12 @@ export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed
 	}, []);
 
 	const toneColor = (tone: string) =>
-		({ info: "text-[var(--color-info)]", success: "text-[var(--color-success)]", error: "text-[var(--color-error)]", warning: "text-[var(--color-warning)]" })[tone] || "text-[var(--color-info)]";
+		({
+			info: "text-[var(--color-info)]",
+			success: "text-[var(--color-success)]",
+			error: "text-[var(--color-error)]",
+			warning: "text-[var(--color-warning)]",
+		})[tone] || "text-[var(--color-info)]";
 
 	return (
 		<div className="max-w-md mx-auto w-full">
@@ -125,7 +136,9 @@ export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed
 			{authMode === "login" && (
 				<div className="space-y-4">
 					<div>
-						<label className="label-text" htmlFor="auth-email">{t("auth.email")}</label>
+						<label className="label-text" htmlFor="auth-email">
+							{t("auth.email")}
+						</label>
 						<input
 							id="auth-email"
 							className="input"
@@ -137,7 +150,9 @@ export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed
 						/>
 					</div>
 					<div>
-						<label className="label-text" htmlFor="auth-password">{t("auth.password")}</label>
+						<label className="label-text" htmlFor="auth-password">
+							{t("auth.password")}
+						</label>
 						<input
 							id="auth-password"
 							className="input"
@@ -162,7 +177,9 @@ export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed
 			{authMode === "register" && (
 				<div className="space-y-4">
 					<div>
-						<label className="label-text" htmlFor="reg-username">{t("auth.username")}</label>
+						<label className="label-text" htmlFor="reg-username">
+							{t("auth.username")}
+						</label>
 						<input
 							id="reg-username"
 							className="input"
@@ -172,7 +189,9 @@ export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed
 						/>
 					</div>
 					<div>
-						<label className="label-text" htmlFor="reg-email">{t("auth.email")}</label>
+						<label className="label-text" htmlFor="reg-email">
+							{t("auth.email")}
+						</label>
 						<input
 							id="reg-email"
 							className="input"
@@ -183,7 +202,9 @@ export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed
 						/>
 					</div>
 					<div>
-						<label className="label-text" htmlFor="reg-password">{t("auth.password")}</label>
+						<label className="label-text" htmlFor="reg-password">
+							{t("auth.password")}
+						</label>
 						<input
 							id="reg-password"
 							className="input"
@@ -205,7 +226,9 @@ export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed
 			{authMode === "forgot" && (
 				<div className="space-y-4">
 					<div>
-						<label className="label-text" htmlFor="forgot-email">{t("auth.email")}</label>
+						<label className="label-text" htmlFor="forgot-email">
+							{t("auth.email")}
+						</label>
 						<input
 							id="forgot-email"
 							className="input"
@@ -229,7 +252,9 @@ export default function AuthForm({ onAuthed, initialMode = "login" }: { onAuthed
 			{authMode === "reset" && (
 				<div className="space-y-4">
 					<div>
-						<label className="label-text" htmlFor="reset-password">{t("auth.newPassword")}</label>
+						<label className="label-text" htmlFor="reset-password">
+							{t("auth.newPassword")}
+						</label>
 						<input
 							id="reset-password"
 							className="input"

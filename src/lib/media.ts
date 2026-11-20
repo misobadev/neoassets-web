@@ -73,9 +73,13 @@ export function measureVideo(file: File): Promise<VideoMeasurement> {
 		const guard = window.setTimeout(() => done(0), 4000);
 		const cleanup = () => {
 			window.clearTimeout(guard);
-			try { video.pause(); } catch {}
+			try {
+				video.pause();
+			} catch {}
 			video.removeAttribute("src");
-			try { video.load(); } catch {}
+			try {
+				video.load();
+			} catch {}
 			video.remove();
 			URL.revokeObjectURL(url);
 		};
@@ -102,7 +106,10 @@ export function measureVideo(file: File): Promise<VideoMeasurement> {
 			const warmupMs = 500;
 			const sampleMs = 1500;
 			const t0 = performance.now();
-			const qualityFrames = () => (typeof video.getVideoPlaybackQuality === "function" ? video.getVideoPlaybackQuality().totalVideoFrames : null);
+			const qualityFrames = () =>
+				typeof video.getVideoPlaybackQuality === "function"
+					? video.getVideoPlaybackQuality().totalVideoFrames
+					: null;
 			let sampling = false;
 			let sampleStart = 0;
 			let sampleStartFrames = 0;
@@ -137,7 +144,10 @@ export function measureVideo(file: File): Promise<VideoMeasurement> {
 					window.setTimeout(tick, 100);
 				}
 			};
-			video.play().then(tick).catch(() => done(0));
+			video
+				.play()
+				.then(tick)
+				.catch(() => done(0));
 		};
 	});
 }
@@ -160,16 +170,25 @@ export function checkVideoMeasurement(fileName: string, m: VideoMeasurement): Vi
 		errors.push({ key: "metadataSubmit.errors.format" });
 	}
 	if (m.duration < VIDEO_MIN_SECONDS - 0.5) {
-		errors.push({ key: "metadataSubmit.errors.durationMin", params: { min: VIDEO_MIN_SECONDS, current: m.duration.toFixed(1) } });
+		errors.push({
+			key: "metadataSubmit.errors.durationMin",
+			params: { min: VIDEO_MIN_SECONDS, current: m.duration.toFixed(1) },
+		});
 	}
 	if (m.duration > VIDEO_MAX_SECONDS + 0.5) {
-		errors.push({ key: "metadataSubmit.errors.durationMax", params: { max: VIDEO_MAX_SECONDS, current: m.duration.toFixed(1) } });
+		errors.push({
+			key: "metadataSubmit.errors.durationMax",
+			params: { max: VIDEO_MAX_SECONDS, current: m.duration.toFixed(1) },
+		});
 	}
 	if (m.width <= 0 || m.height <= 0) {
 		errors.push({ key: "metadataSubmit.errors.dimensions" });
 	}
 	if (m.fps > 0 && m.fps < VIDEO_FPS_MIN) {
-		warnings.push({ key: "metadataSubmit.errors.frameRate", params: { fpsMin: VIDEO_FPS_MIN, fps: VIDEO_FPS, detected: m.fps } });
+		warnings.push({
+			key: "metadataSubmit.errors.frameRate",
+			params: { fpsMin: VIDEO_FPS_MIN, fps: VIDEO_FPS, detected: m.fps },
+		});
 	}
 	return { errors, warnings };
 }

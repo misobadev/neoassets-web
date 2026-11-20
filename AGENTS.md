@@ -14,7 +14,7 @@ a static file.
 
 ```
 Browser (React SPA)
-  -> GET  /api/v1/packs            approved packs (LandingPage)
+  -> GET  /api/v1/packs            approved packs (HomeView)
   -> GET  /api/v1/systems          system catalog (upload grid)
   -> GET  /auth/submissions        current user's submissions + files + logs
   -> GET  /auth/submissions/:id    a submission detail
@@ -41,40 +41,39 @@ in `src/pages/DeveloperPage.tsx`, which calls the user-JWT endpoints
 
 ## Key files
 
-- `src/lib/api.ts`         `api()` fetch helper (`credentials: "include"`),
-                           types, `isAuthed()`, `clearStoredAuth()`, `cdnUrl()`.
-                           Auth is an httpOnly session cookie set by the API, so
-                           no token is stored in JS: `userToken()`/`reviewToken()`
-                           return null and the cookie authenticates the request.
-                           Only the non-secret profile (`USER_ID/NAME/EMAIL/ROLE`)
-                           is cached in `localStorage` for the UI.
-- `src/i18n/index.ts`      i18next setup, `LANGUAGES`, `setLanguage()`, persisted
-                           in `localStorage` under `ns-language`.
+- `src/lib/api.ts` `api()` fetch helper (`credentials: "include"`),
+  types, `isAuthed()`, `clearStoredAuth()`, `cdnUrl()`.
+  Auth is an httpOnly session cookie set by the API, so
+  no token is stored in JS: the cookie authenticates
+  every request.
+  Only the non-secret profile (`USER_ID/NAME/EMAIL/ROLE`)
+  is cached in `localStorage` for the UI.
+- `src/i18n/index.ts` i18next setup, `LANGUAGES`, `setLanguage()`, persisted
+  in `localStorage` under `ns-language`.
 - `src/i18n/locales/*.json` all UI strings (en, de, es, fr, id, it, ja, ko, pt, ru, zh).
-- `src/components/LanguageSelect.tsx`  language dropdown in the sidebar footer.
-- `src/lib/image.ts`       `toSafeBackground()` for avatars (center-crops to a
-                           square WebP in the browser).
-- `src/lib/upload.ts`      `uploadWithProgress()` PUT via XHR to the presigned URL.
-- `src/lib/draft.ts`       client-side draft store (IndexedDB): `savePackDraft()`,
-                           `loadPackDraft()`, `clearPackDraft()`. Holds metadata +
-                           the actual image `File` blobs; a single DB connection is
-                           reused.
-- `src/lib/media.ts`       metadata media helpers: accepted formats,
-                           `measureVideo()`, accepted aspect ratios and video
-                           limits. Submission images are uploaded as picked; the
-                           backend normalizes them to WebP (crop/scale/quality)
-                           on approval.
-- `src/pages/NewGamePage.tsx`  create a brand-new game (system + type + name with
-                           an existing-game search, all fields and media) as a
-                           `kind=new_game` metadata submission (route
-                           `/app/metadata[/:systemId]/new`).
-- `src/pages/SubmissionsView.tsx`   list of submission cards (reads `/auth/submissions`).
-- `src/components/SubmissionEditor.tsx`  new/edit form + uploads + save/submit.
-- `src/pages/LandingPage.tsx`   approved community packs + contribution categories.
-- `src/pages/AdminView.tsx`     admin review/approve/reject modal.
-- `src/pages/ApiDocsPage.tsx`   public docs for the scraping API (route `/app/docs`).
+- `src/components/LanguageSelect.tsx` language dropdown in the sidebar footer.
+- `src/lib/image.ts` `toSafeBackground()` for avatars (center-crops to a
+  square WebP in the browser).
+- `src/lib/upload.ts` `uploadWithProgress()` PUT via XHR to the presigned URL.
+- `src/lib/draft.ts` client-side draft store (IndexedDB): `savePackDraft()`,
+  `loadPackDraft()`, `clearPackDraft()`. Holds metadata +
+  the actual image `File` blobs; a single DB connection is
+  reused.
+- `src/lib/media.ts` metadata media helpers: accepted formats,
+  `measureVideo()`, accepted aspect ratios and video
+  limits. Submission images are uploaded as picked; the
+  backend normalizes them to WebP (crop/scale/quality)
+  on approval.
+- `src/pages/NewGamePage.tsx` create a brand-new game (system + type + name with
+  an existing-game search, all fields and media) as a
+  `kind=new_game` metadata submission (route
+  `/app/metadata[/:systemId]/new`).
+- `src/pages/SubmissionsView.tsx` list of submission cards (reads `/auth/submissions`).
+- `src/components/SubmissionEditor.tsx` new/edit form + uploads + save/submit.
+- `src/pages/AdminView.tsx` admin review/approve/reject modal.
+- `src/pages/ApiDocsPage.tsx` public docs for the scraping API (route `/app/docs`).
 - `src/pages/DeveloperPage.tsx` self-service developer apps + personal API keys
-                                (route `/app/developer`, auth required).
+  (route `/app/developer`, auth required).
 
 Icons use `lucide-react` (imported per component, tree-shakeable). Do not hand-write
 inline SVGs; pick an existing `lucide-react` icon instead.
@@ -105,6 +104,17 @@ inline SVGs; pick an existing `lucide-react` icon instead.
   `useTranslation()` + `t()`. Keep the same keys across every locale file and
   preserve `{{placeholders}}`. Status/role/log labels use `status.*`,
   `metadataStatus.*`, `role.*`, `log.*` (the latter two with `defaultValue`).
+
+## Development checks
+
+```bash
+npm run check   # typecheck + ESLint + Prettier check + Vitest
+npm run format  # format with Prettier
+```
+
+CI (`.github/workflows/ci.yml`) runs the same checks and the build on every
+push and pull request. User-supplied links (donation URLs, duplicate-game
+links) go through `safeHttpUrl()` (`src/lib/url.ts`) before rendering.
 
 ## Known pitfalls / notes
 

@@ -38,37 +38,149 @@ createRoot(document.getElementById("root")!).render(
 			<Layout>
 				<Routes>
 					<Route path="/" element={<Navigate to="/app/home" replace />} />
-					<Route path="/app" element={<ReviewsProvider><AppPage /></ReviewsProvider>}>
+					<Route
+						path="/app"
+						element={
+							<ReviewsProvider>
+								<AppPage />
+							</ReviewsProvider>
+						}
+					>
 						<Route index element={<Navigate to="/app/home" replace />} />
 						<Route path="home" element={<HomeView />} />
 						<Route path="login" element={<AuthPage mode="login" />} />
 						<Route path="register" element={<AuthPage mode="register" />} />
 						<Route path="dashboard" element={<DashboardsPage />} />
-						<Route path="profile" element={<RequireAuth><ProfilePage /></RequireAuth>} />
+						<Route
+							path="profile"
+							element={
+								<RequireAuth>
+									<ProfilePage />
+								</RequireAuth>
+							}
+						/>
 						<Route path="guide" element={<GuidePage />} />
 						<Route path="docs" element={<ApiDocsPage />} />
-						<Route path="developer" element={<RequireAuth><DeveloperPage /></RequireAuth>} />
+						<Route
+							path="developer"
+							element={
+								<RequireAuth>
+									<DeveloperPage />
+								</RequireAuth>
+							}
+						/>
 						<Route path="u/:username" element={<PublicProfilePage />} />
 						<Route path="sap" element={<SubmissionsView />} />
 						<Route path="sap/:packID" element={<SapDetailPage />} />
-						<Route path="contributions" element={<RequireAuth><ReviewsPage /></RequireAuth>} />
+						<Route
+							path="contributions"
+							element={
+								<RequireAuth>
+									<ReviewsPage />
+								</RequireAuth>
+							}
+						/>
 						<Route path="reviews" element={<Navigate to="/app/contributions" replace />} />
-						<Route path="sap/:packID/contribute" element={<RequireAuth><ContributePage /></RequireAuth>} />
+						<Route
+							path="sap/:packID/contribute"
+							element={
+								<RequireAuth>
+									<ContributePage />
+								</RequireAuth>
+							}
+						/>
 						<Route path="submissions" element={<Navigate to="/app/sap" replace />} />
-						<Route path="submissions/new" element={<RequireAuth><SubmissionEditor /></RequireAuth>} />
-						<Route path="submissions/:id" element={<RequireAuth><SubmissionEditor /></RequireAuth>} />
-						<Route path="admin" element={<RequireAuth><AdminMenu /></RequireAuth>} />
-						<Route path="admin/sap" element={<RequireAuth><AdminView /></RequireAuth>} />
-						<Route path="admin/sap/:id" element={<RequireAuth><AdminSubmissionReview /></RequireAuth>} />
-						<Route path="admin/metadata" element={<RequireAuth><MetadataAdminView /></RequireAuth>} />
-						<Route path="admin/users" element={<RequireAuth><AdminUsersView /></RequireAuth>} />
-						<Route path="admin/donations" element={<RequireAuth><AdminDonationsView /></RequireAuth>} />
+						<Route
+							path="submissions/new"
+							element={
+								<RequireAuth>
+									<SubmissionEditor />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="submissions/:id"
+							element={
+								<RequireAuth>
+									<SubmissionEditor />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="admin"
+							element={
+								<RequireAuth>
+									<AdminMenu />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="admin/sap"
+							element={
+								<RequireAuth>
+									<AdminView />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="admin/sap/:id"
+							element={
+								<RequireAuth>
+									<AdminSubmissionReview />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="admin/metadata"
+							element={
+								<RequireAuth>
+									<MetadataAdminView />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="admin/users"
+							element={
+								<RequireAuth>
+									<AdminUsersView />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="admin/donations"
+							element={
+								<RequireAuth>
+									<AdminDonationsView />
+								</RequireAuth>
+							}
+						/>
 						<Route path="metadata" element={<MetadataBrowse />} />
-						<Route path="metadata/new" element={<RequireAuth><NewGamePage /></RequireAuth>} />
+						<Route
+							path="metadata/new"
+							element={
+								<RequireAuth>
+									<NewGamePage />
+								</RequireAuth>
+							}
+						/>
 						<Route path="metadata/:systemId" element={<MetadataBrowse />} />
-						<Route path="metadata/:systemId/new" element={<RequireAuth><NewGamePage /></RequireAuth>} />
+						<Route
+							path="metadata/:systemId/new"
+							element={
+								<RequireAuth>
+									<NewGamePage />
+								</RequireAuth>
+							}
+						/>
 						<Route path="metadata/:systemId/game/:gameId" element={<MetadataGameDetail />} />
-						<Route path="metadata/:systemId/game/:gameId/submit" element={<RequireAuth><MetadataSubmissionPage /></RequireAuth>} />
+						<Route
+							path="metadata/:systemId/game/:gameId/submit"
+							element={
+								<RequireAuth>
+									<MetadataSubmissionPage />
+								</RequireAuth>
+							}
+						/>
 						<Route path="metadata/admin" element={<Navigate to="/app/admin/metadata" replace />} />
 					</Route>
 					<Route path="*" element={<Navigate to="/app/home" replace />} />

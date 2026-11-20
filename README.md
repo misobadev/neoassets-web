@@ -16,30 +16,38 @@ npm ci
 npm run dev        # local dev server
 npm run build      # typecheck (tsc) + production build to dist/
 npm run typecheck  # tsc -b --noEmit
+npm run lint       # ESLint
+npm run format     # Prettier
+npm test           # Vitest
+npm run check      # typecheck + lint + format check + tests
+npm run lint       # ESLint
+npm run format     # Prettier
+npm test           # Vitest
+npm run check      # all of the above except build
 ```
 
 ## Environment (Vite)
 
-| var                   | default                                        | purpose                     |
-|-----------------------|------------------------------------------------|-----------------------------|
-| `VITE_ASSETS_API_URL` | `https://neoassets.dev`                        | base URL of the Go API      |
-| `VITE_CDN_BASE`       | `https://cdn.neoassets.dev`                    | R2 public custom domain     |
+| var                   | default                     | purpose                 |
+| --------------------- | --------------------------- | ----------------------- |
+| `VITE_ASSETS_API_URL` | `https://neoassets.dev`     | base URL of the Go API  |
+| `VITE_CDN_BASE`       | `https://cdn.neoassets.dev` | R2 public custom domain |
 
 `VITE_CDN_BASE` is used to build the public URL of every uploaded object:
 `<CDN_BASE>/<object_key>`. The custom domain is public; objects are not signed.
 
 ## Routes
 
-| path                         | view                              |
-|------------------------------|-----------------------------------|
-| `/`                          | LandingPage (approved packs)      |
-| `/app`                       | AppPage shell (auth required)     |
-| `/app/submissions`           | SubmissionsView (list of cards)   |
-| `/app/submissions/new`       | SubmissionEditor (new)            |
-| `/app/submissions/:id`       | SubmissionEditor (edit)           |
-| `/app/admin`                 | AdminView (admin only)            |
-| `/app/docs`                  | ApiDocsPage (scraping API docs)   |
-| `/app/developer`             | DeveloperPage (apps + API keys)   |
+| path                   | view                            |
+| ---------------------- | ------------------------------- |
+| `/`                    | redirects to `/app/home`        |
+| `/app`                 | AppPage shell (auth required)   |
+| `/app/submissions`     | SubmissionsView (list of cards) |
+| `/app/submissions/new` | SubmissionEditor (new)          |
+| `/app/submissions/:id` | SubmissionEditor (edit)         |
+| `/app/admin`           | AdminView (admin only)          |
+| `/app/docs`            | ApiDocsPage (scraping API docs) |
+| `/app/developer`       | DeveloperPage (apps + API keys) |
 
 ## Submission lifecycle
 

@@ -37,7 +37,10 @@ export default function Layout({ children }: { children: ReactNode }) {
 						<div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4">
 							<Link to="/" className="flex items-center gap-2.5 text-base-content">
 								<span className="isotype-mask h-9 w-9 shrink-0" aria-hidden="true" />
-								<span className="inline-block uppercase tracking-tight text-2xl leading-none"><span className="font-bold">Neo</span><span className="font-normal">Assets</span></span>
+								<span className="inline-block uppercase tracking-tight text-2xl leading-none">
+									<span className="font-bold">Neo</span>
+									<span className="font-normal">Assets</span>
+								</span>
 							</Link>
 							<nav className="flex items-center gap-2">
 								<Link to="/" className="btn btn-ghost btn-sm">

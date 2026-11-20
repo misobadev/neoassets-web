@@ -15,7 +15,10 @@ export function RatingBadge({ rating }: { rating?: number | null }) {
 	const r = rating || 0;
 	if (r <= 0) {
 		return (
-			<span className="inline-flex items-center gap-1 text-[var(--color-base-content)]/40" title={t("rating.noRating")}>
+			<span
+				className="inline-flex items-center gap-1 text-[var(--color-base-content)]/40"
+				title={t("rating.noRating")}
+			>
 				<Star className="w-6 h-6" fill="currentColor" />
 			</span>
 		);

@@ -65,8 +65,19 @@ export default function AdminDonationsView() {
 				<p className="text-sm text-[var(--color-base-content)]/70">{t("adminDonations.hint")}</p>
 
 				<div>
-					<label className="label-text" htmlFor="don-kind">{t("adminDonations.kind")}</label>
-					<select id="don-kind" className="select w-full" value={kind} onChange={(e) => { setKind(e.target.value as "subscription" | "one_time"); setResult(null); }} disabled={busy}>
+					<label className="label-text" htmlFor="don-kind">
+						{t("adminDonations.kind")}
+					</label>
+					<select
+						id="don-kind"
+						className="select w-full"
+						value={kind}
+						onChange={(e) => {
+							setKind(e.target.value as "subscription" | "one_time");
+							setResult(null);
+						}}
+						disabled={busy}
+					>
 						<option value="subscription">{t("adminDonations.monthly")}</option>
 						<option value="one_time">{t("adminDonations.oneTime")}</option>
 					</select>
@@ -76,13 +87,23 @@ export default function AdminDonationsView() {
 					className="input w-full min-h-48 font-mono text-xs"
 					placeholder={t("adminDonations.placeholder")}
 					value={text}
-					onChange={(e) => { setText(e.target.value); setResult(null); }}
+					onChange={(e) => {
+						setText(e.target.value);
+						setResult(null);
+					}}
 					disabled={busy}
 				/>
 
 				<div className="flex flex-wrap items-center justify-between gap-3">
-					<p className="text-sm text-[var(--color-base-content)]/60">{t("adminDonations.parsed", { count: emails.length })}</p>
-					<button className="btn btn-primary" type="button" onClick={runImport} disabled={busy || emails.length === 0}>
+					<p className="text-sm text-[var(--color-base-content)]/60">
+						{t("adminDonations.parsed", { count: emails.length })}
+					</p>
+					<button
+						className="btn btn-primary"
+						type="button"
+						onClick={runImport}
+						disabled={busy || emails.length === 0}
+					>
 						<Upload className="w-4 h-4" />
 						{busy ? t("adminDonations.importing") : t("adminDonations.import")}
 					</button>
@@ -91,7 +112,11 @@ export default function AdminDonationsView() {
 
 			{result ? (
 				<div className="card p-4 text-sm text-[var(--color-success)]">
-					{t("adminDonations.result", { imported: result.imported, linked: result.linked, skipped: result.skipped })}
+					{t("adminDonations.result", {
+						imported: result.imported,
+						linked: result.linked,
+						skipped: result.skipped,
+					})}
 				</div>
 			) : null}
 			{error ? <div className="card p-4 text-sm text-[var(--color-error)]">{error}</div> : null}

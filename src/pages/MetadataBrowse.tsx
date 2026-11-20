@@ -1,9 +1,31 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChevronDown, Clapperboard, Download, FileText, Globe, Image, ImagePlus, Images, Languages, Layers, Plus, Search, Server, Tag } from "lucide-react";
+import {
+	ChevronDown,
+	Clapperboard,
+	Download,
+	FileText,
+	Globe,
+	Image,
+	ImagePlus,
+	Images,
+	Languages,
+	Layers,
+	Plus,
+	Search,
+	Server,
+	Tag,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
-import { cdnUrl, fetchMetadataGamesBySystem, fetchMetadataSystems, searchMetadataGames, type GameSummary, type MetadataSystem } from "../lib/api";
+import {
+	cdnUrl,
+	fetchMetadataGamesBySystem,
+	fetchMetadataSystems,
+	searchMetadataGames,
+	type GameSummary,
+	type MetadataSystem,
+} from "../lib/api";
 import { RatingBadge } from "../components/Rating";
 import Pagination from "../components/Pagination";
 import { GAME_TYPES, typeBadgeClass, type GameType } from "../lib/gameTypes";
@@ -34,7 +56,14 @@ function CircularProgress({ pct, size = 40, stroke = 4 }: { pct: number; size?: 
 	const c = 2 * Math.PI * r;
 	const offset = c - (clamped / 100) * c;
 	return (
-		<svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0" role="img" aria-label={t("metadata.completePct", { pct: Math.round(clamped) })}>
+		<svg
+			width={size}
+			height={size}
+			viewBox={`0 0 ${size} ${size}`}
+			className="shrink-0"
+			role="img"
+			aria-label={t("metadata.completePct", { pct: Math.round(clamped) })}
+		>
 			<circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--color-base-300)" strokeWidth={stroke} />
 			<circle
 				cx={size / 2}
@@ -48,7 +77,15 @@ function CircularProgress({ pct, size = 40, stroke = 4 }: { pct: number; size?: 
 				strokeDashoffset={offset}
 				transform={`rotate(-90 ${size / 2} ${size / 2})`}
 			/>
-			<text x="50%" y="50%" dominantBaseline="central" textAnchor="middle" fontSize={size * 0.3} fontWeight={700} fill="currentColor">
+			<text
+				x="50%"
+				y="50%"
+				dominantBaseline="central"
+				textAnchor="middle"
+				fontSize={size * 0.3}
+				fontWeight={700}
+				fill="currentColor"
+			>
 				{Math.round(clamped)}
 			</text>
 		</svg>
@@ -67,17 +104,28 @@ function SystemOption({ system, active, onSelect }: { system: MetadataSystem; ac
 			<div className="flex items-center gap-3">
 				<div className="min-w-0 flex-1">
 					<p className="font-medium text-sm truncate flex items-center gap-1.5">
-						{system.virtual ? <Layers className="w-3.5 h-3.5 shrink-0 text-[var(--color-primary)]" /> : null}
+						{system.virtual ? (
+							<Layers className="w-3.5 h-3.5 shrink-0 text-[var(--color-primary)]" />
+						) : null}
 						{system.name}
 					</p>
 					<p className="text-xs text-[var(--color-base-content)]/50 flex items-center gap-1.5 flex-wrap">
-						<span className="inline-flex items-center gap-1"><Tag className="w-3 h-3" />{system.total_games ?? 0}</span>
+						<span className="inline-flex items-center gap-1">
+							<Tag className="w-3 h-3" />
+							{system.total_games ?? 0}
+						</span>
 						<span className="text-[var(--color-base-content)]/40">·</span>
-						<span>{t("metadata.abbr.base")} {system.base ?? 0}</span>
+						<span>
+							{t("metadata.abbr.base")} {system.base ?? 0}
+						</span>
 						<span className="text-[var(--color-base-content)]/40">·</span>
-						<span>{t("metadata.abbr.hack")} {system.hack ?? 0}</span>
+						<span>
+							{t("metadata.abbr.hack")} {system.hack ?? 0}
+						</span>
 						<span className="text-[var(--color-base-content)]/40">·</span>
-						<span>{t("metadata.abbr.homebrew")} {system.homebrew ?? 0}</span>
+						<span>
+							{t("metadata.abbr.homebrew")} {system.homebrew ?? 0}
+						</span>
 					</p>
 				</div>
 				<CircularProgress pct={system.metadata_pct ?? 0} size={36} stroke={3} />
@@ -94,7 +142,17 @@ function kindLabel(kind: string, t: TFunction): string {
 // MetaIcon renders a small status icon with a Tailwind tooltip. tone controls
 // the color: ok = present (success), partial = some data, none = absent/empty.
 // When dark is true the icon is drawn for the light (holographic) cards.
-function MetaIcon({ label, tone, dark = false, children }: { label: string; tone: "ok" | "partial" | "none"; dark?: boolean; children: React.ReactNode }) {
+function MetaIcon({
+	label,
+	tone,
+	dark = false,
+	children,
+}: {
+	label: string;
+	tone: "ok" | "partial" | "none";
+	dark?: boolean;
+	children: React.ReactNode;
+}) {
 	const color = dark
 		? tone === "ok"
 			? "text-emerald-800"
@@ -129,14 +187,7 @@ function textMetaTone(g: GameSummary): "ok" | "partial" | "none" {
 
 // textMetaFields mirrors the backend text_complete columns.
 function textMetaFields(g: GameSummary) {
-	return [
-		g.description,
-		g.genre,
-		g.developer,
-		g.publisher,
-		g.release_year,
-		g.rating ? String(g.rating) : "",
-	];
+	return [g.description, g.genre, g.developer, g.publisher, g.release_year, g.rating ? String(g.rating) : ""];
 }
 
 function textMetaFilled(g: GameSummary): number {
@@ -215,13 +266,20 @@ function GameCard({ g }: { g: GameSummary }) {
 		>
 			<div className="flex items-center gap-3 relative z-[1]">
 				{g.cover ? (
-					<img src={cdnUrl(g.cover) + (g.cover_updated ? `?v=${encodeURIComponent(g.cover_updated)}` : "")} alt="" className="w-16 h-16 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0" onError={(e) => (e.currentTarget.style.display = "none")} />
+					<img
+						src={cdnUrl(g.cover) + (g.cover_updated ? `?v=${encodeURIComponent(g.cover_updated)}` : "")}
+						alt=""
+						className="w-16 h-16 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
+						onError={(e) => (e.currentTarget.style.display = "none")}
+					/>
 				) : (
 					<div className="w-16 h-16 rounded-lg bg-[var(--color-base-300)] shrink-0" />
 				)}
 				<div className="min-w-0 flex-1">
 					<span className="group/name relative block">
-						<h3 ref={nameRef} className="font-semibold truncate">{g.name}</h3>
+						<h3 ref={nameRef} className="font-semibold truncate">
+							{g.name}
+						</h3>
 						{nameClipped ? (
 							<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 w-max max-w-[18rem] break-words rounded-md bg-[var(--color-base-200)] px-2 py-1 text-[11px] font-normal leading-snug text-[var(--color-base-content)] opacity-0 shadow-lg transition-opacity duration-150 group-hover/name:opacity-100">
 								{g.name}
@@ -235,12 +293,41 @@ function GameCard({ g }: { g: GameSummary }) {
 								{g.release_year ? ` · ${g.release_year}` : ""}
 							</p>
 							<div className="flex items-center gap-2.5 mt-2 flex-wrap">
-								<MetaIcon label={textMetaTitle(t, g)} tone={textMetaTone(g)}><FileText className="w-3.5 h-3.5" /></MetaIcon>
-								<MetaIcon label={g.has_translations ? t("metadata.hasTranslations") : t("metadata.englishOnly")} tone={g.has_translations ? "ok" : "none"}><Languages className="w-3.5 h-3.5" /></MetaIcon>
-								<MetaIcon label={g.has_logo ? t("metadata.hasLogo") : t("metadata.noLogo")} tone={g.has_logo ? "ok" : "none"}><ImagePlus className="w-3.5 h-3.5" /></MetaIcon>
-								<MetaIcon label={g.has_screenshot ? t("metadata.hasScreenshot") : t("metadata.noScreenshot")} tone={g.has_screenshot ? "ok" : "none"}><Image className="w-3.5 h-3.5" /></MetaIcon>
-								<MetaIcon label={g.has_fanart ? t("metadata.hasFanart") : t("metadata.noFanart")} tone={g.has_fanart ? "ok" : "none"}><Images className="w-3.5 h-3.5" /></MetaIcon>
-								<MetaIcon label={g.has_video ? t("metadata.hasVideo") : t("metadata.noVideo")} tone={g.has_video ? "ok" : "none"}><Clapperboard className="w-3.5 h-3.5" /></MetaIcon>
+								<MetaIcon label={textMetaTitle(t, g)} tone={textMetaTone(g)}>
+									<FileText className="w-3.5 h-3.5" />
+								</MetaIcon>
+								<MetaIcon
+									label={
+										g.has_translations ? t("metadata.hasTranslations") : t("metadata.englishOnly")
+									}
+									tone={g.has_translations ? "ok" : "none"}
+								>
+									<Languages className="w-3.5 h-3.5" />
+								</MetaIcon>
+								<MetaIcon
+									label={g.has_logo ? t("metadata.hasLogo") : t("metadata.noLogo")}
+									tone={g.has_logo ? "ok" : "none"}
+								>
+									<ImagePlus className="w-3.5 h-3.5" />
+								</MetaIcon>
+								<MetaIcon
+									label={g.has_screenshot ? t("metadata.hasScreenshot") : t("metadata.noScreenshot")}
+									tone={g.has_screenshot ? "ok" : "none"}
+								>
+									<Image className="w-3.5 h-3.5" />
+								</MetaIcon>
+								<MetaIcon
+									label={g.has_fanart ? t("metadata.hasFanart") : t("metadata.noFanart")}
+									tone={g.has_fanart ? "ok" : "none"}
+								>
+									<Images className="w-3.5 h-3.5" />
+								</MetaIcon>
+								<MetaIcon
+									label={g.has_video ? t("metadata.hasVideo") : t("metadata.noVideo")}
+									tone={g.has_video ? "ok" : "none"}
+								>
+									<Clapperboard className="w-3.5 h-3.5" />
+								</MetaIcon>
 							</div>
 						</div>
 						<RatingBadge rating={g.rating} />
@@ -406,11 +493,12 @@ export default function MetadataBrowse() {
 			<div className="flex items-start justify-between gap-3">
 				<div>
 					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("metadata.title")}</h1>
-					<p className="text-[var(--color-base-content)]/60 text-sm pt-2">
-						{t("metadata.browse.subtitle")}
-					</p>
+					<p className="text-[var(--color-base-content)]/60 text-sm pt-2">{t("metadata.browse.subtitle")}</p>
 				</div>
-				<Link to={systemId ? `/app/metadata/${systemId}/new` : "/app/metadata/new"} className="btn btn-primary btn-sm shrink-0">
+				<Link
+					to={systemId ? `/app/metadata/${systemId}/new` : "/app/metadata/new"}
+					className="btn btn-primary btn-sm shrink-0"
+				>
 					<Plus className="w-4 h-4" />
 					{t("metadata.newGame.addButton")}
 				</Link>
@@ -430,10 +518,21 @@ export default function MetadataBrowse() {
 						<p className="font-semibold truncate">{selected ? selected.name : t("metadata.allSystems")}</p>
 						{selected ? (
 							<p className="text-xs text-[var(--color-base-content)]/50">
-								{t("metadata.systemStats", { games: selected.total_games ?? 0, base: selected.base ?? 0, hack: selected.hack ?? 0, homebrew: selected.homebrew ?? 0, bootleg: selected.bootleg ?? 0, aftermarket: selected.aftermarket ?? 0 })}
+								{t("metadata.systemStats", {
+									games: selected.total_games ?? 0,
+									base: selected.base ?? 0,
+									hack: selected.hack ?? 0,
+									homebrew: selected.homebrew ?? 0,
+									bootleg: selected.bootleg ?? 0,
+									aftermarket: selected.aftermarket ?? 0,
+								})}
 							</p>
 						) : (
-							<p className="text-xs text-[var(--color-base-content)]/50">{systems ? t("metadata.systemsCount", { count: systems.length }) : t("metadata.loadingSystems")}</p>
+							<p className="text-xs text-[var(--color-base-content)]/50">
+								{systems
+									? t("metadata.systemsCount", { count: systems.length })
+									: t("metadata.loadingSystems")}
+							</p>
 						)}
 					</div>
 					{selected ? (
@@ -441,7 +540,9 @@ export default function MetadataBrowse() {
 							<CircularProgress pct={selected.metadata_pct ?? 0} size={44} />
 						</div>
 					) : null}
-					<ChevronDown className={`w-4 h-4 shrink-0 text-[var(--color-base-content)]/50 transition-transform ${menuOpen ? "rotate-180" : ""}`} />
+					<ChevronDown
+						className={`w-4 h-4 shrink-0 text-[var(--color-base-content)]/50 transition-transform ${menuOpen ? "rotate-180" : ""}`}
+					/>
 				</button>
 
 				{menuOpen ? (
@@ -454,12 +555,17 @@ export default function MetadataBrowse() {
 							<div className="flex items-center gap-3">
 								<div className="min-w-0 flex-1">
 									<p className="font-medium text-sm">{t("metadata.allSystems")}</p>
-									<p className="text-xs text-[var(--color-base-content)]/50">{systems ? t("metadata.systemsCount", { count: systems.length }) : "..."}</p>
+									<p className="text-xs text-[var(--color-base-content)]/50">
+										{systems ? t("metadata.systemsCount", { count: systems.length }) : "..."}
+									</p>
 								</div>
 							</div>
 						</button>
 						{familyGroups.map((g) => (
-							<div key={g.family} className="mt-2 rounded-xl border border-[var(--color-base-300)] bg-[var(--color-base-200)]/50 p-2">
+							<div
+								key={g.family}
+								className="mt-2 rounded-xl border border-[var(--color-base-300)] bg-[var(--color-base-200)]/50 p-2"
+							>
 								<div className="flex items-center justify-between px-1 pb-1">
 									<p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-primary)]">
 										{kindLabel(g.family, t)}
@@ -470,7 +576,12 @@ export default function MetadataBrowse() {
 								</div>
 								<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
 									{g.systems.map((s) => (
-										<SystemOption key={s.id} system={s} active={s.id === systemId} onSelect={() => goSystem(s.id)} />
+										<SystemOption
+											key={s.id}
+											system={s}
+											active={s.id === systemId}
+											onSelect={() => goSystem(s.id)}
+										/>
 									))}
 								</div>
 							</div>
@@ -485,7 +596,11 @@ export default function MetadataBrowse() {
 					<Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-base-content)]/40" />
 					<input
 						className="input pl-9 w-full"
-						placeholder={selected ? t("metadata.searchSystemGames", { name: selected.name }) : t("metadata.searchAllGames")}
+						placeholder={
+							selected
+								? t("metadata.searchSystemGames", { name: selected.name })
+								: t("metadata.searchAllGames")
+						}
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
 					/>
@@ -493,7 +608,10 @@ export default function MetadataBrowse() {
 				<select
 					className="select select-sm shrink-0 w-44"
 					value={sort}
-					onChange={(e) => { setSort(e.target.value); setPage(1); }}
+					onChange={(e) => {
+						setSort(e.target.value);
+						setPage(1);
+					}}
 				>
 					<option value="scrapes">{t("metadata.sort.scrapesDesc")}</option>
 					<option value="">{t("metadata.sort.nameAsc")}</option>
@@ -508,13 +626,20 @@ export default function MetadataBrowse() {
 				<select
 					className="select select-sm shrink-0 w-36"
 					value={typeFilter}
-					onChange={(e) => { setTypeFilter(e.target.value as TypeFilter); setPage(1); }}
+					onChange={(e) => {
+						setTypeFilter(e.target.value as TypeFilter);
+						setPage(1);
+					}}
 				>
 					{TYPE_TABS.map((tab) => (
-						<option key={tab.key} value={tab.key}>{t(tab.labelKey)}</option>
+						<option key={tab.key} value={tab.key}>
+							{t(tab.labelKey)}
+						</option>
 					))}
 				</select>
-				<p className="text-sm text-[var(--color-base-content)]/50 sm:shrink-0">{t("metadata.gamesCount", { count: total })}</p>
+				<p className="text-sm text-[var(--color-base-content)]/50 sm:shrink-0">
+					{t("metadata.gamesCount", { count: total })}
+				</p>
 			</div>
 
 			{/* Pagination (top) */}
@@ -523,9 +648,13 @@ export default function MetadataBrowse() {
 			{error ? (
 				<p className="text-sm text-[var(--color-error)] py-6 text-center">{error}</p>
 			) : loading ? (
-				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("metadata.loadingGames")}</p>
+				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">
+					{t("metadata.loadingGames")}
+				</p>
 			) : games && games.length === 0 ? (
-				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("metadata.noGamesMatch")}</p>
+				<p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">
+					{t("metadata.noGamesMatch")}
+				</p>
 			) : games ? (
 				<>
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

@@ -21,6 +21,7 @@ import {
 } from "../lib/api";
 import { formatDate } from "../lib/format";
 import { regionLabel } from "../lib/regions";
+import { safeHttpUrl } from "../lib/url";
 import RegionLabel from "../components/RegionLabel";
 
 const BADGE: Record<MetadataStatus, string> = {
@@ -86,7 +87,9 @@ export default function MetadataAdminView() {
 	const [busy, setBusy] = useState(false);
 	const [actionError, setActionError] = useState<string | null>(null);
 	// A name collision returns the existing game so the reviewer can open it.
-	const [actionConflict, setActionConflict] = useState<{ gameId: string; systemId: string; name: string } | null>(null);
+	const [actionConflict, setActionConflict] = useState<{ gameId: string; systemId: string; name: string } | null>(
+		null,
+	);
 	const [approved, setApproved] = useState<{ id: string; description: boolean } | null>(null);
 
 	function load(s = status) {
@@ -123,7 +126,9 @@ export default function MetadataAdminView() {
 		const err = e as ApiError;
 		setActionError(err.message);
 		const c = (err.data as { conflict?: { game_id?: string; system_id?: string; name?: string } } | null)?.conflict;
-		setActionConflict(c?.game_id && c?.system_id ? { gameId: c.game_id, systemId: c.system_id, name: c.name || "" } : null);
+		setActionConflict(
+			c?.game_id && c?.system_id ? { gameId: c.game_id, systemId: c.system_id, name: c.name || "" } : null,
+		);
 	}
 
 	async function approve() {
@@ -134,7 +139,8 @@ export default function MetadataAdminView() {
 		try {
 			await approveMetadataSubmission(detail.submission.id, comment);
 			const hasDescription =
-				typeof detail.submission.payload.description === "string" && (detail.submission.payload.description as string).trim() !== "";
+				typeof detail.submission.payload.description === "string" &&
+				(detail.submission.payload.description as string).trim() !== "";
 			setApproved({ id: detail.submission.id, description: hasDescription });
 			setDetail(null);
 			load();
@@ -169,12 +175,28 @@ export default function MetadataAdminView() {
 	// game that should be kept.
 	const isDeleteGame = payload.delete_game === true;
 	const duplicateOf = typeof payload.duplicate_of === "string" ? payload.duplicate_of : "";
-	const payloadKeys = Object.keys(payload).filter((k) => k !== "note" && k !== "release_month" && k !== "region" && k !== "regions" && k !== "roms" && k !== "duplicate_of" && k !== "delete_game");
+	const payloadKeys = Object.keys(payload).filter(
+		(k) =>
+			k !== "note" &&
+			k !== "release_month" &&
+			k !== "region" &&
+			k !== "regions" &&
+			k !== "roms" &&
+			k !== "duplicate_of" &&
+			k !== "delete_game",
+	);
 	// A new game may submit several per-region names/releases at once.
-	const regionEntries = Array.isArray(payload.regions) ? (payload.regions as Array<Record<string, unknown>>).filter((r) => typeof r?.region === "string") : [];
+	const regionEntries = Array.isArray(payload.regions)
+		? (payload.regions as Array<Record<string, unknown>>).filter((r) => typeof r?.region === "string")
+		: [];
 	// ROM dump changes (add/edit/delete), each matched against the current roms.
-	const romEntries = Array.isArray(payload.roms) ? (payload.roms as Array<Record<string, unknown>>).filter((r) => typeof r?.action === "string") : [];
-	const textKeys = [...TEXT_ORDER.filter((k) => payloadKeys.includes(k)), ...payloadKeys.filter((k) => !TEXT_ORDER.includes(k))];
+	const romEntries = Array.isArray(payload.roms)
+		? (payload.roms as Array<Record<string, unknown>>).filter((r) => typeof r?.action === "string")
+		: [];
+	const textKeys = [
+		...TEXT_ORDER.filter((k) => payloadKeys.includes(k)),
+		...payloadKeys.filter((k) => !TEXT_ORDER.includes(k)),
+	];
 
 	// Header data for the detail modal: the target game/system and a link to
 	// open the game in a new tab. A brand-new game has no row (and no link)
@@ -182,7 +204,8 @@ export default function MetadataAdminView() {
 	const gameID = detail?.submission.game_id || detail?.game?.id || "";
 	const systemID = detail?.game?.system_id || detail?.submission.system_id || "";
 	const systemName = detail?.game?.system_name || detail?.submission.system_name || detail?.system?.name || "";
-	const gameName = detail?.game?.name || detail?.submission.game_name || (typeof payload.name === "string" ? payload.name : "");
+	const gameName =
+		detail?.game?.name || detail?.submission.game_name || (typeof payload.name === "string" ? payload.name : "");
 
 	// old_payload / old_media snapshot the target's published state at approval
 	// time, so an approved submission still shows the correct "old" side (the
@@ -226,20 +249,30 @@ export default function MetadataAdminView() {
 		}
 		if (g) {
 			switch (key) {
-				case "name": return g.name || "";
-				case "description": return g.description || "";
-				case "region": return g.region || "";
-				case "genre": return g.genre || "";
-				case "developer": return g.developer || "";
-				case "publisher": return g.publisher || "";
-				case "rating": return g.rating ? String(g.rating) : "";
-				case "type": return g.type || "";
+				case "name":
+					return g.name || "";
+				case "description":
+					return g.description || "";
+				case "region":
+					return g.region || "";
+				case "genre":
+					return g.genre || "";
+				case "developer":
+					return g.developer || "";
+				case "publisher":
+					return g.publisher || "";
+				case "rating":
+					return g.rating ? String(g.rating) : "";
+				case "type":
+					return g.type || "";
 			}
 		}
 		if (sys) {
 			switch (key) {
-				case "description": return sys.description || "";
-				case "region": return sys.region || "";
+				case "description":
+					return sys.description || "";
+				case "region":
+					return sys.region || "";
 			}
 		}
 		return "";
@@ -279,9 +312,7 @@ export default function MetadataAdminView() {
 		for (const s of submissions || []) {
 			if (!map.has(s.user_id)) map.set(s.user_id, s.submitted_by_name || s.user_id);
 		}
-		return [...map.entries()]
-			.map(([id, name]) => ({ id, name }))
-			.sort((a, b) => a.name.localeCompare(b.name));
+		return [...map.entries()].map(([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name));
 	}, [submissions]);
 
 	// systemOptions lists every system present in the current result set so the
@@ -294,9 +325,7 @@ export default function MetadataAdminView() {
 			const key = systemKey(s);
 			if (key && !map.has(key)) map.set(key, s.system_name || key);
 		}
-		return [...map.entries()]
-			.map(([id, name]) => ({ id, name }))
-			.sort((a, b) => a.name.localeCompare(b.name));
+		return [...map.entries()].map(([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name));
 	}, [submissions]);
 
 	// Reset to the first page whenever a filter or the status tab changes.
@@ -308,7 +337,9 @@ export default function MetadataAdminView() {
 		.filter((s) => !kindFilter || (s.change_kinds || []).includes(kindFilter))
 		.filter((s) => !userFilter || s.user_id === userFilter)
 		.filter((s) => !systemFilter || systemKey(s) === systemFilter)
-		.sort((a, b) => (sortDir === "asc" ? (a.created_at > b.created_at ? 1 : -1) : a.created_at < b.created_at ? 1 : -1));
+		.sort((a, b) =>
+			sortDir === "asc" ? (a.created_at > b.created_at ? 1 : -1) : a.created_at < b.created_at ? 1 : -1,
+		);
 
 	const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
 	const currentPage = Math.min(page, totalPages);
@@ -322,19 +353,19 @@ export default function MetadataAdminView() {
 				</Link>
 				<div>
 					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("nav.metadataReview")}</h1>
-					<p className="text-[var(--color-base-content)]/60 text-sm pt-2">
-						{t("metadataAdmin.subtitle")}
-					</p>
+					<p className="text-[var(--color-base-content)]/60 text-sm pt-2">{t("metadataAdmin.subtitle")}</p>
 				</div>
 			</div>
 
 			<div className="flex flex-wrap items-center gap-2">
-				{([
-					{ label: t("metadataStatus.pending"), value: "pending" },
-					{ label: t("metadataStatus.approved"), value: "approved" },
-					{ label: t("metadataStatus.rejected"), value: "rejected" },
-					{ label: t("common.all"), value: "" },
-				] as { label: string; value: MetadataStatus | "" }[]).map((f) => (
+				{(
+					[
+						{ label: t("metadataStatus.pending"), value: "pending" },
+						{ label: t("metadataStatus.approved"), value: "approved" },
+						{ label: t("metadataStatus.rejected"), value: "rejected" },
+						{ label: t("common.all"), value: "" },
+					] as { label: string; value: MetadataStatus | "" }[]
+				).map((f) => (
 					<button
 						key={f.value || "all"}
 						className={status === f.value ? "btn btn-primary" : "btn btn-ghost"}
@@ -352,40 +383,76 @@ export default function MetadataAdminView() {
 			{submissions === null ? (
 				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-6">{t("common.loading")}</p>
 			) : submissions.length === 0 ? (
-				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-6">{listMsg || t("metadataAdmin.noSubmissions")}</p>
+				<p className="text-sm text-[var(--color-base-content)]/50 text-center py-6">
+					{listMsg || t("metadataAdmin.noSubmissions")}
+				</p>
 			) : (
 				<>
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
 						<label className="w-full">
-							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">{t("metadataAdmin.filterBy")}</span>
-							<select className="select select-sm w-full" value={kindFilter} onChange={(e) => setKindFilter(e.target.value)} aria-label={t("metadataAdmin.filterBy")}>
+							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">
+								{t("metadataAdmin.filterBy")}
+							</span>
+							<select
+								className="select select-sm w-full"
+								value={kindFilter}
+								onChange={(e) => setKindFilter(e.target.value)}
+								aria-label={t("metadataAdmin.filterBy")}
+							>
 								<option value="">{t("common.all")}</option>
 								{allKinds.map((k) => (
-									<option key={k} value={k}>{kindLabel(k)}</option>
+									<option key={k} value={k}>
+										{kindLabel(k)}
+									</option>
 								))}
 							</select>
 						</label>
 						<label className="w-full">
-							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">{t("metadataAdmin.filterSystem")}</span>
-							<select className="select select-sm w-full" value={systemFilter} onChange={(e) => setSystemFilter(e.target.value)} aria-label={t("metadataAdmin.filterSystem")}>
+							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">
+								{t("metadataAdmin.filterSystem")}
+							</span>
+							<select
+								className="select select-sm w-full"
+								value={systemFilter}
+								onChange={(e) => setSystemFilter(e.target.value)}
+								aria-label={t("metadataAdmin.filterSystem")}
+							>
 								<option value="">{t("metadataAdmin.allSystems")}</option>
 								{systemOptions.map((s) => (
-									<option key={s.id} value={s.id}>{s.name}</option>
+									<option key={s.id} value={s.id}>
+										{s.name}
+									</option>
 								))}
 							</select>
 						</label>
 						<label className="w-full">
-							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">{t("metadataAdmin.filterUser")}</span>
-							<select className="select select-sm w-full" value={userFilter} onChange={(e) => setUserFilter(e.target.value)} aria-label={t("metadataAdmin.filterUser")}>
+							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">
+								{t("metadataAdmin.filterUser")}
+							</span>
+							<select
+								className="select select-sm w-full"
+								value={userFilter}
+								onChange={(e) => setUserFilter(e.target.value)}
+								aria-label={t("metadataAdmin.filterUser")}
+							>
 								<option value="">{t("metadataAdmin.allUsers")}</option>
 								{userOptions.map((u) => (
-									<option key={u.id} value={u.id}>{u.name}</option>
+									<option key={u.id} value={u.id}>
+										{u.name}
+									</option>
 								))}
 							</select>
 						</label>
 						<label className="w-full">
-							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">{t("metadataAdmin.sortBy")}</span>
-							<select className="select select-sm w-full" value={sortDir} onChange={(e) => setSortDir(e.target.value as "asc" | "desc")} aria-label={t("metadataAdmin.sortBy")}>
+							<span className="block text-xs text-[var(--color-base-content)]/50 mb-1">
+								{t("metadataAdmin.sortBy")}
+							</span>
+							<select
+								className="select select-sm w-full"
+								value={sortDir}
+								onChange={(e) => setSortDir(e.target.value as "asc" | "desc")}
+								aria-label={t("metadataAdmin.sortBy")}
+							>
 								<option value="desc">{t("metadataAdmin.newestFirst")}</option>
 								<option value="asc">{t("metadataAdmin.oldestFirst")}</option>
 							</select>
@@ -393,17 +460,28 @@ export default function MetadataAdminView() {
 					</div>
 
 					{visible.length === 0 ? (
-						<p className="text-sm text-[var(--color-base-content)]/50 text-center py-6">{t("metadataAdmin.noSubmissions")}</p>
+						<p className="text-sm text-[var(--color-base-content)]/50 text-center py-6">
+							{t("metadataAdmin.noSubmissions")}
+						</p>
 					) : (
 						<>
 							<Pagination page={currentPage} totalPages={totalPages} onChange={setPage} />
 							<div className="space-y-3">
 								{pageItems.map((s) => (
-									<div key={s.id} className="card card-hover p-4 cursor-pointer" onClick={() => open(s.id)}>
+									<div
+										key={s.id}
+										className="card card-hover p-4 cursor-pointer"
+										onClick={() => open(s.id)}
+									>
 										<div className="flex items-center gap-3">
 											{s.cover ? (
 												<img
-													src={cdnUrl(s.cover) + (s.cover_updated ? `?v=${encodeURIComponent(s.cover_updated)}` : "")}
+													src={
+														cdnUrl(s.cover) +
+														(s.cover_updated
+															? `?v=${encodeURIComponent(s.cover_updated)}`
+															: "")
+													}
 													alt=""
 													className="w-14 h-14 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
 													onError={(e) => (e.currentTarget.style.display = "none")}
@@ -416,22 +494,44 @@ export default function MetadataAdminView() {
 											<div className="min-w-0 flex-1">
 												<div className="flex items-center gap-2 flex-wrap">
 													<p className="font-semibold truncate text-sm">
-														{s.game_name || (s.game_id ? t("metadataAdmin.gameContribution") : t("metadataAdmin.systemContribution"))}
+														{s.game_name ||
+															(s.game_id
+																? t("metadataAdmin.gameContribution")
+																: t("metadataAdmin.systemContribution"))}
 													</p>
-													{s.system_name ? <span className="badge badge-ghost badge-sm shrink-0">{s.system_name}</span> : null}
-													{s.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
+													{s.system_name ? (
+														<span className="badge badge-ghost badge-sm shrink-0">
+															{s.system_name}
+														</span>
+													) : null}
+													{s.kind === "new_game" ? (
+														<span className="badge badge-primary badge-sm shrink-0">
+															{t("metadataAdmin.newGame")}
+														</span>
+													) : null}
 												</div>
 												<div className="flex flex-wrap gap-1 mt-1">
 													{(s.change_kinds || []).map((k) => (
-														<span key={k} className="badge badge-outline badge-xs">{kindLabel(k)}</span>
+														<span key={k} className="badge badge-outline badge-xs">
+															{kindLabel(k)}
+														</span>
 													))}
 												</div>
 												<p className="text-xs text-[var(--color-base-content)]/50 mt-1">
-													{t("metadataAdmin.by")} <UserLink>{s.submitted_by_name}</UserLink> · {formatDate(s.created_at)}
-													{s.reviewed_by_name ? <span> · {t("metadataAdmin.reviewedBy")} <UserLink>{s.reviewed_by_name}</UserLink></span> : null}
+													{t("metadataAdmin.by")} <UserLink>{s.submitted_by_name}</UserLink> ·{" "}
+													{formatDate(s.created_at)}
+													{s.reviewed_by_name ? (
+														<span>
+															{" "}
+															· {t("metadataAdmin.reviewedBy")}{" "}
+															<UserLink>{s.reviewed_by_name}</UserLink>
+														</span>
+													) : null}
 												</p>
 											</div>
-											<span className={`badge ${BADGE[s.status]} shrink-0`}>{t("metadataStatus." + s.status, { defaultValue: s.status })}</span>
+											<span className={`badge ${BADGE[s.status]} shrink-0`}>
+												{t("metadataStatus." + s.status, { defaultValue: s.status })}
+											</span>
 										</div>
 									</div>
 								))}
@@ -443,17 +543,36 @@ export default function MetadataAdminView() {
 			)}
 
 			{detail ? (
-				<div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && setDetail(null)}>
+				<div
+					className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+					onClick={(e) => e.target === e.currentTarget && setDetail(null)}
+				>
 					<div className="card w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
 						{/* Header */}
 						<div className="flex items-start justify-between gap-3 p-5 border-b border-[var(--color-base-300)] bg-[var(--color-base-100)]/40">
 							<div className="min-w-0">
 								<div className="flex items-center gap-2 flex-wrap">
-									<h2 className="text-xl font-bold truncate">{gameName || t("metadataAdmin.submissionTitle")}</h2>
-									{systemName ? <span className="badge badge-ghost badge-sm shrink-0">{systemName}</span> : null}
-									{subRegion ? <span className="badge badge-solid-neutral badge-sm shrink-0"><RegionLabel region={subRegion} /></span> : null}
-									{detail.submission.kind === "new_game" ? <span className="badge badge-primary badge-sm shrink-0">{t("metadataAdmin.newGame")}</span> : null}
-									{isDeleteGame ? <span className="badge badge-error badge-sm shrink-0">{t("metadataAdmin.deleteGame")}</span> : null}
+									<h2 className="text-xl font-bold truncate">
+										{gameName || t("metadataAdmin.submissionTitle")}
+									</h2>
+									{systemName ? (
+										<span className="badge badge-ghost badge-sm shrink-0">{systemName}</span>
+									) : null}
+									{subRegion ? (
+										<span className="badge badge-solid-neutral badge-sm shrink-0">
+											<RegionLabel region={subRegion} />
+										</span>
+									) : null}
+									{detail.submission.kind === "new_game" ? (
+										<span className="badge badge-primary badge-sm shrink-0">
+											{t("metadataAdmin.newGame")}
+										</span>
+									) : null}
+									{isDeleteGame ? (
+										<span className="badge badge-error badge-sm shrink-0">
+											{t("metadataAdmin.deleteGame")}
+										</span>
+									) : null}
 								</div>
 								{gameID && systemID ? (
 									<Link
@@ -467,7 +586,11 @@ export default function MetadataAdminView() {
 									</Link>
 								) : null}
 							</div>
-							<button className="btn btn-ghost !p-2 shrink-0" onClick={() => setDetail(null)} aria-label={t("common.close")}>
+							<button
+								className="btn btn-ghost !p-2 shrink-0"
+								onClick={() => setDetail(null)}
+								aria-label={t("common.close")}
+							>
 								<X className="w-5 h-5" />
 							</button>
 						</div>
@@ -477,11 +600,17 @@ export default function MetadataAdminView() {
 							<div className="flex flex-wrap items-start gap-x-8 gap-y-3 text-sm">
 								<div>
 									<p className="label-text mb-1">{t("common.status")}</p>
-									<span className={`badge ${BADGE[detail.submission.status]}`}>{t("metadataStatus." + detail.submission.status, { defaultValue: detail.submission.status })}</span>
+									<span className={`badge ${BADGE[detail.submission.status]}`}>
+										{t("metadataStatus." + detail.submission.status, {
+											defaultValue: detail.submission.status,
+										})}
+									</span>
 								</div>
 								<div>
 									<p className="label-text mb-1">{t("metadataAdmin.submittedBy")}</p>
-									<p><UserLink>{detail.submission.submitted_by_name}</UserLink></p>
+									<p>
+										<UserLink>{detail.submission.submitted_by_name}</UserLink>
+									</p>
 								</div>
 								<div>
 									<p className="label-text mb-1">{t("log.created")}</p>
@@ -492,14 +621,23 @@ export default function MetadataAdminView() {
 							{note ? (
 								<div>
 									<p className="label-text">{t("metadataAdmin.note")}</p>
-									<p className="text-sm text-[var(--color-base-content)]/70 whitespace-pre-wrap">{note}</p>
+									<p className="text-sm text-[var(--color-base-content)]/70 whitespace-pre-wrap">
+										{note}
+									</p>
 								</div>
 							) : null}
 
 							{isDeleteGame && duplicateOf ? (
 								<div>
 									<p className="label-text">{t("metadataAdmin.duplicateOf")}</p>
-									<a href={duplicateOf} target="_blank" rel="noreferrer" className="link link-primary text-sm break-all">{duplicateOf}</a>
+									<a
+										href={safeHttpUrl(duplicateOf)}
+										target="_blank"
+										rel="noreferrer"
+										className="link link-primary text-sm break-all"
+									>
+										{duplicateOf}
+									</a>
 								</div>
 							) : null}
 
@@ -510,19 +648,61 @@ export default function MetadataAdminView() {
 										{regionEntries.map((r, i) => {
 											const name = typeof r.name === "string" ? r.name : "";
 											const nameFrom = typeof r.name_from === "string" ? r.name_from : "";
-											const releaseFrom = typeof r.release_from === "string" ? r.release_from : "";
+											const releaseFrom =
+												typeof r.release_from === "string" ? r.release_from : "";
 											const y = r.release_year;
 											const m = r.release_month;
 											const release = y ? `${y}${m ? `-${String(m).padStart(2, "0")}` : ""}` : "";
 											const delName = r.delete_name === true;
 											const delRelease = r.delete_release === true;
 											return (
-												<div key={i} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1">
-													<p className="font-medium text-sm"><RegionLabel region={String(r.region)} /></p>
-													{name ? <p className="text-sm"><span className="text-[var(--color-base-content)]/50">{t("metadataSubmit.textTypes.name")}: </span>{name}{nameFrom ? <span className="text-[var(--color-base-content)]/50"> ({t("metadataAdmin.movedFrom")} <RegionLabel region={nameFrom} />)</span> : null}</p> : null}
-													{delName ? <p className="text-sm text-[var(--color-error)]">{t("metadataAdmin.nameRemoved")}</p> : null}
-													{release ? <p className="text-sm"><span className="text-[var(--color-base-content)]/50">{t("metadataSubmit.textTypes.release")}: </span>{release}{releaseFrom ? <span className="text-[var(--color-base-content)]/50"> ({t("metadataAdmin.movedFrom")} <RegionLabel region={releaseFrom} />)</span> : null}</p> : null}
-													{delRelease ? <p className="text-sm text-[var(--color-error)]">{t("metadataAdmin.releaseRemoved")}</p> : null}
+												<div
+													key={i}
+													className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1"
+												>
+													<p className="font-medium text-sm">
+														<RegionLabel region={String(r.region)} />
+													</p>
+													{name ? (
+														<p className="text-sm">
+															<span className="text-[var(--color-base-content)]/50">
+																{t("metadataSubmit.textTypes.name")}:{" "}
+															</span>
+															{name}
+															{nameFrom ? (
+																<span className="text-[var(--color-base-content)]/50">
+																	{" "}
+																	({t("metadataAdmin.movedFrom")}{" "}
+																	<RegionLabel region={nameFrom} />)
+																</span>
+															) : null}
+														</p>
+													) : null}
+													{delName ? (
+														<p className="text-sm text-[var(--color-error)]">
+															{t("metadataAdmin.nameRemoved")}
+														</p>
+													) : null}
+													{release ? (
+														<p className="text-sm">
+															<span className="text-[var(--color-base-content)]/50">
+																{t("metadataSubmit.textTypes.release")}:{" "}
+															</span>
+															{release}
+															{releaseFrom ? (
+																<span className="text-[var(--color-base-content)]/50">
+																	{" "}
+																	({t("metadataAdmin.movedFrom")}{" "}
+																	<RegionLabel region={releaseFrom} />)
+																</span>
+															) : null}
+														</p>
+													) : null}
+													{delRelease ? (
+														<p className="text-sm text-[var(--color-error)]">
+															{t("metadataAdmin.releaseRemoved")}
+														</p>
+													) : null}
 												</div>
 											);
 										})}
@@ -532,7 +712,9 @@ export default function MetadataAdminView() {
 
 							{romEntries.length > 0 ? (
 								<div>
-									<p className="label-text mb-2">{t("metadataGame.romDumpsTitle", { count: romEntries.length })}</p>
+									<p className="label-text mb-2">
+										{t("metadataGame.romDumpsTitle", { count: romEntries.length })}
+									</p>
 									<div className="space-y-2">
 										{romEntries.map((r, i) => {
 											const action = typeof r.action === "string" ? r.action : "";
@@ -541,14 +723,30 @@ export default function MetadataAdminView() {
 											const sha1 = typeof r.sha1 === "string" ? r.sha1 : "";
 											const current = (detail?.game?.roms || []).find((x) => x.id === r.id);
 											return (
-												<div key={i} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1">
+												<div
+													key={i}
+													className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-1"
+												>
 													<p className="font-medium text-sm flex items-center gap-2 flex-wrap">
-														<span className={`badge badge-sm ${action === "delete" ? "badge-error" : action === "edit" ? "badge-warning" : "badge-primary"}`}>{t("common." + action, { defaultValue: action })}</span>
+														<span
+															className={`badge badge-sm ${action === "delete" ? "badge-error" : action === "edit" ? "badge-warning" : "badge-primary"}`}
+														>
+															{t("common." + action, { defaultValue: action })}
+														</span>
 														{name || current?.name}
 														{region ? <RegionLabel region={region} /> : null}
 													</p>
-													{action !== "delete" && sha1 ? <p className="font-mono text-[11px] break-all text-[var(--color-base-content)]/60">SHA1 {sha1}</p> : null}
-													{current ? <p className="text-xs text-[var(--color-base-content)]/40">{t("admin.old")}: {current.name}{current.sha1 ? ` · SHA1 ${current.sha1}` : ""}</p> : null}
+													{action !== "delete" && sha1 ? (
+														<p className="font-mono text-[11px] break-all text-[var(--color-base-content)]/60">
+															SHA1 {sha1}
+														</p>
+													) : null}
+													{current ? (
+														<p className="text-xs text-[var(--color-base-content)]/40">
+															{t("admin.old")}: {current.name}
+															{current.sha1 ? ` · SHA1 ${current.sha1}` : ""}
+														</p>
+													) : null}
 												</div>
 											);
 										})}
@@ -561,22 +759,39 @@ export default function MetadataAdminView() {
 									<p className="label-text mb-2">{t("metadataAdmin.textChanges")}</p>
 									<div className="space-y-3">
 										{textKeys.map((k) => (
-											<div key={k} className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-2">
+											<div
+												key={k}
+												className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-2"
+											>
 												<p className="font-medium text-sm">
 													{textLabel(k)}
-													{(k === "name" || k === "release_year") && subRegion ? ` (${regionLabel(t, subRegion)})` : ""}
+													{(k === "name" || k === "release_year") && subRegion
+														? ` (${regionLabel(t, subRegion)})`
+														: ""}
 												</p>
 												<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 													<div className="min-w-0">
-														<span className="inline-block badge badge-ghost badge-sm mb-1">{t("admin.old")}</span>
+														<span className="inline-block badge badge-ghost badge-sm mb-1">
+															{t("admin.old")}
+														</span>
 														<p className="text-sm whitespace-pre-wrap break-words max-h-64 overflow-y-auto text-[var(--color-base-content)]/60">
-															{currentValue(k) || <span className="italic opacity-60">{t("metadataAdmin.none")}</span>}
+															{currentValue(k) || (
+																<span className="italic opacity-60">
+																	{t("metadataAdmin.none")}
+																</span>
+															)}
 														</p>
 													</div>
 													<div className="min-w-0">
-														<span className="inline-block badge badge-primary badge-sm mb-1">{t("admin.new")}</span>
+														<span className="inline-block badge badge-primary badge-sm mb-1">
+															{t("admin.new")}
+														</span>
 														<p className="text-sm whitespace-pre-wrap break-words max-h-64 overflow-y-auto">
-															{newValue(k) || <span className="italic opacity-60">{t("metadataAdmin.none")}</span>}
+															{newValue(k) || (
+																<span className="italic opacity-60">
+																	{t("metadataAdmin.none")}
+																</span>
+															)}
 														</p>
 													</div>
 												</div>
@@ -593,30 +808,60 @@ export default function MetadataAdminView() {
 										{detail.files.map((f) => {
 											// For an approved submission the target media already holds the
 											// new asset, so the old snapshot is used for the "old" side.
-											const current = (oldMedia.length > 0 ? oldMedia : detail.media).find((m) => m.kind === f.kind && (m.region || "") === (f.region || ""));
+											const current = (oldMedia.length > 0 ? oldMedia : detail.media).find(
+												(m) => m.kind === f.kind && (m.region || "") === (f.region || ""),
+											);
 											const isVideo = f.kind === "video";
 											return (
 												<div key={f.id} className="space-y-2">
 													<p className="font-medium text-sm flex items-center gap-2">
 														{t(MEDIA_LABEL[f.kind])}
-														{f.region ? <span className="badge badge-solid-neutral badge-xs"><RegionLabel region={f.region} /></span> : null}
+														{f.region ? (
+															<span className="badge badge-solid-neutral badge-xs">
+																<RegionLabel region={f.region} />
+															</span>
+														) : null}
 													</p>
 													<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 														{isVideo ? (
 															current ? (
-																<CompareVideo label={t("admin.old")} url={mediaUrl(current.object_key, current.created_at)} size={current.size} />
+																<CompareVideo
+																	label={t("admin.old")}
+																	url={mediaUrl(
+																		current.object_key,
+																		current.created_at,
+																	)}
+																	size={current.size}
+																/>
 															) : (
 																<EmptySlot label={t("admin.old")} />
 															)
 														) : current ? (
-															<CompareImage label={t("admin.old")} url={mediaUrl(current.object_key, current.created_at)} size={current.size} onOpen={setLightbox} />
+															<CompareImage
+																label={t("admin.old")}
+																url={mediaUrl(current.object_key, current.created_at)}
+																size={current.size}
+																onOpen={setLightbox}
+															/>
 														) : (
 															<EmptySlot label={t("admin.old")} />
 														)}
 														{isVideo ? (
-															<CompareVideo label={t("admin.new")} url={mediaUrl(f.object_key, f.created_at)} size={f.size} file={f} highlight />
+															<CompareVideo
+																label={t("admin.new")}
+																url={mediaUrl(f.object_key, f.created_at)}
+																size={f.size}
+																file={f}
+																highlight
+															/>
 														) : (
-															<CompareImage label={t("admin.new")} url={mediaUrl(f.object_key, f.created_at)} size={f.size} onOpen={setLightbox} highlight />
+															<CompareImage
+																label={t("admin.new")}
+																url={mediaUrl(f.object_key, f.created_at)}
+																size={f.size}
+																onOpen={setLightbox}
+																highlight
+															/>
 														)}
 													</div>
 												</div>
@@ -625,13 +870,17 @@ export default function MetadataAdminView() {
 									</div>
 								</div>
 							) : (
-								<p className="text-sm text-[var(--color-base-content)]/50">{t("metadataAdmin.noFiles")}</p>
+								<p className="text-sm text-[var(--color-base-content)]/50">
+									{t("metadataAdmin.noFiles")}
+								</p>
 							)}
 
 							{detail.submission.status !== "pending" && detail.submission.review_comment ? (
 								<div>
 									<p className="label-text">{t("metadataAdmin.reviewComment")}</p>
-									<p className="text-sm text-[var(--color-base-content)]/70">{detail.submission.review_comment}</p>
+									<p className="text-sm text-[var(--color-base-content)]/70">
+										{detail.submission.review_comment}
+									</p>
 								</div>
 							) : null}
 						</div>
@@ -639,14 +888,21 @@ export default function MetadataAdminView() {
 						{/* Footer (pending actions) */}
 						{detail.submission.status === "pending" ? (
 							<div className="p-5 border-t border-[var(--color-base-300)] bg-[var(--color-base-100)]/40 space-y-3">
-								<textarea className="input !h-auto min-h-[4rem] py-2.5" placeholder={t("metadataAdmin.commentPlaceholder")} value={comment} onChange={(e) => setComment(e.target.value)} disabled={busy} />
+								<textarea
+									className="input !h-auto min-h-[4rem] py-2.5"
+									placeholder={t("metadataAdmin.commentPlaceholder")}
+									value={comment}
+									onChange={(e) => setComment(e.target.value)}
+									disabled={busy}
+								/>
 								{busy ? (
 									<div className="space-y-1">
 										<div className="relative h-1.5 rounded-full bg-[var(--color-base-300)] overflow-hidden">
 											<div className="absolute inset-y-0 w-1/2 rounded-full bg-[var(--color-primary)] animate-[progress-slide_1.2s_linear_infinite]" />
 										</div>
 										<p className="text-xs text-[var(--color-base-content)]/60">
-											{typeof detail.submission.payload.description === "string" && detail.submission.payload.description
+											{typeof detail.submission.payload.description === "string" &&
+											detail.submission.payload.description
 												? t("metadataAdmin.approvingWithTranslations")
 												: t("metadataAdmin.approving")}
 										</p>
@@ -688,15 +944,27 @@ export default function MetadataAdminView() {
 			) : null}
 
 			{lightbox ? (
-				<div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && setLightbox(null)}>
+				<div
+					className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+					onClick={(e) => e.target === e.currentTarget && setLightbox(null)}
+				>
 					<div className="w-full max-w-6xl space-y-3">
 						<div className="flex items-center justify-between text-white">
 							<h2 className="text-lg font-bold">{lightbox.label}</h2>
-							<button className="btn btn-ghost !p-2" type="button" onClick={() => setLightbox(null)} aria-label={t("common.close")}>
+							<button
+								className="btn btn-ghost !p-2"
+								type="button"
+								onClick={() => setLightbox(null)}
+								aria-label={t("common.close")}
+							>
 								<X className="w-5 h-5" />
 							</button>
 						</div>
-						<img src={lightbox.url} alt={lightbox.label} className="w-full max-h-[85vh] object-contain rounded-lg bg-black/40" />
+						<img
+							src={lightbox.url}
+							alt={lightbox.label}
+							className="w-full max-h-[85vh] object-contain rounded-lg bg-black/40"
+						/>
 					</div>
 				</div>
 			) : null}
@@ -730,20 +998,39 @@ function EmptySlot({ label }: { label: string }) {
 	return (
 		<div className="rounded-xl border border-dashed border-[var(--color-base-300)] bg-[var(--color-base-100)]/40 p-3 space-y-2.5">
 			<span className="inline-block badge badge-ghost badge-sm">{label}</span>
-			<div className="h-32 flex items-center justify-center text-sm text-[var(--color-base-content)]/40">{t("metadataAdmin.none")}</div>
+			<div className="h-32 flex items-center justify-center text-sm text-[var(--color-base-content)]/40">
+				{t("metadataAdmin.none")}
+			</div>
 		</div>
 	);
 }
 
 // CompareImage shows an image at full size with its resolution (read from the
 // loaded bitmap) and file size. Clicking opens the lightbox.
-function CompareImage({ label, url, size, highlight, onOpen }: { label: string; url: string; size?: number; highlight?: boolean; onOpen: (lb: { url: string; label: string }) => void }) {
+function CompareImage({
+	label,
+	url,
+	size,
+	highlight,
+	onOpen,
+}: {
+	label: string;
+	url: string;
+	size?: number;
+	highlight?: boolean;
+	onOpen: (lb: { url: string; label: string }) => void;
+}) {
 	const [dim, setDim] = useState<string | null>(null);
 	return (
-		<div className={`rounded-xl border p-3 space-y-2.5 ${highlight ? "border-[var(--color-primary)]/40 bg-[var(--color-primary)]/5" : "border-[var(--color-base-300)] bg-[var(--color-base-100)]/40"}`}>
+		<div
+			className={`rounded-xl border p-3 space-y-2.5 ${highlight ? "border-[var(--color-primary)]/40 bg-[var(--color-primary)]/5" : "border-[var(--color-base-300)] bg-[var(--color-base-100)]/40"}`}
+		>
 			<div className="flex items-center justify-between gap-2">
 				<span className={`badge badge-sm ${highlight ? "badge-primary" : "badge-ghost"}`}>{label}</span>
-				<span className="text-[11px] text-[var(--color-base-content)]/50">{dim ? `${dim} · ` : ""}{fmtSize(size)}</span>
+				<span className="text-[11px] text-[var(--color-base-content)]/50">
+					{dim ? `${dim} · ` : ""}
+					{fmtSize(size)}
+				</span>
 			</div>
 			<button type="button" className="block w-full" onClick={() => onOpen({ url, label })}>
 				<img
@@ -760,10 +1047,24 @@ function CompareImage({ label, url, size, highlight, onOpen }: { label: string; 
 
 // CompareVideo shows a video with its size and (for new submissions) the probe
 // metadata captured at upload time.
-function CompareVideo({ label, url, size, file, highlight }: { label: string; url: string; size?: number; file?: MetadataSubmissionFile; highlight?: boolean }) {
+function CompareVideo({
+	label,
+	url,
+	size,
+	file,
+	highlight,
+}: {
+	label: string;
+	url: string;
+	size?: number;
+	file?: MetadataSubmissionFile;
+	highlight?: boolean;
+}) {
 	const { t } = useTranslation();
 	return (
-		<div className={`rounded-xl border p-3 space-y-2.5 ${highlight ? "border-[var(--color-primary)]/40 bg-[var(--color-primary)]/5" : "border-[var(--color-base-300)] bg-[var(--color-base-100)]/40"}`}>
+		<div
+			className={`rounded-xl border p-3 space-y-2.5 ${highlight ? "border-[var(--color-primary)]/40 bg-[var(--color-primary)]/5" : "border-[var(--color-base-300)] bg-[var(--color-base-100)]/40"}`}
+		>
 			<div className="flex items-center justify-between gap-2">
 				<span className={`badge badge-sm ${highlight ? "badge-primary" : "badge-ghost"}`}>{label}</span>
 				<span className="text-[11px] text-[var(--color-base-content)]/50">{fmtSize(size)}</span>
@@ -771,11 +1072,22 @@ function CompareVideo({ label, url, size, file, highlight }: { label: string; ur
 			<video src={url} controls className="w-full max-h-[34vh] rounded-lg bg-black" />
 			{file ? (
 				<div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[11px] text-[var(--color-base-content)]/60">
-					<p>{t("metadataAdmin.format")}: {file.video_format || file.file_name.split(".").pop() || "—"}</p>
-					<p>{t("metadataAdmin.codec")}: {file.video_codec || "—"}</p>
-					<p>{t("metadataAdmin.resolution")}: {file.width && file.height ? `${file.width}×${file.height}` : "—"}</p>
-					<p>{t("metadataAdmin.fps")}: {file.fps ? `${file.fps} fps` : "—"}</p>
-					<p>{t("metadataAdmin.duration")}: {file.duration_sec ? `${file.duration_sec.toFixed(1)}s` : "—"}</p>
+					<p>
+						{t("metadataAdmin.format")}: {file.video_format || file.file_name.split(".").pop() || "—"}
+					</p>
+					<p>
+						{t("metadataAdmin.codec")}: {file.video_codec || "—"}
+					</p>
+					<p>
+						{t("metadataAdmin.resolution")}:{" "}
+						{file.width && file.height ? `${file.width}×${file.height}` : "—"}
+					</p>
+					<p>
+						{t("metadataAdmin.fps")}: {file.fps ? `${file.fps} fps` : "—"}
+					</p>
+					<p>
+						{t("metadataAdmin.duration")}: {file.duration_sec ? `${file.duration_sec.toFixed(1)}s` : "—"}
+					</p>
 				</div>
 			) : null}
 		</div>

@@ -36,7 +36,8 @@ export default function SapDetailPage() {
 			</div>
 		);
 	}
-	if (!pack) return <p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("common.loading")}</p>;
+	if (!pack)
+		return <p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("common.loading")}</p>;
 
 	const images = (pack.files || []).filter((f) => f.kind === "background" || f.kind === "preview");
 
@@ -51,7 +52,9 @@ export default function SapDetailPage() {
 						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{pack.name}</h1>
 						<span className="badge badge-success shrink-0">v{pack.version || "?"}</span>
 					</div>
-					<p className="text-sm text-[var(--color-base-content)]/60 pt-1">{t("submissions.byAuthor", { author: pack.author })}</p>
+					<p className="text-sm text-[var(--color-base-content)]/60 pt-1">
+						{t("submissions.byAuthor", { author: pack.author })}
+					</p>
 				</div>
 				{signedIn ? (
 					<Link to={`/app/sap/${pack.folder}/contribute`} className="btn btn-primary btn-sm shrink-0">
@@ -59,7 +62,11 @@ export default function SapDetailPage() {
 						{t("submissions.contribute")}
 					</Link>
 				) : (
-					<Link to="/app/login" state={{ from: `/app/sap/${pack.folder}` }} className="btn btn-primary btn-sm shrink-0">
+					<Link
+						to="/app/login"
+						state={{ from: `/app/sap/${pack.folder}` }}
+						className="btn btn-primary btn-sm shrink-0"
+					>
 						<Plus className="w-4 h-4" />
 						{t("submissions.contribute")}
 					</Link>
@@ -82,7 +89,11 @@ export default function SapDetailPage() {
 						</span>
 					) : null}
 				</div>
-				{pack.description ? <p className="text-sm text-[var(--color-base-content)]/70 whitespace-pre-wrap">{pack.description}</p> : null}
+				{pack.description ? (
+					<p className="text-sm text-[var(--color-base-content)]/70 whitespace-pre-wrap">
+						{pack.description}
+					</p>
+				) : null}
 				<div className="pt-2 border-t border-[var(--color-base-300)]">
 					<DonateButton url={pack.donation_url} author={pack.author} />
 				</div>
