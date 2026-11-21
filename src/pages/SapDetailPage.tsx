@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import SectionTitle from "../components/ui/SectionTitle";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, Download, Layers, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, Download, Layers, Plus, Trash2, Images } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { deletePack, fetchPackDetail, type PackDetail } from "../lib/api";
 import UserLink from "../components/UserLink";
@@ -127,7 +128,7 @@ export default function SapDetailPage() {
 				</div>
 			</header>
 
-			<section className="card p-6 space-y-4">
+			<section className="card card-tone tone-sap p-6 space-y-4">
 				<div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--color-base-content)]/60">
 					<span className="flex items-center gap-1">
 						<Download className="w-4 h-4" />
@@ -153,8 +154,8 @@ export default function SapDetailPage() {
 				</div>
 			</section>
 
-			<section className="card p-6">
-				<h2 className="font-semibold mb-3">{t("submissions.gallery")}</h2>
+			<section className="card p-6 tone-sap">
+				<SectionTitle icon={Images}>{t("submissions.gallery")}</SectionTitle>
 				{images.length === 0 ? (
 					<p className="text-sm text-[var(--color-base-content)]/50">{t("submissions.noImages")}</p>
 				) : (

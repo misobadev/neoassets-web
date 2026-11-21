@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import PageTitle from "../components/ui/PageTitle";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
@@ -13,6 +14,7 @@ import {
 	Package,
 	Server,
 	Users,
+	LayoutDashboard,
 } from "lucide-react";
 import { cdnUrl, fetchDashboard, type DashboardData, mediaUrl } from "../lib/api";
 import UserLink from "../components/UserLink";
@@ -46,7 +48,9 @@ export default function DashboardPage() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("nav.dashboard")}</h1>
+				<PageTitle icon={LayoutDashboard} tone="tone-community">
+					{t("nav.dashboard")}
+				</PageTitle>
 				<p className="text-sm text-[var(--color-base-content)]/60">{t("dashboard.subtitle")}</p>
 			</div>
 

@@ -91,9 +91,9 @@ export default function PublicProfilePage() {
 
 	return (
 		<div className="space-y-6">
-			<section className="card p-6 space-y-4">
+			<section className="card card-tone tone-community p-6 space-y-4">
 				<div className="flex items-center gap-4">
-					<div className="size-24 rounded-xl overflow-hidden bg-[var(--color-primary)]/15 grid place-items-center text-4xl font-bold text-[var(--color-primary-soft)] shrink-0">
+					<div className="size-24 rounded-full overflow-hidden bg-[var(--color-primary)]/15 grid place-items-center text-4xl font-bold text-[var(--color-primary-soft)] shrink-0 ring-[3px] ring-[var(--color-primary)] ring-offset-4 ring-offset-[var(--color-base-200)]">
 						{profile.avatar_key ? (
 							<img src={cdnUrl(profile.avatar_key)} alt="" className="w-full h-full object-cover" />
 						) : (
@@ -101,7 +101,9 @@ export default function PublicProfilePage() {
 						)}
 					</div>
 					<div className="min-w-0 flex-1">
-						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{profile.username}</h1>
+						<h1 className="font-display text-2xl md:text-3xl font-bold tracking-tight truncate">
+							{profile.username}
+						</h1>
 						<p className="text-sm text-[var(--color-base-content)]/60 flex items-center gap-2 flex-wrap">
 							<span
 								className={`badge ${profile.role === "admin" ? "badge-rose" : profile.role === "reviewer" ? "badge-purple" : "badge-outline"} !px-2`}
@@ -133,19 +135,20 @@ export default function PublicProfilePage() {
 
 				<div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
 					<Stat
+						tone="tone-reward"
 						n={t("guide.ranks." + profile.rank, { defaultValue: profile.rank })}
 						label={t("publicProfile.rank")}
 					/>
-					<Stat n={profile.level} label={t("profile.level")} />
-					<Stat n={`${profile.xp.toLocaleString()}`} label={t("common.xp")} />
-					<Stat n={profile.threads} label={t("common.threads")} />
+					<Stat tone="tone-reward" n={profile.level} label={t("profile.level")} />
+					<Stat tone="tone-reward" n={`${profile.xp.toLocaleString()}`} label={t("common.xp")} />
+					<Stat tone="tone-primary" n={profile.threads} label={t("common.threads")} />
 				</div>
 
 				<div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-					<Stat n={profile.approved} label={t("publicProfile.approved")} />
-					<Stat n={profile.submitted} label={t("publicProfile.contributions")} />
-					<Stat n={profile.followers} label={t("publicProfile.followers")} />
-					<Stat n={profile.following} label={t("publicProfile.following")} />
+					<Stat tone="tone-community" n={profile.approved} label={t("publicProfile.approved")} />
+					<Stat tone="tone-meta" n={profile.submitted} label={t("publicProfile.contributions")} />
+					<Stat tone="tone-sap" n={profile.followers} label={t("publicProfile.followers")} />
+					<Stat tone="tone-sap" n={profile.following} label={t("publicProfile.following")} />
 				</div>
 			</section>
 
@@ -200,10 +203,10 @@ export default function PublicProfilePage() {
 	);
 }
 
-function Stat({ n, label }: { n: number | string; label: string }) {
+function Stat({ n, label, tone }: { n: number | string; label: string; tone: string }) {
 	return (
-		<div className="rounded-lg border border-[var(--color-base-300)] p-3 text-center">
-			<p className="text-2xl font-bold">{n}</p>
+		<div className={`card card-tone ${tone} p-3 text-center`}>
+			<p className="font-display text-2xl font-bold tone-text truncate">{n}</p>
 			<p className="text-[11px] text-[var(--color-base-content)]/50">{label}</p>
 		</div>
 	);

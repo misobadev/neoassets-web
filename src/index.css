@@ -1119,3 +1119,46 @@ body {
 		color-mix(in oklab, var(--color-base-100) 85%, transparent)
 	);
 }
+
+/* A card in its area's color: tinted surface, tinted border and a top bar in
+   the tone. Combine with a tone-* class (defaults to the brand cyan). */
+.card-tone {
+	position: relative;
+	overflow: hidden;
+	background-color: color-mix(in oklab, var(--tone, var(--color-primary-soft)) 6%, var(--color-base-200));
+	border-color: color-mix(in oklab, var(--tone, var(--color-primary-soft)) 26%, var(--color-base-300));
+}
+.card-tone::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 3px;
+	background-color: var(--tone, var(--color-primary-soft));
+	pointer-events: none;
+}
+
+/* Top bar in the tone that appears on hover, for dense lists of cards. */
+.card-tone-hover {
+	position: relative;
+	overflow: hidden;
+}
+.card-tone-hover::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 3px;
+	background-color: var(--tone, var(--color-primary-soft));
+	opacity: 0;
+	transition: opacity 0.15s ease;
+	pointer-events: none;
+}
+.card-tone-hover:hover::before,
+.card-tone-hover:focus-visible::before {
+	opacity: 1;
+}
+
+/* Softer artwork backdrop for small cards in a grid. */
+.art-backdrop-soft > .art-backdrop-img {
+	opacity: 0.32;
+	filter: blur(24px) saturate(1.5);
+}

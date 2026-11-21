@@ -103,6 +103,15 @@ padding on desktop and 16px on phones.
 - **Stat tiles** (`components/ui/StatTile`). Tinted surface with a top bar
   in the tone, icon chip and label, a large faded icon in the corner, and the
   number in `font-display`; a tile can link to its area.
+- **Page titles** (`components/ui/PageTitle`): the area's icon in a tone chip
+  next to the h1. Section titles (`components/ui/SectionTitle`) use a smaller
+  chip that takes the tone of the enclosing section.
+- **Toned cards.** `card-tone` gives a card its area color (tinted surface and
+  border, 3px top bar); `card-tone-hover` shows only the top bar on hover, for
+  dense grids.
+- **Game cards.** Blurred cover behind the card (`art-backdrop-soft`), 3:4
+  cover, title in the display face, rating in an amber pill, system chip, and
+  completion as a bar.
 - **Rankings.** Positions 1-3 use gold, silver and bronze.
 - **Home hero.** Headline with "NeoAssets" in soft cyan, next to a staggered
   wall of the most scraped games' box art.

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import PageTitle from "../components/ui/PageTitle";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
 	ChevronDown,
@@ -15,6 +16,7 @@ import {
 	Search,
 	Server,
 	Tag,
+	Gamepad2,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
@@ -262,99 +264,117 @@ function GameCard({ g }: { g: GameSummary }) {
 			onPointerMove={onMove}
 			onPointerLeave={onLeave}
 			style={style}
-			className={`relative card card-hover holo-card p-3 flex flex-col gap-3`}
+			className="relative card card-hover holo-card card-tone-hover tone-meta art-backdrop art-backdrop-soft p-3 flex flex-col gap-3"
 		>
-			<div className="flex items-center gap-3 relative z-[1]">
+			{g.cover ? (
+				<div
+					className="art-backdrop-img"
+					aria-hidden="true"
+					style={{ backgroundImage: `url("${mediaUrl(g.cover, g.cover_updated)}")` }}
+				/>
+			) : null}
+			<div className="flex items-start gap-3 relative z-[1]">
 				{g.cover ? (
 					<img
 						src={mediaUrl(g.cover, g.cover_updated)}
 						alt=""
-						className="w-16 h-16 object-cover rounded-lg border border-[var(--color-base-300)] shrink-0"
+						className="w-[4.5rem] aspect-[3/4] object-cover rounded-md ring-1 ring-white/10 shadow-lg shadow-black/30 shrink-0"
 						onError={(e) => (e.currentTarget.style.display = "none")}
 					/>
 				) : (
-					<div className="w-16 h-16 rounded-lg bg-[var(--color-base-300)] shrink-0" />
+					<div className="w-[4.5rem] aspect-[3/4] rounded-md bg-[var(--color-base-300)] shrink-0" />
 				)}
 				<div className="min-w-0 flex-1">
-					<span className="group/name relative block">
-						<h3 ref={nameRef} className="font-semibold truncate">
-							{g.name}
-						</h3>
-						{nameClipped ? (
-							<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 w-max max-w-[18rem] break-words rounded-md bg-[var(--color-base-200)] px-2 py-1 text-[11px] font-normal leading-snug text-[var(--color-base-content)] opacity-0 shadow-lg transition-opacity duration-150 group-hover/name:opacity-100">
+					<div className="flex items-start gap-2">
+						<span className="group/name relative block min-w-0 flex-1">
+							<h3 ref={nameRef} className="font-display font-semibold text-lg leading-tight truncate">
 								{g.name}
+							</h3>
+							{nameClipped ? (
+								<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 w-max max-w-[18rem] break-words rounded-md bg-[var(--color-base-200)] px-2 py-1 text-[11px] font-normal leading-snug text-[var(--color-base-content)] opacity-0 shadow-lg transition-opacity duration-150 group-hover/name:opacity-100">
+									{g.name}
+								</span>
+							) : null}
+						</span>
+						<span className="shrink-0 rounded-md bg-[color-mix(in_oklab,var(--color-reward)_14%,transparent)] px-2 py-1">
+							<RatingBadge rating={g.rating} />
+						</span>
+					</div>
+					<p className="flex items-center gap-2 mt-1 text-xs text-[var(--color-base-content)]/60">
+						{g.system_id ? (
+							<span className="rounded px-1.5 py-0.5 font-mono text-[10px] font-medium bg-[color-mix(in_oklab,var(--tone)_16%,transparent)] text-[var(--tone)]">
+								{g.system_id.toUpperCase()}
 							</span>
 						) : null}
-					</span>
-					<div className="flex items-center gap-2 mt-0.5">
-						<div className="min-w-0 flex-1">
-							<p className="text-xs text-[var(--color-base-content)]/50 truncate">
-								{g.system_id ? `${g.system_id.toUpperCase()}` : ""}
-								{g.release_year ? ` · ${g.release_year}` : ""}
-							</p>
-							<div className="flex items-center gap-2.5 mt-2 flex-wrap">
-								<MetaIcon label={textMetaTitle(t, g)} tone={textMetaTone(g)}>
-									<FileText className="w-3.5 h-3.5" />
-								</MetaIcon>
-								<MetaIcon
-									label={
-										g.has_translations ? t("metadata.hasTranslations") : t("metadata.englishOnly")
-									}
-									tone={g.has_translations ? "ok" : "none"}
-								>
-									<Languages className="w-3.5 h-3.5" />
-								</MetaIcon>
-								<MetaIcon
-									label={g.has_logo ? t("metadata.hasLogo") : t("metadata.noLogo")}
-									tone={g.has_logo ? "ok" : "none"}
-								>
-									<ImagePlus className="w-3.5 h-3.5" />
-								</MetaIcon>
-								<MetaIcon
-									label={g.has_screenshot ? t("metadata.hasScreenshot") : t("metadata.noScreenshot")}
-									tone={g.has_screenshot ? "ok" : "none"}
-								>
-									<Image className="w-3.5 h-3.5" />
-								</MetaIcon>
-								<MetaIcon
-									label={g.has_fanart ? t("metadata.hasFanart") : t("metadata.noFanart")}
-									tone={g.has_fanart ? "ok" : "none"}
-								>
-									<Images className="w-3.5 h-3.5" />
-								</MetaIcon>
-								<MetaIcon
-									label={g.has_video ? t("metadata.hasVideo") : t("metadata.noVideo")}
-									tone={g.has_video ? "ok" : "none"}
-								>
-									<Clapperboard className="w-3.5 h-3.5" />
-								</MetaIcon>
-							</div>
-						</div>
-						<RatingBadge rating={g.rating} />
+						{g.release_year ? <span>{g.release_year}</span> : null}
+					</p>
+					<div className="flex items-center gap-2.5 mt-2.5 flex-wrap">
+						<MetaIcon label={textMetaTitle(t, g)} tone={textMetaTone(g)}>
+							<FileText className="w-3.5 h-3.5" />
+						</MetaIcon>
+						<MetaIcon
+							label={g.has_translations ? t("metadata.hasTranslations") : t("metadata.englishOnly")}
+							tone={g.has_translations ? "ok" : "none"}
+						>
+							<Languages className="w-3.5 h-3.5" />
+						</MetaIcon>
+						<MetaIcon
+							label={g.has_logo ? t("metadata.hasLogo") : t("metadata.noLogo")}
+							tone={g.has_logo ? "ok" : "none"}
+						>
+							<ImagePlus className="w-3.5 h-3.5" />
+						</MetaIcon>
+						<MetaIcon
+							label={g.has_screenshot ? t("metadata.hasScreenshot") : t("metadata.noScreenshot")}
+							tone={g.has_screenshot ? "ok" : "none"}
+						>
+							<Image className="w-3.5 h-3.5" />
+						</MetaIcon>
+						<MetaIcon
+							label={g.has_fanart ? t("metadata.hasFanart") : t("metadata.noFanart")}
+							tone={g.has_fanart ? "ok" : "none"}
+						>
+							<Images className="w-3.5 h-3.5" />
+						</MetaIcon>
+						<MetaIcon
+							label={g.has_video ? t("metadata.hasVideo") : t("metadata.noVideo")}
+							tone={g.has_video ? "ok" : "none"}
+						>
+							<Clapperboard className="w-3.5 h-3.5" />
+						</MetaIcon>
 					</div>
 				</div>
 			</div>
-			<div className="flex items-center justify-between gap-2 border-t border-[var(--color-base-300)] pt-2 relative z-[1]">
-				<div className="flex items-center gap-2 min-w-0">
-					<span className={`badge badge-sm ${typeBadgeClass(g.type)}`}>
-						{t("metadata.type." + (g.type || "base"))}
+			<div className="flex items-center gap-3 border-t border-[var(--color-base-300)]/70 pt-2.5 relative z-[1]">
+				<span className={`badge badge-sm shrink-0 ${typeBadgeClass(g.type)}`}>
+					{t("metadata.type." + (g.type || "base"))}
+				</span>
+				<span
+					className="flex items-center gap-2 flex-1 min-w-0"
+					title={pct === 100 ? t("metadata.completed") : t("metadata.completion")}
+				>
+					<span
+						className="h-1.5 flex-1 rounded-full bg-[var(--color-base-300)] overflow-hidden"
+						aria-hidden="true"
+					>
+						<span
+							className={`block h-full rounded-full ${pct === 100 ? "bg-[var(--color-success)]" : "bg-[var(--color-warning)]"}`}
+							style={{ width: `${pct}%` }}
+						/>
 					</span>
 					<span
-						title={pct === 100 ? t("metadata.completed") : t("metadata.completion")}
-						className={`badge badge-sm ${pct === 100 ? "holo-badge" : "badge-solid-neutral"}`}
+						className={`font-display text-xs font-semibold tabular-nums ${pct === 100 ? "text-[var(--color-success)]" : "text-[var(--color-warning)]"}`}
 					>
 						{pct}%
 					</span>
-				</div>
-				<div className="flex items-center gap-2 shrink-0">
-					<span
-						className="inline-flex items-center gap-1 text-[11px] font-medium text-[var(--color-base-content)]/50"
-						title={t("metadata.scrapedTimes", { n: (g.scrapes ?? 0).toLocaleString() })}
-					>
-						<Download className="w-3.5 h-3.5" />
-						{(g.scrapes ?? 0).toLocaleString()}
-					</span>
-				</div>
+				</span>
+				<span
+					className="inline-flex items-center gap-1 text-[11px] font-medium text-[var(--color-base-content)]/60 shrink-0"
+					title={t("metadata.scrapedTimes", { n: (g.scrapes ?? 0).toLocaleString() })}
+				>
+					<Download className="w-3.5 h-3.5" />
+					{(g.scrapes ?? 0).toLocaleString()}
+				</span>
 			</div>
 		</Link>
 	);
@@ -497,7 +517,9 @@ export default function MetadataBrowse() {
 		<div className="space-y-6">
 			<div className="flex items-start justify-between gap-3">
 				<div>
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("metadata.title")}</h1>
+					<PageTitle icon={Gamepad2} tone="tone-meta">
+						{t("metadata.title")}
+					</PageTitle>
 					<p className="text-[var(--color-base-content)]/60 text-sm pt-2">{t("metadata.browse.subtitle")}</p>
 				</div>
 				<Link
@@ -514,13 +536,15 @@ export default function MetadataBrowse() {
 				<button
 					type="button"
 					onClick={() => setMenuOpen((v) => !v)}
-					className="card card-border hover:card-hover p-4 w-full flex items-center gap-3 text-left"
+					className="card card-tone tone-meta hover:card-hover p-4 w-full flex items-center gap-3 text-left"
 				>
-					<span className="grid size-11 place-items-center rounded-xl bg-[var(--color-base-300)] text-[var(--color-primary)] shrink-0">
+					<span className="tone-chip !size-11 shrink-0">
 						{selected ? <Server className="w-5 h-5" /> : <Globe className="w-5 h-5" />}
 					</span>
 					<div className="min-w-0 flex-1">
-						<p className="font-semibold truncate">{selected ? selected.name : t("metadata.allSystems")}</p>
+						<p className="font-display font-semibold text-lg truncate">
+							{selected ? selected.name : t("metadata.allSystems")}
+						</p>
 						{selected ? (
 							<p className="text-xs text-[var(--color-base-content)]/50">
 								{t("metadata.systemStats", {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import PageTitle from "../components/ui/PageTitle";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight, Download, Layers } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, Layers, Palette } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { api, CDN_BASE, type Pack, userUsername } from "../lib/api";
 import UserLink from "../components/UserLink";
@@ -71,7 +72,9 @@ export default function SubmissionsView() {
 		<div className="space-y-8">
 			<div className="flex items-end justify-between gap-3 flex-wrap">
 				<div>
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("nav.systemArtPack")}</h1>
+					<PageTitle icon={Palette} tone="tone-sap">
+						{t("nav.systemArtPack")}
+					</PageTitle>
 					<p className="text-[var(--color-base-content)]/60 text-sm">{t("submissions.guestSubtitle")}</p>
 				</div>
 				{signedIn ? (
@@ -82,7 +85,7 @@ export default function SubmissionsView() {
 			</div>
 
 			{!signedIn ? (
-				<div className="card p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+				<div className="card card-tone tone-sap p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
 					<div>
 						<h2 className="font-semibold mb-1">{t("submissions.signInToCreate")}</h2>
 						<p className="text-sm text-[var(--color-base-content)]/60">{t("submissions.signInBody")}</p>
@@ -124,7 +127,7 @@ export default function SubmissionsView() {
 										onKeyDown={(e) => {
 											if (e.key === "Enter") navigate(`/app/sap/${p.folder}`);
 										}}
-										className="card card-hover overflow-hidden flex flex-col cursor-pointer"
+										className="card card-hover card-tone-hover tone-sap overflow-hidden flex flex-col cursor-pointer"
 									>
 										<div className="h-32 art-backdrop bg-[var(--color-base-300)] flex items-center justify-center">
 											{icons[0] ? (
@@ -155,7 +158,9 @@ export default function SubmissionsView() {
 										</div>
 										<div className="p-4 space-y-2 flex-1 flex flex-col">
 											<div className="flex items-center justify-between gap-2">
-												<h3 className="font-semibold truncate">{p.name}</h3>
+												<h3 className="font-display font-semibold text-lg truncate">
+													{p.name}
+												</h3>
 												<span className="badge badge-success shrink-0">
 													v{p.version || "?"}
 												</span>

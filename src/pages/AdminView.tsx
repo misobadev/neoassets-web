@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import PageTitle from "../components/ui/PageTitle";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Palette } from "lucide-react";
 import { api, type SubmissionDetail, mediaUrl } from "../lib/api";
 import { useSystems } from "../lib/systems";
 import UserLink from "../components/UserLink";
@@ -48,7 +49,9 @@ export default function AdminView() {
 					<ChevronLeft className="w-5 h-5" />
 				</Link>
 				<div>
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("admin.title")}</h1>
+					<PageTitle icon={Palette} tone="tone-sap">
+						{t("admin.title")}
+					</PageTitle>
 					<p className="text-[var(--color-base-content)]/60">{t("admin.subtitle")}</p>
 				</div>
 			</div>
@@ -91,7 +94,7 @@ export default function AdminView() {
 								key={s.id}
 								type="button"
 								onClick={() => navigate(`/app/admin/sap/${s.id}`)}
-								className="card card-hover overflow-hidden flex flex-col text-left"
+								className="card card-hover card-tone-hover tone-sap overflow-hidden flex flex-col text-left"
 							>
 								<div className="h-32 bg-[var(--color-base-300)] flex items-center justify-center overflow-hidden">
 									{images.length > 0 ? (

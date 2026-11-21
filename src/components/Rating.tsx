@@ -23,7 +23,7 @@ export function RatingBadge({ rating }: { rating?: number | null }) {
 	return (
 		<span className="inline-flex items-baseline gap-1" title={t("rating.rated", { rating: r })}>
 			<Star className="w-4 h-4 self-center" fill={ratingColor(r)} stroke="none" />
-			<span className="text-lg font-semibold leading-none tabular-nums">{r}</span>
+			<span className="font-display text-lg font-bold leading-none tabular-nums">{r}</span>
 			<span className="text-xs text-[var(--color-base-content)]/50">/10</span>
 		</span>
 	);

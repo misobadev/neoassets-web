@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import SectionTitle from "../components/ui/SectionTitle";
+import PageTitle from "../components/ui/PageTitle";
 import { Gauge, KeyRound, Plus, RotateCw, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import CopyButton from "../components/CopyButton";
@@ -130,16 +132,18 @@ export default function DeveloperPage() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("developer.title")}</h1>
+				<PageTitle icon={KeyRound} tone="tone-primary">
+					{t("developer.title")}
+				</PageTitle>
 				<p className="text-sm text-[var(--color-base-content)]/60">{t("developer.subtitle")}</p>
 			</div>
 
 			{error ? <div className="card p-4 text-sm text-red-500">{error}</div> : null}
 
 			<section className="card p-6 space-y-4">
-				<h2 className="font-semibold flex items-center gap-2">
-					<KeyRound className="w-4 h-4 text-[var(--color-primary)]" /> {t("developer.appsTitle")}
-				</h2>
+				<SectionTitle icon={KeyRound} className="">
+					{t("developer.appsTitle")}
+				</SectionTitle>
 
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-2">
 					<input
@@ -211,9 +215,9 @@ export default function DeveloperPage() {
 			</section>
 
 			<section className="card p-6 space-y-3">
-				<h2 className="font-semibold flex items-center gap-2">
-					<Gauge className="w-4 h-4 text-[var(--color-primary)]" /> {t("developer.statsTitle")}
-				</h2>
+				<SectionTitle icon={Gauge} className="">
+					{t("developer.statsTitle")}
+				</SectionTitle>
 				<p className="text-xs text-[var(--color-base-content)]/60">{t("developer.softnameHint")}</p>
 				{loading ? (
 					<p className="text-sm text-[var(--color-base-content)]/60">{t("common.loading")}</p>

@@ -1,6 +1,18 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import SectionTitle from "../components/ui/SectionTitle";
+import PageTitle from "../components/ui/PageTitle";
 import { useTranslation } from "react-i18next";
-import { HeartHandshake, KeyRound, Mail, Plus, ShieldCheck, Star, Trash2, User as UserIcon } from "lucide-react";
+import {
+	HeartHandshake,
+	KeyRound,
+	Mail,
+	Plus,
+	ShieldCheck,
+	Star,
+	Trash2,
+	User as UserIcon,
+	UserRound,
+} from "lucide-react";
 import CopyButton from "../components/CopyButton";
 import DonorBadge from "../components/DonorBadge";
 import { toSafeBackground } from "../lib/image";
@@ -241,14 +253,16 @@ export default function ProfilePage() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("profile.title")}</h1>
+				<PageTitle icon={UserRound} tone="tone-community">
+					{t("profile.title")}
+				</PageTitle>
 				<p className="text-sm text-[var(--color-base-content)]/60">{t("profile.subtitle")}</p>
 			</div>
 
 			<section className="card p-6 space-y-4">
-				<h2 className="font-semibold flex items-center gap-2">
-					<UserIcon className="w-4 h-4" /> {t("nav.account")}
-				</h2>
+				<SectionTitle icon={UserIcon} className="">
+					{t("nav.account")}
+				</SectionTitle>
 				<div className="flex items-center gap-4">
 					<div className="size-24 rounded-xl overflow-hidden bg-[var(--color-primary)]/15 grid place-items-center shrink-0">
 						{me.avatar_key ? (
@@ -330,17 +344,17 @@ export default function ProfilePage() {
 				</div>
 			</section>
 
-			<section className="card p-6 space-y-4">
-				<h2 className="font-semibold flex items-center gap-2">
-					<Star className="w-4 h-4" /> {t("profile.rewards")}
-				</h2>
+			<section className="card card-tone tone-reward p-6 space-y-4">
+				<SectionTitle icon={Star} className="">
+					{t("profile.rewards")}
+				</SectionTitle>
 				{rewards ? (
 					<>
 						<div className="flex items-center justify-between gap-4 flex-wrap">
 							<div className="flex items-center gap-3">
-								<div className="rounded-xl bg-[var(--color-primary)]/15 px-3 py-2 text-center">
-									<p className="text-xs text-[var(--color-base-content)]/50">{t("profile.level")}</p>
-									<p className="text-2xl font-bold text-[var(--color-primary-soft)]">
+								<div className="rounded-xl bg-[color-mix(in_oklab,var(--tone)_16%,transparent)] px-4 py-2 text-center">
+									<p className="text-xs text-[var(--color-base-content)]/60">{t("profile.level")}</p>
+									<p className="font-display text-3xl font-bold tone-text leading-none mt-0.5">
 										{rewards.level}
 									</p>
 								</div>
@@ -356,13 +370,17 @@ export default function ProfilePage() {
 							</div>
 							<div className="flex items-center gap-4 text-center">
 								<div>
-									<p className="text-2xl font-bold">{rewards.threads}</p>
+									<p className="font-display text-2xl font-bold text-[var(--color-primary-soft)]">
+										{rewards.threads}
+									</p>
 									<p className="text-[11px] text-[var(--color-base-content)]/50">
 										{t("common.threads")}
 									</p>
 								</div>
 								<div>
-									<p className="text-2xl font-bold">{rewards.daily_games.toLocaleString()}</p>
+									<p className="font-display text-2xl font-bold text-[var(--color-meta)]">
+										{rewards.daily_games.toLocaleString()}
+									</p>
 									<p className="text-[11px] text-[var(--color-base-content)]/50">
 										{t("profile.gamesPerDay")}
 									</p>
@@ -380,7 +398,7 @@ export default function ProfilePage() {
 								</div>
 								<div className="h-2 w-full overflow-hidden rounded-full bg-[var(--color-base-300)]">
 									<div
-										className="h-full rounded-full bg-[var(--color-primary)] transition-[width] duration-300"
+										className="h-full rounded-full bg-[var(--tone)] transition-[width] duration-300"
 										style={{ width: `${rewards.progress_pct}%` }}
 									/>
 								</div>
@@ -404,9 +422,9 @@ export default function ProfilePage() {
 			</section>
 
 			<section className="card p-6 space-y-4">
-				<h2 className="font-semibold flex items-center gap-2">
-					<HeartHandshake className="w-4 h-4" /> {t("donor.claimTitle")}
-				</h2>
+				<SectionTitle icon={HeartHandshake} className="">
+					{t("donor.claimTitle")}
+				</SectionTitle>
 				<p className="text-xs text-[var(--color-base-content)]/60">{t("donor.claimSubtitle")}</p>
 				<div className="flex flex-wrap gap-2">
 					<input
@@ -455,9 +473,9 @@ export default function ProfilePage() {
 			</section>
 
 			<section className="card p-6 space-y-4">
-				<h2 className="font-semibold flex items-center gap-2">
-					<KeyRound className="w-4 h-4" /> {t("apiKeys.title")}
-				</h2>
+				<SectionTitle icon={KeyRound} className="">
+					{t("apiKeys.title")}
+				</SectionTitle>
 				<p className="text-xs text-[var(--color-base-content)]/60">{t("apiKeys.subtitle")}</p>
 				<div className="flex flex-wrap gap-2">
 					<input
@@ -503,9 +521,9 @@ export default function ProfilePage() {
 			</section>
 
 			<section className="card p-6 space-y-4">
-				<h2 className="font-semibold flex items-center gap-2">
-					<Mail className="w-4 h-4" /> {t("profile.changePassword")}
-				</h2>{" "}
+				<SectionTitle icon={Mail} className="">
+					{t("profile.changePassword")}
+				</SectionTitle>{" "}
 				<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 					<div>
 						<label className="label-text">{t("profile.currentPassword")}</label>

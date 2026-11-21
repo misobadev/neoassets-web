@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
+import SectionTitle from "../components/ui/SectionTitle";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, ChevronRight, PenSquare, PlusCircle, Search } from "lucide-react";
+import {
+	ChevronLeft,
+	ChevronRight,
+	PenSquare,
+	PlusCircle,
+	Search,
+	Images,
+	Globe,
+	Users,
+	HardDrive,
+} from "lucide-react";
 import {
 	fetchMetadataGameDetail,
 	isAuthed,
@@ -374,10 +385,10 @@ export default function MetadataGameDetail() {
 				</div>
 			</div>
 
-			<section className="card p-4 sm:p-6">
-				<h2 className="font-semibold mb-3">
+			<section className="card p-4 sm:p-6 tone-meta">
+				<SectionTitle icon={Images}>
 					{t("metadataGame.mediaTitle", { count: game.media.filter((m) => m.kind !== "cover").length })}
-				</h2>
+				</SectionTitle>
 				{(() => {
 					const list = game.media.filter((m) => m.kind !== "cover");
 					if (list.length === 0) {
@@ -397,8 +408,8 @@ export default function MetadataGameDetail() {
 			</section>
 
 			{regions.some((r) => (r.media || []).length > 0) ? (
-				<section className="card p-4 sm:p-6">
-					<h2 className="font-semibold mb-3">{t("metadataGame.regionsTitle")}</h2>
+				<section className="card p-4 sm:p-6 tone-meta">
+					<SectionTitle icon={Globe}>{t("metadataGame.regionsTitle")}</SectionTitle>
 					<div className="space-y-3">
 						{regions
 							.filter((r) => (r.media || []).length > 0)
@@ -428,8 +439,8 @@ export default function MetadataGameDetail() {
 			) : null}
 
 			{contributors.length > 0 ? (
-				<section className="card p-4 sm:p-6">
-					<h2 className="font-semibold mb-3">{t("metadataGame.contributors")}</h2>
+				<section className="card p-4 sm:p-6 tone-community">
+					<SectionTitle icon={Users}>{t("metadataGame.contributors")}</SectionTitle>
 					<p className="text-sm text-[var(--color-base-content)]/70 break-words">
 						{contributors.map((c, i) => (
 							<span key={c.id}>
@@ -441,8 +452,10 @@ export default function MetadataGameDetail() {
 				</section>
 			) : null}
 
-			<section className="card p-4 sm:p-6">
-				<h2 className="font-semibold mb-3">{t("metadataGame.romDumpsTitle", { count: game.roms.length })}</h2>
+			<section className="card p-4 sm:p-6 tone-meta">
+				<SectionTitle icon={HardDrive}>
+					{t("metadataGame.romDumpsTitle", { count: game.roms.length })}
+				</SectionTitle>
 				{game.roms.length > 0 ? (
 					<div className="relative mb-3">
 						<Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-base-content)]/40" />

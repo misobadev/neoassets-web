@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Check, Copy, Download } from "lucide-react";
+import { Check, Copy, Download, Shapes } from "lucide-react";
+import PageTitle from "../components/ui/PageTitle";
 import { useTranslation } from "react-i18next";
 import { Isotype, Wordmark } from "../components/Brand";
 import { usePageMeta } from "../lib/seo";
@@ -60,7 +61,9 @@ export default function BrandPage() {
 	return (
 		<div className="space-y-12">
 			<header>
-				<h1 className="text-2xl md:text-3xl font-semibold">{t("brand.title")}</h1>
+				<PageTitle icon={Shapes} tone="tone-primary">
+					{t("brand.title")}
+				</PageTitle>
 				<p className="text-[var(--color-base-content)]/70 mt-2 max-w-prose">{t("brand.subtitle")}</p>
 			</header>
 
