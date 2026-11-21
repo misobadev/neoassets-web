@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import BackLink from "../components/ui/BackLink";
 import SectionTitle from "../components/ui/SectionTitle";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -183,13 +184,10 @@ export default function MetadataGameDetail() {
 					aria-hidden="true"
 				/>
 				<div className="min-w-0">
-					<Link
+					<BackLink
 						to={`/app/metadata/${systemId || game.system_id}`}
-						className="inline-flex items-center gap-1 text-sm text-[var(--color-base-content)]/75 hover:text-[var(--color-base-content)] mb-2"
-					>
-						<ChevronLeft className="w-4 h-4" aria-hidden="true" />
-						{game.system_name || t("common.back")}
-					</Link>
+						label={game.system_name || t("common.back")}
+					/>
 					<h1 className="text-2xl md:text-3xl font-semibold break-words">{game.name}</h1>
 					<div className="flex items-center gap-1.5 flex-wrap mt-2">
 						<span className={`badge ${typeBadgeClass(game.type)}`}>

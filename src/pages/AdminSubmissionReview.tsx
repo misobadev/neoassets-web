@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import BackLink from "../components/ui/BackLink";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AlertTriangle, Check, ChevronLeft, Loader2, Trash2, X } from "lucide-react";
+import { AlertTriangle, Check, Loader2, Trash2, X } from "lucide-react";
 import { api, isAdmin, type SubmissionDetail, type SubmissionFile, mediaUrl } from "../lib/api";
 import { useSystems } from "../lib/systems";
 import { useReviews } from "../lib/reviews";
@@ -142,10 +143,8 @@ export default function AdminSubmissionReview() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-3">
-				<Link to="/app/admin/sap" className="btn btn-ghost !p-2" aria-label={t("common.back")}>
-					<ChevronLeft className="w-5 h-5" />
-				</Link>
 				<div className="min-w-0 flex-1">
+					<BackLink to="/app/admin/sap" label={t("nav.sapReview")} />
 					<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{detail.name}</h1>
 					<p className="text-sm text-[var(--color-base-content)]/60">
 						{t("admin.by")} <UserLink>{detail.submitted_by || detail.author}</UserLink> ·{" "}

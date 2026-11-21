@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import BackLink from "../components/ui/BackLink";
 import PageTitle from "../components/ui/PageTitle";
-import { Link } from "react-router-dom";
+
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, ShieldCheck, Users } from "lucide-react";
+import { ShieldCheck, Users } from "lucide-react";
 import { fetchUsers, setUserRole, setDonorStatus, type User } from "../lib/api";
 import Avatar from "../components/Avatar";
 
@@ -60,10 +61,8 @@ export default function AdminUsersView() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-3">
-				<Link to="/app/admin" className="btn btn-ghost !p-2" aria-label={t("common.back")}>
-					<ChevronLeft className="w-5 h-5" />
-				</Link>
 				<div>
+					<BackLink to="/app/admin" label={t("nav.admin")} />
 					<PageTitle icon={Users} tone="tone-community">
 						{t("nav.users")}
 					</PageTitle>

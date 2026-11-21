@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import BackLink from "../components/ui/BackLink";
 import PageTitle from "../components/ui/PageTitle";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, Trash2, X, Zap, ListChecks } from "lucide-react";
+import { Check, Clock, Image as ImageIcon, Sparkles, Trash2, X, Zap, ListChecks } from "lucide-react";
 import {
 	cancelMetadataSubmission,
 	fetchMetadataGameDetail,
@@ -169,10 +170,8 @@ export default function ReviewsPage() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-3">
-				<Link to="/app/home" className="btn btn-ghost !p-2" aria-label={t("common.back")}>
-					<ChevronLeft className="w-5 h-5" />
-				</Link>
 				<div>
+					<BackLink to="/app/home" label={t("nav.home")} />
 					<PageTitle icon={ListChecks} tone="tone-meta">
 						{t("reviews.title")}
 					</PageTitle>
