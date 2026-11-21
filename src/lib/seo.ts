@@ -7,7 +7,7 @@ export const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://neoassets.dev
 export const DEFAULT_TITLE = "NeoAssets - System Art Packs & Game Metadata";
 export const DEFAULT_DESCRIPTION =
 	"NeoAssets is a community-driven catalog of system art packs and game metadata for emulation frontends. Create, share and review art packs; browse and contribute game metadata and media.";
-export const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`;
+export const DEFAULT_IMAGE = `${SITE_URL}/og-image.png?v=2`;
 
 export interface PageMeta {
 	title: string;
