@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useState, type ReactNode } from "react";
+import { Isotype, Wordmark } from "../components/Brand";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
 	Bell,
@@ -56,6 +57,7 @@ function SideLink({
 	end,
 	collapsed,
 	active,
+	tone = "tone-primary",
 }: {
 	to: string;
 	icon: ReactNode;
@@ -63,6 +65,8 @@ function SideLink({
 	end?: boolean;
 	collapsed: boolean;
 	active?: boolean;
+	// tone-* class: the section color of the icon and of the active state.
+	tone?: string;
 }) {
 	return (
 		<NavLink
@@ -70,7 +74,7 @@ function SideLink({
 			end={end}
 			title={collapsed ? label : undefined}
 			className={({ isActive }) =>
-				`sap-nav ${(active ?? isActive) ? "sap-nav-active" : ""} ${collapsed ? "justify-center" : ""}`
+				`sap-nav ${tone} ${(active ?? isActive) ? "sap-nav-active" : ""} ${collapsed ? "justify-center" : ""}`
 			}
 		>
 			{icon}
@@ -144,14 +148,8 @@ export default function AppPage() {
 			{/* Phone top bar: brand and the button that opens the sidebar drawer. */}
 			<header className="md:hidden sticky top-0 z-30 flex items-center justify-between h-14 px-4 border-b border-[var(--color-base-300)] bg-[var(--color-base-200)]">
 				<Link to="/app/home" className="flex items-center gap-2.5">
-					<span
-						className="isotype-mask h-6 w-6 shrink-0 text-[var(--color-primary-soft)]"
-						aria-hidden="true"
-					/>
-					<span className="font-brand uppercase tracking-tight text-lg leading-none">
-						<span className="font-bold">Neo</span>
-						<span className="font-normal">Assets</span>
-					</span>
+					<Isotype className="h-6 w-6" />
+					<Wordmark className="text-lg" />
 				</Link>
 				<button
 					type="button"
@@ -178,23 +176,15 @@ export default function AppPage() {
 			>
 				<div className={`flex items-center gap-2 mb-4 ${collapsed ? "flex-col" : ""}`}>
 					<Link to="/app/home" className="flex items-center gap-2.5 min-w-0">
-						<span
-							className="isotype-mask h-7 w-7 shrink-0 text-[var(--color-primary-soft)]"
-							aria-hidden="true"
-						/>
-						{!collapsed ? (
-							<span className="font-brand inline-block uppercase tracking-tight text-xl leading-none">
-								<span className="font-bold">Neo</span>
-								<span className="font-normal">Assets</span>
-							</span>
-						) : null}
+						<Isotype className="h-7 w-7" />
+						{!collapsed ? <Wordmark className="text-xl" /> : null}
 					</Link>
 					<button
 						type="button"
 						onClick={isMobile ? () => setDrawerOpen(false) : toggleCollapsed}
 						title={collapsed ? t("nav.expandMenu") : t("nav.collapseMenu")}
 						aria-label={collapsed ? t("nav.expandMenu") : t("nav.collapseMenu")}
-						className={`sap-icon-btn ${collapsed ? "" : "ml-auto w-10"}`}
+						className={`sap-icon-btn ${collapsed ? "" : "ml-auto !flex-none size-9"}`}
 					>
 						{isMobile ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
 					</button>
@@ -210,6 +200,7 @@ export default function AppPage() {
 					/>
 					<SideLink
 						to="/app/dashboard"
+						tone="tone-community"
 						icon={<LayoutDashboard className="w-4 h-4 shrink-0" />}
 						label={t("nav.dashboard")}
 						collapsed={collapsed}
@@ -222,6 +213,7 @@ export default function AppPage() {
 					{!collapsed ? <p className="sap-section">{t("nav.submissions")}</p> : null}
 					<SideLink
 						to="/app/metadata"
+						tone="tone-meta"
 						icon={<Gamepad2 className="w-4 h-4 shrink-0" />}
 						label={t("nav.gameMetadata")}
 						active={path === "/app/metadata" || path.startsWith("/app/metadata/")}
@@ -229,6 +221,7 @@ export default function AppPage() {
 					/>
 					<SideLink
 						to="/app/sap"
+						tone="tone-sap"
 						icon={<Palette className="w-4 h-4 shrink-0" />}
 						label={t("nav.systemArtPack")}
 						end
@@ -237,6 +230,7 @@ export default function AppPage() {
 					{authed ? (
 						<SideLink
 							to="/app/contributions"
+							tone="tone-meta"
 							icon={<ListChecks className="w-4 h-4 shrink-0" />}
 							label={t("nav.myReviews")}
 							collapsed={collapsed}
@@ -250,6 +244,7 @@ export default function AppPage() {
 					{!collapsed ? <p className="sap-section">{t("nav.help")}</p> : null}
 					<SideLink
 						to="/app/guide"
+						tone="tone-reward"
 						icon={<HelpCircle className="w-4 h-4 shrink-0" />}
 						label={t("nav.rewardsGuide")}
 						collapsed={collapsed}
@@ -372,6 +367,9 @@ export default function AppPage() {
 					<div className="w-full px-4 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
 						<p className="text-xs text-base-content/60">{t("footer.tagline")}</p>
 						<div className="flex items-center gap-4 text-xs text-base-content/60">
+							<Link to="/app/brand" className="hover:text-base-content">
+								{t("footer.brandKit")}
+							</Link>
 							<a
 								href="https://neostation.dev"
 								target="_blank"

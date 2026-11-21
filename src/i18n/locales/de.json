@@ -181,6 +181,7 @@
 		"totalUsers": "Nutzer"
 	},
 	"footer": {
+		"brandKit": "Brand-Kit",
 		"tagline": "NeoAssets - gemeinschaftlich erstellte visuelle Stile."
 	},
 	"guide": {
@@ -1230,5 +1231,65 @@
 		"monthly_supporter": "Monatlicher Supporter",
 		"none": "Keiner",
 		"supporter": "Supporter"
+	},
+	"brand": {
+		"title": "Brand-Kit",
+		"subtitle": "Logo, Bildmarke, Farben und Schriften von NeoAssets. Nutze sie, um auf NeoAssets zu verlinken oder es in deinem Frontend, Theme oder Video zu nennen.",
+		"logo": {
+			"title": "Logo",
+			"isotypeTitle": "Die Bildmarke",
+			"isotypeBody": "Ein Würfel aus Asset-Kacheln, dem eine Kachel fehlt: das Stück, das die Community beiträgt. Er funktioniert farbig bis 16 px und einfarbig auf Fotos."
+		},
+		"files": {
+			"title": "Downloads",
+			"logoDark": "Logo für dunkle Hintergründe",
+			"logoLight": "Logo für helle Hintergründe",
+			"logoWhite": "Logo in Weiß",
+			"logoBlack": "Logo in Schwarz",
+			"isotypeBlack": "Bildmarke in Schwarz, für Druck und einfarbige Nutzung auf hellem Grund",
+			"isotype": "Bildmarke in Farbe",
+			"isotypeWhite": "Bildmarke in Weiß, für Fotos und dunkle Bilder"
+		},
+		"colors": {
+			"title": "Farben",
+			"hint": "Klicke auf eine Farbe, um ihren Wert zu kopieren.",
+			"copy": "{{value}} kopieren",
+			"groups": {
+				"brand": "Marke",
+				"sections": "Bereiche",
+				"neutrals": "Neutraltöne"
+			},
+			"names": {
+				"primary": "Cyan",
+				"primarySoft": "Helles Cyan",
+				"cubeTop": "Würfel oben",
+				"cubeLeft": "Würfel links",
+				"cubeRight": "Magenta",
+				"meta": "Spiel-Metadaten",
+				"sap": "System Art Packs",
+				"reward": "Belohnungen",
+				"community": "Community",
+				"system": "Systeme",
+				"storage": "Speicher",
+				"background": "Hintergrund",
+				"surface": "Fläche",
+				"border": "Rahmen",
+				"text": "Text"
+			}
+		},
+		"type": {
+			"title": "Schriften",
+			"display": "Überschriften und Kennzahlen.",
+			"anta": "Nur für den Schriftzug.",
+			"sans": "Oberfläche und Texte.",
+			"mono": "Hashes, Größen, IDs und Code."
+		},
+		"usage": {
+			"title": "Verwendung",
+			"space": "Lass um das Logo einen Freiraum von mindestens der halben Breite der Bildmarke.",
+			"background": "Verwende das dunkle Logo auf dunklen und das helle auf hellen Hintergründen; auf Fotos die weiße Bildmarke.",
+			"colors": "Ändere die Farben von Würfel und Schriftzug nicht und füge keine Verläufe, Schatten oder Konturen hinzu.",
+			"shape": "Drehe, verzerre oder ordne die Kacheln nicht um; die fehlende Kachel gehört zur Marke."
+		}
 	}
 }

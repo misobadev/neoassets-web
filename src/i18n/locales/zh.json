@@ -181,6 +181,7 @@
 		"totalUsers": "用户"
 	},
 	"footer": {
+		"brandKit": "品牌资源",
 		"tagline": "NeoAssets - 社区制作的视觉风格。"
 	},
 	"guide": {
@@ -1230,5 +1231,65 @@
 		"monthly_supporter": "月度支持者",
 		"none": "无",
 		"supporter": "支持者"
+	},
+	"brand": {
+		"title": "品牌资源",
+		"subtitle": "NeoAssets 的标志、图形标、配色和字体。可用于链接到 NeoAssets，或在你的前端、主题或视频中注明出处。",
+		"logo": {
+			"title": "标志",
+			"isotypeTitle": "图形标",
+			"isotypeBody": "一个由素材方块组成的立方体，缺了一块：那是社区补上的一块。彩色版可清晰显示到 16px，在照片上可使用单色版。"
+		},
+		"files": {
+			"title": "下载",
+			"logoDark": "深色背景标志",
+			"logoLight": "浅色背景标志",
+			"logoWhite": "白色标志",
+			"logoBlack": "黑色标志",
+			"isotypeBlack": "黑色图形标（用于印刷和浅色背景单色使用）",
+			"isotype": "彩色图形标",
+			"isotypeWhite": "白色图形标（用于照片和深色图片）"
+		},
+		"colors": {
+			"title": "配色",
+			"hint": "点击颜色即可复制色值。",
+			"copy": "复制 {{value}}",
+			"groups": {
+				"brand": "品牌",
+				"sections": "分区",
+				"neutrals": "中性色"
+			},
+			"names": {
+				"primary": "青色",
+				"primarySoft": "浅青色",
+				"cubeTop": "立方体顶面",
+				"cubeLeft": "立方体左面",
+				"cubeRight": "品红",
+				"meta": "游戏元数据",
+				"sap": "系统美术包",
+				"reward": "奖励",
+				"community": "社区",
+				"system": "系统",
+				"storage": "存储",
+				"background": "背景",
+				"surface": "表面",
+				"border": "边框",
+				"text": "文字"
+			}
+		},
+		"type": {
+			"title": "字体",
+			"display": "标题和重点数字。",
+			"anta": "仅用于标准字。",
+			"sans": "界面和正文。",
+			"mono": "哈希、大小、ID 和代码。"
+		},
+		"usage": {
+			"title": "使用规范",
+			"space": "标志四周请保留至少为图形标宽度一半的留白。",
+			"background": "深色背景使用深色版标志，浅色背景使用浅色版；在照片上请使用白色图形标。",
+			"colors": "请勿更改立方体或文字的颜色，也不要添加渐变、阴影或描边。",
+			"shape": "请勿旋转、拉伸或重新排列方块；缺失的那一块也是标志的一部分。"
+		}
 	}
 }

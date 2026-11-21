@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
+import PageTitle from "../components/ui/PageTitle";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, Upload } from "lucide-react";
+import { ChevronLeft, Upload, Heart } from "lucide-react";
 import { importDonations, type DonationImportItem } from "../lib/api";
 
 // parseEmails reads a plain list of emails (one per line, or comma/space
@@ -56,7 +57,9 @@ export default function AdminDonationsView() {
 					<ChevronLeft className="w-5 h-5" />
 				</Link>
 				<div>
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("adminDonations.title")}</h1>
+					<PageTitle icon={Heart} tone="tone-reward">
+						{t("adminDonations.title")}
+					</PageTitle>
 					<p className="text-sm text-[var(--color-base-content)]/60 pt-1">{t("adminDonations.subtitle")}</p>
 				</div>
 			</div>

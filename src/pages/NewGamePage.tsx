@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
+import PageTitle from "../components/ui/PageTitle";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AlertTriangle, Check, ChevronLeft, Clapperboard, HardDrive, Plus, Trash2, Upload } from "lucide-react";
+import {
+	AlertTriangle,
+	Check,
+	ChevronLeft,
+	Clapperboard,
+	HardDrive,
+	Plus,
+	Trash2,
+	Upload,
+	Gamepad2,
+} from "lucide-react";
 import {
 	createMetadataSubmission,
 	fetchGenres,
@@ -402,7 +413,9 @@ export default function NewGamePage() {
 					<ChevronLeft className="w-5 h-5" />
 				</Link>
 				<div>
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("metadata.newGame.title")}</h1>
+					<PageTitle icon={Gamepad2} tone="tone-meta">
+						{t("metadata.newGame.title")}
+					</PageTitle>
 					<p className="text-sm text-[var(--color-base-content)]/60 pt-1">{t("metadata.newGame.subtitle")}</p>
 				</div>
 			</div>

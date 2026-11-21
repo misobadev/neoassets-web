@@ -181,6 +181,7 @@
 		"totalUsers": "사용자"
 	},
 	"footer": {
+		"brandKit": "브랜드 키트",
 		"tagline": "NeoAssets - 커뮤니티가 만든 비주얼 스타일."
 	},
 	"guide": {
@@ -1230,5 +1231,65 @@
 		"monthly_supporter": "월간 서포터",
 		"none": "없음",
 		"supporter": "서포터"
+	},
+	"brand": {
+		"title": "브랜드 키트",
+		"subtitle": "NeoAssets의 로고, 심벌, 색상, 서체입니다. NeoAssets로 링크하거나 프런트엔드, 테마, 영상에서 출처를 표기할 때 사용하세요.",
+		"logo": {
+			"title": "로고",
+			"isotypeTitle": "심벌",
+			"isotypeBody": "에셋 타일로 만든 큐브에서 타일 하나가 빠져 있습니다. 바로 커뮤니티가 채우는 조각입니다. 컬러로는 16px까지, 사진 위에서는 단색으로 사용할 수 있습니다."
+		},
+		"files": {
+			"title": "다운로드",
+			"logoDark": "어두운 배경용 로고",
+			"logoLight": "밝은 배경용 로고",
+			"logoWhite": "흰색 로고",
+			"logoBlack": "검은색 로고",
+			"isotypeBlack": "검은색 심벌(인쇄 및 밝은 배경의 단색 용도)",
+			"isotype": "컬러 심벌",
+			"isotypeWhite": "흰색 심벌(사진과 어두운 이미지용)"
+		},
+		"colors": {
+			"title": "색상",
+			"hint": "색상을 클릭하면 값이 복사됩니다.",
+			"copy": "{{value}} 복사",
+			"groups": {
+				"brand": "브랜드",
+				"sections": "섹션",
+				"neutrals": "뉴트럴"
+			},
+			"names": {
+				"primary": "시안",
+				"primarySoft": "소프트 시안",
+				"cubeTop": "큐브 윗면",
+				"cubeLeft": "큐브 왼쪽",
+				"cubeRight": "마젠타",
+				"meta": "게임 메타데이터",
+				"sap": "시스템 아트 팩",
+				"reward": "보상",
+				"community": "커뮤니티",
+				"system": "시스템",
+				"storage": "저장 공간",
+				"background": "배경",
+				"surface": "표면",
+				"border": "테두리",
+				"text": "텍스트"
+			}
+		},
+		"type": {
+			"title": "서체",
+			"display": "제목과 주요 숫자.",
+			"anta": "로고타입 전용.",
+			"sans": "인터페이스와 본문.",
+			"mono": "해시, 크기, ID, 코드."
+		},
+		"usage": {
+			"title": "사용 규칙",
+			"space": "로고 주위에 심벌 너비의 절반 이상의 여백을 두세요.",
+			"background": "어두운 배경에는 어두운 배경용 로고를, 밝은 배경에는 밝은 배경용 로고를 쓰고, 사진 위에는 흰색 심벌을 사용하세요.",
+			"colors": "큐브나 글자의 색을 바꾸지 말고, 그라데이션·그림자·외곽선을 추가하지 마세요.",
+			"shape": "타일을 회전하거나 늘리거나 재배열하지 마세요. 빠진 타일도 마크의 일부입니다."
+		}
 	}
 }

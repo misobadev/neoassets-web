@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { BookOpen, Gauge, HeartHandshake, HelpCircle, Star } from "lucide-react";
+import SectionTitle from "../components/ui/SectionTitle";
+import PageTitle from "../components/ui/PageTitle";
+import { BookOpen, Gauge, HeartHandshake, HelpCircle, Star, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { fetchConfig, type PublicConfig } from "../lib/api";
 import DonorBadge from "../components/DonorBadge";
@@ -51,25 +53,24 @@ export default function GuidePage() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("guide.title")}</h1>
+				<PageTitle icon={Sparkles} tone="tone-reward">
+					{t("guide.title")}
+				</PageTitle>
 				<p className="text-sm text-[var(--color-base-content)]/60">{t("guide.subtitle")}</p>
 			</div>
 
-			<section className="card p-6 space-y-3">
-				<h2 className="font-semibold flex items-center gap-2">
-					<Star className="w-4 h-4 text-[var(--color-primary)]" /> {t("guide.earn.title")}
-				</h2>
+			<section className="card p-6 space-y-3 tone-reward">
+				<SectionTitle icon={Star} className="">
+					{t("guide.earn.title")}
+				</SectionTitle>
 				<p className="text-sm text-[var(--color-base-content)]/70">
 					{t("guide.earn.introPrefix")} <strong>{t("guide.earn.introApproved")}</strong>
 					{t("guide.earn.introSuffix")}
 				</p>
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 					{earn.map((e) => (
-						<div
-							key={e.labelKey}
-							className="rounded-lg border border-[var(--color-base-300)] p-3 flex items-start gap-3"
-						>
-							<span className="text-2xl font-bold text-[var(--color-primary-soft)] shrink-0">
+						<div key={e.labelKey} className="card card-tone p-4 flex items-center gap-4">
+							<span className="font-display text-3xl font-bold tone-text shrink-0 tabular-nums">
 								{e.value}
 							</span>
 							<div className="min-w-0">
@@ -81,10 +82,10 @@ export default function GuidePage() {
 				</div>
 			</section>
 
-			<section className="card p-6 space-y-3">
-				<h2 className="font-semibold flex items-center gap-2">
-					<Gauge className="w-4 h-4 text-[var(--color-primary)]" /> {t("guide.progression.title")}
-				</h2>
+			<section className="card p-6 space-y-3 tone-primary">
+				<SectionTitle icon={Gauge} className="">
+					{t("guide.progression.title")}
+				</SectionTitle>
 				<p className="text-sm text-[var(--color-base-content)]/70">
 					{t("guide.progression.intro", { per: cfg.daily_games_per_thread.toLocaleString() })}
 				</p>
@@ -110,7 +111,7 @@ export default function GuidePage() {
 									<td className="py-2 pr-4 font-mono text-xs">
 										{r.min_level}–{r.max_level}
 									</td>
-									<td className="py-2 pr-4 font-medium">
+									<td className="py-2 pr-4 font-display font-semibold text-[var(--color-primary-soft)]">
 										{t("guide.ranks." + r.rank, { defaultValue: r.rank })}
 									</td>
 									<td className="py-2 pr-4">{r.threads}</td>
@@ -126,17 +127,14 @@ export default function GuidePage() {
 				</p>
 			</section>
 
-			<section className="card p-6 space-y-3">
-				<h2 className="font-semibold flex items-center gap-2">
-					<HeartHandshake className="w-4 h-4 text-[var(--color-primary)]" /> {t("guide.donations.title")}
-				</h2>
+			<section className="card p-6 space-y-3 tone-sap">
+				<SectionTitle icon={HeartHandshake} className="">
+					{t("guide.donations.title")}
+				</SectionTitle>
 				<p className="text-sm text-[var(--color-base-content)]/70">{t("guide.donations.intro")}</p>
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 					{cfg.donor_tiers.map((tier) => (
-						<div
-							key={tier.status}
-							className="rounded-lg border border-[var(--color-base-300)] p-4 space-y-2"
-						>
+						<div key={tier.status} className="card card-tone p-4 space-y-2">
 							<DonorBadge status={tier.status} />
 							<p className="text-sm text-[var(--color-base-content)]/70">
 								{t("guide.donations." + tier.status + ".perk", {
@@ -158,10 +156,10 @@ export default function GuidePage() {
 				</p>
 			</section>
 
-			<section className="card p-6 space-y-3">
-				<h2 className="font-semibold flex items-center gap-2">
-					<HelpCircle className="w-4 h-4 text-[var(--color-primary)]" /> {t("guide.contribute.title")}
-				</h2>
+			<section className="card p-6 space-y-3 tone-community">
+				<SectionTitle icon={HelpCircle} className="">
+					{t("guide.contribute.title")}
+				</SectionTitle>
 				<ol className="list-decimal list-inside text-sm text-[var(--color-base-content)]/70 space-y-1">
 					<li>
 						{t("guide.contribute.step1Before")} <strong>{t("nav.gameMetadata")}</strong>{" "}

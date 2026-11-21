@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import PageTitle from "../components/ui/PageTitle";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, ShieldCheck } from "lucide-react";
+import { ChevronLeft, ShieldCheck, Users } from "lucide-react";
 import { fetchUsers, setUserRole, setDonorStatus, type User } from "../lib/api";
 import Avatar from "../components/Avatar";
 
@@ -63,7 +64,9 @@ export default function AdminUsersView() {
 					<ChevronLeft className="w-5 h-5" />
 				</Link>
 				<div>
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("nav.users")}</h1>
+					<PageTitle icon={Users} tone="tone-community">
+						{t("nav.users")}
+					</PageTitle>
 					<p className="text-sm text-[var(--color-base-content)]/60">{t("admin.usersSubtitle")}</p>
 				</div>
 			</div>

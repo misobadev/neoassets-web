@@ -181,6 +181,7 @@
 		"totalUsers": "Utilizadores"
 	},
 	"footer": {
+		"brandKit": "Kit de marca",
 		"tagline": "NeoAssets - estilos visuais feitos pela comunidade."
 	},
 	"guide": {
@@ -1230,5 +1231,65 @@
 		"monthly_supporter": "Supporter mensal",
 		"none": "Nenhum",
 		"supporter": "Supporter"
+	},
+	"brand": {
+		"title": "Kit de marca",
+		"subtitle": "O logo, o isotipo, as cores e as fontes do NeoAssets. Use-os para linkar o NeoAssets ou dar crédito no seu frontend, tema ou vídeo.",
+		"logo": {
+			"title": "Logo",
+			"isotypeTitle": "O isotipo",
+			"isotypeBody": "Um cubo feito de peças de assets com uma peça faltando: a parte que a comunidade adiciona. Funciona em cores até 16px e em uma cor sobre fotos."
+		},
+		"files": {
+			"title": "Downloads",
+			"logoDark": "Logo para fundos escuros",
+			"logoLight": "Logo para fundos claros",
+			"logoWhite": "Logo branco",
+			"logoBlack": "Logo preto",
+			"isotypeBlack": "Isotipo preto, para impressão e usos em uma cor sobre fundo claro",
+			"isotype": "Isotipo colorido",
+			"isotypeWhite": "Isotipo branco, para fotos e imagens escuras"
+		},
+		"colors": {
+			"title": "Cores",
+			"hint": "Clique em uma cor para copiar o valor.",
+			"copy": "Copiar {{value}}",
+			"groups": {
+				"brand": "Marca",
+				"sections": "Seções",
+				"neutrals": "Neutras"
+			},
+			"names": {
+				"primary": "Ciano",
+				"primarySoft": "Ciano suave",
+				"cubeTop": "Cubo topo",
+				"cubeLeft": "Cubo esquerda",
+				"cubeRight": "Magenta",
+				"meta": "Metadados de jogos",
+				"sap": "System art packs",
+				"reward": "Recompensas",
+				"community": "Comunidade",
+				"system": "Sistemas",
+				"storage": "Armazenamento",
+				"background": "Fundo",
+				"surface": "Superfície",
+				"border": "Borda",
+				"text": "Texto"
+			}
+		},
+		"type": {
+			"title": "Fontes",
+			"display": "Títulos e números em destaque.",
+			"anta": "Apenas para o logotipo.",
+			"sans": "Interface e textos.",
+			"mono": "Hashes, tamanhos, ids e código."
+		},
+		"usage": {
+			"title": "Uso",
+			"space": "Deixe ao redor do logo um espaço livre de pelo menos metade da largura do isotipo.",
+			"background": "Use o logo escuro em fundos escuros e o claro em fundos claros; sobre fotos, use o isotipo branco.",
+			"colors": "Não mude as cores do cubo nem do texto, e não adicione degradês, sombras ou contornos.",
+			"shape": "Não gire, estique nem reorganize as peças; a peça que falta faz parte da marca."
+		}
 	}
 }

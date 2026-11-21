@@ -1,6 +1,8 @@
 import { type ReactNode } from "react";
+import SectionTitle from "../components/ui/SectionTitle";
+import PageTitle from "../components/ui/PageTitle";
 import { Link } from "react-router-dom";
-import { Terminal } from "lucide-react";
+import { Terminal, KeyRound, Gauge, BookOpen, Braces, TriangleAlert } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import CopyButton from "../components/CopyButton";
 import { usePageMeta } from "../lib/seo";
@@ -137,14 +139,16 @@ export default function ApiDocsPage() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h1 className="text-2xl md:text-3xl font-bold tracking-tight flex items-center gap-2">
-					<Terminal className="w-6 h-6 text-[var(--color-primary)]" /> {t("apiDocs.title")}
-				</h1>
+				<PageTitle icon={Terminal} tone="tone-primary">
+					{t("apiDocs.title")}
+				</PageTitle>
 				<p className="text-sm text-[var(--color-base-content)]/60">{t("apiDocs.subtitle")}</p>
 			</div>
 
-			<section className="card p-6 space-y-3">
-				<h2 className="font-semibold">{t("apiDocs.authTitle")}</h2>
+			<section className="card p-6 space-y-3 tone-primary">
+				<SectionTitle icon={KeyRound} className="">
+					{t("apiDocs.authTitle")}
+				</SectionTitle>
 				<p className="text-sm text-[var(--color-base-content)]/70">{t("apiDocs.authIntro")}</p>
 				<div className="overflow-x-auto">
 					<table className="w-full text-sm">
@@ -186,16 +190,20 @@ export default function ApiDocsPage() {
 				</p>
 			</section>
 
-			<section className="card p-6 space-y-3">
-				<h2 className="font-semibold">{t("apiDocs.quotaTitle")}</h2>
+			<section className="card p-6 space-y-3 tone-reward">
+				<SectionTitle icon={Gauge} className="">
+					{t("apiDocs.quotaTitle")}
+				</SectionTitle>
 				<p className="text-sm text-[var(--color-base-content)]/70">{t("apiDocs.quotaBody")}</p>
 				<Code lang="text">{`X-Quota-Limit: 4000
 X-Quota-Remaining: 3877
 X-Quota-Reset: 2026-09-12T00:00:00Z`}</Code>
 			</section>
 
-			<section className="card p-6 space-y-4">
-				<h2 className="font-semibold">{t("apiDocs.conceptsTitle")}</h2>
+			<section className="card p-6 space-y-4 tone-meta">
+				<SectionTitle icon={BookOpen} className="">
+					{t("apiDocs.conceptsTitle")}
+				</SectionTitle>
 				<p className="text-sm text-[var(--color-base-content)]/70">{t("apiDocs.conceptsIntro")}</p>
 
 				<div className="grid gap-3 sm:grid-cols-3">
@@ -266,8 +274,10 @@ curl "${BASE_URL}/api/v1/scrape/games?group=mame-fbneo&name=sfa3.zip"`}</Code>
 				<p className="text-xs text-[var(--color-base-content)]/60">{t("apiDocs.conceptsExampleNote")}</p>
 			</section>
 
-			<section className="card p-6 space-y-4">
-				<h2 className="font-semibold">{t("apiDocs.endpointsTitle")}</h2>
+			<section className="card p-6 space-y-4 tone-primary">
+				<SectionTitle icon={Braces} className="">
+					{t("apiDocs.endpointsTitle")}
+				</SectionTitle>
 
 				<div className="space-y-2">
 					<p className="font-mono text-sm">
@@ -437,8 +447,10 @@ curl "${BASE_URL}/api/v1/scrape/games?group=mame-fbneo&name=sfa3.zip"`}</Code>
 				</div>
 			</section>
 
-			<section className="card p-6 space-y-3">
-				<h2 className="font-semibold">{t("apiDocs.errorsTitle")}</h2>
+			<section className="card p-6 space-y-3 tone-sap">
+				<SectionTitle icon={TriangleAlert} className="">
+					{t("apiDocs.errorsTitle")}
+				</SectionTitle>
 				<div className="overflow-x-auto">
 					<table className="w-full text-sm">
 						<thead>

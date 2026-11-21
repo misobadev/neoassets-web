@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import SectionTitle from "../components/ui/SectionTitle";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, Download, Layers, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, Download, Layers, Plus, Trash2, Images, Palette } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { deletePack, fetchPackDetail, type PackDetail } from "../lib/api";
 import UserLink from "../components/UserLink";
@@ -80,7 +81,12 @@ export default function SapDetailPage() {
 
 	return (
 		<div className="space-y-6">
-			<header className="flex flex-col gap-3 sm:flex-row sm:items-center">
+			<header className="card card-tone px-4 py-5 sm:px-6 sm:py-7 flex flex-col gap-3 sm:flex-row sm:items-center tone-sap">
+				<Palette
+					className="absolute -right-6 -bottom-8 w-40 h-40 -rotate-12 text-[var(--tone)] opacity-[0.08] pointer-events-none"
+					strokeWidth={1.5}
+					aria-hidden="true"
+				/>
 				<div className="flex items-center gap-3 min-w-0 flex-1">
 					<Link to="/app/sap" className="btn btn-ghost !p-2 shrink-0" aria-label={t("common.back")}>
 						<ChevronLeft className="w-5 h-5" />
@@ -90,7 +96,7 @@ export default function SapDetailPage() {
 							<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{pack.name}</h1>
 							<span className="badge badge-success shrink-0">v{pack.version || "?"}</span>
 						</div>
-						<p className="text-sm text-[var(--color-base-content)]/60 pt-1">
+						<p className="text-sm text-[var(--color-base-content)]/75 pt-1">
 							{t("submissions.byAuthor", { author: pack.author })}
 						</p>
 					</div>
@@ -120,7 +126,7 @@ export default function SapDetailPage() {
 				</div>
 			</header>
 
-			<section className="card p-6 space-y-4">
+			<section className="card card-tone tone-sap p-6 space-y-4">
 				<div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--color-base-content)]/60">
 					<span className="flex items-center gap-1">
 						<Download className="w-4 h-4" />
@@ -146,8 +152,8 @@ export default function SapDetailPage() {
 				</div>
 			</section>
 
-			<section className="card p-6">
-				<h2 className="font-semibold mb-3">{t("submissions.gallery")}</h2>
+			<section className="card p-6 tone-sap">
+				<SectionTitle icon={Images}>{t("submissions.gallery")}</SectionTitle>
 				{images.length === 0 ? (
 					<p className="text-sm text-[var(--color-base-content)]/50">{t("submissions.noImages")}</p>
 				) : (

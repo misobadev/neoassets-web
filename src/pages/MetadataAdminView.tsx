@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import PageTitle from "../components/ui/PageTitle";
 import { Link } from "react-router-dom";
 import { AlertTriangle, ChevronLeft, ExternalLink, Image as ImageIcon, ShieldCheck, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -327,7 +328,9 @@ export default function MetadataAdminView() {
 					<ChevronLeft className="w-5 h-5" />
 				</Link>
 				<div>
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("nav.metadataReview")}</h1>
+					<PageTitle icon={ShieldCheck} tone="tone-meta">
+						{t("nav.metadataReview")}
+					</PageTitle>
 					<p className="text-[var(--color-base-content)]/60 text-sm pt-2">{t("metadataAdmin.subtitle")}</p>
 				</div>
 			</div>
@@ -445,7 +448,7 @@ export default function MetadataAdminView() {
 								{pageItems.map((s) => (
 									<div
 										key={s.id}
-										className="card card-hover p-4 cursor-pointer"
+										className="card card-hover card-tone-hover tone-meta p-4 cursor-pointer"
 										onClick={() => open(s.id)}
 									>
 										<div className="flex items-center gap-3">

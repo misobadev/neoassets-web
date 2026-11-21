@@ -181,6 +181,7 @@
 		"totalUsers": "Utilisateurs"
 	},
 	"footer": {
+		"brandKit": "Kit de marque",
 		"tagline": "NeoAssets - styles visuels créés par la communauté."
 	},
 	"guide": {
@@ -1230,5 +1231,65 @@
 		"monthly_supporter": "Supporter mensuel",
 		"none": "Aucun",
 		"supporter": "Supporter"
+	},
+	"brand": {
+		"title": "Kit de marque",
+		"subtitle": "Le logo, l'isotype, les couleurs et les polices de NeoAssets. Utilisez-les pour renvoyer vers NeoAssets ou le citer dans votre frontend, thème ou vidéo.",
+		"logo": {
+			"title": "Logo",
+			"isotypeTitle": "L'isotype",
+			"isotypeBody": "Un cube fait de tuiles d'assets auquel il manque une tuile : la pièce qu'apporte la communauté. Il fonctionne en couleur jusqu'à 16 px et en une seule couleur sur des photos."
+		},
+		"files": {
+			"title": "Téléchargements",
+			"logoDark": "Logo pour fonds sombres",
+			"logoLight": "Logo pour fonds clairs",
+			"logoWhite": "Logo blanc",
+			"logoBlack": "Logo noir",
+			"isotypeBlack": "Isotype noir, pour l'impression et les usages monochromes sur fond clair",
+			"isotype": "Isotype en couleur",
+			"isotypeWhite": "Isotype blanc, pour photos et images sombres"
+		},
+		"colors": {
+			"title": "Couleurs",
+			"hint": "Cliquez sur une couleur pour copier sa valeur.",
+			"copy": "Copier {{value}}",
+			"groups": {
+				"brand": "Marque",
+				"sections": "Sections",
+				"neutrals": "Neutres"
+			},
+			"names": {
+				"primary": "Cyan",
+				"primarySoft": "Cyan doux",
+				"cubeTop": "Cube haut",
+				"cubeLeft": "Cube gauche",
+				"cubeRight": "Magenta",
+				"meta": "Métadonnées de jeux",
+				"sap": "System art packs",
+				"reward": "Récompenses",
+				"community": "Communauté",
+				"system": "Systèmes",
+				"storage": "Stockage",
+				"background": "Fond",
+				"surface": "Surface",
+				"border": "Bordure",
+				"text": "Texte"
+			}
+		},
+		"type": {
+			"title": "Polices",
+			"display": "Titres et chiffres clés.",
+			"anta": "Uniquement pour le logotype.",
+			"sans": "Interface et textes.",
+			"mono": "Hashes, tailles, ids et code."
+		},
+		"usage": {
+			"title": "Utilisation",
+			"space": "Laissez autour du logo un espace libre d'au moins la moitié de la largeur de l'isotype.",
+			"background": "Utilisez le logo sombre sur fond sombre et le clair sur fond clair ; sur une photo, utilisez l'isotype blanc.",
+			"colors": "Ne modifiez pas les couleurs du cube ni du texte, et n'ajoutez ni dégradés, ni ombres, ni contours.",
+			"shape": "Ne faites pas pivoter, n'étirez pas et ne réorganisez pas les tuiles ; la tuile manquante fait partie de la marque."
+		}
 	}
 }

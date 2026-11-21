@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import PageTitle from "../components/ui/PageTitle";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, Trash2, X, Zap } from "lucide-react";
+import { Check, ChevronLeft, Clock, Image as ImageIcon, Sparkles, Trash2, X, Zap, ListChecks } from "lucide-react";
 import {
 	cancelMetadataSubmission,
 	fetchMetadataGameDetail,
@@ -172,7 +173,9 @@ export default function ReviewsPage() {
 					<ChevronLeft className="w-5 h-5" />
 				</Link>
 				<div>
-					<h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t("reviews.title")}</h1>
+					<PageTitle icon={ListChecks} tone="tone-meta">
+						{t("reviews.title")}
+					</PageTitle>
 					<p className="text-sm text-[var(--color-base-content)]/60 pt-1">{t("reviews.subtitle")}</p>
 				</div>
 				<div className="ml-auto card px-4 py-2 flex items-center gap-2 shrink-0">
@@ -221,7 +224,7 @@ export default function ReviewsPage() {
 							return (
 								<div
 									key={r.key}
-									className="card card-hover p-4 cursor-pointer"
+									className="card card-hover card-tone-hover tone-meta p-4 cursor-pointer"
 									onClick={() => setSelected(r)}
 								>
 									<div className="flex items-center gap-3">
