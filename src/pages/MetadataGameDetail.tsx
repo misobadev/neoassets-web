@@ -592,7 +592,7 @@ function ExpandableText({ text }: { text: string }) {
 		return () => ro.disconnect();
 	}, [text]);
 	return (
-		<div className="max-w-[80ch]">
+		<div>
 			<p
 				ref={ref}
 				className={`text-[15px] leading-7 text-[var(--color-base-content)]/75 whitespace-pre-line ${expanded ? "" : "line-clamp-6"}`}
