@@ -155,16 +155,29 @@ export default function MetadataGameDetail() {
 	// A region may exist only to hold regional cover/logo media; it belongs in
 	// the regional media section, not in the regional names list.
 	const namedRegions = regions.filter((r) => r.name || r.release_year);
+	// The header backdrop uses the game's own art: fanart, else a screenshot,
+	// else the cover.
+	const backdrop =
+		game.media.find((m) => m.kind === "fanart") ||
+		game.media.find((m) => m.kind === "screenshot") ||
+		game.media.find((m) => m.kind === "cover");
 
 	return (
 		<div className="space-y-6">
 			{/* Header: a breadcrumb back to the system, the title, compact tags,
 			    and the contribute action (full width on phones). */}
-			<header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+			<header className="art-backdrop rounded-[var(--radius-card)] border border-[var(--color-base-300)] px-4 py-5 sm:px-6 sm:py-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+				{backdrop ? (
+					<div
+						className="art-backdrop-img"
+						aria-hidden="true"
+						style={{ backgroundImage: `url("${mediaUrl(backdrop.object_key, backdrop.created_at)}")` }}
+					/>
+				) : null}
 				<div className="min-w-0">
 					<Link
 						to={`/app/metadata/${systemId || game.system_id}`}
-						className="inline-flex items-center gap-1 text-sm text-[var(--color-base-content)]/65 hover:text-[var(--color-base-content)] mb-2"
+						className="inline-flex items-center gap-1 text-sm text-[var(--color-base-content)]/75 hover:text-[var(--color-base-content)] mb-2"
 					>
 						<ChevronLeft className="w-4 h-4" aria-hidden="true" />
 						{game.system_name || t("common.back")}

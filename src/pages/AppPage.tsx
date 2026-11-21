@@ -56,6 +56,7 @@ function SideLink({
 	end,
 	collapsed,
 	active,
+	tone = "tone-primary",
 }: {
 	to: string;
 	icon: ReactNode;
@@ -63,6 +64,8 @@ function SideLink({
 	end?: boolean;
 	collapsed: boolean;
 	active?: boolean;
+	// tone-* class: the section color of the icon and of the active state.
+	tone?: string;
 }) {
 	return (
 		<NavLink
@@ -70,7 +73,7 @@ function SideLink({
 			end={end}
 			title={collapsed ? label : undefined}
 			className={({ isActive }) =>
-				`sap-nav ${(active ?? isActive) ? "sap-nav-active" : ""} ${collapsed ? "justify-center" : ""}`
+				`sap-nav ${tone} ${(active ?? isActive) ? "sap-nav-active" : ""} ${collapsed ? "justify-center" : ""}`
 			}
 		>
 			{icon}
@@ -210,6 +213,7 @@ export default function AppPage() {
 					/>
 					<SideLink
 						to="/app/dashboard"
+						tone="tone-community"
 						icon={<LayoutDashboard className="w-4 h-4 shrink-0" />}
 						label={t("nav.dashboard")}
 						collapsed={collapsed}
@@ -222,6 +226,7 @@ export default function AppPage() {
 					{!collapsed ? <p className="sap-section">{t("nav.submissions")}</p> : null}
 					<SideLink
 						to="/app/metadata"
+						tone="tone-meta"
 						icon={<Gamepad2 className="w-4 h-4 shrink-0" />}
 						label={t("nav.gameMetadata")}
 						active={path === "/app/metadata" || path.startsWith("/app/metadata/")}
@@ -229,6 +234,7 @@ export default function AppPage() {
 					/>
 					<SideLink
 						to="/app/sap"
+						tone="tone-sap"
 						icon={<Palette className="w-4 h-4 shrink-0" />}
 						label={t("nav.systemArtPack")}
 						end
@@ -237,6 +243,7 @@ export default function AppPage() {
 					{authed ? (
 						<SideLink
 							to="/app/contributions"
+							tone="tone-meta"
 							icon={<ListChecks className="w-4 h-4 shrink-0" />}
 							label={t("nav.myReviews")}
 							collapsed={collapsed}
@@ -250,6 +257,7 @@ export default function AppPage() {
 					{!collapsed ? <p className="sap-section">{t("nav.help")}</p> : null}
 					<SideLink
 						to="/app/guide"
+						tone="tone-reward"
 						icon={<HelpCircle className="w-4 h-4 shrink-0" />}
 						label={t("nav.rewardsGuide")}
 						collapsed={collapsed}

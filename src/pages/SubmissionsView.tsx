@@ -126,7 +126,14 @@ export default function SubmissionsView() {
 										}}
 										className="card card-hover overflow-hidden flex flex-col cursor-pointer"
 									>
-										<div className="h-32 bg-[var(--color-base-300)] flex items-center justify-center overflow-hidden">
+										<div className="h-32 art-backdrop bg-[var(--color-base-300)] flex items-center justify-center">
+											{icons[0] ? (
+												<div
+													className="art-backdrop-img"
+													aria-hidden="true"
+													style={{ backgroundImage: `url("${icons[0]}")` }}
+												/>
+											) : null}
 											{icons.length > 0 ? (
 												<div className="flex flex-wrap items-center justify-center gap-1 p-2">
 													{icons.slice(0, 4).map((src, i) => (

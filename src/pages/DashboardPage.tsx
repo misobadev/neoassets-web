@@ -52,38 +52,38 @@ export default function DashboardPage() {
 			{/* Catalog, community and storage totals */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 				<StatCard
-					tone="primary"
+					tone="tone-meta"
 					icon={<Gamepad2 className="w-5 h-5" />}
 					label={t("dashboard.totalGames")}
 					value={data.total_games.toLocaleString()}
 				/>
 				<StatCard
-					tone="info"
+					tone="tone-primary"
 					icon={<Layers className="w-5 h-5" />}
 					label={t("dashboard.totalSystems")}
 					value={data.total_systems.toLocaleString()}
 				/>
 				<StatCard
-					tone="success"
+					tone="tone-sap"
 					icon={<Package className="w-5 h-5" />}
 					label={t("dashboard.totalPacks")}
 					value={data.total_packs.toLocaleString()}
 				/>
 				<StatCard
-					tone="secondary"
+					tone="tone-community"
 					icon={<Users className="w-5 h-5" />}
 					label={t("dashboard.totalUsers")}
 					value={data.total_users.toLocaleString()}
 				/>
 				<StatCard
-					tone="warning"
+					tone="tone-reward"
 					icon={<ListChecks className="w-5 h-5" />}
 					label={t("dashboard.totalContributions")}
 					value={data.total_contributions.toLocaleString()}
 				/>
 				{data.storage ? (
 					<StatCard
-						tone="primary"
+						tone="tone-primary"
 						icon={<HardDrive className="w-5 h-5" />}
 						label={t("dashboard.usedSpace")}
 						value={formatBytes(data.storage.total_bytes)}
@@ -94,6 +94,7 @@ export default function DashboardPage() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 				<LeaderCard
 					title={t("dashboard.topLevels")}
+					tone="tone-reward"
 					icon={<Crown className="w-4 h-4" />}
 					empty={t("dashboard.noLevels")}
 				>
@@ -118,6 +119,7 @@ export default function DashboardPage() {
 
 				<LeaderCard
 					title={t("dashboard.topContributors")}
+					tone="tone-community"
 					icon={<ListChecks className="w-4 h-4" />}
 					empty={t("dashboard.noSubmissions")}
 				>
@@ -135,6 +137,7 @@ export default function DashboardPage() {
 
 				<LeaderCard
 					title={t("dashboard.topApprovedWeek")}
+					tone="tone-community"
 					icon={<Award className="w-4 h-4" />}
 					empty={t("dashboard.noApprovedWeek")}
 				>
@@ -154,6 +157,7 @@ export default function DashboardPage() {
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 				<LeaderCard
 					title={t("dashboard.topGames")}
+					tone="tone-meta"
 					icon={<Flame className="w-4 h-4" />}
 					empty={t("dashboard.noGames")}
 				>
@@ -179,6 +183,7 @@ export default function DashboardPage() {
 
 				<LeaderCard
 					title={t("dashboard.topSystems")}
+					tone="tone-meta"
 					icon={<Server className="w-4 h-4" />}
 					empty={t("dashboard.noSystems")}
 				>
@@ -206,6 +211,7 @@ export default function DashboardPage() {
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 				<LeaderCard
 					title={t("dashboard.latestSap")}
+					tone="tone-sap"
 					icon={<Package className="w-4 h-4" />}
 					empty={t("dashboard.noPublishedPacks")}
 				>
@@ -242,6 +248,7 @@ export default function DashboardPage() {
 
 				<LeaderCard
 					title={t("dashboard.latestMetadata")}
+					tone="tone-meta"
 					icon={<Clock className="w-4 h-4" />}
 					empty={t("dashboard.noApprovedMetadata")}
 				>
@@ -284,52 +291,31 @@ export default function DashboardPage() {
 	);
 }
 
-// StatCard is one of the dashboard's headline metric tiles: a neutral icon
-// next to the label and value. The numbers carry the emphasis, so every tile
-// uses the same quiet icon style (see DESIGN.md).
-const STAT_TONES: Record<string, string> = {
-	primary: "",
-	info: "",
-	success: "",
-	warning: "",
-	secondary: "",
-};
-
-function StatCard({
-	tone,
-	icon,
-	label,
-	value,
-}: {
-	tone: keyof typeof STAT_TONES;
-	icon: ReactNode;
-	label: string;
-	value: string;
-}) {
+// StatCard is one of the dashboard's headline metric tiles. Its tone-* class
+// gives the icon and the number the color of the area it counts.
+function StatCard({ tone, icon, label, value }: { tone: string; icon: ReactNode; label: string; value: string }) {
 	return (
-		<div className="card p-4 flex items-center gap-4">
-			<span
-				className={`grid place-items-center w-10 h-10 rounded-md shrink-0 bg-[var(--color-base-100)] border border-[var(--color-base-300)] text-[var(--color-base-content)]/60 ${STAT_TONES[tone]}`}
-			>
-				{icon}
-			</span>
+		<div className={`card p-4 flex items-center gap-4 ${tone}`}>
+			<span className="tone-chip !w-10 !h-10">{icon}</span>
 			<div className="min-w-0">
 				<p className="text-xs text-[var(--color-base-content)]/60 truncate">{label}</p>
-				<p className="text-2xl font-semibold leading-tight tabular-nums truncate">{value}</p>
+				<p className="text-2xl font-semibold leading-tight tabular-nums truncate tone-text">{value}</p>
 			</div>
 		</div>
 	);
 }
 
+// RankIcon is the position of a ranking row; the first three get the podium
+// colors (gold, silver, bronze).
 function RankIcon({ i }: { i: number }) {
-	const tone =
-		[
-			"bg-[var(--color-warning)]/15 text-[var(--color-warning)]",
-			"bg-[var(--color-base-content)]/10 text-[var(--color-base-content)]/70",
-			"bg-[var(--color-error)]/15 text-[var(--color-error)]",
-		][i] || "bg-[var(--color-base-300)] text-[var(--color-base-content)]/50";
 	return (
-		<span className={`w-7 h-7 rounded-full grid place-items-center font-mono text-sm font-bold shrink-0 ${tone}`}>
+		<span
+			className={`w-7 h-7 rounded-full grid place-items-center font-mono text-sm font-bold shrink-0 ${
+				i < 3
+					? `rank-${i + 1} bg-[color-mix(in_oklab,var(--tone)_18%,transparent)] text-[var(--tone)]`
+					: "bg-[var(--color-base-300)] text-[var(--color-base-content)]/50"
+			}`}
+		>
 			{i + 1}
 		</span>
 	);
@@ -339,18 +325,20 @@ function LeaderCard({
 	title,
 	icon,
 	empty,
+	tone = "tone-primary",
 	children,
 }: {
 	title: string;
 	icon: ReactNode;
 	empty: string;
+	tone?: string;
 	children: ReactNode;
 }) {
 	const items = Array.isArray(children) ? children : null;
 	return (
-		<section className="card p-5 space-y-3">
-			<h2 className="font-semibold flex items-center gap-2 text-base">
-				<span className="text-[var(--color-primary)]">{icon}</span>
+		<section className={`card p-5 space-y-3 ${tone}`}>
+			<h2 className="font-semibold flex items-center gap-2.5 text-base">
+				<span className="tone-chip !w-7 !h-7">{icon}</span>
 				{title}
 			</h2>
 			{items && items.length === 0 ? (

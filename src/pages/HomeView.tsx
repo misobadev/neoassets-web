@@ -1,9 +1,29 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Heart } from "lucide-react";
+import {
+	ArrowRight,
+	Check,
+	Gamepad2,
+	Heart,
+	Layers,
+	Palette,
+	Search,
+	Send,
+	ShieldCheck,
+	Sparkles,
+	Users,
+	type LucideIcon,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Avatar from "../components/Avatar";
-import { cdnUrl, fetchDashboard, mediaUrl, type DashboardData } from "../lib/api";
+import {
+	cdnUrl,
+	fetchDashboard,
+	mediaUrl,
+	searchMetadataGames,
+	type DashboardData,
+	type GameSummary,
+} from "../lib/api";
 import { useSession } from "../lib/session";
 import { DEFAULT_TITLE, usePageMeta } from "../lib/seo";
 
@@ -23,12 +43,19 @@ export default function HomeView() {
 	const { t } = useTranslation();
 	usePageMeta({ title: DEFAULT_TITLE });
 	const [stats, setStats] = useState<DashboardData | null>(null);
+	const [wall, setWall] = useState<GameSummary[]>([]);
 
 	useEffect(() => {
 		let ignore = false;
 		fetchDashboard()
 			.then((d) => {
 				if (!ignore) setStats(d);
+			})
+			.catch(() => {});
+		// The most scraped games give the hero its box art wall.
+		searchMetadataGames("", "", 24, 0, "", "scrapes")
+			.then((d) => {
+				if (!ignore) setWall(d.games.filter((g) => g.cover).slice(0, 9));
 			})
 			.catch(() => {});
 		return () => {
@@ -49,15 +76,34 @@ export default function HomeView() {
 		.filter((p, i, list) => list.findIndex((x) => x.pack_id === p.pack_id) === i)
 		.slice(0, 5);
 	const contributors = (stats?.top_contributions || []).slice(0, 6);
-	const steps = ["find", "submit", "review", "earn"] as const;
+	const steps: { key: "find" | "submit" | "review" | "earn"; icon: LucideIcon; tone: string }[] = [
+		{ key: "find", icon: Search, tone: "tone-meta" },
+		{ key: "submit", icon: Send, tone: "tone-sap" },
+		{ key: "review", icon: ShieldCheck, tone: "tone-community" },
+		{ key: "earn", icon: Sparkles, tone: "tone-reward" },
+	];
+	const numbers: { label: string; value?: number; icon: LucideIcon; tone: string }[] = [
+		{ label: t("dashboard.totalGames"), value: stats?.total_games, icon: Gamepad2, tone: "tone-meta" },
+		{ label: t("dashboard.totalSystems"), value: stats?.total_systems, icon: Layers, tone: "tone-primary" },
+		{ label: t("dashboard.totalPacks"), value: stats?.total_packs, icon: Palette, tone: "tone-sap" },
+		{
+			label: t("dashboard.totalContributions"),
+			value: stats?.total_contributions,
+			icon: Users,
+			tone: "tone-community",
+		},
+	];
+	// Three staggered columns of box art.
+	const wallColumns = [0, 1, 2].map((c) => wall.filter((_, i) => i % 3 === c));
 
 	return (
 		<div className="space-y-16 md:space-y-20 pb-8">
 			{/* Hero: what NeoAssets is and the way in, with the catalog numbers. */}
-			<div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start pt-4 md:pt-10">
+			<div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-center pt-4 md:pt-8">
 				<section className="max-w-2xl">
 					<h1 className="text-3xl md:text-[2.5rem] md:leading-[2.75rem] font-semibold mb-5">
-						{t("home.title")} {t("home.titleHighlight")}
+						{t("home.title")}{" "}
+						<span className="text-[var(--color-primary-soft)]">{t("home.titleHighlight")}</span>
 					</h1>
 					<p className="text-lg text-[var(--color-base-content)]/75 mb-6 max-w-prose">{t("home.subtitle")}</p>
 					<ul className="flex flex-wrap gap-x-6 gap-y-2 mb-8 text-sm">
@@ -106,28 +152,47 @@ export default function HomeView() {
 					</div>
 				</section>
 
-				<aside className="card p-5" aria-label={t("nav.dashboard")}>
-					<dl className="grid grid-cols-2 gap-x-4 gap-y-5">
-						{[
-							{ label: t("dashboard.totalGames"), value: stats?.total_games },
-							{ label: t("dashboard.totalSystems"), value: stats?.total_systems },
-							{ label: t("dashboard.totalPacks"), value: stats?.total_packs },
-							{ label: t("dashboard.totalContributions"), value: stats?.total_contributions },
-						].map((s) => (
-							<div key={s.label}>
-								<dt className="text-xs text-[var(--color-base-content)]/60 mb-1">{s.label}</dt>
-								<dd className="text-2xl font-semibold tabular-nums">
-									{s.value !== undefined ? s.value.toLocaleString() : "—"}
-								</dd>
+				{wall.length >= 6 ? (
+					<div className="hidden lg:grid grid-cols-3 gap-3 -my-2" aria-hidden="true">
+						{wallColumns.map((col, c) => (
+							<div key={c} className={`space-y-3 ${c === 1 ? "pt-10" : c === 2 ? "pt-4" : ""}`}>
+								{col.map((g) => (
+									<Link
+										key={g.id}
+										to={`/app/metadata/${g.system_id}/game/${g.id}`}
+										tabIndex={-1}
+										className="block aspect-[3/4] overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-base-300)] bg-[var(--color-base-200)] hover:border-[var(--color-primary)]"
+									>
+										<img
+											src={mediaUrl(g.cover!, g.cover_updated)}
+											alt=""
+											className="w-full h-full object-cover"
+											onError={(e) => (e.currentTarget.style.visibility = "hidden")}
+										/>
+									</Link>
+								))}
 							</div>
 						))}
-					</dl>
-					<Link to="/app/dashboard" className="link text-sm inline-flex items-center gap-1 mt-5">
-						{t("nav.dashboard")}
-						<ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-					</Link>
-				</aside>
+					</div>
+				) : null}
 			</div>
+
+			{/* The catalog in numbers, each in the color of its area. */}
+			<dl className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+				{numbers.map((n) => (
+					<div key={n.label} className={`card p-4 flex items-center gap-3 ${n.tone}`}>
+						<span className="tone-chip">
+							<n.icon className="w-5 h-5" aria-hidden="true" />
+						</span>
+						<div className="min-w-0">
+							<dt className="text-xs text-[var(--color-base-content)]/60 truncate">{n.label}</dt>
+							<dd className="text-2xl font-semibold tabular-nums tone-text">
+								{n.value !== undefined ? n.value.toLocaleString() : "—"}
+							</dd>
+						</div>
+					</div>
+				))}
+			</dl>
 
 			{/* The two catalogs, each shown with what it actually holds. */}
 			<section aria-labelledby="home-catalog">
@@ -135,8 +200,13 @@ export default function HomeView() {
 					{t("home.catalog.title")}
 				</h2>
 				<div className="grid gap-6 lg:grid-cols-5">
-					<article className="card p-5 lg:col-span-3 flex flex-col">
-						<h3 className="text-lg font-semibold mb-1">{t("home.catalog.metadataTitle")}</h3>
+					<article className="card p-5 lg:col-span-3 flex flex-col tone-meta">
+						<h3 className="text-lg font-semibold mb-1 flex items-center gap-3">
+							<span className="tone-chip">
+								<Gamepad2 className="w-5 h-5" aria-hidden="true" />
+							</span>
+							{t("home.catalog.metadataTitle")}
+						</h3>
 						<p className="text-sm text-[var(--color-base-content)]/65 mb-5 max-w-prose">
 							{t("home.catalog.metadataBody")}
 						</p>
@@ -203,8 +273,13 @@ export default function HomeView() {
 						</Link>
 					</article>
 
-					<article className="card p-5 lg:col-span-2 flex flex-col">
-						<h3 className="text-lg font-semibold mb-1">{t("home.catalog.packsTitle")}</h3>
+					<article className="card p-5 lg:col-span-2 flex flex-col tone-sap">
+						<h3 className="text-lg font-semibold mb-1 flex items-center gap-3">
+							<span className="tone-chip">
+								<Palette className="w-5 h-5" aria-hidden="true" />
+							</span>
+							{t("home.catalog.packsTitle")}
+						</h3>
 						<p className="text-sm text-[var(--color-base-content)]/65 mb-5">
 							{t("home.catalog.packsBody")}
 						</p>
@@ -250,16 +325,16 @@ export default function HomeView() {
 				</h2>
 				<ol className="grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
 					{steps.map((s, i) => (
-						<li
-							key={s}
-							className="border-t-2 border-[var(--color-base-300)] pt-4 first:border-[var(--color-primary)]"
-						>
-							<p className="font-mono text-xs text-[var(--color-base-content)]/50 mb-2">
-								{String(i + 1).padStart(2, "0")}
-							</p>
-							<h3 className="font-semibold mb-1">{t(`home.steps.${s}.title`)}</h3>
+						<li key={s.key} className={`border-t-2 border-[var(--tone)] pt-4 ${s.tone}`}>
+							<div className="flex items-center gap-3 mb-3">
+								<span className="tone-chip">
+									<s.icon className="w-5 h-5" aria-hidden="true" />
+								</span>
+								<span className="font-mono text-xs tone-text">{String(i + 1).padStart(2, "0")}</span>
+							</div>
+							<h3 className="font-semibold mb-1">{t(`home.steps.${s.key}.title`)}</h3>
 							<p className="text-sm leading-6 text-[var(--color-base-content)]/65">
-								{t(`home.steps.${s}.body`)}
+								{t(`home.steps.${s.key}.body`)}
 							</p>
 						</li>
 					))}
@@ -316,16 +391,18 @@ export default function HomeView() {
 						</Link>
 					</div>
 					<ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-						{contributors.map((u) => (
-							<li key={u.id}>
+						{contributors.map((u, i) => (
+							<li key={u.id} className={i < 3 ? `rank-${i + 1}` : ""}>
 								<Link
 									to={`/app/u/${encodeURIComponent(u.username)}`}
-									className="card card-hover flex items-center gap-3 p-3"
+									className={`card card-hover flex items-center gap-3 p-3 ${i < 3 ? "border-t-2 !border-t-[var(--tone)]" : ""}`}
 								>
 									<Avatar name={u.username} avatarKey={u.avatar_key} size={36} />
 									<span className="min-w-0">
 										<span className="block text-sm font-medium truncate">{u.username}</span>
-										<span className="block text-xs text-[var(--color-base-content)]/60 tabular-nums">
+										<span
+											className={`block text-xs tabular-nums ${i < 3 ? "tone-text font-medium" : "text-[var(--color-base-content)]/60"}`}
+										>
 											{u.count.toLocaleString()}
 										</span>
 									</span>

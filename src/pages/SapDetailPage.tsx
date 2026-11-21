@@ -80,7 +80,14 @@ export default function SapDetailPage() {
 
 	return (
 		<div className="space-y-6">
-			<header className="flex flex-col gap-3 sm:flex-row sm:items-center">
+			<header className="art-backdrop rounded-[var(--radius-card)] border border-[var(--color-base-300)] px-4 py-5 sm:px-6 sm:py-7 flex flex-col gap-3 sm:flex-row sm:items-center tone-sap">
+				{images[0] ? (
+					<div
+						className="art-backdrop-img"
+						aria-hidden="true"
+						style={{ backgroundImage: `url("${images[0].url}")` }}
+					/>
+				) : null}
 				<div className="flex items-center gap-3 min-w-0 flex-1">
 					<Link to="/app/sap" className="btn btn-ghost !p-2 shrink-0" aria-label={t("common.back")}>
 						<ChevronLeft className="w-5 h-5" />
@@ -90,7 +97,7 @@ export default function SapDetailPage() {
 							<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{pack.name}</h1>
 							<span className="badge badge-success shrink-0">v{pack.version || "?"}</span>
 						</div>
-						<p className="text-sm text-[var(--color-base-content)]/60 pt-1">
+						<p className="text-sm text-[var(--color-base-content)]/75 pt-1">
 							{t("submissions.byAuthor", { author: pack.author })}
 						</p>
 					</div>
