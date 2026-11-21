@@ -38,6 +38,8 @@ The public brand kit lives at `/app/brand` and its files in `public/brand`.
 | `--color-sap`                | `#f07ad8` | `#a8308f` | System art packs area                         |
 | `--color-reward`             | `#ffd166` | `#94600a` | Rewards, XP, ratings (also `--color-accent`)  |
 | `--color-community`          | `#5be3a3` | `#177a4c` | Community, users, dashboard                   |
+| `--color-system`             | `#a99bff` | `#5b45c4` | Systems count                                 |
+| `--color-storage`            | `#9db4cc` | `#4c5d70` | Storage                                       |
 | `--color-gold/silver/bronze` |           |           | First three places of a ranking (`rank-1..3`) |
 | `--color-success`            | `#3fae7b` | `#1d7f53` | Approved, complete                            |
 | `--color-warning`            | `#d9a03f` | `#9a6410` | Pending, warnings                             |
@@ -47,7 +49,7 @@ The public brand kit lives at `/app/brand` and its files in `public/brand`.
   theme's deep cyan is 4.9:1. Section colors are above 7:1 on dark surfaces
   and above 4.9:1 on light ones.
 - **Tones.** `tone-meta`, `tone-sap`, `tone-reward`, `tone-community` and
-  `tone-primary` set `--tone`; `tone-chip` (tinted icon well), `tone-text` and
+  `tone-primary`, `tone-system` and `tone-storage` set `--tone`; `tone-chip` (tinted icon well), `tone-text` and
   the sidebar links read it. A page gives an element its area color with one
   class.
 - No gradients on text or buttons, no glass, no decorative glows. The one
@@ -98,8 +100,9 @@ padding on desktop and 16px on phones.
 - **Navigation.** `base-200` sidebar. Each item's icon takes its area tone;
   the active item gets the tone at 16% and a 2px bar on the left. The collapse
   button is a fixed 36px square at the right of the brand row.
-- **Stat tiles.** `tone-chip` icon plus the number in `font-display` and
-  `tone-text`.
+- **Stat tiles** (`components/ui/StatTile`). Tinted surface with a top bar
+  in the tone, icon chip and label, a large faded icon in the corner, and the
+  number in `font-display`; a tile can link to its area.
 - **Rankings.** Positions 1-3 use gold, silver and bronze.
 - **Home hero.** Headline with "NeoAssets" in soft cyan, next to a staggered
   wall of the most scraped games' box art.

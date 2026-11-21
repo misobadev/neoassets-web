@@ -30,6 +30,8 @@
 	--color-sap: #f07ad8;
 	--color-reward: #ffd166;
 	--color-community: #5be3a3;
+	--color-system: #a99bff;
+	--color-storage: #9db4cc;
 	/* Podium */
 	--color-gold: #f0c24a;
 	--color-silver: #c3ccd8;
@@ -112,6 +114,8 @@ html.light {
 	--color-sap: #a8308f;
 	--color-reward: #94600a;
 	--color-community: #177a4c;
+	--color-system: #5b45c4;
+	--color-storage: #4c5d70;
 	--color-gold: #a87a06;
 	--color-silver: #66717f;
 	--color-bronze: #a5582a;
@@ -1053,6 +1057,12 @@ body {
 }
 .tone-community {
 	--tone: var(--color-community);
+}
+.tone-system {
+	--tone: var(--color-system);
+}
+.tone-storage {
+	--tone: var(--color-storage);
 }
 
 /* Icon well tinted with the tone. */

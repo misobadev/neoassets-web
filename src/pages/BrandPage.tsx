@@ -27,6 +27,8 @@ const COLORS = [
 	{ group: "sections", name: "sap", hex: "#f07ad8" },
 	{ group: "sections", name: "reward", hex: "#ffd166" },
 	{ group: "sections", name: "community", hex: "#5be3a3" },
+	{ group: "sections", name: "system", hex: "#a99bff" },
+	{ group: "sections", name: "storage", hex: "#9db4cc" },
 	{ group: "neutrals", name: "background", hex: "#0b1016" },
 	{ group: "neutrals", name: "surface", hex: "#121a23" },
 	{ group: "neutrals", name: "border", hex: "#22303e" },

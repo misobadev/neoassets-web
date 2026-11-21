@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Avatar from "../components/Avatar";
+import StatTile from "../components/ui/StatTile";
 import {
 	cdnUrl,
 	fetchDashboard,
@@ -82,10 +83,28 @@ export default function HomeView() {
 		{ key: "review", icon: ShieldCheck, tone: "tone-community" },
 		{ key: "earn", icon: Sparkles, tone: "tone-reward" },
 	];
-	const numbers: { label: string; value?: number; icon: LucideIcon; tone: string }[] = [
-		{ label: t("dashboard.totalGames"), value: stats?.total_games, icon: Gamepad2, tone: "tone-meta" },
-		{ label: t("dashboard.totalSystems"), value: stats?.total_systems, icon: Layers, tone: "tone-primary" },
-		{ label: t("dashboard.totalPacks"), value: stats?.total_packs, icon: Palette, tone: "tone-sap" },
+	const numbers: { label: string; value?: number; icon: LucideIcon; tone: string; to?: string }[] = [
+		{
+			label: t("dashboard.totalGames"),
+			value: stats?.total_games,
+			icon: Gamepad2,
+			tone: "tone-meta",
+			to: "/app/metadata",
+		},
+		{
+			label: t("dashboard.totalSystems"),
+			value: stats?.total_systems,
+			icon: Layers,
+			tone: "tone-system",
+			to: "/app/metadata",
+		},
+		{
+			label: t("dashboard.totalPacks"),
+			value: stats?.total_packs,
+			icon: Palette,
+			tone: "tone-sap",
+			to: "/app/sap",
+		},
 		{
 			label: t("dashboard.totalContributions"),
 			value: stats?.total_contributions,
@@ -178,21 +197,18 @@ export default function HomeView() {
 			</div>
 
 			{/* The catalog in numbers, each in the color of its area. */}
-			<dl className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+			<div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
 				{numbers.map((n) => (
-					<div key={n.label} className={`card p-4 flex items-center gap-3 ${n.tone}`}>
-						<span className="tone-chip">
-							<n.icon className="w-5 h-5" aria-hidden="true" />
-						</span>
-						<div className="min-w-0">
-							<dt className="text-xs text-[var(--color-base-content)]/60 truncate">{n.label}</dt>
-							<dd className="font-display text-2xl font-semibold tabular-nums tone-text">
-								{n.value !== undefined ? n.value.toLocaleString() : "—"}
-							</dd>
-						</div>
-					</div>
+					<StatTile
+						key={n.label}
+						tone={n.tone}
+						icon={n.icon}
+						label={n.label}
+						value={n.value !== undefined ? n.value.toLocaleString() : "—"}
+						to={n.to}
+					/>
 				))}
-			</dl>
+			</div>
 
 			{/* The two catalogs, each shown with what it actually holds. */}
 			<section aria-labelledby="home-catalog">

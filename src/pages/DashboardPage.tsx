@@ -17,6 +17,7 @@ import {
 import { cdnUrl, fetchDashboard, type DashboardData, mediaUrl } from "../lib/api";
 import UserLink from "../components/UserLink";
 import Avatar from "../components/Avatar";
+import StatTile from "../components/ui/StatTile";
 import { formatBytes, formatDate } from "../lib/format";
 import { usePageMeta } from "../lib/seo";
 
@@ -51,40 +52,43 @@ export default function DashboardPage() {
 
 			{/* Catalog, community and storage totals */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-				<StatCard
+				<StatTile
 					tone="tone-meta"
-					icon={<Gamepad2 className="w-5 h-5" />}
+					icon={Gamepad2}
 					label={t("dashboard.totalGames")}
 					value={data.total_games.toLocaleString()}
+					to="/app/metadata"
 				/>
-				<StatCard
-					tone="tone-primary"
-					icon={<Layers className="w-5 h-5" />}
+				<StatTile
+					tone="tone-system"
+					icon={Layers}
 					label={t("dashboard.totalSystems")}
 					value={data.total_systems.toLocaleString()}
+					to="/app/metadata"
 				/>
-				<StatCard
+				<StatTile
 					tone="tone-sap"
-					icon={<Package className="w-5 h-5" />}
+					icon={Package}
 					label={t("dashboard.totalPacks")}
 					value={data.total_packs.toLocaleString()}
+					to="/app/sap"
 				/>
-				<StatCard
+				<StatTile
 					tone="tone-community"
-					icon={<Users className="w-5 h-5" />}
+					icon={Users}
 					label={t("dashboard.totalUsers")}
 					value={data.total_users.toLocaleString()}
 				/>
-				<StatCard
+				<StatTile
 					tone="tone-reward"
-					icon={<ListChecks className="w-5 h-5" />}
+					icon={ListChecks}
 					label={t("dashboard.totalContributions")}
 					value={data.total_contributions.toLocaleString()}
 				/>
 				{data.storage ? (
-					<StatCard
-						tone="tone-primary"
-						icon={<HardDrive className="w-5 h-5" />}
+					<StatTile
+						tone="tone-storage"
+						icon={HardDrive}
 						label={t("dashboard.usedSpace")}
 						value={formatBytes(data.storage.total_bytes)}
 					/>
@@ -289,22 +293,6 @@ export default function DashboardPage() {
 						</Link>
 					))}
 				</LeaderCard>
-			</div>
-		</div>
-	);
-}
-
-// StatCard is one of the dashboard's headline metric tiles. Its tone-* class
-// gives the icon and the number the color of the area it counts.
-function StatCard({ tone, icon, label, value }: { tone: string; icon: ReactNode; label: string; value: string }) {
-	return (
-		<div className={`card p-4 flex items-center gap-4 ${tone}`}>
-			<span className="tone-chip !w-10 !h-10">{icon}</span>
-			<div className="min-w-0">
-				<p className="text-xs text-[var(--color-base-content)]/60 truncate">{label}</p>
-				<p className="font-display text-2xl font-semibold leading-tight tabular-nums truncate tone-text">
-					{value}
-				</p>
 			</div>
 		</div>
 	);
