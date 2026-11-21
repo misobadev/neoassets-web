@@ -980,7 +980,8 @@
 			"deleteFailed": "삭제 실패: {{message}}",
 			"titleContribute": "{{pack}}에 기여하기",
 			"errGifTooLarge": "GIF는 {{mb}} MB 이하여야 합니다.",
-			"titleView": "제출 보기"
+			"titleView": "제출 보기",
+			"donationUpdated": "후원 링크를 업데이트했습니다."
 		},
 		"form": {
 			"nameLabel": "팩 이름",
@@ -995,7 +996,8 @@
 			"aiNote1c": "가 포함되어 있으면 이 상자를 선택하세요. 단 하나의 시스템만 포함하더라도 마찬가지입니다. 눈에 띄지 않는 기존 아트의 수리나 복원은 표시할 필요가 없습니다.",
 			"aiNote2a": "이 상자를 선택하지 않은 상태에서 AI 생성 콘텐츠가 감지되면 해당 제출물은",
 			"aiNote2b": "검토 중 거부됩니다",
-			"aiNote2c": "."
+			"aiNote2c": ".",
+			"donationAdminHint": "관리자는 이 팩의 후원 링크를 변경할 수 있습니다. 검토 없이 팩에 바로 저장됩니다."
 		},
 		"backgrounds": {
 			"title": "배경",
@@ -1046,10 +1048,7 @@
 		"publicSubtitle": "커뮤니티가 검토하고 게시한 팩을 둘러보세요.",
 		"publicTitle": "커뮤니티 System Art Pack",
 		"realAuthor": "실제 제작자",
-		"systemsShort": "시스템",
-		"donationLink": "후원 링크",
-		"donationLinkTitle": "후원 링크 변경",
-		"donationLinkBody": "{{name}}의 후원 링크는 관리자만 변경할 수 있습니다. 비워 두면 삭제됩니다."
+		"systemsShort": "시스템"
 	},
 	"reviews": {
 		"title": "내 기여",

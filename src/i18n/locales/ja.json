@@ -980,7 +980,8 @@
 			"deleteFailed": "削除に失敗しました: {{message}}",
 			"titleContribute": "{{pack}} に投稿",
 			"errGifTooLarge": "GIF は {{mb}} MB 以下にしてください。",
-			"titleView": "投稿を表示"
+			"titleView": "投稿を表示",
+			"donationUpdated": "寄付リンクを更新しました。"
 		},
 		"form": {
 			"nameLabel": "パック名",
@@ -995,7 +996,8 @@
 			"aiNote1c": "が含まれる場合（1つのシステムのみでも）はこのボックスにチェックを入れてください。既存アートの目立たない修復や復元は申告不要です。",
 			"aiNote2a": "このボックスにチェックがない状態でAI生成コンテンツが検出された場合、投稿は",
 			"aiNote2b": "レビューで却下されます",
-			"aiNote2c": "。"
+			"aiNote2c": "。",
+			"donationAdminHint": "管理者はこのパックの寄付リンクを変更できます。審査なしで、すぐにパックに保存されます。"
 		},
 		"backgrounds": {
 			"title": "背景",
@@ -1046,10 +1048,7 @@
 		"publicSubtitle": "コミュニティが審査・公開したパックを閲覧できます。",
 		"publicTitle": "コミュニティ System Art Pack",
 		"realAuthor": "実際の作者",
-		"systemsShort": "システム",
-		"donationLink": "寄付リンク",
-		"donationLinkTitle": "寄付リンクを変更",
-		"donationLinkBody": "{{name}} の寄付リンクを変更できるのは管理者だけです。空にすると削除されます。"
+		"systemsShort": "システム"
 	},
 	"reviews": {
 		"title": "マイ投稿",

@@ -993,7 +993,8 @@
 			"removeFailed": "Could not remove the image: {{message}}",
 			"deletingPermanent": "Deleting submission permanently...",
 			"deleted": "Submission deleted.",
-			"deleteFailed": "Delete failed: {{message}}"
+			"deleteFailed": "Delete failed: {{message}}",
+			"donationUpdated": "Donation link updated."
 		},
 		"form": {
 			"nameLabel": "Pack name",
@@ -1008,7 +1009,8 @@
 			"aiNote1c": ", even if it covers just one system. Repairs or restorations of existing art that are not noticeable do not need to be marked.",
 			"aiNote2a": "If AI-generated content is detected without this box checked, the submission will be",
 			"aiNote2b": "rejected during review",
-			"aiNote2c": "."
+			"aiNote2c": ".",
+			"donationAdminHint": "As an admin you can change this pack's donation link. It is saved on the pack right away, without review."
 		},
 		"backgrounds": {
 			"title": "Backgrounds",
@@ -1045,10 +1047,7 @@
 		"adminDelete": {
 			"title": "Delete submission permanently?",
 			"body": "This removes the system art pack submission completely and deletes its images from storage. This cannot be undone."
-		},
-		"donationLink": "Donation link",
-		"donationLinkTitle": "Change the donation link",
-		"donationLinkBody": "Only admins can change the donation link of {{name}}. Leave it empty to remove it."
+		}
 	},
 	"reviews": {
 		"title": "My contributions",

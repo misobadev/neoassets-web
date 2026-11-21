@@ -980,7 +980,8 @@
 			"deleteFailed": "Eliminazione non riuscita: {{message}}",
 			"titleContribute": "Contribuisci a {{pack}}",
 			"errGifTooLarge": "Le GIF devono essere di {{mb}} MB o meno.",
-			"titleView": "Vedi invio"
+			"titleView": "Vedi invio",
+			"donationUpdated": "Link donazioni aggiornato."
 		},
 		"form": {
 			"nameLabel": "Nome del pacchetto",
@@ -995,7 +996,8 @@
 			"aiNote1c": ", anche se riguarda un solo sistema. Le riparazioni o i restauri non evidenti di opere esistenti non devono essere segnalati.",
 			"aiNote2a": "Se viene rilevato contenuto generato dall'IA senza questa casella selezionata, la proposta sarà",
 			"aiNote2b": "rifiutata durante la revisione",
-			"aiNote2c": "."
+			"aiNote2c": ".",
+			"donationAdminHint": "Come admin puoi modificare il link donazioni di questo pack. Viene salvato sul pack subito, senza revisione."
 		},
 		"backgrounds": {
 			"title": "Sfondi",
@@ -1046,10 +1048,7 @@
 		"publicSubtitle": "Sfoglia i pack che la community ha esaminato e pubblicato.",
 		"publicTitle": "System Art Pack della community",
 		"realAuthor": "Autore reale",
-		"systemsShort": "sistemi",
-		"donationLink": "Link donazioni",
-		"donationLinkTitle": "Modifica il link donazioni",
-		"donationLinkBody": "Solo gli admin possono modificare il link donazioni di {{name}}. Lascialo vuoto per rimuoverlo."
+		"systemsShort": "sistemi"
 	},
 	"reviews": {
 		"title": "I miei contributi",

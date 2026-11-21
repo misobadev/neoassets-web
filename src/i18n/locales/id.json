@@ -980,7 +980,8 @@
 			"deleteFailed": "Gagal menghapus: {{message}}",
 			"titleContribute": "Berkontribusi ke {{pack}}",
 			"errGifTooLarge": "GIF harus {{mb}} MB atau lebih kecil.",
-			"titleView": "Lihat kiriman"
+			"titleView": "Lihat kiriman",
+			"donationUpdated": "Tautan donasi diperbarui."
 		},
 		"form": {
 			"nameLabel": "Nama paket",
@@ -995,7 +996,8 @@
 			"aiNote1c": ", meskipun hanya mencakup satu sistem. Perbaikan atau restorasi seni yang ada yang tidak terlihat tidak perlu ditandai.",
 			"aiNote2a": "Jika konten yang dihasilkan AI terdeteksi tanpa kotak ini dicentang, kiriman akan",
 			"aiNote2b": "ditolak saat tinjauan",
-			"aiNote2c": "."
+			"aiNote2c": ".",
+			"donationAdminHint": "Sebagai admin, kamu bisa mengubah tautan donasi pack ini. Tautan langsung disimpan di pack tanpa peninjauan."
 		},
 		"backgrounds": {
 			"title": "Latar Belakang",
@@ -1046,10 +1048,7 @@
 		"publicSubtitle": "Jelajahi paket yang telah ditinjau dan diterbitkan komunitas.",
 		"publicTitle": "System Art Pack Komunitas",
 		"realAuthor": "Penulis asli",
-		"systemsShort": "sistem",
-		"donationLink": "Tautan donasi",
-		"donationLinkTitle": "Ubah tautan donasi",
-		"donationLinkBody": "Hanya admin yang dapat mengubah tautan donasi {{name}}. Kosongkan untuk menghapusnya."
+		"systemsShort": "sistem"
 	},
 	"reviews": {
 		"title": "Kontribusi saya",
