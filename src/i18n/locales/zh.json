@@ -1046,7 +1046,10 @@
 		"publicSubtitle": "浏览社区已审核并发布的包。",
 		"publicTitle": "社区 System Art Pack",
 		"realAuthor": "实际作者",
-		"systemsShort": "系统"
+		"systemsShort": "系统",
+		"donationLink": "捐赠链接",
+		"donationLinkTitle": "修改捐赠链接",
+		"donationLinkBody": "只有管理员可以修改 {{name}} 的捐赠链接。留空即可删除。"
 	},
 	"reviews": {
 		"title": "我的贡献",

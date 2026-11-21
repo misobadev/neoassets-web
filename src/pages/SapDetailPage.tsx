@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import BackLink from "../components/ui/BackLink";
 import SectionTitle from "../components/ui/SectionTitle";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Download, Layers, Plus, Trash2, Images, Palette } from "lucide-react";
+import { Download, HandCoins, Layers, Plus, Trash2, Images, Palette } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { deletePack, fetchPackDetail, type PackDetail } from "../lib/api";
+import { deletePack, fetchPackDetail, setPackDonation, type PackDetail } from "../lib/api";
 import UserLink from "../components/UserLink";
 import DonateButton from "../components/DonateButton";
 import Modal from "../components/ui/Modal";
@@ -27,6 +27,9 @@ export default function SapDetailPage() {
 	const [confirmDelete, setConfirmDelete] = useState(false);
 	const [deleting, setDeleting] = useState(false);
 	const [deleteError, setDeleteError] = useState<string | null>(null);
+	const [donationDraft, setDonationDraft] = useState<string | null>(null);
+	const [savingDonation, setSavingDonation] = useState(false);
+	const [donationError, setDonationError] = useState<string | null>(null);
 	const { systems } = useSystems();
 	usePageMeta({
 		title: pack ? `${pack.name} - ${t("nav.systemArtPack")} - NeoAssets` : `${t("nav.systemArtPack")} - NeoAssets`,
@@ -63,6 +66,21 @@ export default function SapDetailPage() {
 		} catch (e) {
 			setDeleteError((e as Error).message);
 			setDeleting(false);
+		}
+	};
+
+	const saveDonation = async () => {
+		if (donationDraft === null) return;
+		setSavingDonation(true);
+		setDonationError(null);
+		try {
+			const res = await setPackDonation(pack.folder, donationDraft.trim());
+			setPack({ ...pack, donation_url: res.donation_url });
+			setDonationDraft(null);
+		} catch (e) {
+			setDonationError((e as Error).message);
+		} finally {
+			setSavingDonation(false);
 		}
 	};
 
@@ -107,6 +125,19 @@ export default function SapDetailPage() {
 							<Plus className="w-4 h-4" />
 							{t("submissions.contribute")}
 						</Link>
+						{isAdmin ? (
+							<button
+								type="button"
+								className="btn btn-secondary btn-sm flex-1 sm:flex-none"
+								onClick={() => {
+									setDonationError(null);
+									setDonationDraft(pack.donation_url || "");
+								}}
+							>
+								<HandCoins className="w-4 h-4" />
+								{t("submissions.donationLink")}
+							</button>
+						) : null}
 						{isAdmin ? (
 							<button
 								type="button"
@@ -183,6 +214,45 @@ export default function SapDetailPage() {
 					</div>
 				)}
 			</section>
+
+			{donationDraft !== null ? (
+				<Modal onClose={savingDonation ? undefined : () => setDonationDraft(null)}>
+					<form
+						className="card w-full max-w-md p-6 space-y-4"
+						onSubmit={(e) => {
+							e.preventDefault();
+							saveDonation();
+						}}
+					>
+						<DialogHeader tone="primary" icon={HandCoins} title={t("submissions.donationLinkTitle")}>
+							{t("submissions.donationLinkBody", { name: pack.name })}
+						</DialogHeader>
+						<input
+							type="url"
+							inputMode="url"
+							className="input w-full"
+							placeholder="https://ko-fi.com/..."
+							aria-label={t("submissions.donationLink")}
+							value={donationDraft}
+							onChange={(e) => setDonationDraft(e.target.value)}
+						/>
+						{donationError ? <p className="text-sm text-[var(--color-error)]">{donationError}</p> : null}
+						<div className="flex justify-end gap-2">
+							<button
+								className="btn btn-ghost"
+								type="button"
+								disabled={savingDonation}
+								onClick={() => setDonationDraft(null)}
+							>
+								{t("common.cancel")}
+							</button>
+							<button className="btn btn-primary" type="submit" disabled={savingDonation}>
+								{savingDonation ? t("common.saving") : t("common.save")}
+							</button>
+						</div>
+					</form>
+				</Modal>
+			) : null}
 
 			{confirmDelete ? (
 				<Modal onClose={deleting ? undefined : () => setConfirmDelete(false)}>

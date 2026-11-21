@@ -1046,7 +1046,10 @@
 		"publicSubtitle": "コミュニティが審査・公開したパックを閲覧できます。",
 		"publicTitle": "コミュニティ System Art Pack",
 		"realAuthor": "実際の作者",
-		"systemsShort": "システム"
+		"systemsShort": "システム",
+		"donationLink": "寄付リンク",
+		"donationLinkTitle": "寄付リンクを変更",
+		"donationLinkBody": "{{name}} の寄付リンクを変更できるのは管理者だけです。空にすると削除されます。"
 	},
 	"reviews": {
 		"title": "マイ投稿",

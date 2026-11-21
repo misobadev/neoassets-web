@@ -131,6 +131,15 @@ export function deletePack(folder: string): Promise<{ deleted: boolean }> {
 	return api<{ deleted: boolean }>(`/api/v1/admin/packs/${encodeURIComponent(folder)}`, { method: "DELETE" });
 }
 
+// Changes the donation link of an approved pack (admin only). An empty link
+// removes it; the response carries the link as stored.
+export function setPackDonation(folder: string, donationURL: string): Promise<{ donation_url: string }> {
+	return api<{ donation_url: string }>(`/api/v1/admin/packs/${encodeURIComponent(folder)}/donation`, {
+		method: "PUT",
+		body: JSON.stringify({ donation_url: donationURL }),
+	});
+}
+
 // Developer apps and personal API keys with their usage (admin only).
 export interface AdminSoftwareStats {
 	name: string;

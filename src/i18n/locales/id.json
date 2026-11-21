@@ -1046,7 +1046,10 @@
 		"publicSubtitle": "Jelajahi paket yang telah ditinjau dan diterbitkan komunitas.",
 		"publicTitle": "System Art Pack Komunitas",
 		"realAuthor": "Penulis asli",
-		"systemsShort": "sistem"
+		"systemsShort": "sistem",
+		"donationLink": "Tautan donasi",
+		"donationLinkTitle": "Ubah tautan donasi",
+		"donationLinkBody": "Hanya admin yang dapat mengubah tautan donasi {{name}}. Kosongkan untuk menghapusnya."
 	},
 	"reviews": {
 		"title": "Kontribusi saya",

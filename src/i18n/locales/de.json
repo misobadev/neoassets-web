@@ -1046,7 +1046,10 @@
 		"publicSubtitle": "Durchsuche die Packs, die die Community geprüft und veröffentlicht hat.",
 		"publicTitle": "Community-System-Art-Packs",
 		"realAuthor": "Tatsächlicher Autor",
-		"systemsShort": "Systeme"
+		"systemsShort": "Systeme",
+		"donationLink": "Spendenlink",
+		"donationLinkTitle": "Spendenlink ändern",
+		"donationLinkBody": "Nur Admins können den Spendenlink von {{name}} ändern. Leer lassen, um ihn zu entfernen."
 	},
 	"reviews": {
 		"title": "Meine Beiträge",
