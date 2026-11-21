@@ -110,7 +110,7 @@ padding on desktop and 16px on phones.
 - **Toned cards.** `card-tone` gives a card its area color (tinted surface and
   border, 3px top bar); `card-tone-hover` shows only the top bar on hover, for
   dense grids.
-- **Game cards.** `card-tone` in the metadata tone, 3:4 cover, title in the
+- **Game cards.** `card-tone-hover` in the metadata tone (bar on hover only), 3:4 cover, title in the
   display face on up to two lines, system chip, and a footer with type,
   completion bar, rating pill and downloads.
 - **Detail headers** (game, pack): `card-tone` in the area tone with its icon
