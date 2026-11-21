@@ -1046,7 +1046,10 @@
 		"publicSubtitle": "Explore os packs que a comunidade reviu e publicou.",
 		"publicTitle": "System Art Packs da comunidade",
 		"realAuthor": "Autor real",
-		"systemsShort": "sistemas"
+		"systemsShort": "sistemas",
+		"donationLink": "Link de doação",
+		"donationLinkTitle": "Alterar o link de doação",
+		"donationLinkBody": "Só os admins podem alterar o link de doação de {{name}}. Deixe vazio para removê-lo."
 	},
 	"reviews": {
 		"title": "Minhas contribuições",

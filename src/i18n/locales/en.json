@@ -1045,7 +1045,10 @@
 		"adminDelete": {
 			"title": "Delete submission permanently?",
 			"body": "This removes the system art pack submission completely and deletes its images from storage. This cannot be undone."
-		}
+		},
+		"donationLink": "Donation link",
+		"donationLinkTitle": "Change the donation link",
+		"donationLinkBody": "Only admins can change the donation link of {{name}}. Leave it empty to remove it."
 	},
 	"reviews": {
 		"title": "My contributions",

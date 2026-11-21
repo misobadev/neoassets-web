@@ -1045,7 +1045,10 @@
 		"adminDelete": {
 			"title": "¿Eliminar el envío permanentemente?",
 			"body": "Esto elimina por completo el envío del paquete de arte de sistemas y borra sus imágenes del almacenamiento. Esta acción no se puede deshacer."
-		}
+		},
+		"donationLink": "Link de donación",
+		"donationLinkTitle": "Cambiar el link de donación",
+		"donationLinkBody": "Solo los admins pueden cambiar el link de donación de {{name}}. Déjalo vacío para quitarlo."
 	},
 	"reviews": {
 		"title": "Mis contribuciones",
