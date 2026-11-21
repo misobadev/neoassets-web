@@ -52,9 +52,10 @@ The public brand kit lives at `/app/brand` and its files in `public/brand`.
   `tone-primary`, `tone-system` and `tone-storage` set `--tone`; `tone-chip` (tinted icon well), `tone-text` and
   the sidebar links read it. A page gives an element its area color with one
   class.
-- No gradients on text or buttons, no glass, no decorative glows. The one
-  backdrop effect is `art-backdrop`: a header behind which the page's own
-  artwork is blurred and darkened (game and pack pages, pack cards).
+- No gradients on text or buttons, no glass, no blurred backdrops, no
+  decorative glows. Depth comes from the tone: tinted surfaces, a top bar and,
+  on large headers and stat tiles, the area's icon large and faint in a
+  corner.
 
 ## Typography
 
@@ -109,9 +110,11 @@ padding on desktop and 16px on phones.
 - **Toned cards.** `card-tone` gives a card its area color (tinted surface and
   border, 3px top bar); `card-tone-hover` shows only the top bar on hover, for
   dense grids.
-- **Game cards.** Blurred cover behind the card (`art-backdrop-soft`), 3:4
-  cover, title in the display face, rating in an amber pill, system chip, and
-  completion as a bar.
+- **Game cards.** `card-tone` in the metadata tone, 3:4 cover, title in the
+  display face on up to two lines, system chip, and a footer with type,
+  completion bar, rating pill and downloads.
+- **Detail headers** (game, pack): `card-tone` in the area tone with its icon
+  large and faint in the corner.
 - **Rankings.** Positions 1-3 use gold, silver and bronze.
 - **Home hero.** Headline with "NeoAssets" in soft cyan, next to a staggered
   wall of the most scraped games' box art.

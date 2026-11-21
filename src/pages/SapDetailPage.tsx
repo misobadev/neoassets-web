@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SectionTitle from "../components/ui/SectionTitle";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, Download, Layers, Plus, Trash2, Images } from "lucide-react";
+import { ChevronLeft, Download, Layers, Plus, Trash2, Images, Palette } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { deletePack, fetchPackDetail, type PackDetail } from "../lib/api";
 import UserLink from "../components/UserLink";
@@ -81,14 +81,12 @@ export default function SapDetailPage() {
 
 	return (
 		<div className="space-y-6">
-			<header className="art-backdrop rounded-[var(--radius-card)] border border-[var(--color-base-300)] px-4 py-5 sm:px-6 sm:py-7 flex flex-col gap-3 sm:flex-row sm:items-center tone-sap">
-				{images[0] ? (
-					<div
-						className="art-backdrop-img"
-						aria-hidden="true"
-						style={{ backgroundImage: `url("${images[0].url}")` }}
-					/>
-				) : null}
+			<header className="card card-tone px-4 py-5 sm:px-6 sm:py-7 flex flex-col gap-3 sm:flex-row sm:items-center tone-sap">
+				<Palette
+					className="absolute -right-6 -bottom-8 w-40 h-40 -rotate-12 text-[var(--tone)] opacity-[0.08] pointer-events-none"
+					strokeWidth={1.5}
+					aria-hidden="true"
+				/>
 				<div className="flex items-center gap-3 min-w-0 flex-1">
 					<Link to="/app/sap" className="btn btn-ghost !p-2 shrink-0" aria-label={t("common.back")}>
 						<ChevronLeft className="w-5 h-5" />

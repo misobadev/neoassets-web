@@ -264,15 +264,8 @@ function GameCard({ g }: { g: GameSummary }) {
 			onPointerMove={onMove}
 			onPointerLeave={onLeave}
 			style={style}
-			className="relative card card-hover holo-card card-tone-hover tone-meta art-backdrop art-backdrop-soft p-3 flex flex-col gap-3"
+			className="relative card card-hover holo-card card-tone tone-meta p-3 flex flex-col gap-3"
 		>
-			{g.cover ? (
-				<div
-					className="art-backdrop-img"
-					aria-hidden="true"
-					style={{ backgroundImage: `url("${mediaUrl(g.cover, g.cover_updated)}")` }}
-				/>
-			) : null}
 			<div className="flex items-start gap-3 relative z-[1]">
 				{g.cover ? (
 					<img

@@ -129,14 +129,7 @@ export default function SubmissionsView() {
 										}}
 										className="card card-hover card-tone-hover tone-sap overflow-hidden flex flex-col cursor-pointer"
 									>
-										<div className="h-32 art-backdrop bg-[var(--color-base-300)] flex items-center justify-center">
-											{icons[0] ? (
-												<div
-													className="art-backdrop-img"
-													aria-hidden="true"
-													style={{ backgroundImage: `url("${icons[0]}")` }}
-												/>
-											) : null}
+										<div className="h-32 bg-[color-mix(in_oklab,var(--tone)_12%,var(--color-base-100))] flex items-center justify-center overflow-hidden">
 											{icons.length > 0 ? (
 												<div className="flex flex-wrap items-center justify-center gap-1 p-2">
 													{icons.slice(0, 4).map((src, i) => (

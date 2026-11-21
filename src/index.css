@@ -1092,34 +1092,6 @@ body {
 	--tone: var(--color-bronze);
 }
 
-/* Header backdrop made from the page's own artwork (box art, pack image):
-   blurred and darkened so text on top stays readable. */
-.art-backdrop {
-	position: relative;
-	isolation: isolate;
-	overflow: hidden;
-}
-.art-backdrop > .art-backdrop-img {
-	position: absolute;
-	inset: -40px;
-	z-index: -2;
-	background-size: cover;
-	background-position: center;
-	filter: blur(32px) saturate(1.4);
-	opacity: 0.75;
-}
-.art-backdrop::after {
-	content: "";
-	position: absolute;
-	inset: 0;
-	z-index: -1;
-	background: linear-gradient(
-		to bottom,
-		color-mix(in oklab, var(--color-base-100) 25%, transparent),
-		color-mix(in oklab, var(--color-base-100) 85%, transparent)
-	);
-}
-
 /* A card in its area's color: tinted surface, tinted border and a top bar in
    the tone. Combine with a tone-* class (defaults to the brand cyan). */
 .card-tone {
@@ -1155,10 +1127,4 @@ body {
 .card-tone-hover:hover::before,
 .card-tone-hover:focus-visible::before {
 	opacity: 1;
-}
-
-/* Softer artwork backdrop for small cards in a grid. */
-.art-backdrop-soft > .art-backdrop-img {
-	opacity: 0.32;
-	filter: blur(24px) saturate(1.5);
 }
