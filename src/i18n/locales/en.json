@@ -83,6 +83,8 @@
 		"emailVerified": "Email verified! You can now sign in."
 	},
 	"common": {
+		"showMore": "Show more",
+		"showLess": "Show less",
 		"appName": "NeoAssets",
 		"loading": "Loading...",
 		"donate": "Donate to author",
