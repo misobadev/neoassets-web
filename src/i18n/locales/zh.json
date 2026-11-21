@@ -20,7 +20,7 @@
 		"aiWarning": "此投稿未标注 AI 生成内容。如有任何素材由 AI 生成，请拒绝。",
 		"files_one": "文件（{{count}}）",
 		"files_other": "文件（{{count}}）",
-		"showingUpdateOnly": "— 仅显示本次更新",
+		"showingUpdateOnly": "（仅显示本次更新）",
 		"commentLabel": "给投稿人的评论",
 		"commentPlaceholder": "可选，将展示给投稿人的反馈。",
 		"approve": "批准",
@@ -248,14 +248,14 @@
 			"step1Before": "打开",
 			"step1Or": "或",
 			"step1After": "板块。",
-			"step2": "找到一款游戏 / 资源包并提交更正（文本、图片或视频）——或者提交整个美术资源包。",
+			"step2": "找到一款游戏 / 资源包并提交更正（文本、图片或视频），或者提交整个美术资源包。",
 			"step3": "审核员批准后，你的积分会自动计入。",
 			"step4": "在个人资料中用积分购买更多线程。",
 			"note": "积分仅反映已获批准的内容。被拒绝或待审核的投稿不会获得积分。"
 		},
 		"donations": {
 			"fairPlay": "你的活动线程数为基础线程（来自你的等级）加上捐赠者加成，硬上限为 {{max}} 个线程。因此月度支持者在较低等级就能达到最大抓取速度；高等级仍是纯粹的社区荣誉。",
-			"intro": "不是每个人都有时间贡献元数据，但你仍然可以帮助承担服务器成本（Cloudflare R2、数据库）。捐赠会立即带来技术权益，但绝不会给予 XP 或等级——等级必须通过真实贡献来获得。",
+			"intro": "不是每个人都有时间贡献元数据，但你仍然可以帮助承担服务器成本（Cloudflare R2、数据库）。捐赠会立即带来技术权益，但绝不会给予 XP 或等级：等级必须通过真实贡献来获得。",
 			"monthly_supporter": {
 				"bonus": "个人资料上闪亮的月度支持者徽章。",
 				"note": "如果取消，你将保留支持者徽章。",
@@ -369,8 +369,8 @@
 			"subtitle": "NeoAssets 支持多种贡献类型。系统美术资源包现已上线；游戏和系统元数据即将推出。",
 			"systemMetadata": "系统元数据",
 			"systemArtPackBody": "为你的 NeoAssets 系统浏览器创建视觉风格，并与社区分享。",
-			"gameMetadataBody": "贡献每款游戏的元数据（名称、地区、封面图）。即将推出——无并发或传输限制。",
-			"systemMetadataBody": "贡献由贡献者提供的系统本身元数据。即将推出——无并发或传输限制。",
+			"gameMetadataBody": "贡献每款游戏的元数据（名称、地区、封面图）。即将推出，无并发或传输限制。",
+			"systemMetadataBody": "贡献由贡献者提供的系统本身元数据。即将推出，无并发或传输限制。",
 			"available": "可用",
 			"getStarted": "开始使用",
 			"disabledForNow": "暂时禁用"
@@ -379,7 +379,7 @@
 			"title": "运作方式",
 			"contribute": {
 				"title": "贡献",
-				"body": "为 NeoAssets 生态构建或贡献素材，无论类型——美术资源包或元数据。"
+				"body": "为 NeoAssets 生态构建或贡献素材，无论类型：美术资源包或元数据。"
 			},
 			"review": {
 				"title": "审核",
@@ -955,7 +955,7 @@
 			"adding": "正在添加 {{name}}……",
 			"convertFailed": "无法转换图片。",
 			"updatedDraft": "已更新 {{name}}（草稿）",
-			"addedDraft": "已添加 {{name}}（草稿——提交时上传）",
+			"addedDraft": "已添加 {{name}}（草稿，提交时上传）",
 			"replacedDraft": "已替换 {{name}}（草稿）",
 			"uploadingFile": "正在上传 {{name}}……",
 			"uploadingProgress": "正在上传 {{name}}（{{current}}/{{total}}）……",

@@ -204,7 +204,7 @@ export default function HomeView() {
 						tone={n.tone}
 						icon={n.icon}
 						label={n.label}
-						value={n.value !== undefined ? n.value.toLocaleString() : "—"}
+						value={n.value !== undefined ? n.value.toLocaleString() : "-"}
 						to={n.to}
 					/>
 				))}

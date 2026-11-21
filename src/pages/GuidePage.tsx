@@ -101,7 +101,7 @@ export default function GuidePage() {
 						</thead>
 						<tbody className="divide-y divide-[var(--color-base-300)]">
 							<tr>
-								<td className="py-2 pr-4 text-[var(--color-base-content)]/60">—</td>
+								<td className="py-2 pr-4 text-[var(--color-base-content)]/60">-</td>
 								<td className="py-2 pr-4">{t("guide.tiers.guest.name")}</td>
 								<td className="py-2 pr-4">{cfg.guest_threads}</td>
 								<td className="py-2">{daily(cfg.guest_threads).toLocaleString()}</td>
@@ -109,7 +109,7 @@ export default function GuidePage() {
 							{cfg.ranks.map((r) => (
 								<tr key={r.rank}>
 									<td className="py-2 pr-4 font-mono text-xs">
-										{r.min_level}–{r.max_level}
+										{r.min_level}-{r.max_level}
 									</td>
 									<td className="py-2 pr-4 font-display font-semibold text-[var(--color-primary-soft)]">
 										{t("guide.ranks." + r.rank, { defaultValue: r.rank })}

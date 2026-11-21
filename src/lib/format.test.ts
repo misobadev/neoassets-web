@@ -28,8 +28,8 @@ describe("formatBytes", () => {
 
 describe("formatFileSize", () => {
 	it.each([
-		[undefined, "—"],
-		[0, "—"],
+		[undefined, "-"],
+		[0, "-"],
 		[512, "512 B"],
 		[2048, "2 KB"],
 		[1.25 * 1024 * 1024, "1.3 MB"],

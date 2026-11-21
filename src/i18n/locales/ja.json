@@ -20,7 +20,7 @@
 		"aiWarning": "この投稿はAI生成コンテンツとして申告されていません。AI生成の素材が含まれている場合は却下してください。",
 		"files_one": "ファイル（{{count}}）",
 		"files_other": "ファイル（{{count}}）",
-		"showingUpdateOnly": "— この更新のみを表示中",
+		"showingUpdateOnly": "（この更新のみを表示中）",
 		"commentLabel": "投稿者へのコメント",
 		"commentPlaceholder": "投稿者に表示される任意のフィードバック。",
 		"approve": "承認",

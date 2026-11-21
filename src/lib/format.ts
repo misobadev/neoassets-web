@@ -21,7 +21,7 @@ export function formatBytes(bytes: number): string {
 // formatFileSize renders a stored file's size for review screens: MB with one
 // decimal, and a dash when the size is unknown or zero.
 export function formatFileSize(bytes?: number): string {
-	if (!bytes) return "—";
+	if (!bytes) return "-";
 	if (bytes < KB) return `${bytes} B`;
 	if (bytes < MB) return `${(bytes / KB).toFixed(0)} KB`;
 	return `${(bytes / MB).toFixed(1)} MB`;

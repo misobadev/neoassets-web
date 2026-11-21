@@ -20,7 +20,7 @@
 		"aiWarning": "This submission does not mark AI-generated content. If any asset is AI-generated, reject it.",
 		"files_one": "File ({{count}})",
 		"files_other": "Files ({{count}})",
-		"showingUpdateOnly": "— showing this update only",
+		"showingUpdateOnly": "(showing this update only)",
 		"commentLabel": "Comment for the submitter",
 		"commentPlaceholder": "Optional feedback shown to the submitter.",
 		"approve": "Approve",

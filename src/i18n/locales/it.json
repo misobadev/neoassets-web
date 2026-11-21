@@ -20,7 +20,7 @@
 		"aiWarning": "Questa proposta non segnala contenuti generati dall'IA. Se qualche risorsa è generata dall'IA, rifiutala.",
 		"files_one": "File ({{count}})",
 		"files_other": "File ({{count}})",
-		"showingUpdateOnly": "— visualizzazione solo di questo aggiornamento",
+		"showingUpdateOnly": "(visualizzazione solo di questo aggiornamento)",
 		"commentLabel": "Commento per chi ha inviato",
 		"commentPlaceholder": "Feedback facoltativo mostrato a chi ha inviato.",
 		"approve": "Approva",
