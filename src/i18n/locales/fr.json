@@ -906,6 +906,10 @@
 		"trashed": "Dans la corbeille"
 	},
 	"submissions": {
+		"deletePack": "Supprimer le pack",
+		"deletePackTitle": "Supprimer ce pack ?",
+		"deletePackBody": "Cela supprime définitivement {{name}} : toutes ses versions, les contributions en attente et toutes ses images stockées. Action irréversible.",
+		"deletingPack": "Suppression…",
 		"title": "Mes soumissions",
 		"subtitle": "Créez un pack, enregistrez-le comme brouillon et soumettez-le pour révision quand vous êtes prêt.",
 		"newSubmission": "Contribuer",

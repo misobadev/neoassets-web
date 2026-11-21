@@ -904,6 +904,10 @@
 		"claimDone": "¡Listo! {{count}} donación(es) vinculada(s) a tu cuenta."
 	},
 	"submissions": {
+		"deletePack": "Eliminar pack",
+		"deletePackTitle": "¿Eliminar este pack?",
+		"deletePackBody": "Esto elimina para siempre {{name}}: todas sus versiones, las contribuciones pendientes y todas sus imágenes en el almacenamiento. No se puede deshacer.",
+		"deletingPack": "Eliminando…",
 		"title": "Mis envíos",
 		"subtitle": "Crea un paquete, guárdalo como borrador y envíalo para revisión cuando quieras.",
 		"newSubmission": "Aportar",

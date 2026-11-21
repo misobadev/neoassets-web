@@ -304,6 +304,21 @@ body {
 	}
 }
 
+/* Quiet destructive action that sits next to normal buttons: surface fill,
+   error-colored text and border, filled on hover. Use it instead of
+   btn-outline, not together with it. */
+@utility btn-error {
+	border: 1px solid color-mix(in oklab, var(--color-error) 45%, transparent);
+	background-color: var(--color-base-200);
+	color: var(--color-error);
+
+	&:hover {
+		background-color: var(--color-error);
+		border-color: transparent;
+		color: #fff;
+	}
+}
+
 @utility btn-lg {
 	min-height: 3rem;
 	height: 3rem;

@@ -906,6 +906,10 @@
 		"trashed": "Nel cestino"
 	},
 	"submissions": {
+		"deletePack": "Elimina pack",
+		"deletePackTitle": "Eliminare questo pack?",
+		"deletePackBody": "Questo elimina definitivamente {{name}}: tutte le versioni, i contributi in attesa e tutte le immagini archiviate. Non si può annullare.",
+		"deletingPack": "Eliminazione…",
 		"title": "Le mie proposte",
 		"subtitle": "Crea un pacchetto, salvalo come bozza e invialo per la revisione quando sei pronto.",
 		"newSubmission": "Contribuisci",

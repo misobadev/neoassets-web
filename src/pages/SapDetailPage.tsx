@@ -1,23 +1,30 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { ChevronLeft, Download, Layers, Plus } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ChevronLeft, Download, Layers, Plus, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { fetchPackDetail, type PackDetail } from "../lib/api";
+import { deletePack, fetchPackDetail, type PackDetail } from "../lib/api";
 import UserLink from "../components/UserLink";
 import DonateButton from "../components/DonateButton";
+import Modal from "../components/ui/Modal";
+import DialogHeader from "../components/ui/DialogHeader";
 import { useSession } from "../lib/session";
 import { usePageMeta } from "../lib/seo";
 import { useSystems } from "../lib/systems";
 
 // SapDetailPage shows a published System Art Pack: its metadata, every image and
 // a Contribute button, mirroring the game metadata detail page. Browsing is
-// public; contributing requires an account.
+// public; contributing requires an account. Admins can also delete the whole
+// pack (every version, contributions and stored images).
 export default function SapDetailPage() {
 	const { packID } = useParams<{ packID: string }>();
 	const { t } = useTranslation();
 	const [pack, setPack] = useState<PackDetail | null>(null);
 	const [error, setError] = useState<string | null>(null);
-	const { authed: signedIn } = useSession();
+	const { authed: signedIn, isAdmin } = useSession();
+	const navigate = useNavigate();
+	const [confirmDelete, setConfirmDelete] = useState(false);
+	const [deleting, setDeleting] = useState(false);
+	const [deleteError, setDeleteError] = useState<string | null>(null);
 	const { systems } = useSystems();
 	usePageMeta({
 		title: pack ? `${pack.name} - ${t("nav.systemArtPack")} - NeoAssets` : `${t("nav.systemArtPack")} - NeoAssets`,
@@ -48,6 +55,18 @@ export default function SapDetailPage() {
 	if (!pack)
 		return <p className="text-sm text-[var(--color-base-content)]/50 py-6 text-center">{t("common.loading")}</p>;
 
+	const removePack = async () => {
+		setDeleting(true);
+		setDeleteError(null);
+		try {
+			await deletePack(pack.folder);
+			navigate("/app/sap", { replace: true });
+		} catch (e) {
+			setDeleteError((e as Error).message);
+			setDeleting(false);
+		}
+	};
+
 	const systemNames = new Map(systems.map((s) => [s.id, s.name]));
 	// Each image is labelled with its system (the pack's preview has none).
 	const imageLabel = (f: { kind: string; system_id?: string }) =>
@@ -61,35 +80,45 @@ export default function SapDetailPage() {
 
 	return (
 		<div className="space-y-6">
-			<div className="flex items-center gap-3">
-				<Link to="/app/sap" className="btn btn-ghost !p-2 shrink-0" aria-label={t("common.back")}>
-					<ChevronLeft className="w-5 h-5" />
-				</Link>
-				<div className="min-w-0 flex-1">
-					<div className="flex items-center gap-2 flex-wrap">
-						<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{pack.name}</h1>
-						<span className="badge badge-success shrink-0">v{pack.version || "?"}</span>
-					</div>
-					<p className="text-sm text-[var(--color-base-content)]/60 pt-1">
-						{t("submissions.byAuthor", { author: pack.author })}
-					</p>
-				</div>
-				{signedIn ? (
-					<Link to={`/app/sap/${pack.folder}/contribute`} className="btn btn-primary btn-sm shrink-0">
-						<Plus className="w-4 h-4" />
-						{t("submissions.contribute")}
+			<header className="flex flex-col gap-3 sm:flex-row sm:items-center">
+				<div className="flex items-center gap-3 min-w-0 flex-1">
+					<Link to="/app/sap" className="btn btn-ghost !p-2 shrink-0" aria-label={t("common.back")}>
+						<ChevronLeft className="w-5 h-5" />
 					</Link>
-				) : (
+					<div className="min-w-0 flex-1">
+						<div className="flex items-center gap-2">
+							<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">{pack.name}</h1>
+							<span className="badge badge-success shrink-0">v{pack.version || "?"}</span>
+						</div>
+						<p className="text-sm text-[var(--color-base-content)]/60 pt-1">
+							{t("submissions.byAuthor", { author: pack.author })}
+						</p>
+					</div>
+				</div>
+				<div className="flex gap-2 shrink-0">
 					<Link
-						to="/app/login"
-						state={{ from: `/app/sap/${pack.folder}` }}
-						className="btn btn-primary btn-sm shrink-0"
+						to={signedIn ? `/app/sap/${pack.folder}/contribute` : "/app/login"}
+						state={signedIn ? undefined : { from: `/app/sap/${pack.folder}` }}
+						className="btn btn-primary btn-sm flex-1 sm:flex-none"
 					>
 						<Plus className="w-4 h-4" />
 						{t("submissions.contribute")}
 					</Link>
-				)}
-			</div>
+					{isAdmin ? (
+						<button
+							type="button"
+							className="btn btn-error btn-sm flex-1 sm:flex-none"
+							onClick={() => {
+								setDeleteError(null);
+								setConfirmDelete(true);
+							}}
+						>
+							<Trash2 className="w-4 h-4" />
+							{t("common.delete")}
+						</button>
+					) : null}
+				</div>
+			</header>
 
 			<section className="card p-6 space-y-4">
 				<div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--color-base-content)]/60">
@@ -143,6 +172,31 @@ export default function SapDetailPage() {
 					</div>
 				)}
 			</section>
+
+			{confirmDelete ? (
+				<Modal onClose={deleting ? undefined : () => setConfirmDelete(false)}>
+					<div className="card w-full max-w-md p-6 space-y-4">
+						<DialogHeader tone="error" icon={Trash2} title={t("submissions.deletePackTitle")}>
+							{t("submissions.deletePackBody", { name: pack.name })}
+						</DialogHeader>
+						{deleteError ? <p className="text-sm text-[var(--color-error)]">{deleteError}</p> : null}
+						<div className="flex justify-end gap-2">
+							<button
+								className="btn btn-ghost"
+								type="button"
+								disabled={deleting}
+								onClick={() => setConfirmDelete(false)}
+							>
+								{t("common.cancel")}
+							</button>
+							<button className="btn btn-danger" type="button" disabled={deleting} onClick={removePack}>
+								<Trash2 className="w-4 h-4" />
+								{deleting ? t("submissions.deletingPack") : t("submissions.deletePack")}
+							</button>
+						</div>
+					</div>
+				</Modal>
+			) : null}
 		</div>
 	);
 }

@@ -255,7 +255,7 @@ export default function AdminSubmissionReview() {
 						</button>
 						{isAdmin() ? (
 							<button
-								className="btn btn-outline btn-error"
+								className="btn btn-error"
 								type="button"
 								onClick={() => setConfirmDelete(true)}
 								disabled={busy}

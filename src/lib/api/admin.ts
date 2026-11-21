@@ -124,3 +124,9 @@ export function importDonations(
 ): Promise<{ imported: number; linked: number; skipped: number }> {
 	return api("/api/v1/admin/donations/import", { method: "POST", body: { donations } });
 }
+
+// deletePack permanently removes a published system art pack: every version,
+// pending contributions and all its stored images (admin only).
+export function deletePack(folder: string): Promise<{ deleted: boolean }> {
+	return api<{ deleted: boolean }>(`/api/v1/admin/packs/${encodeURIComponent(folder)}`, { method: "DELETE" });
+}
