@@ -439,6 +439,7 @@
 			"subtitle": "システムとそのゲームを閲覧できます。種類で絞り込み、検索できます。"
 		},
 		"allSystems": "すべてのシステム",
+		"filterSystems": "システムを絞り込む…",
 		"systemStats": "{{games}} ゲーム · {{base}} ベース · {{hack}} ハック · {{homebrew}} ホームブリュー · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} システム",
 		"systemsCount_other": "{{count}} システム",

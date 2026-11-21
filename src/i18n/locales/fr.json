@@ -439,6 +439,7 @@
 			"subtitle": "Parcourez les systèmes et leurs jeux. Filtrez par type et recherchez."
 		},
 		"allSystems": "Tous les systèmes",
+		"filterSystems": "Filtrer les systèmes…",
 		"systemStats": "{{games}} jeux · {{base}} de base · {{hack}} hack · {{homebrew}} homebrew · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} système",
 		"systemsCount_other": "{{count}} systèmes",

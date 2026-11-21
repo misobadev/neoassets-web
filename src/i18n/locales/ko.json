@@ -439,6 +439,7 @@
 			"subtitle": "시스템과 게임을 둘러보세요. 유형별로 필터링하고 검색하세요."
 		},
 		"allSystems": "모든 시스템",
+		"filterSystems": "시스템 필터…",
 		"systemStats": "{{games}} 게임 · {{base}} 기본 · {{hack}} 핵 · {{homebrew}} 홈브루 · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} 시스템",
 		"systemsCount_other": "{{count}} 시스템",
