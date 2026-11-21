@@ -83,6 +83,8 @@
 		"emailVerified": "Email verificata! Ora puoi accedere."
 	},
 	"common": {
+		"showMore": "Mostra di più",
+		"showLess": "Mostra meno",
 		"appName": "NeoAssets",
 		"loading": "Caricamento...",
 		"saving": "Salvataggio...",

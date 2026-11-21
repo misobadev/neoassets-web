@@ -83,6 +83,8 @@
 		"emailVerified": "邮箱已验证！现在可以登录了。"
 	},
 	"common": {
+		"showMore": "展开",
+		"showLess": "收起",
 		"appName": "NeoAssets",
 		"loading": "正在加载……",
 		"saving": "正在保存……",

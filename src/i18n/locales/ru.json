@@ -87,6 +87,8 @@
 		"emailVerified": "Почта подтверждена! Теперь вы можете войти."
 	},
 	"common": {
+		"showMore": "Показать больше",
+		"showLess": "Свернуть",
 		"appName": "NeoAssets",
 		"loading": "Загрузка...",
 		"saving": "Сохранение...",

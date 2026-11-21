@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SectionTitle from "../components/ui/SectionTitle";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,7 @@ import {
 	Code,
 	Tag,
 	Star,
+	ChevronDown,
 } from "lucide-react";
 import {
 	fetchMetadataGameDetail,
@@ -380,9 +381,7 @@ export default function MetadataGameDetail() {
 										</select>
 									) : null}
 								</div>
-								<p className="text-[15px] leading-7 text-[var(--color-base-content)]/75 max-h-52 overflow-y-auto pr-2 max-w-[80ch]">
-									{game.description}
-								</p>
+								<ExpandableText key={`${game.id}-${lang}`} text={game.description} />
 								{lang !== "en" && activeLang ? (
 									<p className="text-xs text-[var(--color-base-content)]/40 mt-1">
 										{t("metadataGame.translatedIn", { language: activeLang.name })}
@@ -572,6 +571,45 @@ function FactTile({
 				{label}
 			</p>
 			<div className="mt-1.5 text-[15px] font-medium truncate">{children}</div>
+		</div>
+	);
+}
+
+// ExpandableText shows the first lines of a long text with a Show more / Show
+// less toggle, which only appears when the text is actually cut off.
+function ExpandableText({ text }: { text: string }) {
+	const { t } = useTranslation();
+	const ref = useRef<HTMLParagraphElement>(null);
+	const [expanded, setExpanded] = useState(false);
+	const [clamped, setClamped] = useState(false);
+	useEffect(() => {
+		const el = ref.current;
+		if (!el) return;
+		const check = () => setClamped(el.scrollHeight > el.clientHeight + 1);
+		check();
+		const ro = new ResizeObserver(check);
+		ro.observe(el);
+		return () => ro.disconnect();
+	}, [text]);
+	return (
+		<div className="max-w-[80ch]">
+			<p
+				ref={ref}
+				className={`text-[15px] leading-7 text-[var(--color-base-content)]/75 whitespace-pre-line ${expanded ? "" : "line-clamp-6"}`}
+			>
+				{text}
+			</p>
+			{clamped || expanded ? (
+				<button
+					type="button"
+					onClick={() => setExpanded((v) => !v)}
+					className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-[var(--color-primary-soft)] hover:underline"
+					aria-expanded={expanded}
+				>
+					{expanded ? t("common.showLess") : t("common.showMore")}
+					<ChevronDown className={`w-4 h-4 transition-transform ${expanded ? "rotate-180" : ""}`} />
+				</button>
+			) : null}
 		</div>
 	);
 }
