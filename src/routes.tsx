@@ -22,6 +22,7 @@ const NewGamePage = lazy(() => import("./pages/NewGamePage"));
 const MetadataAdminView = lazy(() => import("./pages/MetadataAdminView"));
 const DashboardsPage = lazy(() => import("./pages/DashboardPage"));
 const AdminUsersView = lazy(() => import("./pages/AdminUsersView"));
+const AdminDeveloperView = lazy(() => import("./pages/AdminDeveloperView"));
 const AdminDonationsView = lazy(() => import("./pages/AdminDonationsView"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const GuidePage = lazy(() => import("./pages/GuidePage"));
@@ -145,6 +146,16 @@ export default function AppRoutes() {
 						<RequireRole required="reviewer" redirectTo="/app/home">
 							<RequireRole required="admin" redirectTo="/app/admin">
 								<AdminUsersView />
+							</RequireRole>
+						</RequireRole>
+					}
+				/>
+				<Route
+					path="admin/developer"
+					element={
+						<RequireRole required="reviewer" redirectTo="/app/home">
+							<RequireRole required="admin" redirectTo="/app/admin">
+								<AdminDeveloperView />
 							</RequireRole>
 						</RequireRole>
 					}

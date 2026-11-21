@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import PageTitle from "../components/ui/PageTitle";
 import { useTranslation } from "react-i18next";
-import { LayoutGrid, ShieldCheck, Tag, HeartHandshake } from "lucide-react";
+import { LayoutGrid, ShieldCheck, Tag, HeartHandshake, KeyRound } from "lucide-react";
 import { useSession } from "../lib/session";
 
 // AdminMenu is the /app/admin landing: cards that link to the review sections.
@@ -9,6 +9,7 @@ import { useSession } from "../lib/session";
 const TONES: Record<string, string> = {
 	"/app/admin/users": "tone-community",
 	"/app/admin/donations": "tone-reward",
+	"/app/admin/developer": "tone-primary",
 	"/app/admin/metadata": "tone-meta",
 	"/app/admin/sap": "tone-sap",
 };
@@ -34,6 +35,16 @@ export default function AdminMenu() {
 						icon: <HeartHandshake className="w-5 h-5" />,
 						titleKey: "nav.donations",
 						bodyKey: "adminMenu.donationsBody",
+					},
+				]
+			: []),
+		...(admin
+			? [
+					{
+						to: "/app/admin/developer",
+						icon: <KeyRound className="w-5 h-5" />,
+						titleKey: "adminDeveloper.title",
+						bodyKey: "adminMenu.developerBody",
 					},
 				]
 			: []),

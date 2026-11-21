@@ -1213,6 +1213,7 @@
 		"delete": "削除"
 	},
 	"adminMenu": {
+		"developerBody": "開発者アプリと API キー、およびスクレイピングの利用状況。",
 		"donationsBody": "過去のPatreon寄付をインポートします。",
 		"metadataBody": "ゲームのメタデータとメディアの投稿を審査します。",
 		"sapBody": "System Art Pack の投稿を審査・承認・却下します。",
@@ -1294,5 +1295,33 @@
 			"colors": "キューブや文字の色を変えたり、グラデーション・影・輪郭を加えたりしないでください。",
 			"shape": "タイルを回転・変形・並べ替えしないでください。欠けたタイルもマークの一部です。"
 		}
+	},
+	"adminDeveloper": {
+		"title": "API の利用状況",
+		"subtitle": "すべての開発者アプリと個人 API キー、およびスクレイピング API の利用状況。",
+		"activeApps": "有効なアプリ",
+		"activeKeys": "有効な API キー",
+		"apiCalls": "API 呼び出し",
+		"scrapesToday": "今日のスクレイプ",
+		"scrapes30d": "スクレイプ（30 日）",
+		"overQuota": "上限超過",
+		"search": "名前、所有者、client id、ソフトウェアで検索…",
+		"apps": "開発者アプリ",
+		"keys": "個人 API キー",
+		"app": "アプリ",
+		"key": "キー",
+		"owner": "所有者",
+		"notFound": "見つからず",
+		"rateLimited": "レート制限",
+		"lastUsed": "最終使用",
+		"status": "状態",
+		"ownerToday": "所有者（今日）",
+		"owner30d": "所有者（30 日）",
+		"usageNote": "スクレイピングの利用はキーごとではなくユーザーごとに集計されます。これらの列はキー所有者の利用状況です。",
+		"empty": "まだありません。",
+		"never": "なし",
+		"created": "{{date}} に作成",
+		"active": "有効",
+		"revoked": "無効化済み"
 	}
 }

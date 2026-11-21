@@ -1213,6 +1213,7 @@
 		"delete": "Excluir"
 	},
 	"adminMenu": {
+		"developerBody": "Aplicativos de desenvolvedor e chaves de API, com seu uso do scraping.",
 		"donationsBody": "Importar doações históricas do Patreon.",
 		"metadataBody": "Reveja contribuições de metadados e mídia de jogos.",
 		"sapBody": "Reveja, aprove ou rejeite envios de System Art Packs.",
@@ -1294,5 +1295,33 @@
 			"colors": "Não mude as cores do cubo nem do texto, e não adicione degradês, sombras ou contornos.",
 			"shape": "Não gire, estique nem reorganize as peças; a peça que falta faz parte da marca."
 		}
+	},
+	"adminDeveloper": {
+		"title": "Uso da API",
+		"subtitle": "Todos os aplicativos de desenvolvedor e chaves de API pessoais, com seu uso da API de scraping.",
+		"activeApps": "Apps ativos",
+		"activeKeys": "Chaves ativas",
+		"apiCalls": "Chamadas à API",
+		"scrapesToday": "Scrapes hoje",
+		"scrapes30d": "Scrapes (30 dias)",
+		"overQuota": "Acima da cota",
+		"search": "Buscar por nome, dono, client id ou software…",
+		"apps": "Aplicativos de desenvolvedor",
+		"keys": "Chaves de API pessoais",
+		"app": "App",
+		"key": "Chave",
+		"owner": "Dono",
+		"notFound": "Não encontrados",
+		"rateLimited": "Limitadas",
+		"lastUsed": "Último uso",
+		"status": "Status",
+		"ownerToday": "Dono hoje",
+		"owner30d": "Dono (30 dias)",
+		"usageNote": "O uso de scraping é contado por usuário, não por chave: estas colunas mostram o uso do dono da chave.",
+		"empty": "Nada aqui ainda.",
+		"never": "Nunca",
+		"created": "Criada em {{date}}",
+		"active": "Ativa",
+		"revoked": "Revogada"
 	}
 }

@@ -140,6 +140,7 @@
 		"prev": "Prev"
 	},
 	"adminMenu": {
+		"developerBody": "Developer apps and API keys, with their scraping usage.",
 		"donationsBody": "Import historical Patreon donations.",
 		"subtitle": "Moderation and administration tools.",
 		"sapBody": "Review, approve or reject System Art Pack submissions.",
@@ -1269,5 +1270,33 @@
 			"colors": "Do not recolor the cube or the wordmark, and do not add gradients, shadows or outlines.",
 			"shape": "Do not rotate, stretch or rearrange the tiles; the missing tile is part of the mark."
 		}
+	},
+	"adminDeveloper": {
+		"title": "API usage",
+		"subtitle": "Every developer app and personal API key, with its usage of the scraping API.",
+		"activeApps": "Active apps",
+		"activeKeys": "Active API keys",
+		"apiCalls": "API calls",
+		"scrapesToday": "Scrapes today",
+		"scrapes30d": "Scrapes (30 days)",
+		"overQuota": "Over quota",
+		"search": "Search by name, owner, client id or software…",
+		"apps": "Developer apps",
+		"keys": "Personal API keys",
+		"app": "App",
+		"key": "Key",
+		"owner": "Owner",
+		"notFound": "Not found",
+		"rateLimited": "Rate limited",
+		"lastUsed": "Last used",
+		"status": "Status",
+		"ownerToday": "Owner today",
+		"owner30d": "Owner (30 days)",
+		"usageNote": "Scrape usage is counted per user, not per key: these columns show the key owner's usage.",
+		"empty": "Nothing here yet.",
+		"never": "Never",
+		"created": "Created {{date}}",
+		"active": "Active",
+		"revoked": "Revoked"
 	}
 }

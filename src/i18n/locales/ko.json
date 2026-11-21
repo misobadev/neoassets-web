@@ -1213,6 +1213,7 @@
 		"delete": "삭제"
 	},
 	"adminMenu": {
+		"developerBody": "개발자 앱과 API 키, 그리고 스크래핑 사용량.",
 		"donationsBody": "과거 Patreon 후원을 가져옵니다.",
 		"metadataBody": "게임 메타데이터와 미디어 기여를 검토합니다.",
 		"sapBody": "System Art Pack 제출물을 검토, 승인 또는 거부합니다.",
@@ -1294,5 +1295,33 @@
 			"colors": "큐브나 글자의 색을 바꾸지 말고, 그라데이션·그림자·외곽선을 추가하지 마세요.",
 			"shape": "타일을 회전하거나 늘리거나 재배열하지 마세요. 빠진 타일도 마크의 일부입니다."
 		}
+	},
+	"adminDeveloper": {
+		"title": "API 사용량",
+		"subtitle": "모든 개발자 앱과 개인 API 키, 그리고 스크래핑 API 사용량.",
+		"activeApps": "활성 앱",
+		"activeKeys": "활성 API 키",
+		"apiCalls": "API 호출",
+		"scrapesToday": "오늘 스크랩",
+		"scrapes30d": "스크랩 (30일)",
+		"overQuota": "할당량 초과",
+		"search": "이름, 소유자, client id 또는 소프트웨어로 검색…",
+		"apps": "개발자 앱",
+		"keys": "개인 API 키",
+		"app": "앱",
+		"key": "키",
+		"owner": "소유자",
+		"notFound": "찾지 못함",
+		"rateLimited": "속도 제한",
+		"lastUsed": "마지막 사용",
+		"status": "상태",
+		"ownerToday": "소유자 오늘",
+		"owner30d": "소유자 (30일)",
+		"usageNote": "스크래핑 사용량은 키가 아니라 사용자 기준으로 집계됩니다. 이 열은 키 소유자의 사용량입니다.",
+		"empty": "아직 없습니다.",
+		"never": "없음",
+		"created": "{{date}} 생성",
+		"active": "활성",
+		"revoked": "폐기됨"
 	}
 }

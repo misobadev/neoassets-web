@@ -140,6 +140,7 @@
 		"prev": "Anterior"
 	},
 	"adminMenu": {
+		"developerBody": "Aplicaciones de desarrollador y API keys, con su uso del scraping.",
 		"donationsBody": "Importa donaciones históricas de Patreon.",
 		"subtitle": "Herramientas de moderación y administración.",
 		"sapBody": "Revisa, aprueba o rechaza envíos de paquetes de arte de sistemas.",
@@ -1269,5 +1270,33 @@
 			"colors": "No cambies los colores del cubo ni del texto, y no agregues degradados, sombras ni contornos.",
 			"shape": "No rotes, estires ni reordenes las losetas; la loseta que falta es parte de la marca."
 		}
+	},
+	"adminDeveloper": {
+		"title": "Uso de la API",
+		"subtitle": "Todas las aplicaciones de desarrollador y API keys personales, con su uso de la API de scraping.",
+		"activeApps": "Apps activas",
+		"activeKeys": "API keys activas",
+		"apiCalls": "Llamadas a la API",
+		"scrapesToday": "Scrapes hoy",
+		"scrapes30d": "Scrapes (30 días)",
+		"overQuota": "Sobre la cuota",
+		"search": "Buscar por nombre, dueño, client id o software…",
+		"apps": "Aplicaciones de desarrollador",
+		"keys": "API keys personales",
+		"app": "App",
+		"key": "Key",
+		"owner": "Dueño",
+		"notFound": "No encontrados",
+		"rateLimited": "Limitadas",
+		"lastUsed": "Último uso",
+		"status": "Estado",
+		"ownerToday": "Dueño hoy",
+		"owner30d": "Dueño (30 días)",
+		"usageNote": "El uso de scraping se cuenta por usuario, no por key: estas columnas muestran el uso del dueño de la key.",
+		"empty": "Todavía no hay nada.",
+		"never": "Nunca",
+		"created": "Creada el {{date}}",
+		"active": "Activa",
+		"revoked": "Revocada"
 	}
 }

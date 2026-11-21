@@ -1213,6 +1213,7 @@
 		"delete": "Elimina"
 	},
 	"adminMenu": {
+		"developerBody": "App sviluppatore e chiavi API, con il loro uso dello scraping.",
 		"donationsBody": "Importa donazioni Patreon storiche.",
 		"metadataBody": "Esamina i contributi di metadati e media dei giochi.",
 		"sapBody": "Esamina, approva o rifiuta le proposte di System Art Pack.",
@@ -1294,5 +1295,33 @@
 			"colors": "Non cambiare i colori del cubo o del testo e non aggiungere sfumature, ombre o contorni.",
 			"shape": "Non ruotare, deformare o riordinare le tessere; la tessera mancante fa parte del marchio."
 		}
+	},
+	"adminDeveloper": {
+		"title": "Uso dell'API",
+		"subtitle": "Tutte le app sviluppatore e le chiavi API personali, con il loro uso dell'API di scraping.",
+		"activeApps": "App attive",
+		"activeKeys": "Chiavi API attive",
+		"apiCalls": "Chiamate API",
+		"scrapesToday": "Scrape oggi",
+		"scrapes30d": "Scrape (30 giorni)",
+		"overQuota": "Oltre la quota",
+		"search": "Cerca per nome, proprietario, client id o software…",
+		"apps": "App sviluppatore",
+		"keys": "Chiavi API personali",
+		"app": "App",
+		"key": "Chiave",
+		"owner": "Proprietario",
+		"notFound": "Non trovati",
+		"rateLimited": "Limitate",
+		"lastUsed": "Ultimo uso",
+		"status": "Stato",
+		"ownerToday": "Proprietario oggi",
+		"owner30d": "Proprietario (30 giorni)",
+		"usageNote": "L'uso dello scraping è contato per utente, non per chiave: queste colonne mostrano l'uso del proprietario.",
+		"empty": "Ancora niente.",
+		"never": "Mai",
+		"created": "Creata il {{date}}",
+		"active": "Attiva",
+		"revoked": "Revocata"
 	}
 }

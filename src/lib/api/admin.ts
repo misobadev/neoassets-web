@@ -130,3 +130,60 @@ export function importDonations(
 export function deletePack(folder: string): Promise<{ deleted: boolean }> {
 	return api<{ deleted: boolean }>(`/api/v1/admin/packs/${encodeURIComponent(folder)}`, { method: "DELETE" });
 }
+
+// Developer apps and personal API keys with their usage (admin only).
+export interface AdminSoftwareStats {
+	name: string;
+	api_calls: number;
+	ko_scraps: number;
+	rate_limited: number;
+	quota_exceeded: number;
+	last_scrape_at?: string | null;
+}
+
+export interface AdminDeveloperApp {
+	id: string;
+	name: string;
+	owner: string;
+	client_id: string;
+	homepage_url: string;
+	created_at: string;
+	last_used_at?: string | null;
+	last_scrape_at?: string | null;
+	revoked_at?: string | null;
+	api_calls: number;
+	ko_scraps: number;
+	rate_limited: number;
+	quota_exceeded: number;
+	software?: AdminSoftwareStats[];
+}
+
+export interface AdminAPIKey {
+	id: string;
+	name: string;
+	owner: string;
+	prefix: string;
+	created_at: string;
+	last_used_at?: string | null;
+	revoked_at?: string | null;
+	owner_scrapes_today: number;
+	owner_scrapes_30d: number;
+}
+
+export interface DeveloperOverview {
+	totals: {
+		active_apps: number;
+		active_keys: number;
+		api_calls: number;
+		scrapes_today: number;
+		scrapes_30d: number;
+		quota_exceeded: number;
+		rate_limited: number;
+	};
+	apps: AdminDeveloperApp[];
+	keys: AdminAPIKey[];
+}
+
+export function fetchDeveloperOverview(): Promise<DeveloperOverview> {
+	return api<DeveloperOverview>("/api/v1/admin/developer");
+}

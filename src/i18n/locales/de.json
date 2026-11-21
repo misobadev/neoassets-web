@@ -1213,6 +1213,7 @@
 		"delete": "Löschen"
 	},
 	"adminMenu": {
+		"developerBody": "Entwickler-Apps und API-Schlüssel mit ihrer Scraping-Nutzung.",
 		"donationsBody": "Historische Patreon-Spenden importieren.",
 		"metadataBody": "Spiel-Metadaten und Medien-Beiträge prüfen.",
 		"sapBody": "System-Art-Pack-Einreichungen prüfen, genehmigen oder ablehnen.",
@@ -1294,5 +1295,33 @@
 			"colors": "Ändere die Farben von Würfel und Schriftzug nicht und füge keine Verläufe, Schatten oder Konturen hinzu.",
 			"shape": "Drehe, verzerre oder ordne die Kacheln nicht um; die fehlende Kachel gehört zur Marke."
 		}
+	},
+	"adminDeveloper": {
+		"title": "API-Nutzung",
+		"subtitle": "Alle Entwickler-Apps und persönlichen API-Schlüssel mit ihrer Nutzung der Scraping-API.",
+		"activeApps": "Aktive Apps",
+		"activeKeys": "Aktive API-Schlüssel",
+		"apiCalls": "API-Aufrufe",
+		"scrapesToday": "Scrapes heute",
+		"scrapes30d": "Scrapes (30 Tage)",
+		"overQuota": "Über dem Kontingent",
+		"search": "Nach Name, Besitzer, Client-ID oder Software suchen…",
+		"apps": "Entwickler-Apps",
+		"keys": "Persönliche API-Schlüssel",
+		"app": "App",
+		"key": "Schlüssel",
+		"owner": "Besitzer",
+		"notFound": "Nicht gefunden",
+		"rateLimited": "Gedrosselt",
+		"lastUsed": "Zuletzt genutzt",
+		"status": "Status",
+		"ownerToday": "Besitzer heute",
+		"owner30d": "Besitzer (30 Tage)",
+		"usageNote": "Die Scraping-Nutzung wird pro Nutzer gezählt, nicht pro Schlüssel: Diese Spalten zeigen die Nutzung des Besitzers.",
+		"empty": "Noch nichts vorhanden.",
+		"never": "Nie",
+		"created": "Erstellt am {{date}}",
+		"active": "Aktiv",
+		"revoked": "Widerrufen"
 	}
 }

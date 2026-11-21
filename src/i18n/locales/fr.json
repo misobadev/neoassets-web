@@ -1213,6 +1213,7 @@
 		"delete": "Supprimer"
 	},
 	"adminMenu": {
+		"developerBody": "Applications développeur et clés API, avec leur utilisation du scraping.",
 		"donationsBody": "Importer des dons Patreon historiques.",
 		"metadataBody": "Examiner les contributions de métadonnées et de médias de jeux.",
 		"sapBody": "Examiner, approuver ou rejeter les soumissions de packs d'art système.",
@@ -1294,5 +1295,33 @@
 			"colors": "Ne modifiez pas les couleurs du cube ni du texte, et n'ajoutez ni dégradés, ni ombres, ni contours.",
 			"shape": "Ne faites pas pivoter, n'étirez pas et ne réorganisez pas les tuiles ; la tuile manquante fait partie de la marque."
 		}
+	},
+	"adminDeveloper": {
+		"title": "Utilisation de l'API",
+		"subtitle": "Toutes les applications développeur et clés API personnelles, avec leur utilisation de l'API de scraping.",
+		"activeApps": "Apps actives",
+		"activeKeys": "Clés API actives",
+		"apiCalls": "Appels API",
+		"scrapesToday": "Scrapes aujourd'hui",
+		"scrapes30d": "Scrapes (30 jours)",
+		"overQuota": "Quota dépassé",
+		"search": "Rechercher par nom, propriétaire, client id ou logiciel…",
+		"apps": "Applications développeur",
+		"keys": "Clés API personnelles",
+		"app": "App",
+		"key": "Clé",
+		"owner": "Propriétaire",
+		"notFound": "Introuvables",
+		"rateLimited": "Limitées",
+		"lastUsed": "Dernière utilisation",
+		"status": "Statut",
+		"ownerToday": "Propriétaire aujourd'hui",
+		"owner30d": "Propriétaire (30 jours)",
+		"usageNote": "L'utilisation du scraping est comptée par utilisateur, pas par clé : ces colonnes montrent l'utilisation du propriétaire.",
+		"empty": "Rien pour l'instant.",
+		"never": "Jamais",
+		"created": "Créée le {{date}}",
+		"active": "Active",
+		"revoked": "Révoquée"
 	}
 }
