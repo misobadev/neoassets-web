@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import BackLink from "./ui/BackLink";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { AlertTriangle, ChevronLeft, Loader2, Trash2, X } from "lucide-react";
+import { AlertTriangle, Loader2, Trash2, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
 	api,
@@ -603,13 +604,11 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 		<div className="space-y-6">
 			<div className="flex items-center justify-between gap-3 flex-wrap">
 				<div>
-					<Link
+					<BackLink
 						to={isContribution ? "/app/sap" : "/app/submissions"}
-						className="link text-sm inline-flex items-center gap-1"
-					>
-						<ChevronLeft className="w-4 h-4" />
-						{t("submissions.editor.back")}
-					</Link>
+						label={t("submissions.editor.back")}
+						className=""
+					/>
 					<h1 className="text-2xl md:text-3xl font-bold tracking-tight mt-2">
 						{isContribution
 							? t("submissions.editor.titleContribute", { pack: name || "…" })

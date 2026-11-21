@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import BackLink from "../components/ui/BackLink";
 import PageTitle from "../components/ui/PageTitle";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, Palette } from "lucide-react";
+import { Palette } from "lucide-react";
 import { api, type SubmissionDetail, mediaUrl } from "../lib/api";
 import { useSystems } from "../lib/systems";
 import UserLink from "../components/UserLink";
@@ -45,10 +46,8 @@ export default function AdminView() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-3">
-				<Link to="/app/admin" className="btn btn-ghost !p-2" aria-label={t("common.back")}>
-					<ChevronLeft className="w-5 h-5" />
-				</Link>
 				<div>
+					<BackLink to="/app/admin" label={t("nav.admin")} />
 					<PageTitle icon={Palette} tone="tone-sap">
 						{t("admin.title")}
 					</PageTitle>

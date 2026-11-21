@@ -1,18 +1,9 @@
 import { useEffect, useState } from "react";
+import BackLink from "../components/ui/BackLink";
 import PageTitle from "../components/ui/PageTitle";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-	AlertTriangle,
-	Check,
-	ChevronLeft,
-	Clapperboard,
-	HardDrive,
-	Plus,
-	Trash2,
-	Upload,
-	Gamepad2,
-} from "lucide-react";
+import { AlertTriangle, Check, Clapperboard, HardDrive, Plus, Trash2, Upload, Gamepad2 } from "lucide-react";
 import {
 	createMetadataSubmission,
 	fetchGenres,
@@ -405,14 +396,11 @@ export default function NewGamePage() {
 	return (
 		<div className="space-y-6 max-w-3xl mx-auto">
 			<div className="flex items-center gap-3">
-				<Link
-					to={systemId ? `/app/metadata/${systemId}` : "/app/metadata"}
-					className="btn btn-ghost !p-2"
-					aria-label={t("common.back")}
-				>
-					<ChevronLeft className="w-5 h-5" />
-				</Link>
 				<div>
+					<BackLink
+						to={systemId ? `/app/metadata/${systemId}` : "/app/metadata"}
+						label={t("nav.gameMetadata")}
+					/>
 					<PageTitle icon={Gamepad2} tone="tone-meta">
 						{t("metadata.newGame.title")}
 					</PageTitle>

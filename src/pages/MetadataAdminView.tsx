@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import BackLink from "../components/ui/BackLink";
 import PageTitle from "../components/ui/PageTitle";
 import { Link } from "react-router-dom";
-import { AlertTriangle, ChevronLeft, ExternalLink, Image as ImageIcon, ShieldCheck, X } from "lucide-react";
+import { AlertTriangle, ExternalLink, Image as ImageIcon, ShieldCheck, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Pagination from "../components/Pagination";
 import UserLink from "../components/UserLink";
@@ -324,10 +325,8 @@ export default function MetadataAdminView() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-3">
-				<Link to="/app/admin" className="btn btn-ghost !p-2" aria-label={t("common.back")}>
-					<ChevronLeft className="w-5 h-5" />
-				</Link>
 				<div>
+					<BackLink to="/app/admin" label={t("nav.admin")} />
 					<PageTitle icon={ShieldCheck} tone="tone-meta">
 						{t("nav.metadataReview")}
 					</PageTitle>

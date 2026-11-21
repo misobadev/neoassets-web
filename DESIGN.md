@@ -107,6 +107,9 @@ padding on desktop and 16px on phones.
 - **Page titles** (`components/ui/PageTitle`): the area's icon in a tone chip
   next to the h1. Section titles (`components/ui/SectionTitle`) use a smaller
   chip that takes the tone of the enclosing section.
+- **Back links** (`components/ui/BackLink`): a small breadcrumb above the
+  page title, a chevron and the name of the page it returns to. No icon-only
+  back buttons.
 - **Toned cards.** `card-tone` gives a card its area color (tinted surface and
   border, 3px top bar); `card-tone-hover` shows only the top bar on hover, for
   dense grids.

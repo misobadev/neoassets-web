@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import BackLink from "../components/ui/BackLink";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
 	AlertTriangle,
@@ -873,14 +874,8 @@ export default function MetadataSubmissionPage() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center gap-3">
-				<Link
-					to={`/app/metadata/${game.system_id}/game/${game.id}`}
-					className="btn btn-ghost !p-2"
-					aria-label={t("common.back")}
-				>
-					<ChevronLeft className="w-5 h-5" />
-				</Link>
 				<div className="min-w-0">
+					<BackLink to={`/app/metadata/${game.system_id}/game/${game.id}`} label={game.name} />
 					<h1 className="text-2xl md:text-3xl font-bold tracking-tight truncate">
 						{t("metadataSubmit.submitChanges")}
 					</h1>
