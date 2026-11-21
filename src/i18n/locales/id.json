@@ -1213,6 +1213,7 @@
 		"delete": "Hapus"
 	},
 	"adminMenu": {
+		"developerBody": "Aplikasi developer dan kunci API, beserta penggunaan scraping-nya.",
 		"donationsBody": "Impor donasi Patreon historis.",
 		"metadataBody": "Tinjau kontribusi metadata dan media game.",
 		"sapBody": "Tinjau, setujui, atau tolak kiriman System Art Pack.",
@@ -1294,5 +1295,33 @@
 			"colors": "Jangan ubah warna kubus atau teks, dan jangan tambahkan gradasi, bayangan, atau garis luar.",
 			"shape": "Jangan memutar, meregangkan, atau menyusun ulang ubin; ubin yang hilang adalah bagian dari merek."
 		}
+	},
+	"adminDeveloper": {
+		"title": "Penggunaan API",
+		"subtitle": "Semua aplikasi developer dan kunci API pribadi, beserta penggunaan API scraping-nya.",
+		"activeApps": "Aplikasi aktif",
+		"activeKeys": "Kunci API aktif",
+		"apiCalls": "Panggilan API",
+		"scrapesToday": "Scrape hari ini",
+		"scrapes30d": "Scrape (30 hari)",
+		"overQuota": "Melebihi kuota",
+		"search": "Cari berdasarkan nama, pemilik, client id, atau software…",
+		"apps": "Aplikasi developer",
+		"keys": "Kunci API pribadi",
+		"app": "Aplikasi",
+		"key": "Kunci",
+		"owner": "Pemilik",
+		"notFound": "Tidak ditemukan",
+		"rateLimited": "Dibatasi",
+		"lastUsed": "Terakhir dipakai",
+		"status": "Status",
+		"ownerToday": "Pemilik hari ini",
+		"owner30d": "Pemilik (30 hari)",
+		"usageNote": "Penggunaan scraping dihitung per pengguna, bukan per kunci: kolom ini menampilkan penggunaan pemilik kunci.",
+		"empty": "Belum ada apa-apa.",
+		"never": "Belum pernah",
+		"created": "Dibuat {{date}}",
+		"active": "Aktif",
+		"revoked": "Dicabut"
 	}
 }

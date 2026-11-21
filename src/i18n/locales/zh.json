@@ -1213,6 +1213,7 @@
 		"delete": "删除"
 	},
 	"adminMenu": {
+		"developerBody": "开发者应用和 API 密钥及其抓取使用情况。",
 		"donationsBody": "导入历史 Patreon 捐赠。",
 		"metadataBody": "审核游戏元数据和媒体贡献。",
 		"sapBody": "审核、批准或拒绝 System Art Pack 提交。",
@@ -1294,5 +1295,33 @@
 			"colors": "请勿更改立方体或文字的颜色，也不要添加渐变、阴影或描边。",
 			"shape": "请勿旋转、拉伸或重新排列方块；缺失的那一块也是标志的一部分。"
 		}
+	},
+	"adminDeveloper": {
+		"title": "API 使用情况",
+		"subtitle": "所有开发者应用和个人 API 密钥及其抓取 API 的使用情况。",
+		"activeApps": "活跃应用",
+		"activeKeys": "活跃 API 密钥",
+		"apiCalls": "API 调用",
+		"scrapesToday": "今日抓取",
+		"scrapes30d": "抓取（30 天）",
+		"overQuota": "超出配额",
+		"search": "按名称、所有者、client id 或软件搜索…",
+		"apps": "开发者应用",
+		"keys": "个人 API 密钥",
+		"app": "应用",
+		"key": "密钥",
+		"owner": "所有者",
+		"notFound": "未找到",
+		"rateLimited": "被限流",
+		"lastUsed": "最近使用",
+		"status": "状态",
+		"ownerToday": "所有者今日",
+		"owner30d": "所有者（30 天）",
+		"usageNote": "抓取使用量按用户而非按密钥统计：这些列显示密钥所有者的使用量。",
+		"empty": "暂无内容。",
+		"never": "从未",
+		"created": "创建于 {{date}}",
+		"active": "活跃",
+		"revoked": "已撤销"
 	}
 }
