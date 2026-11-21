@@ -419,24 +419,24 @@ export default function MetadataGameDetail() {
 			{regions.some((r) => (r.media || []).length > 0) ? (
 				<section className="card p-4 sm:p-6 tone-meta">
 					<SectionTitle icon={Globe}>{t("metadataGame.regionsTitle")}</SectionTitle>
-					<div className="space-y-3">
+					<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
 						{regions
 							.filter((r) => (r.media || []).length > 0)
 							.map((r) => (
 								<div
 									key={r.region}
-									className="rounded-lg border border-[var(--color-base-300)] p-3 space-y-2"
+									className="rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-100)]/40 p-3 flex items-center gap-3"
 								>
-									<span className="badge badge-solid-neutral badge-sm">
+									<span className="badge badge-solid-neutral badge-sm shrink-0 w-[5rem] justify-start">
 										<RegionLabel region={r.region} />
 									</span>
-									<div className="flex flex-wrap gap-2">
+									<div className="flex flex-wrap gap-2 min-w-0">
 										{(r.media || []).map((m) => (
 											<img
 												key={m.id}
 												src={mediaUrl(m.object_key, m.created_at)}
 												alt={t(KIND_LABEL[m.kind] || m.kind)}
-												className="w-24 h-24 object-contain rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-300)]/30"
+												className="w-16 h-16 object-contain rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-100)] p-1"
 												onError={(e) => (e.currentTarget.style.display = "none")}
 											/>
 										))}
