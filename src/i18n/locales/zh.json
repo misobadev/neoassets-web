@@ -980,7 +980,8 @@
 			"deleteFailed": "删除失败：{{message}}",
 			"titleContribute": "为 {{pack}} 贡献",
 			"errGifTooLarge": "GIF 必须小于等于 {{mb}} MB。",
-			"titleView": "查看提交"
+			"titleView": "查看提交",
+			"donationUpdated": "捐赠链接已更新。"
 		},
 		"form": {
 			"nameLabel": "资源包名称",
@@ -995,7 +996,8 @@
 			"aiNote1c": "，请勾选此框，即使只涉及一个系统。对现有美术不易察觉的修复或还原无需勾选。",
 			"aiNote2a": "如果检测到 AI 生成内容但未勾选此框，投稿将在审核时被",
 			"aiNote2b": "拒绝",
-			"aiNote2c": "。"
+			"aiNote2c": "。",
+			"donationAdminHint": "作为管理员，你可以修改此资源包的捐赠链接。它会立即保存到资源包，无需审核。"
 		},
 		"backgrounds": {
 			"title": "背景",
@@ -1046,10 +1048,7 @@
 		"publicSubtitle": "浏览社区已审核并发布的包。",
 		"publicTitle": "社区 System Art Pack",
 		"realAuthor": "实际作者",
-		"systemsShort": "系统",
-		"donationLink": "捐赠链接",
-		"donationLinkTitle": "修改捐赠链接",
-		"donationLinkBody": "只有管理员可以修改 {{name}} 的捐赠链接。留空即可删除。"
+		"systemsShort": "系统"
 	},
 	"reviews": {
 		"title": "我的贡献",

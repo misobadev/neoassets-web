@@ -980,7 +980,8 @@
 			"deleteFailed": "Löschen fehlgeschlagen: {{message}}",
 			"titleContribute": "Zu {{pack}} beitragen",
 			"errGifTooLarge": "GIFs dürfen höchstens {{mb}} MB groß sein.",
-			"titleView": "Einreichung ansehen"
+			"titleView": "Einreichung ansehen",
+			"donationUpdated": "Spendenlink aktualisiert."
 		},
 		"form": {
 			"nameLabel": "Pack-Name",
@@ -995,7 +996,8 @@
 			"aiNote1c": "enthält, selbst wenn nur ein System betroffen ist. Reparaturen oder Restaurierungen vorhandener Kunst, die nicht auffallen, müssen nicht markiert werden.",
 			"aiNote2a": "Wenn KI-generierte Inhalte erkannt werden, ohne dass dieses Kästchen markiert ist, wird die Einreichung",
 			"aiNote2b": "bei der Prüfung abgelehnt",
-			"aiNote2c": "."
+			"aiNote2c": ".",
+			"donationAdminHint": "Als Admin kannst du den Spendenlink dieses Packs ändern. Er wird sofort am Pack gespeichert, ohne Prüfung."
 		},
 		"backgrounds": {
 			"title": "Hintergründe",
@@ -1046,10 +1048,7 @@
 		"publicSubtitle": "Durchsuche die Packs, die die Community geprüft und veröffentlicht hat.",
 		"publicTitle": "Community-System-Art-Packs",
 		"realAuthor": "Tatsächlicher Autor",
-		"systemsShort": "Systeme",
-		"donationLink": "Spendenlink",
-		"donationLinkTitle": "Spendenlink ändern",
-		"donationLinkBody": "Nur Admins können den Spendenlink von {{name}} ändern. Leer lassen, um ihn zu entfernen."
+		"systemsShort": "Systeme"
 	},
 	"reviews": {
 		"title": "Meine Beiträge",

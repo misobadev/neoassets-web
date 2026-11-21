@@ -12,6 +12,7 @@ import {
 	type SubmissionLog,
 	type SubmissionStatus,
 	mediaUrl,
+	setPackDonation,
 } from "../lib/api";
 import { useSystems } from "../lib/systems";
 import { uploadWithProgress } from "../lib/upload";
@@ -119,6 +120,21 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 	const persistBlockedRef = useRef(false);
 
 	const editable = submissionStatus === null || submissionStatus === "created" || submissionStatus === "rejected";
+
+	// An admin can change the donation link of the pack they contribute to. It
+	// is saved on the pack right away, outside the contribution's review.
+	const canEditPackDonation = isContribution && isAdmin();
+	const [packDonation, setPackDonationState] = useState(basePack?.donation_url || "");
+
+	// syncPackDonation saves the admin's new donation link on the pack when it
+	// changed. It reports whether a change was saved; errors propagate.
+	async function syncPackDonation(): Promise<boolean> {
+		if (!canEditPackDonation || !basePack || donationUrl.trim() === packDonation) return false;
+		const res = await setPackDonation(basePack.folder, donationUrl.trim());
+		setPackDonationState(res.donation_url);
+		setDonationUrl(res.donation_url);
+		return true;
+	}
 
 	const draftKey = subId ? `pack-${subId}` : isContribution ? `contribution-${basePack?.folder}` : "current";
 
@@ -414,6 +430,15 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 			setStatus({ text: t("submissions.editor.required"), tone: "error" });
 			return;
 		}
+		try {
+			if ((await syncPackDonation()) && isContribution && !subId && !files.some((f) => f.isNew)) {
+				setStatus({ text: t("submissions.editor.donationUpdated"), tone: "success" });
+				return;
+			}
+		} catch (e) {
+			setStatus({ text: t("submissions.editor.saveFailed", { message: (e as Error).message }), tone: "error" });
+			return;
+		}
 		if (!subId) {
 			setSubmitting(true);
 			try {
@@ -471,6 +496,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 		setConfirmSubmit(false);
 		setProgress({ active: true, label: t("submissions.editor.preparing"), percent: null });
 		try {
+			await syncPackDonation();
 			const toUpload = files.filter((f) => f.blob && !f.objectKey);
 			const uploaded = [];
 			let i = 0;
@@ -777,12 +803,17 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 								</label>
 								<input
 									id="pack-donation"
-									className={`input ${!editable || isContribution ? "opacity-60 cursor-not-allowed" : ""}`}
+									className={`input ${!editable || (isContribution && !canEditPackDonation) ? "opacity-60 cursor-not-allowed" : ""}`}
 									placeholder="https://patreon.com/you"
 									value={donationUrl}
 									onChange={(e) => setDonationUrl(e.target.value)}
-									disabled={!editable || isContribution}
+									disabled={!editable || (isContribution && !canEditPackDonation)}
 								/>
+								{canEditPackDonation ? (
+									<p className="text-xs text-[var(--color-base-content)]/55 mt-1.5">
+										{t("submissions.form.donationAdminHint")}
+									</p>
+								) : null}
 							</div>
 							<div className="md:col-span-2">
 								<div

@@ -980,7 +980,8 @@
 			"deleteFailed": "Échec de la suppression : {{message}}",
 			"titleContribute": "Contribuer à {{pack}}",
 			"errGifTooLarge": "Les GIF doivent faire {{mb}} Mo ou moins.",
-			"titleView": "Voir la soumission"
+			"titleView": "Voir la soumission",
+			"donationUpdated": "Lien de don mis à jour."
 		},
 		"form": {
 			"nameLabel": "Nom du pack",
@@ -995,7 +996,8 @@
 			"aiNote1c": ", même s'il ne couvre qu'un seul système. Les réparations ou restaurations d'art existant qui ne sont pas perceptibles n'ont pas besoin d'être signalées.",
 			"aiNote2a": "Si du contenu généré par IA est détecté sans que cette case soit cochée, la soumission sera",
 			"aiNote2b": "rejetée lors de la révision",
-			"aiNote2c": "."
+			"aiNote2c": ".",
+			"donationAdminHint": "En tant qu'admin, vous pouvez modifier le lien de don de ce pack. Il est enregistré sur le pack immédiatement, sans révision."
 		},
 		"backgrounds": {
 			"title": "Arrière-plans",
@@ -1046,10 +1048,7 @@
 		"publicSubtitle": "Parcourez les packs que la communauté a examinés et publiés.",
 		"publicTitle": "Packs d'art système de la communauté",
 		"realAuthor": "Auteur réel",
-		"systemsShort": "systèmes",
-		"donationLink": "Lien de don",
-		"donationLinkTitle": "Modifier le lien de don",
-		"donationLinkBody": "Seuls les admins peuvent modifier le lien de don de {{name}}. Laissez vide pour le supprimer."
+		"systemsShort": "systèmes"
 	},
 	"reviews": {
 		"title": "Mes contributions",

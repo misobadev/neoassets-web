@@ -993,7 +993,8 @@
 			"removeFailed": "No se pudo quitar la imagen: {{message}}",
 			"deletingPermanent": "Eliminando el envío permanentemente...",
 			"deleted": "Envío eliminado.",
-			"deleteFailed": "Error al eliminar: {{message}}"
+			"deleteFailed": "Error al eliminar: {{message}}",
+			"donationUpdated": "Link de donación actualizado."
 		},
 		"form": {
 			"nameLabel": "Nombre del paquete",
@@ -1008,7 +1009,8 @@
 			"aiNote1c": ", aunque solo cubra un sistema. Las reparaciones o restauraciones de arte existente que no sean perceptibles no necesitan marcarse.",
 			"aiNote2a": "Si se detecta contenido generado por IA sin esta casilla marcada, el envío será",
 			"aiNote2b": "rechazado durante la revisión",
-			"aiNote2c": "."
+			"aiNote2c": ".",
+			"donationAdminHint": "Como admin puedes cambiar el link de donación de este pack. Se guarda en el pack al instante, sin revisión."
 		},
 		"backgrounds": {
 			"title": "Fondos",
@@ -1045,10 +1047,7 @@
 		"adminDelete": {
 			"title": "¿Eliminar el envío permanentemente?",
 			"body": "Esto elimina por completo el envío del paquete de arte de sistemas y borra sus imágenes del almacenamiento. Esta acción no se puede deshacer."
-		},
-		"donationLink": "Link de donación",
-		"donationLinkTitle": "Cambiar el link de donación",
-		"donationLinkBody": "Solo los admins pueden cambiar el link de donación de {{name}}. Déjalo vacío para quitarlo."
+		}
 	},
 	"reviews": {
 		"title": "Mis contribuciones",
