@@ -3,6 +3,7 @@ import { Check, Copy, Download, Shapes } from "lucide-react";
 import PageTitle from "../components/ui/PageTitle";
 import { useTranslation } from "react-i18next";
 import { Isotype, Wordmark } from "../components/Brand";
+import isotypeUrl from "../assets/neoassets-isotype.svg";
 import { usePageMeta } from "../lib/seo";
 
 // Downloadable brand files, served from public/brand.
@@ -131,7 +132,7 @@ export default function BrandPage() {
 						<div className="flex items-end gap-4 pt-2" aria-hidden="true">
 							{[48, 32, 24, 16].map((s) => (
 								<div key={s} className="flex flex-col items-center gap-1">
-									<img src="/neoassets-isotype.svg" alt="" style={{ width: s, height: s }} />
+									<img src={isotypeUrl} alt="" style={{ width: s, height: s }} />
 									<span className="font-mono text-[11px] text-[var(--color-base-content)]/50">
 										{s}px
 									</span>
