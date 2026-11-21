@@ -906,6 +906,10 @@
 		"trashed": "Di tempat sampah"
 	},
 	"submissions": {
+		"deletePack": "Hapus paket",
+		"deletePackTitle": "Hapus paket ini?",
+		"deletePackBody": "Ini menghapus {{name}} secara permanen: semua versi, kontribusi yang tertunda, dan semua gambarnya di penyimpanan. Tidak dapat dibatalkan.",
+		"deletingPack": "Menghapus…",
 		"title": "Kiriman saya",
 		"subtitle": "Buat paket, simpan sebagai draf, dan kirim untuk ditinjau kapan pun Anda siap.",
 		"newSubmission": "Berkontribusi",

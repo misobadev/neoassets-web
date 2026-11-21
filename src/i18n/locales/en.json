@@ -904,6 +904,10 @@
 		"claimDone": "Done! {{count}} donation(s) linked to your account."
 	},
 	"submissions": {
+		"deletePack": "Delete pack",
+		"deletePackTitle": "Delete this pack?",
+		"deletePackBody": "This permanently deletes {{name}}: every version, pending contributions and all its images in storage. It cannot be undone.",
+		"deletingPack": "Deleting…",
 		"title": "My submissions",
 		"subtitle": "Build a pack, save it as a draft, and submit it for review whenever you are ready.",
 		"newSubmission": "Contribute",

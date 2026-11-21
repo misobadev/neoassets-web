@@ -906,6 +906,10 @@
 		"trashed": "ゴミ箱"
 	},
 	"submissions": {
+		"deletePack": "パックを削除",
+		"deletePackTitle": "このパックを削除しますか？",
+		"deletePackBody": "{{name}} を完全に削除します。すべてのバージョン、保留中の投稿、保存されているすべての画像が削除され、元に戻せません。",
+		"deletingPack": "削除中…",
 		"title": "自分の投稿",
 		"subtitle": "パックを作成し、下書きとして保存し、準備ができたらレビューに提出しましょう。",
 		"newSubmission": "投稿",

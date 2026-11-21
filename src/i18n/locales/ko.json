@@ -906,6 +906,10 @@
 		"trashed": "휴지통"
 	},
 	"submissions": {
+		"deletePack": "팩 삭제",
+		"deletePackTitle": "이 팩을 삭제할까요?",
+		"deletePackBody": "{{name}}을(를) 영구적으로 삭제합니다. 모든 버전, 대기 중인 기여, 저장된 모든 이미지가 삭제되며 되돌릴 수 없습니다.",
+		"deletingPack": "삭제 중…",
 		"title": "내 제출물",
 		"subtitle": "팩을 만들고 초안으로 저장한 뒤 준비되면 검토를 위해 제출하세요.",
 		"newSubmission": "기여하기",

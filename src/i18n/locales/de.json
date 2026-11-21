@@ -906,6 +906,10 @@
 		"trashed": "Im Papierkorb"
 	},
 	"submissions": {
+		"deletePack": "Paket löschen",
+		"deletePackTitle": "Dieses Paket löschen?",
+		"deletePackBody": "Dadurch wird {{name}} dauerhaft gelöscht: alle Versionen, ausstehende Beiträge und alle gespeicherten Bilder. Das kann nicht rückgängig gemacht werden.",
+		"deletingPack": "Wird gelöscht…",
 		"title": "Meine Einreichungen",
 		"subtitle": "Erstelle ein Pack, speichere es als Entwurf und reiche es zur Prüfung ein, wann immer du bereit bist.",
 		"newSubmission": "Beitragen",

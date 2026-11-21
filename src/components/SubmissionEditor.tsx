@@ -660,7 +660,7 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 					) : null}
 					{isAdmin() && subId ? (
 						<button
-							className="btn btn-outline btn-error"
+							className="btn btn-error"
 							type="button"
 							disabled={adminDeleteBusy}
 							onClick={() => setConfirmAdminDelete(true)}

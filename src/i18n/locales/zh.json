@@ -906,6 +906,10 @@
 		"trashed": "回收站中"
 	},
 	"submissions": {
+		"deletePack": "删除资源包",
+		"deletePackTitle": "删除此资源包？",
+		"deletePackBody": "这将永久删除 {{name}}：所有版本、待审核的贡献以及存储中的所有图片。此操作无法撤销。",
+		"deletingPack": "正在删除…",
 		"title": "我的投稿",
 		"subtitle": "制作资源包，保存为草稿，准备好后提交审核。",
 		"newSubmission": "贡献",

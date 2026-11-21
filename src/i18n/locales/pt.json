@@ -906,6 +906,10 @@
 		"trashed": "Na lixeira"
 	},
 	"submissions": {
+		"deletePack": "Excluir pack",
+		"deletePackTitle": "Excluir este pack?",
+		"deletePackBody": "Isto exclui permanentemente {{name}}: todas as versões, contribuições pendentes e todas as imagens no armazenamento. Não pode ser desfeito.",
+		"deletingPack": "Excluindo…",
 		"title": "Meus envios",
 		"subtitle": "Crie um pacote, salve como rascunho e envie para revisão quando estiver pronto.",
 		"newSubmission": "Contribuir",

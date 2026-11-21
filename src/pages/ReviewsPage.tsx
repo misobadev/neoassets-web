@@ -475,7 +475,7 @@ export default function ReviewsPage() {
 							{selected.status === "pending" ? (
 								<button
 									type="button"
-									className="btn btn-error btn-outline mr-auto"
+									className="btn btn-error mr-auto"
 									onClick={() => setConfirmCancel(true)}
 								>
 									<Trash2 className="w-4 h-4" />
