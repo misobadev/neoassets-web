@@ -228,14 +228,14 @@ function GameCard({ g }: { g: GameSummary }) {
 	const [mx, setMx] = useState(0);
 	const [my, setMy] = useState(0);
 
-	// Detect when the game name is truncated so the full-name tooltip only
-	// shows for names that are actually cut off.
+	// Detect when the game name is cut off (it wraps to two lines at most) so
+	// the full-name tooltip only shows for names that do not fit.
 	const nameRef = useRef<HTMLHeadingElement>(null);
 	const [nameClipped, setNameClipped] = useState(false);
 	useEffect(() => {
 		const el = nameRef.current;
 		if (!el) return;
-		const check = () => setNameClipped(el.scrollWidth > el.clientWidth + 1);
+		const check = () => setNameClipped(el.scrollHeight > el.clientHeight + 1);
 		check();
 		const ro = new ResizeObserver(check);
 		ro.observe(el);
@@ -285,21 +285,19 @@ function GameCard({ g }: { g: GameSummary }) {
 					<div className="w-[4.5rem] aspect-[3/4] rounded-md bg-[var(--color-base-300)] shrink-0" />
 				)}
 				<div className="min-w-0 flex-1">
-					<div className="flex items-start gap-2">
-						<span className="group/name relative block min-w-0 flex-1">
-							<h3 ref={nameRef} className="font-display font-semibold text-lg leading-tight truncate">
+					<span className="group/name relative block min-w-0">
+						<h3
+							ref={nameRef}
+							className="font-display font-semibold text-lg leading-tight line-clamp-2 break-words"
+						>
+							{g.name}
+						</h3>
+						{nameClipped ? (
+							<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 w-max max-w-[18rem] break-words rounded-md bg-[var(--color-base-200)] px-2 py-1 text-[11px] font-normal leading-snug text-[var(--color-base-content)] opacity-0 shadow-lg transition-opacity duration-150 group-hover/name:opacity-100">
 								{g.name}
-							</h3>
-							{nameClipped ? (
-								<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 w-max max-w-[18rem] break-words rounded-md bg-[var(--color-base-200)] px-2 py-1 text-[11px] font-normal leading-snug text-[var(--color-base-content)] opacity-0 shadow-lg transition-opacity duration-150 group-hover/name:opacity-100">
-									{g.name}
-								</span>
-							) : null}
-						</span>
-						<span className="shrink-0 rounded-md bg-[color-mix(in_oklab,var(--color-reward)_14%,transparent)] px-2 py-1">
-							<RatingBadge rating={g.rating} />
-						</span>
-					</div>
+							</span>
+						) : null}
+					</span>
 					<p className="flex items-center gap-2 mt-1 text-xs text-[var(--color-base-content)]/60">
 						{g.system_id ? (
 							<span className="rounded px-1.5 py-0.5 font-mono text-[10px] font-medium bg-[color-mix(in_oklab,var(--tone)_16%,transparent)] text-[var(--tone)]">
@@ -367,6 +365,9 @@ function GameCard({ g }: { g: GameSummary }) {
 					>
 						{pct}%
 					</span>
+				</span>
+				<span className="shrink-0 rounded-md bg-[color-mix(in_oklab,var(--color-reward)_14%,transparent)] px-1.5 py-0.5">
+					<RatingBadge rating={g.rating} />
 				</span>
 				<span
 					className="inline-flex items-center gap-1 text-[11px] font-medium text-[var(--color-base-content)]/60 shrink-0"
