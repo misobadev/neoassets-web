@@ -392,19 +392,32 @@ export default function HomeView() {
 					</div>
 					<ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
 						{contributors.map((u, i) => (
-							<li key={u.id} className={i < 3 ? `rank-${i + 1}` : ""}>
+							<li key={u.id} className={i < 3 ? `rank-${i + 1}` : "tone-community"}>
 								<Link
 									to={`/app/u/${encodeURIComponent(u.username)}`}
-									className={`card card-hover flex items-center gap-3 p-3 ${i < 3 ? "border-t-2 !border-t-[var(--tone)]" : ""}`}
+									className="card card-hover relative flex flex-col items-center text-center gap-2 px-3 pt-5 pb-4 overflow-hidden bg-[color-mix(in_oklab,var(--tone)_6%,var(--color-base-200))]"
 								>
-									<Avatar name={u.username} avatarKey={u.avatar_key} size={36} />
-									<span className="min-w-0">
-										<span className="block text-sm font-medium truncate">{u.username}</span>
-										<span
-											className={`block text-xs tabular-nums ${i < 3 ? "tone-text font-medium" : "text-[var(--color-base-content)]/60"}`}
-										>
-											{u.count.toLocaleString()}
-										</span>
+									<span
+										className="absolute inset-x-0 top-0 h-1 bg-[var(--tone)]"
+										aria-hidden="true"
+									/>
+									<span className="absolute top-2.5 left-2.5 grid place-items-center w-6 h-6 rounded-full bg-[color-mix(in_oklab,var(--tone)_18%,transparent)] font-display text-xs font-bold text-[var(--tone)]">
+										{i + 1}
+									</span>
+									<Avatar
+										name={u.username}
+										avatarKey={u.avatar_key}
+										size={56}
+										className="!rounded-full ring-2 ring-[var(--tone)] ring-offset-2 ring-offset-[var(--color-base-200)]"
+									/>
+									<span className="block w-full text-sm font-semibold truncate mt-1">
+										{u.username}
+									</span>
+									<span className="block font-display text-xl font-bold tabular-nums tone-text leading-none">
+										{u.count.toLocaleString()}
+									</span>
+									<span className="block text-[11px] text-[var(--color-base-content)]/55">
+										{t("dashboard.totalContributions")}
 									</span>
 								</Link>
 							</li>

@@ -91,47 +91,50 @@ export default function DashboardPage() {
 				) : null}
 			</div>
 
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-				<LeaderCard
-					title={t("dashboard.topLevels")}
-					tone="tone-reward"
-					icon={<Crown className="w-4 h-4" />}
-					empty={t("dashboard.noLevels")}
-				>
-					{(data.top_levels || []).map((u, i) => (
-						<div key={u.id} className="grid grid-cols-[1.75rem_auto_1fr_auto] items-center gap-3">
-							<RankIcon i={i} />
-							<Avatar name={u.username} avatarKey={u.avatar_key} size={36} />
-							<div className="min-w-0 flex items-center gap-2">
-								<span className="min-w-0 truncate">
-									<UserLink>{u.username}</UserLink>
-								</span>
-								<span className="badge badge-ghost badge-sm shrink-0">
-									{t("guide.ranks." + u.rank, { defaultValue: u.rank })}
-								</span>
-							</div>
-							<span className="text-xs font-medium text-[var(--color-base-content)]/60 shrink-0">
-								{t("dashboard.levelOnly", { level: u.level })}
-							</span>
+			{/* Top levels: a podium for the first three, the rest with XP bars. */}
+			{(data.top_levels || []).length > 0 ? (
+				<section className="space-y-4 tone-reward" aria-labelledby="dash-levels">
+					<h2 id="dash-levels" className="font-semibold flex items-center gap-2.5 text-lg">
+						<span className="tone-chip !w-7 !h-7">
+							<Crown className="w-4 h-4" />
+						</span>
+						{t("dashboard.topLevels")}
+					</h2>
+					<Podium users={data.top_levels.slice(0, 3)} />
+					{data.top_levels.length > 3 ? (
+						<div className="card p-5 grid gap-x-8 gap-y-3 md:grid-cols-2">
+							{data.top_levels.slice(3).map((u, i) => (
+								<UserRow
+									key={u.id}
+									i={i + 3}
+									name={u.username}
+									avatarKey={u.avatar_key}
+									badge={t("guide.ranks." + u.rank, { defaultValue: u.rank })}
+									value={t("dashboard.levelOnly", { level: u.level })}
+									ratio={u.xp / (data.top_levels[0].xp || 1)}
+								/>
+							))}
 						</div>
-					))}
-				</LeaderCard>
+					) : null}
+				</section>
+			) : null}
 
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 				<LeaderCard
 					title={t("dashboard.topContributors")}
 					tone="tone-community"
 					icon={<ListChecks className="w-4 h-4" />}
 					empty={t("dashboard.noSubmissions")}
 				>
-					{(data.top_contributions || []).map((u, i) => (
-						<div key={u.id} className="grid grid-cols-[1.75rem_auto_1fr_auto] items-center gap-3">
-							<RankIcon i={i} />
-							<Avatar name={u.username} avatarKey={u.avatar_key} size={36} />
-							<span className="min-w-0 truncate">
-								<UserLink>{u.username}</UserLink>
-							</span>
-							<span className="badge badge-primary badge-sm shrink-0">{u.count}</span>
-						</div>
+					{(data.top_contributions || []).map((u, i, list) => (
+						<UserRow
+							key={u.id}
+							i={i}
+							name={u.username}
+							avatarKey={u.avatar_key}
+							value={u.count.toLocaleString()}
+							ratio={u.count / (list[0].count || 1)}
+						/>
 					))}
 				</LeaderCard>
 
@@ -141,15 +144,15 @@ export default function DashboardPage() {
 					icon={<Award className="w-4 h-4" />}
 					empty={t("dashboard.noApprovedWeek")}
 				>
-					{(data.top_approved_week || []).map((u, i) => (
-						<div key={u.id} className="grid grid-cols-[1.75rem_auto_1fr_auto] items-center gap-3">
-							<RankIcon i={i} />
-							<Avatar name={u.username} avatarKey={u.avatar_key} size={36} />
-							<span className="min-w-0 truncate">
-								<UserLink>{u.username}</UserLink>
-							</span>
-							<span className="badge badge-success badge-sm shrink-0">{u.count}</span>
-						</div>
+					{(data.top_approved_week || []).map((u, i, list) => (
+						<UserRow
+							key={u.id}
+							i={i}
+							name={u.username}
+							avatarKey={u.avatar_key}
+							value={u.count.toLocaleString()}
+							ratio={u.count / (list[0].count || 1)}
+						/>
 					))}
 				</LeaderCard>
 			</div>
@@ -303,6 +306,103 @@ function StatCard({ tone, icon, label, value }: { tone: string; icon: ReactNode;
 					{value}
 				</p>
 			</div>
+		</div>
+	);
+}
+
+// Podium shows the first three users by level: second, first and third side
+// by side (first raised), each with a ring and number in its podium color.
+function Podium({ users }: { users: DashboardData["top_levels"] }) {
+	const { t } = useTranslation();
+	// Natural order on phones; sm:order-* shows 2nd, 1st, 3rd on wide screens.
+	const order = [0, 1, 2].filter((i) => users[i]);
+	return (
+		<ol className="grid gap-4 sm:grid-cols-3 sm:items-end">
+			{order.map((i) => {
+				const u = users[i];
+				return (
+					<li
+						key={u.id}
+						className={`rank-${i + 1} card relative overflow-hidden text-center px-4 pb-5 ${
+							i === 0 ? "pt-8 sm:order-2" : i === 1 ? "pt-6 sm:order-1" : "pt-6 sm:order-3"
+						} bg-[color-mix(in_oklab,var(--tone)_7%,var(--color-base-200))] !border-[color-mix(in_oklab,var(--tone)_35%,var(--color-base-300))]`}
+					>
+						<span className="absolute inset-x-0 top-0 h-1 bg-[var(--tone)]" aria-hidden="true" />
+						<div className="relative mx-auto w-fit">
+							<Avatar
+								name={u.username}
+								avatarKey={u.avatar_key}
+								size={i === 0 ? 84 : 68}
+								className="!rounded-full ring-[3px] ring-[var(--tone)] ring-offset-4 ring-offset-[var(--color-base-200)]"
+							/>
+							<span className="absolute -bottom-2 -right-2 grid place-items-center w-8 h-8 rounded-full bg-[var(--tone)] text-[#0b1016] font-display font-bold text-sm border-[3px] border-[var(--color-base-200)]">
+								{i + 1}
+							</span>
+						</div>
+						<p className="mt-5 font-display font-semibold text-lg truncate">
+							<UserLink>{u.username}</UserLink>
+						</p>
+						<span className="badge badge-ghost badge-sm mt-1">
+							{t("guide.ranks." + u.rank, { defaultValue: u.rank })}
+						</span>
+						<p className="mt-3 font-display text-3xl font-bold tone-text leading-none">
+							{t("dashboard.levelOnly", { level: u.level })}
+						</p>
+						<p className="mt-1 text-xs text-[var(--color-base-content)]/60 tabular-nums">
+							{u.xp.toLocaleString()} XP
+						</p>
+					</li>
+				);
+			})}
+		</ol>
+	);
+}
+
+// UserRow is one ranking row: position, avatar, name (with an optional rank
+// badge), the value, and a bar showing it against the leader's. The bar uses a
+// square-root scale so the rest stay readable when the leader is far ahead.
+function UserRow({
+	i,
+	name,
+	avatarKey,
+	badge,
+	value,
+	ratio,
+}: {
+	i: number;
+	name: string;
+	avatarKey?: string;
+	badge?: string;
+	value: string;
+	ratio: number;
+}) {
+	return (
+		<div className="grid grid-cols-[1.75rem_auto_minmax(0,1fr)_auto] items-center gap-3">
+			<RankIcon i={i} />
+			<Avatar
+				name={name}
+				avatarKey={avatarKey}
+				size={36}
+				className={i < 3 ? `rank-${i + 1} ring-2 ring-[var(--tone)]` : ""}
+			/>
+			<div className="min-w-0">
+				<div className="flex items-center gap-2 min-w-0">
+					<span className="min-w-0 truncate font-medium">
+						<UserLink>{name}</UserLink>
+					</span>
+					{badge ? <span className="badge badge-ghost badge-sm shrink-0">{badge}</span> : null}
+				</div>
+				<div
+					className="mt-1.5 h-1.5 rounded-full bg-[var(--color-base-300)] overflow-hidden"
+					aria-hidden="true"
+				>
+					<div
+						className="h-full rounded-full bg-[var(--tone)]"
+						style={{ width: `${Math.max(4, Math.min(100, Math.sqrt(ratio) * 100))}%` }}
+					/>
+				</div>
+			</div>
+			<span className="font-display text-sm font-semibold tabular-nums tone-text shrink-0">{value}</span>
 		</div>
 	);
 }
