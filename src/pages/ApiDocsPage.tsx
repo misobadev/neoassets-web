@@ -185,8 +185,8 @@ export default function ApiDocsPage() {
 				<p className="text-xs text-[var(--color-base-content)]/60">
 					<Link to="/app/developer" className="link link-primary">
 						{t("nav.developer")}
-					</Link>{" "}
-					— {t("apiDocs.credentialsHint")}
+					</Link>
+					: {t("apiDocs.credentialsHint")}
 				</p>
 			</section>
 

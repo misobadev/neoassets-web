@@ -20,7 +20,7 @@
 		"aiWarning": "Diese Einreichung kennzeichnet keine KI-generierten Inhalte. Falls ein Asset KI-generiert ist, lehne es ab.",
 		"files_one": "Datei ({{count}})",
 		"files_other": "Dateien ({{count}})",
-		"showingUpdateOnly": "— nur dieses Update wird angezeigt",
+		"showingUpdateOnly": "(nur dieses Update wird angezeigt)",
 		"commentLabel": "Kommentar für den Einreicher",
 		"commentPlaceholder": "Optionales Feedback, das dem Einreicher angezeigt wird.",
 		"approve": "Genehmigen",
@@ -255,7 +255,7 @@
 		},
 		"donations": {
 			"fairPlay": "Deine aktiven Threads sind deine Basis-Threads (aus deinem Level) plus dein Spenderbonus, hart begrenzt auf {{max}} Threads. Ein monatlicher Supporter erreicht die maximale Scraping-Geschwindigkeit also schon auf niedrigerem Level; die Top-Level bleiben reines Community-Prestige.",
-			"intro": "Nicht jeder hat Zeit, Metadaten beizutragen, aber du kannst trotzdem helfen, die Serverkosten zu decken (Cloudflare R2, Datenbanken). Spenden gewähren sofort technische Vorteile, aber niemals XP oder Ränge – Ränge müssen mit echten Beiträgen verdient werden.",
+			"intro": "Nicht jeder hat Zeit, Metadaten beizutragen, aber du kannst trotzdem helfen, die Serverkosten zu decken (Cloudflare R2, Datenbanken). Spenden gewähren sofort technische Vorteile, aber niemals XP oder Ränge: Ränge müssen mit echten Beiträgen verdient werden.",
 			"monthly_supporter": {
 				"bonus": "Ein leuchtendes Badge „Monatlicher Supporter“ in deinem Profil.",
 				"note": "Wenn du kündigst, behältst du das Supporter-Badge.",

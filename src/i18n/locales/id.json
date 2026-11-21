@@ -20,7 +20,7 @@
 		"aiWarning": "Kiriman ini tidak menandai konten yang dihasilkan AI. Jika ada aset yang dihasilkan AI, tolaklah.",
 		"files_one": "Berkas ({{count}})",
 		"files_other": "Berkas ({{count}})",
-		"showingUpdateOnly": "— hanya menampilkan pembaruan ini",
+		"showingUpdateOnly": "(hanya menampilkan pembaruan ini)",
 		"commentLabel": "Komentar untuk pengirim",
 		"commentPlaceholder": "Umpan balik opsional yang ditampilkan ke pengirim.",
 		"approve": "Setujui",

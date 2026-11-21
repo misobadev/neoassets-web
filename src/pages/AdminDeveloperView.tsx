@@ -167,7 +167,7 @@ export default function AdminDeveloperView() {
 													) : null}
 												</td>
 												<td className="py-2.5 px-3">
-													{a.owner ? <UserLink>{a.owner}</UserLink> : "—"}
+													{a.owner ? <UserLink>{a.owner}</UserLink> : "-"}
 												</td>
 												<td className="py-2.5 px-3 text-right font-display font-semibold text-[var(--color-meta)] tabular-nums">
 													{n(a.api_calls)}
@@ -235,7 +235,7 @@ export default function AdminDeveloperView() {
 													</p>
 												</td>
 												<td className="py-2.5 px-3">
-													{k.owner ? <UserLink>{k.owner}</UserLink> : "—"}
+													{k.owner ? <UserLink>{k.owner}</UserLink> : "-"}
 												</td>
 												<td className="py-2.5 px-3 text-right font-display font-semibold text-[var(--color-community)] tabular-nums">
 													{n(k.owner_scrapes_today)}

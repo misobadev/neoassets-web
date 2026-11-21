@@ -966,16 +966,16 @@ export default function MetadataSubmissionPage() {
 							</div>
 							<div>
 								<p className="label-text">{t("metadataGame.fields.publisher")}</p>
-								<p>{game.publisher || "—"}</p>
+								<p>{game.publisher || "-"}</p>
 							</div>
 							<div>
 								<p className="label-text">{t("metadataGame.fields.developer")}</p>
-								<p>{game.developer || "—"}</p>
+								<p>{game.developer || "-"}</p>
 							</div>
 							<div>
 								<p className="label-text">{t("metadataGame.fields.genre")}</p>
 								<p className="text-[var(--color-base-content)]/70">
-									{game.genre ? genreLabel(t, game.genre) : "—"}
+									{game.genre ? genreLabel(t, game.genre) : "-"}
 								</p>
 							</div>
 						</div>
@@ -1208,7 +1208,7 @@ export default function MetadataSubmissionPage() {
 														}
 													}}
 												>
-													<option value="">—</option>
+													<option value="">-</option>
 													{(game.roms || []).map((r) => (
 														<option key={r.id} value={r.id}>
 															{r.name}
@@ -1301,7 +1301,7 @@ export default function MetadataSubmissionPage() {
 													<span className="badge badge-solid-neutral badge-xs">
 														<RegionLabel region={r.region} />
 													</span>
-													<span>{textValueOf(r) || "—"}</span>
+													<span>{textValueOf(r) || "-"}</span>
 												</p>
 											))}
 										</div>
@@ -1425,7 +1425,7 @@ export default function MetadataSubmissionPage() {
 									<p className="label-text">
 										{t("metadataSubmit.form.currentField", { field: textLabel.toLowerCase() })}
 									</p>
-									<p className="text-sm text-[var(--color-base-content)]/70">{currentText || "—"}</p>
+									<p className="text-sm text-[var(--color-base-content)]/70">{currentText || "-"}</p>
 								</div>
 								<div>
 									<label className="label-text">

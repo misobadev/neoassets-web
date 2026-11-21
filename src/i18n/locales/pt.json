@@ -20,7 +20,7 @@
 		"aiWarning": "Este envio não marca conteúdo gerado por IA. Se qualquer recurso for gerado por IA, rejeite-o.",
 		"files_one": "Arquivo ({{count}})",
 		"files_other": "Arquivos ({{count}})",
-		"showingUpdateOnly": "— mostrando apenas esta atualização",
+		"showingUpdateOnly": "(mostrando apenas esta atualização)",
 		"commentLabel": "Comentário para o autor",
 		"commentPlaceholder": "Feedback opcional exibido ao autor.",
 		"approve": "Aprovar",

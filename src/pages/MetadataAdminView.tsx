@@ -1042,20 +1042,20 @@ function CompareVideo({
 			{file ? (
 				<div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[11px] text-[var(--color-base-content)]/60">
 					<p>
-						{t("metadataAdmin.format")}: {file.video_format || file.file_name.split(".").pop() || "—"}
+						{t("metadataAdmin.format")}: {file.video_format || file.file_name.split(".").pop() || "-"}
 					</p>
 					<p>
-						{t("metadataAdmin.codec")}: {file.video_codec || "—"}
+						{t("metadataAdmin.codec")}: {file.video_codec || "-"}
 					</p>
 					<p>
 						{t("metadataAdmin.resolution")}:{" "}
-						{file.width && file.height ? `${file.width}×${file.height}` : "—"}
+						{file.width && file.height ? `${file.width}×${file.height}` : "-"}
 					</p>
 					<p>
-						{t("metadataAdmin.fps")}: {file.fps ? `${file.fps} fps` : "—"}
+						{t("metadataAdmin.fps")}: {file.fps ? `${file.fps} fps` : "-"}
 					</p>
 					<p>
-						{t("metadataAdmin.duration")}: {file.duration_sec ? `${file.duration_sec.toFixed(1)}s` : "—"}
+						{t("metadataAdmin.duration")}: {file.duration_sec ? `${file.duration_sec.toFixed(1)}s` : "-"}
 					</p>
 				</div>
 			) : null}

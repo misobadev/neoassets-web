@@ -20,7 +20,7 @@
 		"aiWarning": "Este envío no marca contenido generado por IA. Si algún recurso es generado por IA, recházalo.",
 		"files_one": "Archivo ({{count}})",
 		"files_other": "Archivos ({{count}})",
-		"showingUpdateOnly": "— mostrando solo esta actualización",
+		"showingUpdateOnly": "(mostrando solo esta actualización)",
 		"commentLabel": "Comentario para el remitente",
 		"commentPlaceholder": "Comentario opcional mostrado al remitente.",
 		"approve": "Aprobar",

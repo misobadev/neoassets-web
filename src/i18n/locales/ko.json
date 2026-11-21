@@ -20,7 +20,7 @@
 		"aiWarning": "이 제출물은 AI 생성 콘텐츠를 표시하지 않았습니다. AI 생성 에셋이 있으면 거부하세요.",
 		"files_one": "파일 ({{count}})",
 		"files_other": "파일 ({{count}})",
-		"showingUpdateOnly": "— 이 업데이트만 표시 중",
+		"showingUpdateOnly": "(이 업데이트만 표시 중)",
 		"commentLabel": "제출자에게 보낼 코멘트",
 		"commentPlaceholder": "제출자에게 표시되는 선택적 피드백.",
 		"approve": "승인",

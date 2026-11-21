@@ -20,7 +20,7 @@
 		"aiWarning": "Cette soumission ne signale pas de contenu généré par IA. Si un élément est généré par IA, rejetez-la.",
 		"files_one": "Fichier ({{count}})",
 		"files_other": "Fichiers ({{count}})",
-		"showingUpdateOnly": "— affichage de cette mise à jour uniquement",
+		"showingUpdateOnly": "(affichage de cette mise à jour uniquement)",
 		"commentLabel": "Commentaire pour le soumissionnaire",
 		"commentPlaceholder": "Retour facultatif affiché au soumissionnaire.",
 		"approve": "Approuver",

@@ -75,12 +75,12 @@ export function RomDetails({
 			<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
 				<div className="flex items-baseline gap-2 min-w-0">
 					<span className="label-text shrink-0">{t("common.size")}</span>
-					<span className="font-mono truncate">{row.size ? formatBytes(Number(row.size)) : "—"}</span>
+					<span className="font-mono truncate">{row.size ? formatBytes(Number(row.size)) : "-"}</span>
 				</div>
 				{HASHES.map((h) => (
 					<div key={h.key} className={`flex items-baseline gap-2 min-w-0 ${h.wide ? "sm:col-span-2" : ""}`}>
 						<span className="label-text shrink-0">{h.label}</span>
-						<span className="font-mono truncate">{row[h.key] || "—"}</span>
+						<span className="font-mono truncate">{row[h.key] || "-"}</span>
 					</div>
 				))}
 			</div>
