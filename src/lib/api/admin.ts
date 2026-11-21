@@ -136,7 +136,7 @@ export function deletePack(folder: string): Promise<{ deleted: boolean }> {
 export function setPackDonation(folder: string, donationURL: string): Promise<{ donation_url: string }> {
 	return api<{ donation_url: string }>(`/api/v1/admin/packs/${encodeURIComponent(folder)}/donation`, {
 		method: "PUT",
-		body: JSON.stringify({ donation_url: donationURL }),
+		body: { donation_url: donationURL },
 	});
 }
 
