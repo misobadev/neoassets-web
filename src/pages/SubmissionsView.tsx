@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Download, Layers, Palette } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { api, CDN_BASE, type Pack, userUsername } from "../lib/api";
-import UserLink from "../components/UserLink";
 import DonateButton from "../components/DonateButton";
 import { useSession } from "../lib/session";
 import { usePageMeta } from "../lib/seo";
@@ -114,7 +113,7 @@ export default function SubmissionsView() {
 				) : (
 					<>
 						{renderPager()}
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
 							{packs.map((p) => {
 								const icons = (p.backgrounds || []).map((k) => `${CDN_BASE}/${k}`);
 								const contributed = signedIn && (p.contributors || []).includes(userUsername() || "");
@@ -129,16 +128,16 @@ export default function SubmissionsView() {
 										}}
 										className="card card-hover card-tone-hover tone-sap overflow-hidden flex flex-col cursor-pointer"
 									>
-										<div className="h-32 bg-[color-mix(in_oklab,var(--tone)_12%,var(--color-base-100))] flex items-center justify-center overflow-hidden">
+										<div className="h-24 bg-[color-mix(in_oklab,var(--tone)_12%,var(--color-base-100))] flex items-center justify-center overflow-hidden">
 											{icons.length > 0 ? (
-												<div className="flex flex-wrap items-center justify-center gap-1 p-2">
+												<div className="flex items-center justify-center gap-1 p-2">
 													{icons.slice(0, 4).map((src, i) => (
 														<img
 															key={i}
 															src={src}
 															alt=""
 															loading="lazy"
-															className="w-16 h-16 object-cover rounded-md"
+															className="w-14 h-14 object-cover rounded-md"
 															onError={(e) => (e.currentTarget.style.display = "none")}
 														/>
 													))}
@@ -149,57 +148,44 @@ export default function SubmissionsView() {
 												</span>
 											)}
 										</div>
-										<div className="p-4 space-y-2 flex-1 flex flex-col">
+										<div className="p-3 space-y-2 flex-1 flex flex-col">
 											<div className="flex items-center justify-between gap-2">
-												<h3 className="font-display font-semibold text-lg truncate">
+												<h3 className="font-display font-semibold text-base truncate">
 													{p.name}
 												</h3>
-												<span className="badge badge-success shrink-0">
+												<span className="badge badge-success badge-sm shrink-0">
 													v{p.version || "?"}
 												</span>
 											</div>
-											<p className="text-sm text-[var(--color-base-content)]/60 line-clamp-2 min-h-[2.5rem]">
-												{p.description}
+											<p className="text-xs text-[var(--color-base-content)]/60 truncate -mt-1">
+												{t("submissions.byAuthor", { author: p.author })}
 											</p>
-
-											<div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--color-base-content)]/60">
-												<span className="flex items-center gap-1">
-													<Download className="w-3.5 h-3.5" />
-													{(p.downloads || 0).toLocaleString()}{" "}
-													{t("submissions.downloadsShort")}
-												</span>
-												<span className="flex items-center gap-1">
-													<Layers className="w-3.5 h-3.5" />
-													{p.systems_covered || 0} {t("submissions.systemsShort")}
-												</span>
-												{(p.contributions || 0) > 0 ? (
-													<span className="badge badge-warning badge-sm">
-														{t("submissions.contributionCount", { count: p.contributions })}
+											<div className="flex items-center justify-between gap-2 pt-2 min-h-[2.75rem] border-t border-[var(--color-base-300)] mt-auto">
+												<div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--color-base-content)]/60 min-w-0">
+													<span className="flex items-center gap-1">
+														<Download className="w-3.5 h-3.5" />
+														{(p.downloads || 0).toLocaleString()}
 													</span>
-												) : null}
-												{contributed ? (
-													<span className="badge badge-success badge-sm">
-														{t("submissions.contributedByYou")}
+													<span className="flex items-center gap-1">
+														<Layers className="w-3.5 h-3.5" />
+														{p.systems_covered || 0}
 													</span>
-												) : null}
-											</div>
-
-											<div className="pt-2 border-t border-[var(--color-base-300)] space-y-0.5">
-												<p className="text-sm font-semibold">
-													{t("submissions.realAuthor")}:{" "}
-													<span className="text-[var(--color-primary-soft)]">{p.author}</span>
-												</p>
-												<p className="text-[11px] text-[var(--color-base-content)]/40">
-													{t("submissions.submittedBy")}{" "}
-													<UserLink>{p.submitted_by || p.author}</UserLink>
-												</p>
-											</div>
-
-											<div
-												className="flex flex-wrap items-center gap-2 pt-2 border-t border-[var(--color-base-300)] mt-auto"
-												onClick={(e) => e.stopPropagation()}
-											>
-												<DonateButton url={p.donation_url} author={p.author} />
+													{(p.contributions || 0) > 0 ? (
+														<span className="badge badge-warning badge-sm">
+															{t("submissions.contributionCount", {
+																count: p.contributions,
+															})}
+														</span>
+													) : null}
+													{contributed ? (
+														<span className="badge badge-success badge-sm">
+															{t("submissions.contributedByYou")}
+														</span>
+													) : null}
+												</div>
+												<div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+													<DonateButton url={p.donation_url} author={p.author} compact />
+												</div>
 											</div>
 										</div>
 									</div>
