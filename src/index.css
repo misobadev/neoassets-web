@@ -1128,3 +1128,12 @@ body {
 .card-tone-hover:focus-visible::before {
 	opacity: 1;
 }
+
+/* Small uppercase label above a fact (detail pages). */
+.fact-label {
+	font-size: 0.6875rem;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+}

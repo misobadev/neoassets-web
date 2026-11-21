@@ -13,6 +13,10 @@ import {
 	Users,
 	HardDrive,
 	Gamepad2,
+	Building2,
+	Code,
+	Tag,
+	Star,
 } from "lucide-react";
 import {
 	fetchMetadataGameDetail,
@@ -22,7 +26,6 @@ import {
 	type MediaKind,
 	mediaUrl,
 } from "../lib/api";
-import { RatingBadge } from "../components/Rating";
 import MediaGrid from "../components/MediaGrid";
 import UserLink from "../components/UserLink";
 import Pagination from "../components/Pagination";
@@ -226,66 +229,82 @@ export default function MetadataGameDetail() {
 
 			<div className="card p-4 sm:p-6">
 				<div className="flex flex-col sm:flex-row gap-6">
-					<div className="w-full sm:w-56 shrink-0 flex flex-col items-center gap-2">
+					{/* Cover: natural aspect, region below, compact switcher when there are several. */}
+					<div className="w-full sm:w-60 shrink-0 space-y-3">
 						{(() => {
 							const covers = game.media.filter((m) => m.kind === "cover");
 							if (covers.length === 0) {
-								return <div className="w-full h-72 rounded-lg bg-[var(--color-base-300)]" />;
+								return <div className="w-full aspect-[3/4] rounded-lg bg-[var(--color-base-300)]" />;
 							}
 							const idx = Math.min(coverIdx, covers.length - 1);
 							const cover = covers[idx];
 							return (
 								<>
-									<div className="relative w-full h-72 flex items-start justify-center">
-										<img
-											src={mediaUrl(cover.object_key, cover.created_at)}
-											alt=""
-											className="max-h-72 max-w-full w-auto h-auto object-contain rounded-lg border border-[var(--color-base-300)]"
-											onError={(e) => (e.currentTarget.style.display = "none")}
-										/>
+									<img
+										src={mediaUrl(cover.object_key, cover.created_at)}
+										alt=""
+										className="block w-full h-auto rounded-lg ring-1 ring-white/10 shadow-xl shadow-black/40 mx-auto max-w-[16rem] sm:max-w-none"
+										onError={(e) => (e.currentTarget.style.visibility = "hidden")}
+									/>
+									<div className="flex items-center justify-between gap-2">
+										{cover.region ? (
+											<span className="badge badge-solid-neutral badge-sm">
+												<RegionLabel region={cover.region} />
+											</span>
+										) : (
+											<span />
+										)}
 										{covers.length > 1 ? (
-											<>
+											<span className="inline-flex items-center rounded-md border border-[var(--color-base-300)] bg-[var(--color-base-100)]">
 												<button
 													type="button"
 													onClick={() =>
 														setCoverIdx((idx - 1 + covers.length) % covers.length)
 													}
 													aria-label={t("metadata.prev")}
-													className="btn btn-circle btn-xs absolute left-1 top-1/2 -translate-y-1/2 bg-black/50 border-0 text-white hover:bg-black/70"
+													className="grid place-items-center w-7 h-7 hover:bg-[var(--color-base-300)] rounded-l-md"
 												>
 													<ChevronLeft className="w-4 h-4" />
 												</button>
+												<span className="px-1.5 font-display text-xs tabular-nums text-[var(--color-base-content)]/70">
+													{idx + 1}/{covers.length}
+												</span>
 												<button
 													type="button"
 													onClick={() => setCoverIdx((idx + 1) % covers.length)}
 													aria-label={t("metadata.next")}
-													className="btn btn-circle btn-xs absolute right-1 top-1/2 -translate-y-1/2 bg-black/50 border-0 text-white hover:bg-black/70"
+													className="grid place-items-center w-7 h-7 hover:bg-[var(--color-base-300)] rounded-r-md"
 												>
 													<ChevronRight className="w-4 h-4" />
 												</button>
-												<span className="badge badge-sm absolute top-2 right-2 bg-black/50 border-0 text-white">
-													{idx + 1}/{covers.length}
-												</span>
-											</>
+											</span>
 										) : null}
 									</div>
-									{cover.region ? (
-										<span className="badge badge-solid-neutral badge-sm">
-											<RegionLabel region={cover.region} />
-										</span>
-									) : null}
 								</>
 							);
 						})()}
 					</div>
-					<div className="flex-1 min-w-0 space-y-4 text-sm">
-						<div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-3">
-							<div>
-								<p className="label-text">{t("metadataGame.fields.ratings")}</p>
-								<RatingBadge rating={game.rating} />
+
+					<div className="flex-1 min-w-0 space-y-5 text-sm">
+						{/* Facts: rating in its own amber tile, then publisher, developer and genre. */}
+						<div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
+							<div className="card card-tone tone-reward p-3">
+								<p className="fact-label">{t("metadataGame.fields.ratings")}</p>
+								{game.rating && game.rating > 0 ? (
+									<p className="mt-1.5 flex items-baseline gap-1.5">
+										<Star className="w-5 h-5 self-center text-[var(--tone)]" fill="currentColor" />
+										<span className="font-display text-3xl font-bold leading-none tone-text tabular-nums">
+											{game.rating}
+										</span>
+										<span className="text-xs text-[var(--color-base-content)]/50">/10</span>
+									</p>
+								) : (
+									<p className="mt-1.5 font-display text-3xl font-bold leading-none text-[var(--color-base-content)]/30">
+										—
+									</p>
+								)}
 							</div>
-							<div>
-								<p className="label-text">{t("metadataGame.fields.publisher")}</p>
+							<FactTile icon={Building2} label={t("metadataGame.fields.publisher")}>
 								<FieldValue
 									gameId={game.id}
 									systemId={systemId || game.system_id}
@@ -293,9 +312,8 @@ export default function MetadataGameDetail() {
 									label={t("metadataGame.fields.publisher")}
 									value={game.publisher}
 								/>
-							</div>
-							<div>
-								<p className="label-text">{t("metadataGame.fields.developer")}</p>
+							</FactTile>
+							<FactTile icon={Code} label={t("metadataGame.fields.developer")}>
 								<FieldValue
 									gameId={game.id}
 									systemId={systemId || game.system_id}
@@ -303,9 +321,8 @@ export default function MetadataGameDetail() {
 									label={t("metadataGame.fields.developer")}
 									value={game.developer}
 								/>
-							</div>
-							<div>
-								<p className="label-text">{t("metadataGame.fields.genre")}</p>
+							</FactTile>
+							<FactTile icon={Tag} label={t("metadataGame.fields.genre")}>
 								<FieldValue
 									gameId={game.id}
 									systemId={systemId || game.system_id}
@@ -313,47 +330,46 @@ export default function MetadataGameDetail() {
 									label={t("metadataGame.fields.genre")}
 									value={genreLabel(t, game.genre)}
 								/>
-							</div>
+							</FactTile>
 						</div>
+
 						{namedRegions.length > 0 ? (
 							<div>
-								<p className="label-text mb-1">{t("metadataGame.regionalNames")}</p>
-								<div className="space-y-1">
+								<p className="fact-label mb-2">{t("metadataGame.regionalNames")}</p>
+								<ul className="divide-y divide-[var(--color-base-300)] rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-100)]/40">
 									{namedRegions.map((r) => (
-										<p
-											key={r.region}
-											className="text-sm text-[var(--color-base-content)]/70 flex items-center gap-2 flex-wrap"
-										>
-											<span className="badge badge-solid-neutral badge-xs">
+										<li key={r.region} className="flex items-center gap-3 px-3 py-2">
+											<span className="badge badge-solid-neutral badge-xs shrink-0 w-[4.75rem] justify-start">
 												<RegionLabel region={r.region} />
 											</span>
-											<span>
+											<span className="flex-1 min-w-0 truncate">
 												{r.name || (
 													<span className="italic opacity-60">{t("metadataAdmin.none")}</span>
 												)}
 											</span>
 											{r.release_year ? (
-												<span className="text-xs text-[var(--color-base-content)]/50">
+												<span className="shrink-0 font-mono text-xs text-[var(--color-base-content)]/50">
 													{r.release_year}
 													{r.release_month
 														? `-${String(r.release_month).padStart(2, "0")}`
 														: ""}
 												</span>
 											) : null}
-										</p>
+										</li>
 									))}
-								</div>
+								</ul>
 							</div>
 						) : null}
+
 						{game.description ? (
 							<div>
-								<div className="flex items-center justify-between gap-3 mb-1">
-									<p className="label-text">{t("common.description")}</p>
+								<div className="flex items-center justify-between gap-3 mb-2">
+									<p className="fact-label">{t("common.description")}</p>
 									{langOptions.length > 1 ? (
 										<select
 											value={lang}
 											onChange={(e) => setLang(e.target.value)}
-											className="select select-sm shrink-0 w-44"
+											className="select !py-1 !min-h-0 h-8 text-xs shrink-0 w-auto max-w-[12rem]"
 											aria-label={t("common.language")}
 										>
 											{langOptions.map((l) => (
@@ -364,7 +380,7 @@ export default function MetadataGameDetail() {
 										</select>
 									) : null}
 								</div>
-								<p className="text-sm text-[var(--color-base-content)]/70 max-h-40 overflow-y-auto pr-2">
+								<p className="text-[15px] leading-7 text-[var(--color-base-content)]/75 max-h-52 overflow-y-auto pr-2 max-w-[80ch]">
 									{game.description}
 								</p>
 								{lang !== "en" && activeLang ? (
@@ -536,4 +552,26 @@ function gameMeta(game: GameDetail | null): PageMeta {
 			image,
 		},
 	};
+}
+
+// FactTile is one labelled fact of a game (publisher, developer, genre) with
+// its icon, on a quiet tile next to the rating.
+function FactTile({
+	icon: Icon,
+	label,
+	children,
+}: {
+	icon: React.ComponentType<{ className?: string }>;
+	label: string;
+	children: React.ReactNode;
+}) {
+	return (
+		<div className="rounded-[var(--radius-card)] border border-[var(--color-base-300)] bg-[var(--color-base-100)]/40 p-3 min-w-0 tone-meta">
+			<p className="fact-label flex items-center gap-1.5">
+				<Icon className="w-3.5 h-3.5 text-[var(--tone)]" />
+				{label}
+			</p>
+			<div className="mt-1.5 text-[15px] font-medium truncate">{children}</div>
+		</div>
+	);
 }
