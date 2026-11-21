@@ -181,6 +181,7 @@
 		"totalUsers": "Utenti"
 	},
 	"footer": {
+		"brandKit": "Kit del marchio",
 		"tagline": "NeoAssets - stili visivi creati dalla community."
 	},
 	"guide": {
@@ -1230,5 +1231,63 @@
 		"monthly_supporter": "Supporter mensile",
 		"none": "Nessuno",
 		"supporter": "Supporter"
+	},
+	"brand": {
+		"title": "Kit del marchio",
+		"subtitle": "Il logo, il pittogramma, i colori e i caratteri di NeoAssets. Usali per collegarti a NeoAssets o citarlo nel tuo frontend, tema o video.",
+		"logo": {
+			"title": "Logo",
+			"isotypeTitle": "Il pittogramma",
+			"isotypeBody": "Un cubo fatto di tessere di asset a cui ne manca una: il pezzo che aggiunge la community. Funziona a colori fino a 16 px e in un solo colore sulle foto."
+		},
+		"files": {
+			"title": "Download",
+			"logoDark": "Logo per sfondi scuri",
+			"logoLight": "Logo per sfondi chiari",
+			"logoWhite": "Logo bianco",
+			"logoBlack": "Logo nero",
+			"isotypeBlack": "Pittogramma nero, per la stampa e usi monocromatici su sfondo chiaro",
+			"isotype": "Pittogramma a colori",
+			"isotypeWhite": "Pittogramma bianco, per foto e immagini scure"
+		},
+		"colors": {
+			"title": "Colori",
+			"hint": "Fai clic su un colore per copiarne il valore.",
+			"copy": "Copia {{value}}",
+			"groups": {
+				"brand": "Marchio",
+				"sections": "Sezioni",
+				"neutrals": "Neutri"
+			},
+			"names": {
+				"primary": "Ciano",
+				"primarySoft": "Ciano tenue",
+				"cubeTop": "Cubo sopra",
+				"cubeLeft": "Cubo sinistra",
+				"cubeRight": "Magenta",
+				"meta": "Metadati dei giochi",
+				"sap": "System art pack",
+				"reward": "Ricompense",
+				"community": "Community",
+				"background": "Sfondo",
+				"surface": "Superficie",
+				"border": "Bordo",
+				"text": "Testo"
+			}
+		},
+		"type": {
+			"title": "Caratteri",
+			"display": "Titoli e numeri in evidenza.",
+			"anta": "Solo per il logotipo.",
+			"sans": "Interfaccia e testi.",
+			"mono": "Hash, dimensioni, id e codice."
+		},
+		"usage": {
+			"title": "Utilizzo",
+			"space": "Lascia intorno al logo uno spazio libero di almeno metà della larghezza del pittogramma.",
+			"background": "Usa il logo scuro su sfondi scuri e quello chiaro su sfondi chiari; sulle foto usa il pittogramma bianco.",
+			"colors": "Non cambiare i colori del cubo o del testo e non aggiungere sfumature, ombre o contorni.",
+			"shape": "Non ruotare, deformare o riordinare le tessere; la tessera mancante fa parte del marchio."
+		}
 	}
 }

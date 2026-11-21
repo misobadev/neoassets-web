@@ -299,7 +299,9 @@ function StatCard({ tone, icon, label, value }: { tone: string; icon: ReactNode;
 			<span className="tone-chip !w-10 !h-10">{icon}</span>
 			<div className="min-w-0">
 				<p className="text-xs text-[var(--color-base-content)]/60 truncate">{label}</p>
-				<p className="text-2xl font-semibold leading-tight tabular-nums truncate tone-text">{value}</p>
+				<p className="font-display text-2xl font-semibold leading-tight tabular-nums truncate tone-text">
+					{value}
+				</p>
 			</div>
 		</div>
 	);

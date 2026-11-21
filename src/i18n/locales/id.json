@@ -181,6 +181,7 @@
 		"totalUsers": "Pengguna"
 	},
 	"footer": {
+		"brandKit": "Kit merek",
 		"tagline": "NeoAssets - gaya visual buatan komunitas."
 	},
 	"guide": {
@@ -1230,5 +1231,63 @@
 		"monthly_supporter": "Supporter Bulanan",
 		"none": "Tidak ada",
 		"supporter": "Supporter"
+	},
+	"brand": {
+		"title": "Kit merek",
+		"subtitle": "Logo, isotipe, warna, dan jenis huruf NeoAssets. Gunakan untuk menautkan ke NeoAssets atau mencantumkannya di frontend, tema, atau video kamu.",
+		"logo": {
+			"title": "Logo",
+			"isotypeTitle": "Isotipe",
+			"isotypeBody": "Kubus dari ubin aset dengan satu ubin yang hilang: bagian yang ditambahkan komunitas. Tetap jelas berwarna hingga 16px dan satu warna di atas foto."
+		},
+		"files": {
+			"title": "Unduhan",
+			"logoDark": "Logo untuk latar gelap",
+			"logoLight": "Logo untuk latar terang",
+			"logoWhite": "Logo putih",
+			"logoBlack": "Logo hitam",
+			"isotypeBlack": "Isotipe hitam, untuk cetak dan penggunaan satu warna di latar terang",
+			"isotype": "Isotipe berwarna",
+			"isotypeWhite": "Isotipe putih, untuk foto dan gambar gelap"
+		},
+		"colors": {
+			"title": "Warna",
+			"hint": "Klik warna untuk menyalin nilainya.",
+			"copy": "Salin {{value}}",
+			"groups": {
+				"brand": "Merek",
+				"sections": "Bagian",
+				"neutrals": "Netral"
+			},
+			"names": {
+				"primary": "Sian",
+				"primarySoft": "Sian lembut",
+				"cubeTop": "Kubus atas",
+				"cubeLeft": "Kubus kiri",
+				"cubeRight": "Magenta",
+				"meta": "Metadata game",
+				"sap": "System art pack",
+				"reward": "Hadiah",
+				"community": "Komunitas",
+				"background": "Latar",
+				"surface": "Permukaan",
+				"border": "Garis tepi",
+				"text": "Teks"
+			}
+		},
+		"type": {
+			"title": "Jenis huruf",
+			"display": "Judul dan angka utama.",
+			"anta": "Hanya untuk logotipe.",
+			"sans": "Antarmuka dan teks.",
+			"mono": "Hash, ukuran, id, dan kode."
+		},
+		"usage": {
+			"title": "Penggunaan",
+			"space": "Beri ruang kosong di sekitar logo minimal setengah lebar isotipe.",
+			"background": "Gunakan logo gelap di latar gelap dan logo terang di latar terang; di atas foto, gunakan isotipe putih.",
+			"colors": "Jangan ubah warna kubus atau teks, dan jangan tambahkan gradasi, bayangan, atau garis luar.",
+			"shape": "Jangan memutar, meregangkan, atau menyusun ulang ubin; ubin yang hilang adalah bagian dari merek."
+		}
 	}
 }

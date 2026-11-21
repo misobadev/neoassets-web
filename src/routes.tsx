@@ -25,6 +25,7 @@ const AdminUsersView = lazy(() => import("./pages/AdminUsersView"));
 const AdminDonationsView = lazy(() => import("./pages/AdminDonationsView"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const GuidePage = lazy(() => import("./pages/GuidePage"));
+const BrandPage = lazy(() => import("./pages/BrandPage"));
 const PublicProfilePage = lazy(() => import("./pages/PublicProfilePage"));
 const ApiDocsPage = lazy(() => import("./pages/ApiDocsPage"));
 const DeveloperPage = lazy(() => import("./pages/DeveloperPage"));
@@ -59,6 +60,7 @@ export default function AppRoutes() {
 					}
 				/>
 				<Route path="guide" element={<GuidePage />} />
+				<Route path="brand" element={<BrandPage />} />
 				<Route path="docs" element={<ApiDocsPage />} />
 				<Route
 					path="developer"

@@ -1,48 +1,66 @@
 # NeoAssets design system
 
 NeoAssets is a catalog: people browse thousands of games, compare media and
-ROM hashes, and review contributions. The interface should feel like a
-precise, quiet tool for a hobby that people care about, not like a game
-launcher or a marketing page. Content (box art, screenshots, logos) brings the
-color; the chrome stays neutral.
+ROM hashes, and review contributions. The interface should feel like a precise
+tool with an arcade spirit: neutral dark chrome, one bright cyan for actions,
+and a color per area of the catalog so the site reads at a glance. Box art,
+logos and screenshots still bring most of the color.
 
 All values live as CSS variables in `src/index.css` (`@theme` and
-`html.light`). Pages use the variable names and the utility classes (`card`,
-`btn-*`, `badge-*`, `input`), never raw hex values.
+`html.light`). Pages use the variable names, the utility classes (`card`,
+`btn-*`, `badge-*`, `input`) and the `tone-*` classes, never raw hex values.
+The public brand kit lives at `/app/brand` and its files in `public/brand`.
+
+## Brand
+
+- **Isotype:** an isometric cube made of 2x2 asset tiles per face, with the
+  top-right tile of the top face missing: the piece the community adds. Faces:
+  top `#7ff0ff`, left `#14a8cc`, right `#e25bd0`. It is used in color
+  (`components/Brand.tsx`, `public/neoassets-isotype.svg`) and reads down to
+  16px; a white version exists for photos.
+- **Wordmark:** "NEOASSETS" in Anta, uppercase, with "NEO" in the soft cyan
+  (deep cyan on light backgrounds).
+- Do not recolor, rotate or rearrange the cube, and do not add gradients,
+  shadows or outlines to the mark.
 
 ## Color
 
-One neutral scale, one brand blue for actions, one amber accent for ratings.
+| Token                        | Dark      | Light     | Role                                          |
+| ---------------------------- | --------- | --------- | --------------------------------------------- |
+| `--color-base-100`           | `#0b1016` | `#f4f6f9` | Page background                               |
+| `--color-base-200`           | `#121a23` | `#ffffff` | Surfaces: cards, sidebar, inputs on cards     |
+| `--color-base-300`           | `#22303e` | `#dbe1e9` | Borders, dividers, hover fill                 |
+| `--color-base-content`       | `#e6eaf0` | `#121821` | Text. Secondary text at 65%, hints at 50%     |
+| `--color-primary`            | `#22c5e8` | `#0a7a98` | Primary buttons, active states, focus ring    |
+| `--color-primary-content`    | `#06141a` | `#ffffff` | Text on a primary fill                        |
+| `--color-primary-soft`       | `#6fe3f5` | `#0a6f8a` | Links, "NEO", primary-tinted text             |
+| `--color-meta`               | `#4fd8f0` | `#0a6f8a` | Game metadata area                            |
+| `--color-sap`                | `#f07ad8` | `#a8308f` | System art packs area                         |
+| `--color-reward`             | `#ffd166` | `#94600a` | Rewards, XP, ratings (also `--color-accent`)  |
+| `--color-community`          | `#5be3a3` | `#177a4c` | Community, users, dashboard                   |
+| `--color-gold/silver/bronze` |           |           | First three places of a ranking (`rank-1..3`) |
+| `--color-success`            | `#3fae7b` | `#1d7f53` | Approved, complete                            |
+| `--color-warning`            | `#d9a03f` | `#9a6410` | Pending, warnings                             |
+| `--color-error`              | `#e2665e` | `#c2372e` | Rejected, destructive actions, errors         |
 
-| Token                  | Dark      | Light     | Role                                                           |
-| ---------------------- | --------- | --------- | -------------------------------------------------------------- |
-| `--color-base-100`     | `#0f1216` | `#f5f6f8` | Page background                                                |
-| `--color-base-200`     | `#161a20` | `#ffffff` | Surfaces: cards, sidebar, inputs on cards                      |
-| `--color-base-300`     | `#272d36` | `#dde1e6` | Borders, dividers, hover fill                                  |
-| `--color-base-content` | `#e4e7eb` | `#14181f` | Text. Secondary text is this color at 65%, hints at 50%        |
-| `--color-primary`      | `#2f74c8` | `#2f74c8` | Primary buttons, active navigation, focus ring, selected state |
-| `--color-primary-soft` | `#7fb0ec` | `#225aa0` | Links and primary-tinted text on the background                |
-| `--color-accent`       | `#d9a03f` | `#a66d0c` | Ratings (stars) only                                           |
-| `--color-success`      | `#3fae7b` | `#1d7f53` | Approved, complete                                             |
-| `--color-warning`      | `#d9a03f` | `#9a6410` | Pending, warnings                                              |
-| `--color-error`        | `#e2665e` | `#c2372e` | Rejected, destructive actions, errors                          |
-| `--color-info`         | `#7fb0ec` | `#225aa0` | Informational notes (same hue as links)                        |
-
-- The brand blue (`#4a90e2` in the logo) is darkened to `#2f74c8` for filled
-  buttons so white text reaches 4.6:1. Body text on both backgrounds is above
-  12:1; secondary text (65%) is above 6:1.
-- `--color-secondary` is kept for existing badges but maps to the neutral
-  scale; there is no second brand color.
-- No gradients on text or buttons, no glows, no glass. A flat color with a
-  1px border separates layers.
+- Contrast: dark text on the bright cyan button is 9.1:1; white on the light
+  theme's deep cyan is 4.9:1. Section colors are above 7:1 on dark surfaces
+  and above 4.9:1 on light ones.
+- **Tones.** `tone-meta`, `tone-sap`, `tone-reward`, `tone-community` and
+  `tone-primary` set `--tone`; `tone-chip` (tinted icon well), `tone-text` and
+  the sidebar links read it. A page gives an element its area color with one
+  class.
+- No gradients on text or buttons, no glass, no decorative glows. The one
+  backdrop effect is `art-backdrop`: a header behind which the page's own
+  artwork is blurred and darkened (game and pack pages, pack cards).
 
 ## Typography
 
-- **IBM Plex Sans** for the interface and text (400, 500, 600). It is
-  technical and readable at small sizes, which a dense catalog needs.
+- **Oxanium** (500, 600, 700) for headings (`h1`-`h3`, automatic) and headline
+  numbers (`font-display`). Squared and technical, a companion to Anta.
+- **Barlow** (400, 500, 600) for the interface and text.
 - **IBM Plex Mono** (400, 500) for hashes, sizes, ids and code.
-- **Anta** only for the NeoAssets wordmark. It is the brand face; used for
-  headings and body it read as a game skin and hurt legibility.
+- **Anta** only for the wordmark.
 
 | Step | Size / line height | Use                                    |
 | ---- | ------------------ | -------------------------------------- |
@@ -54,8 +72,7 @@ One neutral scale, one brand blue for actions, one amber accent for ratings.
 | 2xl  | 28 / 34            | Page titles                            |
 | 3xl  | 40 / 44            | Home headline only                     |
 
-Headings use weight 600 and a slight negative tracking (-0.01em). Body copy
-stays under 72 characters per line (`max-w-prose`).
+Body copy stays under 72 characters per line (`max-w-prose`).
 
 ## Spacing
 
@@ -65,38 +82,35 @@ padding on desktop and 16px on phones.
 
 ## Shape and depth
 
-- Radius: 6px for controls and badges (`rounded-md`), 10px for cards and
-  panels, full only for avatars and progress rings.
-- Shadows: none in the page. Overlays (dialogs, menus) use one shadow:
-  `0 16px 48px -12px rgb(0 0 0 / 0.45)`.
+- Radius: 6px for controls and badges, 10px for cards and panels, full only
+  for avatars, rank numbers and progress rings.
+- Shadows: none in the page. Overlays (dialogs, menus) use one shadow.
 - Cards lift on hover by changing the border to primary at 45%, without
   moving.
 
 ## Components
 
-- **Buttons.** Primary: blue fill, white text. Secondary/outline: surface fill,
-  1px border. Ghost: text only, surface on hover. Danger: error fill. All 6px
-  radius, 14px semibold text, a 2px primary focus ring offset by 2px, 50%
-  opacity when disabled. Heights: 32 (sm), 40 (default), 48 (lg).
-- **Links.** `--color-primary-soft`, underline on hover.
-- **Inputs and selects.** Background `base-100` inside cards, 1px border,
-  6px radius, primary border and ring on focus.
-- **Cards.** `base-200`, 1px `base-300` border, 10px radius.
-- **Badges.** 6px radius, tinted background (14% of the role color) with the
-  role color as text; neutral badges are `base-300` with body text. A
-  complete game shows a success badge, not a rainbow.
-- **Navigation.** The sidebar is a `base-200` surface with a right border.
-  Items are sentence case, 14px medium, secondary text color; the active item
-  gets a primary tint and a 2px primary bar on the left. Section labels are
-  12px, 50% text color, no tracking tricks.
-- **Footer.** Static at the end of the content, not pinned to the viewport.
+- **Buttons.** Primary: cyan fill with `primary-content` text. Secondary and
+  outline: surface fill, 1px border. Ghost: text only. Danger: error fill.
+  `btn-error`: quiet destructive (error text and border, filled on hover),
+  used instead of `btn-outline`. 2px focus ring, 50% opacity when disabled.
+  Heights: 32 (sm), 40 (default), 48 (lg).
+- **Navigation.** `base-200` sidebar. Each item's icon takes its area tone;
+  the active item gets the tone at 16% and a 2px bar on the left. The collapse
+  button is a fixed 36px square at the right of the brand row.
+- **Stat tiles.** `tone-chip` icon plus the number in `font-display` and
+  `tone-text`.
+- **Rankings.** Positions 1-3 use gold, silver and bronze.
+- **Home hero.** Headline with "NeoAssets" in soft cyan, next to a staggered
+  wall of the most scraped games' box art.
+- **Footer.** Static at the end of the content; links to the brand kit,
+  NeoStation, Discord and Patreon.
 - **Dialogs.** `Modal` with the overlay shadow, `base-200` panel, 10px radius.
 
 ## Imagery and icons
 
-- Box art, logos and screenshots are the visual content: shown at their aspect
-  ratio, on a `base-100` well, never cropped by decorative frames.
-- Icons: Lucide only, 16px in UI text and 20px in headers, stroke 1.75,
-  current text color. No emoji as icons.
+- Box art, logos and screenshots are shown at their aspect ratio, never
+  cropped by decorative frames.
+- Icons: Lucide only, 16px in UI text and 20px in headers, current text color
+  or the area tone. No emoji as icons.
 - Flags (flag-icons) only next to region names.
-- The page background is flat; no dot grids or radial glows.

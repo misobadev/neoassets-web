@@ -7,24 +7,29 @@
 
 @theme {
 	/* Typography */
-	--font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-sans: "Barlow", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+	/* Headings and headline numbers: squared, technical, a companion to Anta. */
+	--font-display: "Oxanium", "Barlow", ui-sans-serif, system-ui, sans-serif;
 	--font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 	--font-brand: "Anta", ui-sans-serif, system-ui, sans-serif;
 
 	/* Brand + semantic colors (dark default; light values in html.light) */
-	--color-primary: #2b6fe0;
-	--color-primary-soft: #7db6ff;
-	--color-accent: #d9a03f;
+	--color-primary: #22c5e8;
+	/* Text on a primary fill: dark on the bright cyan, white on the deep
+	   cyan of the light theme. */
+	--color-primary-content: #06141a;
+	--color-primary-soft: #6fe3f5;
+	--color-accent: #ffd166;
 	--color-success: #3fae7b;
 	--color-warning: #d9a03f;
 	--color-error: #e2665e;
-	--color-info: #7db6ff;
+	--color-info: #6fe3f5;
 	/* Section hues: each area of the catalog has its own color, used for its
 	   icons, stat numbers and active navigation (see the tone-* classes). */
-	--color-meta: #5aa9ff;
-	--color-sap: #b393ff;
-	--color-reward: #f0b34a;
-	--color-community: #45c98d;
+	--color-meta: #4fd8f0;
+	--color-sap: #f07ad8;
+	--color-reward: #ffd166;
+	--color-community: #5be3a3;
 	/* Podium */
 	--color-gold: #f0c24a;
 	--color-silver: #c3ccd8;
@@ -33,9 +38,9 @@
 	--color-secondary: #9aa3af;
 
 	/* Neutral scale */
-	--color-base-100: #0d1117;
-	--color-base-200: #151b23;
-	--color-base-300: #263040;
+	--color-base-100: #0b1016;
+	--color-base-200: #121a23;
+	--color-base-300: #22303e;
 	--color-base-content: #e6eaf0;
 
 	/* Radius and the single overlay shadow */
@@ -100,19 +105,21 @@ html.light {
 	--color-base-200: #ffffff;
 	--color-base-300: #dbe1e9;
 	--color-base-content: #121821;
-	--color-primary-soft: #1f62c4;
-	--color-meta: #1f62c4;
-	--color-sap: #6a45c9;
+	--color-primary: #0a7a98;
+	--color-primary-content: #ffffff;
+	--color-primary-soft: #0a6f8a;
+	--color-meta: #0a6f8a;
+	--color-sap: #a8308f;
 	--color-reward: #94600a;
 	--color-community: #177a4c;
 	--color-gold: #a87a06;
 	--color-silver: #66717f;
 	--color-bronze: #a5582a;
-	--color-accent: #a66d0c;
+	--color-accent: #94600a;
 	--color-success: #1d7f53;
 	--color-warning: #9a6410;
 	--color-error: #c2372e;
-	--color-info: #1f62c4;
+	--color-info: #0a6f8a;
 	--color-secondary: #5b6573;
 	--shadow-overlay: 0 16px 48px -12px rgb(15 18 22 / 0.25);
 	color-scheme: light;
@@ -121,6 +128,7 @@ html.light {
 h1,
 h2,
 h3 {
+	font-family: var(--font-display);
 	letter-spacing: -0.01em;
 }
 
@@ -132,21 +140,6 @@ h3 {
 html.light body {
 	background-color: var(--color-base-100);
 	color: var(--color-base-content);
-}
-
-/* NeoAssets isotype: renders the SVG as a mask filled with currentColor so it
-   follows the theme (light mark on dark, dark mark on light). */
-.isotype-mask {
-	display: inline-block;
-	background-color: currentColor;
-	-webkit-mask-image: url("/neoassets-isotype.svg");
-	mask-image: url("/neoassets-isotype.svg");
-	-webkit-mask-repeat: no-repeat;
-	mask-repeat: no-repeat;
-	-webkit-mask-position: center;
-	mask-position: center;
-	-webkit-mask-size: contain;
-	mask-size: contain;
 }
 
 html {
@@ -273,7 +266,7 @@ body {
 
 @utility btn-primary {
 	background-color: var(--color-primary);
-	color: #fff;
+	color: var(--color-primary-content);
 	border: 1px solid transparent;
 
 	&:hover {
@@ -441,7 +434,7 @@ body {
 @utility badge-solid-primary {
 	border-color: var(--color-primary);
 	background-color: var(--color-primary);
-	color: #fff;
+	color: var(--color-primary-content);
 }
 
 @utility badge-solid-secondary {
@@ -722,6 +715,7 @@ body {
 	align-items: center;
 	justify-content: center;
 	flex: 1;
+	min-height: 2.25rem;
 	padding: 0.5rem;
 	border-radius: var(--radius-control);
 	color: color-mix(in oklab, var(--color-base-content) 70%, transparent);
@@ -810,7 +804,7 @@ body {
 	padding: 0.5rem 0.75rem;
 	border-radius: var(--radius-control);
 	background-color: var(--color-primary);
-	color: #ffffff;
+	color: var(--color-primary-content);
 	font-size: 0.875rem;
 	font-weight: 600;
 	transition: background-color 0.15s ease;

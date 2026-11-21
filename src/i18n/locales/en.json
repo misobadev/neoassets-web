@@ -188,6 +188,7 @@
 		"loadingPacks": "Loading packs..."
 	},
 	"footer": {
+		"brandKit": "Brand kit",
 		"tagline": "NeoAssets - community-made visual styles."
 	},
 	"guide": {
@@ -1205,5 +1206,63 @@
 		"lastUsed": "Last used",
 		"never": "Never",
 		"delete": "Delete"
+	},
+	"brand": {
+		"title": "Brand kit",
+		"subtitle": "The NeoAssets logo, isotype, colors and typefaces. Use them to link to NeoAssets or to credit it in your frontend, theme or video.",
+		"logo": {
+			"title": "Logo",
+			"isotypeTitle": "The isotype",
+			"isotypeBody": "A cube made of asset tiles with one tile missing: the piece the community adds. It works in color down to 16px and in a single color on photos."
+		},
+		"files": {
+			"title": "Downloads",
+			"logoDark": "Logo for dark backgrounds",
+			"logoLight": "Logo for light backgrounds",
+			"logoWhite": "Logo in white",
+			"logoBlack": "Logo in black",
+			"isotypeBlack": "Isotype in black, for print and light single-color uses",
+			"isotype": "Isotype in color",
+			"isotypeWhite": "Isotype in white, for photos and dark images"
+		},
+		"colors": {
+			"title": "Colors",
+			"hint": "Click a color to copy its value.",
+			"copy": "Copy {{value}}",
+			"groups": {
+				"brand": "Brand",
+				"sections": "Sections",
+				"neutrals": "Neutrals"
+			},
+			"names": {
+				"primary": "Cyan",
+				"primarySoft": "Soft cyan",
+				"cubeTop": "Cube top",
+				"cubeLeft": "Cube left",
+				"cubeRight": "Magenta",
+				"meta": "Game metadata",
+				"sap": "System art packs",
+				"reward": "Rewards",
+				"community": "Community",
+				"background": "Background",
+				"surface": "Surface",
+				"border": "Border",
+				"text": "Text"
+			}
+		},
+		"type": {
+			"title": "Typefaces",
+			"display": "Headings and headline numbers.",
+			"anta": "The wordmark only.",
+			"sans": "Interface and text.",
+			"mono": "Hashes, sizes, ids and code."
+		},
+		"usage": {
+			"title": "Usage",
+			"space": "Leave clear space around the logo of at least half the isotype's width.",
+			"background": "Use the dark logo on dark backgrounds and the light logo on light ones; on photos, use the white isotype.",
+			"colors": "Do not recolor the cube or the wordmark, and do not add gradients, shadows or outlines.",
+			"shape": "Do not rotate, stretch or rearrange the tiles; the missing tile is part of the mark."
+		}
 	}
 }

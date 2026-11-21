@@ -186,7 +186,7 @@ export default function HomeView() {
 						</span>
 						<div className="min-w-0">
 							<dt className="text-xs text-[var(--color-base-content)]/60 truncate">{n.label}</dt>
-							<dd className="text-2xl font-semibold tabular-nums tone-text">
+							<dd className="font-display text-2xl font-semibold tabular-nums tone-text">
 								{n.value !== undefined ? n.value.toLocaleString() : "—"}
 							</dd>
 						</div>
