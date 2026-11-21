@@ -445,6 +445,7 @@
 			"subtitle": "Просматривайте системы и их игры. Фильтруйте по типу и ищите."
 		},
 		"allSystems": "Все системы",
+		"filterSystems": "Фильтр систем…",
 		"systemStats": "{{games}} игр · {{base}} базовых · {{hack}} хаков · {{homebrew}} хоумбрю · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} система",
 		"systemsCount_few": "{{count}} системы",

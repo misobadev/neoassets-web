@@ -439,6 +439,7 @@
 			"subtitle": "Jelajahi sistem dan game-nya. Filter berdasarkan tipe dan cari."
 		},
 		"allSystems": "Semua sistem",
+		"filterSystems": "Saring sistem…",
 		"systemStats": "{{games}} game · {{base}} base · {{hack}} hack · {{homebrew}} homebrew · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} sistem",
 		"systemsCount_other": "{{count}} sistem",

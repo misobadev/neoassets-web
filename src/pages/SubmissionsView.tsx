@@ -23,7 +23,7 @@ export default function SubmissionsView() {
 	const [packs, setPacks] = useState<Pack[] | null>(null);
 	const [packsTotal, setPacksTotal] = useState(0);
 	const [page, setPage] = useState(0);
-	const pageSize = 9;
+	const pageSize = 12;
 
 	// Approved packs are public: show them to everyone, guests included, sorted
 	// by downloads and paginated.

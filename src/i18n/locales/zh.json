@@ -439,6 +439,7 @@
 			"subtitle": "浏览系统及其游戏。按类型筛选并搜索。"
 		},
 		"allSystems": "所有系统",
+		"filterSystems": "筛选系统…",
 		"systemStats": "{{games}} 款游戏 · {{base}} 个正式版 · {{hack}} 个改版 · {{homebrew}} 个自制 · {{bootleg}} bootleg · {{aftermarket}} aftermarket",
 		"systemsCount_one": "{{count}} 个系统",
 		"systemsCount_other": "{{count}} 个系统",

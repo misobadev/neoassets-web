@@ -15,7 +15,6 @@ import {
 	Plus,
 	Search,
 	Server,
-	Tag,
 	Gamepad2,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -97,41 +96,34 @@ function CircularProgress({ pct, size = 40, stroke = 4 }: { pct: number; size?: 
 // SystemOption is one row in the system selector: name, counts and completion.
 function SystemOption({ system, active, onSelect }: { system: MetadataSystem; active: boolean; onSelect: () => void }) {
 	const { t } = useTranslation();
+	const pct = Math.round(system.metadata_pct ?? 0);
+	const color = completenessStroke(pct);
 	return (
 		<button
 			type="button"
 			onClick={onSelect}
-			className={`w-full text-left rounded-lg p-3 transition-colors ${active ? "bg-primary/10" : "hover:bg-base-300"}`}
+			className={`relative w-full text-left rounded-md px-3 py-2 flex items-center gap-2.5 transition-colors ${
+				active
+					? "bg-[color-mix(in_oklab,var(--tone)_16%,transparent)] before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-0.5 before:rounded-full before:bg-[var(--tone)]"
+					: "hover:bg-[var(--color-base-300)]/70"
+			}`}
 		>
-			<div className="flex items-center gap-3">
-				<div className="min-w-0 flex-1">
-					<p className="font-medium text-sm truncate flex items-center gap-1.5">
-						{system.virtual ? (
-							<Layers className="w-3.5 h-3.5 shrink-0 text-[var(--color-primary)]" />
-						) : null}
-						{system.name}
-					</p>
-					<p className="text-xs text-[var(--color-base-content)]/50 flex items-center gap-1.5 flex-wrap">
-						<span className="inline-flex items-center gap-1">
-							<Tag className="w-3 h-3" />
-							{system.total_games ?? 0}
-						</span>
-						<span className="text-[var(--color-base-content)]/40">·</span>
-						<span>
-							{t("metadata.abbr.base")} {system.base ?? 0}
-						</span>
-						<span className="text-[var(--color-base-content)]/40">·</span>
-						<span>
-							{t("metadata.abbr.hack")} {system.hack ?? 0}
-						</span>
-						<span className="text-[var(--color-base-content)]/40">·</span>
-						<span>
-							{t("metadata.abbr.homebrew")} {system.homebrew ?? 0}
-						</span>
-					</p>
-				</div>
-				<CircularProgress pct={system.metadata_pct ?? 0} size={36} stroke={3} />
-			</div>
+			<span className="min-w-0 flex-1">
+				<span className="flex items-center gap-1.5 text-sm font-medium truncate">
+					{system.virtual ? <Layers className="w-3.5 h-3.5 shrink-0 text-[var(--tone)]" /> : null}
+					<span className="truncate">{system.name}</span>
+				</span>
+				<span className="block text-[11px] text-[var(--color-base-content)]/50 tabular-nums">
+					{t("metadata.gamesCount", { count: system.total_games ?? 0 })}
+				</span>
+			</span>
+			<span
+				className="shrink-0 rounded-md px-1.5 py-0.5 font-display text-xs font-bold tabular-nums"
+				style={{ color, backgroundColor: `color-mix(in oklab, ${color} 14%, transparent)` }}
+				title={t("metadata.completePct", { pct })}
+			>
+				{pct}%
+			</span>
 		</button>
 	);
 }
@@ -264,7 +256,7 @@ function GameCard({ g }: { g: GameSummary }) {
 			onPointerMove={onMove}
 			onPointerLeave={onLeave}
 			style={style}
-			className="relative card card-hover holo-card card-tone tone-meta p-3 flex flex-col gap-3"
+			className="relative card card-hover holo-card card-tone-hover tone-meta p-3 flex flex-col gap-3"
 		>
 			<div className="flex items-start gap-3 relative z-[1]">
 				{g.cover ? (
@@ -382,6 +374,7 @@ export default function MetadataBrowse() {
 	const { systemId } = useParams<{ systemId: string }>();
 	const [systems, setSystems] = useState<MetadataSystem[] | null>(null);
 	const [menuOpen, setMenuOpen] = useState(false);
+	const [sysFilter, setSysFilter] = useState("");
 	const menuRef = useRef<HTMLDivElement>(null);
 
 	const [games, setGames] = useState<GameSummary[] | null>(null);
@@ -569,46 +562,61 @@ export default function MetadataBrowse() {
 				</button>
 
 				{menuOpen ? (
-					<div className="absolute z-30 left-0 right-0 mt-2 card shadow-xl max-h-[60vh] overflow-y-auto p-2">
-						<button
-							type="button"
-							onClick={() => goSystem("")}
-							className={`w-full text-left rounded-lg p-3 transition-colors ${!systemId ? "bg-primary/10" : "hover:bg-base-300"}`}
-						>
-							<div className="flex items-center gap-3">
-								<div className="min-w-0 flex-1">
-									<p className="font-medium text-sm">{t("metadata.allSystems")}</p>
-									<p className="text-xs text-[var(--color-base-content)]/50">
-										{systems ? t("metadata.systemsCount", { count: systems.length }) : "..."}
-									</p>
-								</div>
+					<div className="absolute z-30 left-0 right-0 mt-2 card tone-meta shadow-[var(--shadow-overlay)] max-h-[70vh] overflow-y-auto">
+						<div className="sticky top-0 z-[1] flex items-center gap-2 p-2 bg-[var(--color-base-200)] border-b border-[var(--color-base-300)]">
+							<div className="relative flex-1">
+								<Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-base-content)]/40" />
+								<input
+									className="input !py-1.5 text-sm pl-9 w-full"
+									placeholder={t("metadata.filterSystems")}
+									value={sysFilter}
+									onChange={(e) => setSysFilter(e.target.value)}
+									// eslint-disable-next-line jsx-a11y/no-autofocus
+									autoFocus
+								/>
 							</div>
-						</button>
-						{familyGroups.map((g) => (
-							<div
-								key={g.family}
-								className="mt-2 rounded-xl border border-[var(--color-base-300)] bg-[var(--color-base-200)]/50 p-2"
+							<button
+								type="button"
+								onClick={() => goSystem("")}
+								className={`btn btn-sm shrink-0 ${!systemId ? "btn-primary" : "btn-secondary"}`}
 							>
-								<div className="flex items-center justify-between px-1 pb-1">
-									<p className="text-xs font-semibold text-[var(--color-primary)]">
-										{kindLabel(g.family, t)}
-									</p>
-									<p className="text-[11px] text-[var(--color-base-content)]/40">
-										{t("metadata.systemsCount", { count: g.systems.length })}
-									</p>
-								</div>
-								<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
-									{g.systems.map((s) => (
-										<SystemOption
-											key={s.id}
-											system={s}
-											active={s.id === systemId}
-											onSelect={() => goSystem(s.id)}
-										/>
-									))}
-								</div>
-							</div>
-						))}
+								<Globe className="w-4 h-4" />
+								{t("metadata.allSystems")}
+							</button>
+						</div>
+						<div className="p-2 space-y-3">
+							{familyGroups.map((g) => {
+								const q = sysFilter.trim().toLowerCase();
+								const list = q ? g.systems.filter((s) => s.name.toLowerCase().includes(q)) : g.systems;
+								if (list.length === 0) return null;
+								return (
+									<section key={g.family}>
+										<div className="flex items-center gap-2 px-3 pb-1">
+											<p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--tone)]">
+												{kindLabel(g.family, t)}
+											</p>
+											<span
+												className="h-px flex-1 bg-[var(--color-base-300)]"
+												aria-hidden="true"
+											/>
+											<p className="text-[11px] text-[var(--color-base-content)]/40">
+												{list.length}
+											</p>
+										</div>
+										<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-0.5">
+											{list.map((s) => (
+												<SystemOption
+													key={s.id}
+													system={s}
+													active={s.id === systemId}
+													onSelect={() => goSystem(s.id)}
+												/>
+											))}
+										</div>
+									</section>
+								);
+							})}
+						</div>
 					</div>
 				) : null}
 			</div>
