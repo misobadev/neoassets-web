@@ -496,7 +496,20 @@ export default function SubmissionEditor({ basePack }: { basePack?: PackDetail }
 		setConfirmSubmit(false);
 		setProgress({ active: true, label: t("submissions.editor.preparing"), percent: null });
 		try {
-			await syncPackDonation();
+			// An admin who only changed the donation link has nothing to review:
+			// the link is saved on the pack and no empty contribution is created.
+			const donationSaved = await syncPackDonation();
+			if (
+				donationSaved &&
+				isContribution &&
+				!subId &&
+				!files.some((f) => f.isNew) &&
+				description.trim() === (basePack?.description || "").trim()
+			) {
+				setProgress({ active: false, label: "", percent: null });
+				setStatus({ text: t("submissions.editor.donationUpdated"), tone: "success" });
+				return;
+			}
 			const toUpload = files.filter((f) => f.blob && !f.objectKey);
 			const uploaded = [];
 			let i = 0;
