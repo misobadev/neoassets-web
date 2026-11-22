@@ -523,6 +523,7 @@
 			"noGames": "Game tidak ditemukan."
 		},
 		"scrapedTimes": "Di-scrape {{n}} kali",
+		"scrapesCount": "{{count}} scrape",
 		"kind": {
 			"arcade": "Arcade",
 			"computer": "Komputer",

@@ -523,6 +523,7 @@
 			"noGames": "未找到游戏。"
 		},
 		"scrapedTimes": "已抓取 {{n}} 次",
+		"scrapesCount": "{{count}} 次抓取",
 		"kind": {
 			"arcade": "街机",
 			"computer": "电脑",

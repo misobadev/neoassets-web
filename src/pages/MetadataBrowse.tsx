@@ -220,14 +220,14 @@ function GameCard({ g }: { g: GameSummary }) {
 	const [mx, setMx] = useState(0);
 	const [my, setMy] = useState(0);
 
-	// Detect when the game name is cut off (it wraps to two lines at most) so
-	// the full-name tooltip only shows for names that do not fit.
+	// Detect when the game name is cut off (it is kept to one line) so the
+	// full-name tooltip only shows for names that do not fit.
 	const nameRef = useRef<HTMLHeadingElement>(null);
 	const [nameClipped, setNameClipped] = useState(false);
 	useEffect(() => {
 		const el = nameRef.current;
 		if (!el) return;
-		const check = () => setNameClipped(el.scrollHeight > el.clientHeight + 1);
+		const check = () => setNameClipped(el.scrollWidth > el.clientWidth + 1);
 		check();
 		const ro = new ResizeObserver(check);
 		ro.observe(el);
@@ -247,6 +247,8 @@ function GameCard({ g }: { g: GameSummary }) {
 	};
 
 	const pct = completionPct(g);
+	const pctTitle = pct === 100 ? t("metadata.completed") : t("metadata.completion");
+	const pctClass = `shrink-0 rounded-md px-2 py-1 font-display text-sm font-bold leading-none tabular-nums ${pct === 100 ? "text-[var(--color-success)] bg-[color-mix(in_oklab,var(--color-success)_14%,transparent)]" : "text-[var(--color-warning)] bg-[color-mix(in_oklab,var(--color-warning)_14%,transparent)]"}`;
 	const style = { "--mx": mx, "--my": my } as React.CSSProperties;
 
 	return (
@@ -256,9 +258,9 @@ function GameCard({ g }: { g: GameSummary }) {
 			onPointerMove={onMove}
 			onPointerLeave={onLeave}
 			style={style}
-			className="relative card card-hover holo-card card-tone-hover tone-meta p-3 flex flex-col gap-3"
+			className="relative card card-hover holo-card card-tone-hover tone-meta p-3 flex"
 		>
-			<div className="flex items-start gap-3 relative z-[1]">
+			<div className="flex items-stretch gap-3 relative z-[1] w-full">
 				{g.cover ? (
 					<img
 						src={mediaUrl(g.cover, g.cover_updated)}
@@ -269,12 +271,9 @@ function GameCard({ g }: { g: GameSummary }) {
 				) : (
 					<div className="w-[4.5rem] aspect-[3/4] rounded-md bg-[var(--color-base-300)] shrink-0" />
 				)}
-				<div className="min-w-0 flex-1">
+				<div className="@container min-w-0 flex-1 flex flex-col">
 					<span className="group/name relative block min-w-0">
-						<h3
-							ref={nameRef}
-							className="font-display font-semibold text-lg leading-tight line-clamp-2 break-words"
-						>
+						<h3 ref={nameRef} className="font-display font-semibold text-base leading-tight truncate">
 							{g.name}
 						</h3>
 						{nameClipped ? (
@@ -285,82 +284,73 @@ function GameCard({ g }: { g: GameSummary }) {
 					</span>
 					<p className="flex items-center gap-2 mt-1 text-xs text-[var(--color-base-content)]/60">
 						{g.system_id ? (
-							<span className="rounded px-1.5 py-0.5 font-mono text-[10px] font-medium bg-[color-mix(in_oklab,var(--tone)_16%,transparent)] text-[var(--tone)]">
+							<span className="inline-flex h-5 items-center rounded px-1.5 font-mono text-[10px] font-medium leading-none bg-[color-mix(in_oklab,var(--tone)_16%,transparent)] text-[var(--tone)]">
 								{g.system_id.toUpperCase()}
 							</span>
 						) : null}
+						<span
+							className={`badge ${typeBadgeClass(g.type)} h-5 rounded px-1.5 py-0 text-[10px] leading-none`}
+						>
+							{t("metadata.type." + (g.type || "base"))}
+						</span>
 						{g.release_year ? <span>{g.release_year}</span> : null}
+						<span className={`ml-auto @min-[13rem]:hidden ${pctClass}`} title={pctTitle}>
+							{pct}%
+						</span>
 					</p>
-					<div className="flex items-center gap-2.5 mt-2.5 flex-wrap">
+					<div className="flex items-center gap-2.5 mt-2.5">
 						<MetaIcon label={textMetaTitle(t, g)} tone={textMetaTone(g)}>
-							<FileText className="w-3.5 h-3.5" />
+							<FileText className="w-4 h-4" />
 						</MetaIcon>
 						<MetaIcon
 							label={g.has_translations ? t("metadata.hasTranslations") : t("metadata.englishOnly")}
 							tone={g.has_translations ? "ok" : "none"}
 						>
-							<Languages className="w-3.5 h-3.5" />
+							<Languages className="w-4 h-4" />
 						</MetaIcon>
 						<MetaIcon
 							label={g.has_logo ? t("metadata.hasLogo") : t("metadata.noLogo")}
 							tone={g.has_logo ? "ok" : "none"}
 						>
-							<ImagePlus className="w-3.5 h-3.5" />
+							<ImagePlus className="w-4 h-4" />
 						</MetaIcon>
 						<MetaIcon
 							label={g.has_screenshot ? t("metadata.hasScreenshot") : t("metadata.noScreenshot")}
 							tone={g.has_screenshot ? "ok" : "none"}
 						>
-							<Image className="w-3.5 h-3.5" />
+							<Image className="w-4 h-4" />
 						</MetaIcon>
 						<MetaIcon
 							label={g.has_fanart ? t("metadata.hasFanart") : t("metadata.noFanart")}
 							tone={g.has_fanart ? "ok" : "none"}
 						>
-							<Images className="w-3.5 h-3.5" />
+							<Images className="w-4 h-4" />
 						</MetaIcon>
 						<MetaIcon
 							label={g.has_video ? t("metadata.hasVideo") : t("metadata.noVideo")}
 							tone={g.has_video ? "ok" : "none"}
 						>
-							<Clapperboard className="w-3.5 h-3.5" />
+							<Clapperboard className="w-4 h-4" />
 						</MetaIcon>
+						<span className={`ml-auto hidden @min-[13rem]:inline-flex ${pctClass}`} title={pctTitle}>
+							{pct}%
+						</span>
+					</div>
+					<div className="mt-auto pt-2.5 flex items-center gap-2">
+						<span
+							className="inline-flex min-w-0 items-center gap-1.5 whitespace-nowrap rounded-md bg-[var(--color-base-300)]/60 px-2 py-1 text-[var(--color-base-content)]/70"
+							title={t("metadata.scrapedTimes", { n: (g.scrapes ?? 0).toLocaleString() })}
+						>
+							<Download className="w-4 h-4 shrink-0 text-[var(--color-info)]" />
+							<span className="truncate text-xs font-medium tabular-nums">
+								{t("metadata.scrapesCount", { count: g.scrapes ?? 0 })}
+							</span>
+						</span>
+						<span className="ml-auto shrink-0 rounded-md bg-[color-mix(in_oklab,var(--color-reward)_14%,transparent)] px-1.5 py-0.5">
+							<RatingBadge rating={g.rating} />
+						</span>
 					</div>
 				</div>
-			</div>
-			<div className="flex items-center gap-3 border-t border-[var(--color-base-300)]/70 pt-2.5 relative z-[1]">
-				<span className={`badge badge-sm shrink-0 ${typeBadgeClass(g.type)}`}>
-					{t("metadata.type." + (g.type || "base"))}
-				</span>
-				<span
-					className="flex items-center gap-2 flex-1 min-w-0"
-					title={pct === 100 ? t("metadata.completed") : t("metadata.completion")}
-				>
-					<span
-						className="h-1.5 flex-1 rounded-full bg-[var(--color-base-300)] overflow-hidden"
-						aria-hidden="true"
-					>
-						<span
-							className={`block h-full rounded-full ${pct === 100 ? "bg-[var(--color-success)]" : "bg-[var(--color-warning)]"}`}
-							style={{ width: `${pct}%` }}
-						/>
-					</span>
-					<span
-						className={`font-display text-xs font-semibold tabular-nums ${pct === 100 ? "text-[var(--color-success)]" : "text-[var(--color-warning)]"}`}
-					>
-						{pct}%
-					</span>
-				</span>
-				<span className="shrink-0 rounded-md bg-[color-mix(in_oklab,var(--color-reward)_14%,transparent)] px-1.5 py-0.5">
-					<RatingBadge rating={g.rating} />
-				</span>
-				<span
-					className="inline-flex items-center gap-1 text-[11px] font-medium text-[var(--color-base-content)]/60 shrink-0"
-					title={t("metadata.scrapedTimes", { n: (g.scrapes ?? 0).toLocaleString() })}
-				>
-					<Download className="w-3.5 h-3.5" />
-					{(g.scrapes ?? 0).toLocaleString()}
-				</span>
 			</div>
 		</Link>
 	);
@@ -688,7 +678,7 @@ export default function MetadataBrowse() {
 				</p>
 			) : games ? (
 				<>
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+					<div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,21rem),1fr))] gap-3">
 						{games.map((g) => (
 							<GameCard key={g.id} g={g} />
 						))}

@@ -523,6 +523,7 @@
 			"noGames": "ゲームが見つかりません。"
 		},
 		"scrapedTimes": "{{n}} 回スクレイプ",
+		"scrapesCount": "{{count}} 回スクレイプ",
 		"kind": {
 			"arcade": "アーケード",
 			"computer": "コンピューター",
