@@ -533,6 +533,7 @@
 			"noGames": "Игры не найдены."
 		},
 		"scrapedTimes": "Скраплено {{n}} раз",
+		"scrapesCount": "{{count}} сканирований",
 		"kind": {
 			"arcade": "Аркада",
 			"computer": "Компьютеры",

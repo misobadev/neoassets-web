@@ -518,6 +518,7 @@
 			"noGames": "No games found."
 		},
 		"scrapedTimes": "Scraped {{n}} times",
+		"scrapesCount": "{{count}} scrapes",
 		"genres": {
 			"action": "Action",
 			"adventure": "Adventure",

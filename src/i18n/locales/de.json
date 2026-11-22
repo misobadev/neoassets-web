@@ -523,6 +523,7 @@
 			"noGames": "Keine Spiele gefunden."
 		},
 		"scrapedTimes": "{{n}}-mal gescrapt",
+		"scrapesCount": "{{count}} Scrapes",
 		"kind": {
 			"arcade": "Arcade",
 			"computer": "Computer",

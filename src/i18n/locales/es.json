@@ -506,6 +506,7 @@
 			"noGames": "No se encontraron juegos."
 		},
 		"scrapedTimes": "Scrapeado {{n}} veces",
+		"scrapesCount": "{{count}} scrapes",
 		"kind": {
 			"arcade": "Arcade",
 			"computer": "Computadoras",

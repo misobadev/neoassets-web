@@ -113,7 +113,7 @@ export default function SubmissionsView() {
 				) : (
 					<>
 						{renderPager()}
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+						<div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,18rem),1fr))] gap-3">
 							{packs.map((p) => {
 								const icons = (p.backgrounds || []).map((k) => `${CDN_BASE}/${k}`);
 								const contributed = signedIn && (p.contributors || []).includes(userUsername() || "");
@@ -148,42 +148,54 @@ export default function SubmissionsView() {
 												</span>
 											)}
 										</div>
-										<div className="p-3 space-y-2 flex-1 flex flex-col">
-											<div className="flex items-center justify-between gap-2">
-												<h3 className="font-display font-semibold text-base truncate">
-													{p.name}
-												</h3>
-												<span className="badge badge-success badge-sm shrink-0">
+										<div className="p-3 flex-1 flex flex-col">
+											<h3 className="font-display font-semibold text-base leading-tight truncate" title={p.name}>
+												{p.name}
+											</h3>
+											<p className="flex items-center gap-2 mt-1.5 min-w-0 text-xs text-[var(--color-base-content)]/60">
+												<span className="inline-flex h-5 shrink-0 items-center rounded px-1.5 font-mono text-[10px] font-medium leading-none bg-[color-mix(in_oklab,var(--color-success)_14%,transparent)] text-[var(--color-success)]">
 													v{p.version || "?"}
 												</span>
-											</div>
-											<p className="text-xs text-[var(--color-base-content)]/60 truncate -mt-1">
-												{t("submissions.byAuthor", { author: p.author })}
+												<span className="truncate">{t("submissions.byAuthor", { author: p.author })}</span>
 											</p>
-											<div className="flex items-center justify-between gap-2 pt-2 min-h-[2.75rem] border-t border-[var(--color-base-300)] mt-auto">
-												<div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--color-base-content)]/60 min-w-0">
-													<span className="flex items-center gap-1">
-														<Download className="w-3.5 h-3.5" />
-														{(p.downloads || 0).toLocaleString()}
-													</span>
-													<span className="flex items-center gap-1">
-														<Layers className="w-3.5 h-3.5" />
-														{p.systems_covered || 0}
-													</span>
+											{(p.contributions || 0) > 0 || contributed ? (
+												<div className="flex flex-wrap items-center gap-1.5 mt-2">
 													{(p.contributions || 0) > 0 ? (
-														<span className="badge badge-warning badge-sm">
-															{t("submissions.contributionCount", {
-																count: p.contributions,
-															})}
+														<span className="inline-flex h-5 items-center rounded px-1.5 text-[10px] font-medium leading-none bg-[color-mix(in_oklab,var(--color-warning)_14%,transparent)] text-[var(--color-warning)]">
+															{t("submissions.contributionCount", { count: p.contributions })}
 														</span>
 													) : null}
 													{contributed ? (
-														<span className="badge badge-success badge-sm">
+														<span className="inline-flex h-5 items-center rounded px-1.5 text-[10px] font-medium leading-none bg-[color-mix(in_oklab,var(--color-success)_14%,transparent)] text-[var(--color-success)]">
 															{t("submissions.contributedByYou")}
 														</span>
 													) : null}
 												</div>
-												<div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+											) : null}
+											<div className="@container mt-auto pt-3 min-h-11 flex items-center gap-2">
+												<span
+													className="inline-flex min-w-0 items-center gap-1.5 whitespace-nowrap rounded-md bg-[var(--color-base-300)]/60 px-2 py-1 text-[var(--color-base-content)]/70"
+													title={`${(p.downloads || 0).toLocaleString()} ${t("submissions.downloadsShort")}`}
+												>
+													<Download className="w-4 h-4 shrink-0 text-[var(--color-info)]" />
+													<span className="truncate text-xs font-medium tabular-nums">
+														{(p.downloads || 0).toLocaleString()}
+														<span className="hidden @min-[17rem]:inline"> {t("submissions.downloadsShort")}</span>
+													</span>
+												</span>
+												<span
+													className="inline-flex min-w-0 items-center gap-1.5 whitespace-nowrap rounded-md bg-[var(--color-base-300)]/60 px-2 py-1 text-[var(--color-base-content)]/70"
+													title={`${t("submissions.systemsCovered")}: ${p.systems_covered || 0}`}
+												>
+													<Layers className="w-4 h-4 shrink-0 text-[var(--tone)]" />
+													<span className="truncate text-xs font-medium tabular-nums">
+														<span className="@min-[17rem]:hidden">{p.systems_covered || 0}</span>
+														<span className="hidden @min-[17rem]:inline">
+															{t("metadata.systemsCount", { count: p.systems_covered || 0 })}
+														</span>
+													</span>
+												</span>
+												<div className="ml-auto shrink-0" onClick={(e) => e.stopPropagation()}>
 													<DonateButton url={p.donation_url} author={p.author} compact />
 												</div>
 											</div>
