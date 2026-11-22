@@ -149,20 +149,27 @@ export default function SubmissionsView() {
 											)}
 										</div>
 										<div className="p-3 flex-1 flex flex-col">
-											<h3 className="font-display font-semibold text-base leading-tight truncate" title={p.name}>
+											<h3
+												className="font-display font-semibold text-base leading-tight truncate"
+												title={p.name}
+											>
 												{p.name}
 											</h3>
 											<p className="flex items-center gap-2 mt-1.5 min-w-0 text-xs text-[var(--color-base-content)]/60">
 												<span className="inline-flex h-5 shrink-0 items-center rounded px-1.5 font-mono text-[10px] font-medium leading-none bg-[color-mix(in_oklab,var(--color-success)_14%,transparent)] text-[var(--color-success)]">
 													v{p.version || "?"}
 												</span>
-												<span className="truncate">{t("submissions.byAuthor", { author: p.author })}</span>
+												<span className="truncate">
+													{t("submissions.byAuthor", { author: p.author })}
+												</span>
 											</p>
 											{(p.contributions || 0) > 0 || contributed ? (
 												<div className="flex flex-wrap items-center gap-1.5 mt-2">
 													{(p.contributions || 0) > 0 ? (
 														<span className="inline-flex h-5 items-center rounded px-1.5 text-[10px] font-medium leading-none bg-[color-mix(in_oklab,var(--color-warning)_14%,transparent)] text-[var(--color-warning)]">
-															{t("submissions.contributionCount", { count: p.contributions })}
+															{t("submissions.contributionCount", {
+																count: p.contributions,
+															})}
 														</span>
 													) : null}
 													{contributed ? (
@@ -180,7 +187,10 @@ export default function SubmissionsView() {
 													<Download className="w-4 h-4 shrink-0 text-[var(--color-info)]" />
 													<span className="truncate text-xs font-medium tabular-nums">
 														{(p.downloads || 0).toLocaleString()}
-														<span className="hidden @min-[17rem]:inline"> {t("submissions.downloadsShort")}</span>
+														<span className="hidden @min-[17rem]:inline">
+															{" "}
+															{t("submissions.downloadsShort")}
+														</span>
 													</span>
 												</span>
 												<span
@@ -189,9 +199,13 @@ export default function SubmissionsView() {
 												>
 													<Layers className="w-4 h-4 shrink-0 text-[var(--tone)]" />
 													<span className="truncate text-xs font-medium tabular-nums">
-														<span className="@min-[17rem]:hidden">{p.systems_covered || 0}</span>
+														<span className="@min-[17rem]:hidden">
+															{p.systems_covered || 0}
+														</span>
 														<span className="hidden @min-[17rem]:inline">
-															{t("metadata.systemsCount", { count: p.systems_covered || 0 })}
+															{t("metadata.systemsCount", {
+																count: p.systems_covered || 0,
+															})}
 														</span>
 													</span>
 												</span>

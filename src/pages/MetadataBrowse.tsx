@@ -273,10 +273,7 @@ function GameCard({ g }: { g: GameSummary }) {
 				)}
 				<div className="@container min-w-0 flex-1 flex flex-col">
 					<span className="group/name relative block min-w-0">
-						<h3
-							ref={nameRef}
-							className="font-display font-semibold text-base leading-tight truncate"
-						>
+						<h3 ref={nameRef} className="font-display font-semibold text-base leading-tight truncate">
 							{g.name}
 						</h3>
 						{nameClipped ? (
