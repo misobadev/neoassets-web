@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { fetchConfig, type PublicConfig } from "../lib/api";
 import DonorBadge from "../components/DonorBadge";
 import { usePageMeta } from "../lib/seo";
+import { EXAMPLE_GAMES, exampleTime } from "../lib/scrapeEstimate";
 
 export default function GuidePage() {
 	const { t } = useTranslation();
@@ -27,8 +28,29 @@ export default function GuidePage() {
 	}
 
 	const daily = (threads: number) => threads * cfg.daily_games_per_thread;
+	const rpmPerThread = cfg.rpm_per_thread ?? 100;
+	const rate = (threads: number) => threads * rpmPerThread;
+	const time = (threads: number) =>
+		exampleTime(threads, rpmPerThread, cfg.daily_games_per_thread) ??
+		t("guide.progression.overQuota", { daily: daily(threads).toLocaleString() });
+	const examples = { n: EXAMPLE_GAMES.toLocaleString() };
 	const topRank = cfg.ranks[cfg.ranks.length - 1];
 	const maxThreads = topRank?.threads ?? cfg.admin_threads;
+
+	// What a donation changes for the same first-rank account.
+	const first = cfg.ranks[0];
+	const firstLabel = first ? t("guide.ranks." + first.rank, { defaultValue: first.rank }) : "";
+	const compareRows = first
+		? [
+				{ key: "guest", label: t("guide.tiers.guest.name"), threads: cfg.guest_threads },
+				{ key: "base", label: firstLabel, threads: first.threads },
+				...cfg.donor_tiers.map((d) => ({
+					key: d.status,
+					label: `${firstLabel} + ${t("donor." + d.status)}`,
+					threads: Math.min(first.threads + d.bonus_threads, maxThreads),
+				})),
+			]
+		: [];
 
 	const earn = [
 		{
@@ -87,7 +109,10 @@ export default function GuidePage() {
 					{t("guide.progression.title")}
 				</SectionTitle>
 				<p className="text-sm text-[var(--color-base-content)]/70">
-					{t("guide.progression.intro", { per: cfg.daily_games_per_thread.toLocaleString() })}
+					{t("guide.progression.intro", {
+						per: cfg.daily_games_per_thread.toLocaleString(),
+						rpm: rpmPerThread,
+					})}
 				</p>
 				<div className="overflow-x-auto">
 					<table className="w-full text-sm">
@@ -96,7 +121,9 @@ export default function GuidePage() {
 								<th className="py-2 pr-4">{t("guide.progression.colLevels")}</th>
 								<th className="py-2 pr-4">{t("guide.progression.colRank")}</th>
 								<th className="py-2 pr-4">{t("guide.progression.colThreads")}</th>
-								<th className="py-2">{t("guide.progression.colDaily")}</th>
+								<th className="py-2 pr-4">{t("guide.progression.colRate")}</th>
+								<th className="py-2 pr-4">{t("guide.progression.colDaily")}</th>
+								<th className="py-2">{t("guide.progression.colTime", examples)}</th>
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-[var(--color-base-300)]">
@@ -104,7 +131,9 @@ export default function GuidePage() {
 								<td className="py-2 pr-4 text-[var(--color-base-content)]/60">-</td>
 								<td className="py-2 pr-4">{t("guide.tiers.guest.name")}</td>
 								<td className="py-2 pr-4">{cfg.guest_threads}</td>
-								<td className="py-2">{daily(cfg.guest_threads).toLocaleString()}</td>
+								<td className="py-2 pr-4">{rate(cfg.guest_threads).toLocaleString()}</td>
+								<td className="py-2 pr-4">{daily(cfg.guest_threads).toLocaleString()}</td>
+								<td className="py-2 tabular-nums">{time(cfg.guest_threads)}</td>
 							</tr>
 							{cfg.ranks.map((r) => (
 								<tr key={r.rank}>
@@ -115,12 +144,17 @@ export default function GuidePage() {
 										{t("guide.ranks." + r.rank, { defaultValue: r.rank })}
 									</td>
 									<td className="py-2 pr-4">{r.threads}</td>
-									<td className="py-2">{daily(r.threads).toLocaleString()}</td>
+									<td className="py-2 pr-4">{rate(r.threads).toLocaleString()}</td>
+									<td className="py-2 pr-4">{daily(r.threads).toLocaleString()}</td>
+									<td className="py-2 tabular-nums">{time(r.threads)}</td>
 								</tr>
 							))}
 						</tbody>
 					</table>
 				</div>
+				<p className="text-xs text-[var(--color-base-content)]/50">
+					{t("guide.progression.timeNote", examples)}
+				</p>
 				<p className="text-xs text-[var(--color-base-content)]/50">{t("guide.progression.xpCurve")}</p>
 				<p className="text-xs text-[var(--color-base-content)]/50">
 					{t("guide.progression.adminNote", { threads: cfg.admin_threads })}
@@ -132,6 +166,44 @@ export default function GuidePage() {
 					{t("guide.donations.title")}
 				</SectionTitle>
 				<p className="text-sm text-[var(--color-base-content)]/70">{t("guide.donations.intro")}</p>
+				{compareRows.length > 0 ? (
+					<div className="space-y-2">
+						<p className="text-sm font-semibold">
+							{t("guide.donations.compareTitle", { rank: firstLabel, ...examples })}
+						</p>
+						<div className="overflow-x-auto">
+							<table className="w-full text-sm">
+								<thead>
+									<tr className="text-left text-xs uppercase tracking-wide text-[var(--color-base-content)]/50">
+										<th className="py-2 pr-4">{t("apiDocs.colAccount")}</th>
+										<th className="py-2 pr-4">{t("guide.progression.colThreads")}</th>
+										<th className="py-2 pr-4">{t("guide.progression.colRate")}</th>
+										<th className="py-2 pr-4">{t("guide.progression.colDaily")}</th>
+										<th className="py-2">{t("guide.progression.colTime", examples)}</th>
+									</tr>
+								</thead>
+								<tbody className="divide-y divide-[var(--color-base-300)]">
+									{compareRows.map((r) => (
+										<tr key={r.key}>
+											<td className="py-2 pr-4 font-medium">{r.label}</td>
+											<td className="py-2 pr-4 tabular-nums">{r.threads}</td>
+											<td className="py-2 pr-4 tabular-nums">
+												{rate(r.threads).toLocaleString()}
+											</td>
+											<td className="py-2 pr-4 tabular-nums">
+												{daily(r.threads).toLocaleString()}
+											</td>
+											<td className="py-2 tabular-nums">{time(r.threads)}</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+						<p className="text-xs text-[var(--color-base-content)]/50">
+							{t("guide.donations.compareNote")}
+						</p>
+					</div>
+				) : null}
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 					{cfg.donor_tiers.map((tier) => (
 						<div key={tier.status} className="card card-tone p-4 space-y-2">
