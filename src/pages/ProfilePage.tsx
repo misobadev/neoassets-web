@@ -14,6 +14,7 @@ import {
 	UserRound,
 } from "lucide-react";
 import CopyButton from "../components/CopyButton";
+import MaskedKeyCopy from "../components/MaskedKeyCopy";
 import DonorBadge from "../components/DonorBadge";
 import { toSafeBackground } from "../lib/image";
 import { uploadWithProgress } from "../lib/upload";
@@ -23,6 +24,7 @@ import {
 	createAPIKey,
 	deleteAPIKey,
 	fetchAPIKeys,
+	fetchAPIKeyValue,
 	fetchMe,
 	fetchRewards,
 	presignAvatarUpload,
@@ -500,9 +502,15 @@ export default function ProfilePage() {
 					<ul className="divide-y divide-[var(--color-base-300)]">
 						{activeKeys.map((key) => (
 							<li key={key.id} className="py-3 flex flex-wrap items-center gap-3">
-								<div className="min-w-0 flex-1">
+								<div className="min-w-0 flex-1 space-y-1.5">
 									<p className="font-medium truncate">{key.name}</p>
-									<p className="text-xs text-[var(--color-base-content)]/60">{key.prefix}...</p>
+									<MaskedKeyCopy
+										masked={key.masked || `${key.prefix}...`}
+										value={() => fetchAPIKeyValue(key.id)}
+										disabled={!key.copyable}
+										tooltip={key.copyable ? t("apiKeys.copy") : t("apiKeys.notCopyable")}
+										onError={(e) => setKeyMsg(e.message)}
+									/>
 									<p className="text-xs text-[var(--color-base-content)]/50">
 										{t("apiKeys.lastUsed")}: {formatDate(key.last_used_at, t("apiKeys.never"))}
 									</p>

@@ -43,6 +43,11 @@ export interface UserAPIKey {
 	user_id: string;
 	name: string;
 	prefix: string;
+	// Whether the full key can be fetched again to copy it (keys created before
+	// sealing cannot).
+	copyable: boolean;
+	// Display form showing only the start and end of the key.
+	masked: string;
 	last_used_at?: string | null;
 	revoked_at?: string | null;
 	created_at: string;
@@ -78,6 +83,11 @@ export function fetchAPIKeys(): Promise<UserAPIKey[]> {
 
 export function createAPIKey(body: { name: string }): Promise<CreatedUserAPIKey> {
 	return api<CreatedUserAPIKey>("/api/v1/auth/api-keys", { method: "POST", body });
+}
+
+// fetchAPIKeyValue returns the full plaintext of one of the user's keys.
+export function fetchAPIKeyValue(id: string): Promise<string> {
+	return api<{ key: string }>(`/api/v1/auth/api-keys/${id}/key`).then((d) => d.key);
 }
 
 export function deleteAPIKey(id: string): Promise<{ revoked: boolean }> {

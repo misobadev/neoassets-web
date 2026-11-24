@@ -1236,14 +1236,16 @@
 		"empty": "Noch keine API-Schlüssel.",
 		"name": "Name des Schlüssels",
 		"create": "API-Schlüssel erstellen",
-		"hint": "Der vollständige Schlüssel wird nur einmal direkt nach dem Erstellen angezeigt. Wenn Sie ihn verloren haben, erstellen Sie einen neuen.",
+		"hint": "Mit der Schaltfläche Kopieren kannst du den vollständigen Schlüssel jederzeit kopieren. Aus Sicherheitsgründen wird er nie angezeigt.",
 		"key": "API-Schlüssel",
-		"shownOnce": "Kopieren Sie diesen Schlüssel jetzt. Er wird nicht erneut angezeigt.",
+		"shownOnce": "Kopiere diesen Schlüssel jetzt; du kannst ihn später erneut aus der Liste kopieren.",
 		"saved": "Ich habe es gespeichert",
 		"confirmDelete": "API-Schlüssel \"{{name}}\" löschen? Dies kann nicht rückgängig gemacht werden.",
 		"lastUsed": "Zuletzt verwendet",
 		"never": "Nie",
-		"delete": "Löschen"
+		"delete": "Löschen",
+		"copy": "Vollständigen Schlüssel kopieren",
+		"notCopyable": "Dieser Schlüssel wurde erstellt, bevor Schlüssel erneut kopiert werden konnten. Erstelle einen neuen."
 	},
 	"adminMenu": {
 		"developerBody": "Entwickler-Apps und API-Schlüssel mit ihrer Scraping-Nutzung.",

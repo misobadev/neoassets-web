@@ -1236,14 +1236,16 @@
 		"empty": "暂无 API 密钥。",
 		"name": "密钥名称",
 		"create": "创建 API 密钥",
-		"hint": "完整密钥仅在创建后显示一次。如果丢失，请新建一个。",
+		"hint": "你可以随时通过“复制”按钮复制完整密钥。出于安全考虑，密钥不会显示在屏幕上。",
 		"key": "API 密钥",
-		"shownOnce": "立即复制此密钥。它将不再显示。",
+		"shownOnce": "请立即复制此密钥；之后也可以在列表中再次复制。",
 		"saved": "我已保存",
 		"confirmDelete": "删除 API 密钥“{{name}}”？此操作无法撤销。",
 		"lastUsed": "最后使用",
 		"never": "从未",
-		"delete": "删除"
+		"delete": "删除",
+		"copy": "复制完整密钥",
+		"notCopyable": "此密钥创建于支持再次复制之前，请创建新的密钥。"
 	},
 	"adminMenu": {
 		"developerBody": "开发者应用和 API 密钥及其抓取使用情况。",

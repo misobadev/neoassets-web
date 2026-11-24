@@ -1236,14 +1236,16 @@
 		"empty": "Aucune clé API pour l'instant.",
 		"name": "Nom de la clé",
 		"create": "Créer une clé API",
-		"hint": "La clé complète n'est affichée qu'une seule fois, juste après sa création. Si vous l'avez perdue, créez-en une nouvelle.",
+		"hint": "Vous pouvez copier la clé complète à tout moment avec le bouton Copier. Par sécurité, elle n'est jamais affichée à l'écran.",
 		"key": "Clé API",
-		"shownOnce": "Copiez cette clé maintenant. Elle ne sera plus affichée.",
+		"shownOnce": "Copiez cette clé maintenant ; vous pourrez la recopier plus tard depuis la liste.",
 		"saved": "Je l'ai enregistrée",
 		"confirmDelete": "Supprimer la clé API \"{{name}}\" ? Cette action est irréversible.",
 		"lastUsed": "Dernière utilisation",
 		"never": "Jamais",
-		"delete": "Supprimer"
+		"delete": "Supprimer",
+		"copy": "Copier la clé complète",
+		"notCopyable": "Cette clé a été créée avant que les clés puissent être recopiées. Créez-en une nouvelle."
 	},
 	"adminMenu": {
 		"developerBody": "Applications développeur et clés API, avec leur utilisation du scraping.",
