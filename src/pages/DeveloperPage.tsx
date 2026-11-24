@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import SectionTitle from "../components/ui/SectionTitle";
 import PageTitle from "../components/ui/PageTitle";
-import { Gauge, KeyRound, Plus, RotateCw, Trash2 } from "lucide-react";
+import { Gauge, KeyRound, Plus, RotateCw, Trash2, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import CopyButton from "../components/CopyButton";
 import {
 	createDeveloperApp,
 	deleteDeveloperApp,
+	fetchConfig,
 	fetchDeveloperApps,
 	rotateDeveloperApp,
 	type DeveloperApp,
@@ -26,6 +28,7 @@ export default function DeveloperPage() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [revealed, setRevealed] = useState<Revealed | null>(null);
+	const [guestThreads, setGuestThreads] = useState(2);
 
 	const [appName, setAppName] = useState("");
 	const [appDesc, setAppDesc] = useState("");
@@ -46,6 +49,12 @@ export default function DeveloperPage() {
 	useEffect(() => {
 		void load();
 	}, [load]);
+
+	useEffect(() => {
+		fetchConfig()
+			.then((c) => setGuestThreads(c.guest_threads))
+			.catch(() => {});
+	}, []);
 
 	const handleCreateApp = async () => {
 		if (!appName.trim()) return;
@@ -214,11 +223,24 @@ export default function DeveloperPage() {
 				)}
 			</section>
 
+			<section className="card p-6 space-y-2 tone-primary">
+				<SectionTitle icon={Users} className="">
+					{t("developer.limitsTitle")}
+				</SectionTitle>
+				<p className="text-sm text-[var(--color-base-content)]/70">
+					{t("developer.limitsBody", { threads: guestThreads })}
+				</p>
+				<Link to="/app/docs" className="link link-primary text-sm">
+					{t("developer.limitsLink")}
+				</Link>
+			</section>
+
 			<section className="card p-6 space-y-3">
 				<SectionTitle icon={Gauge} className="">
 					{t("developer.statsTitle")}
 				</SectionTitle>
 				<p className="text-xs text-[var(--color-base-content)]/60">{t("developer.softnameHint")}</p>
+				<p className="text-xs text-[var(--color-base-content)]/60">{t("developer.statsHint")}</p>
 				{loading ? (
 					<p className="text-sm text-[var(--color-base-content)]/60">{t("common.loading")}</p>
 				) : (

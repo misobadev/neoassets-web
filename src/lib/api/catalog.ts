@@ -17,6 +17,8 @@ export interface PublicConfig {
 	guest_threads: number;
 	admin_threads: number;
 	daily_games_per_thread: number;
+	// Requests per minute per thread (an account gets threads * this).
+	rpm_per_thread?: number;
 	points: {
 		text_metadata: number;
 		image_metadata: number;
