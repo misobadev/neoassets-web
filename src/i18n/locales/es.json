@@ -1260,14 +1260,16 @@
 		"empty": "Aún no hay claves API.",
 		"name": "Nombre de la clave",
 		"create": "Crear clave API",
-		"hint": "La clave completa solo se muestra una vez, justo al crearla. Si la perdiste, crea una nueva.",
+		"hint": "Puedes copiar la clave completa cuando quieras con el botón Copiar. Por seguridad no se muestra en pantalla.",
 		"key": "Clave API",
-		"shownOnce": "Copia esta clave ahora. No se volverá a mostrar.",
+		"shownOnce": "Copia esta clave ahora; después podrás volver a copiarla desde la lista.",
 		"saved": "Lo guardé",
 		"confirmDelete": "¿Eliminar la clave API \"{{name}}\"? Esta acción no se puede deshacer.",
 		"lastUsed": "Último uso",
 		"never": "Nunca",
-		"delete": "Eliminar"
+		"delete": "Eliminar",
+		"copy": "Copiar la clave completa",
+		"notCopyable": "Esta clave se creó antes de poder copiarse de nuevo. Crea una nueva."
 	},
 	"brand": {
 		"title": "Kit de marca",

@@ -1236,14 +1236,16 @@
 		"empty": "Belum ada kunci API.",
 		"name": "Nama kunci",
 		"create": "Buat kunci API",
-		"hint": "Kunci lengkap hanya ditampilkan sekali, tepat setelah dibuat. Jika hilang, buat yang baru.",
+		"hint": "Kamu dapat menyalin kunci lengkap kapan saja dengan tombol Salin. Demi keamanan, kunci tidak pernah ditampilkan di layar.",
 		"key": "Kunci API",
-		"shownOnce": "Salin kunci ini sekarang. Tidak akan ditampilkan lagi.",
+		"shownOnce": "Salin kunci ini sekarang; nanti kamu bisa menyalinnya lagi dari daftar.",
 		"saved": "Saya sudah menyimpannya",
 		"confirmDelete": "Hapus kunci API \"{{name}}\"? Tindakan ini tidak dapat dibatalkan.",
 		"lastUsed": "Terakhir digunakan",
 		"never": "Tidak pernah",
-		"delete": "Hapus"
+		"delete": "Hapus",
+		"copy": "Salin kunci lengkap",
+		"notCopyable": "Kunci ini dibuat sebelum kunci bisa disalin ulang. Buat kunci baru."
 	},
 	"adminMenu": {
 		"developerBody": "Aplikasi developer dan kunci API, beserta penggunaan scraping-nya.",

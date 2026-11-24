@@ -1236,14 +1236,16 @@
 		"empty": "Nessuna chiave API.",
 		"name": "Nome della chiave",
 		"create": "Crea chiave API",
-		"hint": "La chiave completa viene mostrata una sola volta, subito dopo la creazione. Se l'hai persa, creane una nuova.",
+		"hint": "Puoi copiare la chiave completa in qualsiasi momento con il pulsante Copia. Per sicurezza non viene mai mostrata a schermo.",
 		"key": "Chiave API",
-		"shownOnce": "Copia questa chiave ora. Non verrà più mostrata.",
+		"shownOnce": "Copia questa chiave ora; potrai copiarla di nuovo in seguito dall'elenco.",
 		"saved": "L'ho salvata",
 		"confirmDelete": "Eliminare la chiave API \"{{name}}\"? Questa azione è irreversibile.",
 		"lastUsed": "Ultimo utilizzo",
 		"never": "Mai",
-		"delete": "Elimina"
+		"delete": "Elimina",
+		"copy": "Copia la chiave completa",
+		"notCopyable": "Questa chiave è stata creata prima che fosse possibile copiarla di nuovo. Creane una nuova."
 	},
 	"adminMenu": {
 		"developerBody": "App sviluppatore e chiavi API, con il loro uso dello scraping.",

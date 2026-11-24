@@ -1260,14 +1260,16 @@
 		"empty": "No API keys yet.",
 		"name": "Key name",
 		"create": "Create API key",
-		"hint": "The full key is only shown once, right after creation. If you lost it, create a new one.",
+		"hint": "You can copy the full key at any time with the Copy button. For safety it is never shown on screen.",
 		"key": "API key",
-		"shownOnce": "Copy this key now. It will not be shown again.",
+		"shownOnce": "Copy this key now; you can copy it again later from the list.",
 		"saved": "I saved it",
 		"confirmDelete": "Delete API key \"{{name}}\"? This cannot be undone.",
 		"lastUsed": "Last used",
 		"never": "Never",
-		"delete": "Delete"
+		"delete": "Delete",
+		"copy": "Copy the full key",
+		"notCopyable": "This key was created before keys could be copied again. Create a new one."
 	},
 	"brand": {
 		"title": "Brand kit",
