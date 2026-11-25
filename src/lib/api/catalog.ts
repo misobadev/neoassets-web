@@ -16,9 +16,12 @@ export async function fetchSystems(): Promise<SystemMeta[]> {
 export interface PublicConfig {
 	guest_threads: number;
 	admin_threads: number;
-	daily_games_per_thread: number;
 	// Requests per minute per thread (an account gets threads * this).
 	rpm_per_thread?: number;
+	// Requests per minute per guest thread (lower than a user's).
+	guest_rpm_per_thread?: number;
+	// Always true: scraping has no daily limit.
+	daily_unlimited?: boolean;
 	points: {
 		text_metadata: number;
 		image_metadata: number;
@@ -41,4 +44,18 @@ export interface PublicConfig {
 
 export function fetchConfig(): Promise<PublicConfig> {
 	return api<PublicConfig>("/api/v1/config");
+}
+
+// ScrapeStatus is the live, public state of the scraping API: requests in the
+// last minute, open threads (requests in progress or waiting) against their
+// caps, and the scrapers active in the last few minutes.
+export interface ScrapeStatus {
+	requests_per_minute: number;
+	open_threads: { users: number; users_max: number; guests: number; guests_max: number };
+	scrapers: { users: number; guests: number };
+	updated_at: string;
+}
+
+export function fetchScrapeStatus(): Promise<ScrapeStatus> {
+	return api<ScrapeStatus>("/api/v1/scrape/status");
 }

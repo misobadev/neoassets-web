@@ -10,7 +10,8 @@ export interface Rewards {
 	donor_status: string;
 	donor_bonus_threads: number;
 	xp_bonus_pct: number;
-	daily_games: number;
+	// Requests per minute (threads * the per-thread rate). No daily limit.
+	rate_per_minute: number;
 	level_xp: number;
 	next_level_xp: number;
 	progress_pct: number;

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { fetchConfig, type PublicConfig } from "../lib/api";
 import DonorBadge from "../components/DonorBadge";
 import { usePageMeta } from "../lib/seo";
-import { EXAMPLE_GAMES, exampleTime } from "../lib/scrapeEstimate";
+import { EXAMPLE_GAMES, exampleTime, ratePerMinute } from "../lib/scrapeEstimate";
 
 export default function GuidePage() {
 	const { t } = useTranslation();
@@ -27,12 +27,9 @@ export default function GuidePage() {
 		return <p className="text-sm text-[var(--color-base-content)]/50 py-10 text-center">{t("common.loading")}</p>;
 	}
 
-	const daily = (threads: number) => threads * cfg.daily_games_per_thread;
-	const rpmPerThread = cfg.rpm_per_thread ?? 100;
-	const rate = (threads: number) => threads * rpmPerThread;
-	const time = (threads: number) =>
-		exampleTime(threads, rpmPerThread, cfg.daily_games_per_thread) ??
-		t("guide.progression.overQuota", { daily: daily(threads).toLocaleString() });
+	// Requests per minute: threads times the per-thread rate (lower for guests).
+	const rate = (threads: number, guest = false) => ratePerMinute(threads, guest, cfg);
+	const time = (threads: number, guest = false) => exampleTime(threads, rate(threads, guest));
 	const examples = { n: EXAMPLE_GAMES.toLocaleString() };
 	const topRank = cfg.ranks[cfg.ranks.length - 1];
 	const maxThreads = topRank?.threads ?? cfg.admin_threads;
@@ -110,8 +107,8 @@ export default function GuidePage() {
 				</SectionTitle>
 				<p className="text-sm text-[var(--color-base-content)]/70">
 					{t("guide.progression.intro", {
-						per: cfg.daily_games_per_thread.toLocaleString(),
-						rpm: rpmPerThread,
+						rpm: ratePerMinute(1, false, cfg),
+						guestRpm: ratePerMinute(1, true, cfg),
 					})}
 				</p>
 				<div className="overflow-x-auto">
@@ -122,7 +119,6 @@ export default function GuidePage() {
 								<th className="py-2 pr-4">{t("guide.progression.colRank")}</th>
 								<th className="py-2 pr-4">{t("guide.progression.colThreads")}</th>
 								<th className="py-2 pr-4">{t("guide.progression.colRate")}</th>
-								<th className="py-2 pr-4">{t("guide.progression.colDaily")}</th>
 								<th className="py-2">{t("guide.progression.colTime", examples)}</th>
 							</tr>
 						</thead>
@@ -131,9 +127,8 @@ export default function GuidePage() {
 								<td className="py-2 pr-4 text-[var(--color-base-content)]/60">-</td>
 								<td className="py-2 pr-4">{t("guide.tiers.guest.name")}</td>
 								<td className="py-2 pr-4">{cfg.guest_threads}</td>
-								<td className="py-2 pr-4">{rate(cfg.guest_threads).toLocaleString()}</td>
-								<td className="py-2 pr-4">{daily(cfg.guest_threads).toLocaleString()}</td>
-								<td className="py-2 tabular-nums">{time(cfg.guest_threads)}</td>
+								<td className="py-2 pr-4">{rate(cfg.guest_threads, true).toLocaleString()}</td>
+								<td className="py-2 tabular-nums">{time(cfg.guest_threads, true)}</td>
 							</tr>
 							{cfg.ranks.map((r) => (
 								<tr key={r.rank}>
@@ -145,7 +140,6 @@ export default function GuidePage() {
 									</td>
 									<td className="py-2 pr-4">{r.threads}</td>
 									<td className="py-2 pr-4">{rate(r.threads).toLocaleString()}</td>
-									<td className="py-2 pr-4">{daily(r.threads).toLocaleString()}</td>
 									<td className="py-2 tabular-nums">{time(r.threads)}</td>
 								</tr>
 							))}
@@ -178,7 +172,6 @@ export default function GuidePage() {
 										<th className="py-2 pr-4">{t("apiDocs.colAccount")}</th>
 										<th className="py-2 pr-4">{t("guide.progression.colThreads")}</th>
 										<th className="py-2 pr-4">{t("guide.progression.colRate")}</th>
-										<th className="py-2 pr-4">{t("guide.progression.colDaily")}</th>
 										<th className="py-2">{t("guide.progression.colTime", examples)}</th>
 									</tr>
 								</thead>
@@ -188,12 +181,9 @@ export default function GuidePage() {
 											<td className="py-2 pr-4 font-medium">{r.label}</td>
 											<td className="py-2 pr-4 tabular-nums">{r.threads}</td>
 											<td className="py-2 pr-4 tabular-nums">
-												{rate(r.threads).toLocaleString()}
+												{rate(r.threads, r.key === "guest").toLocaleString()}
 											</td>
-											<td className="py-2 pr-4 tabular-nums">
-												{daily(r.threads).toLocaleString()}
-											</td>
-											<td className="py-2 tabular-nums">{time(r.threads)}</td>
+											<td className="py-2 tabular-nums">{time(r.threads, r.key === "guest")}</td>
 										</tr>
 									))}
 								</tbody>

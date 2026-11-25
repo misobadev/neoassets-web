@@ -17,6 +17,7 @@ import {
 import { useTranslation } from "react-i18next";
 import Avatar from "../components/Avatar";
 import StatTile from "../components/ui/StatTile";
+import ScrapeStatusPanel from "../components/ScrapeStatusPanel";
 import {
 	cdnUrl,
 	fetchDashboard,
@@ -209,6 +210,9 @@ export default function HomeView() {
 					/>
 				))}
 			</div>
+
+			{/* Live load of the scraping API. */}
+			<ScrapeStatusPanel />
 
 			{/* The two catalogs, each shown with what it actually holds. */}
 			<section aria-labelledby="home-catalog">
