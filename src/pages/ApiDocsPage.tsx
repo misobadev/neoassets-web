@@ -518,6 +518,7 @@ curl "${BASE_URL}/api/v1/scrape/games?group=mame-fbneo&name=sfa3.zip"`}</Code>
   "subject": "user",
   "client": { "id": "nsapp_...", "name": "My Scraper" },
   "user": { "username": "miguel", "threads": 4 },
+  "threads": 4,
   "quota": { "daily_limit": 4000, "used": 123, "remaining": 3877,
              "resets_at": "2026-11-25T00:00:00Z" }
 }`}</Code>
