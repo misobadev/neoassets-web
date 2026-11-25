@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { exampleTime, formatDuration, rateBurst, scrapeSeconds } from "./scrapeEstimate";
+import { exampleTime, formatDuration, ratePerMinute, rateBurst, scrapeSeconds } from "./scrapeEstimate";
 
 describe("scrape estimates", () => {
 	it("bursts about five seconds of the rate, never fewer than the threads", () => {
@@ -21,11 +21,16 @@ describe("scrape estimates", () => {
 		expect(formatDuration(3900)).toBe("~1 h 05 min");
 	});
 
-	it("has no example time when the daily quota is too small", () => {
-		expect(exampleTime(1, 100, 500)).toBeNull(); // 500/day < EXAMPLE_GAMES
-		expect(exampleTime(1, 100, 1000)).toBe("~9 min 55 s"); // a guest
-		expect(exampleTime(2, 100, 1000)).toBe("~4 min 55 s"); // Novice
-		expect(exampleTime(6, 100, 1000)).toBe("~1 min 35 s"); // Novice + monthly
-		expect(exampleTime(20, 100, 1000)).toBe("~25 s"); // Legend
+	it("rates are threads times the per-thread rate, lower for guests", () => {
+		expect(ratePerMinute(1, true)).toBe(30);
+		expect(ratePerMinute(2, false)).toBe(120);
+		expect(ratePerMinute(20, false, { rpm_per_thread: 50 })).toBe(1000);
+		expect(ratePerMinute(1, true, { guest_rpm_per_thread: 20 })).toBe(20);
+	});
+
+	it("gives every account an example time (no daily limit)", () => {
+		expect(exampleTime(1, ratePerMinute(1, true))).toBe("~33 min 16 s"); // a guest
+		expect(exampleTime(2, ratePerMinute(2, false))).toBe("~8 min 15 s"); // Novice
+		expect(exampleTime(20, ratePerMinute(20, false))).toBe("~45 s"); // Legend
 	});
 });

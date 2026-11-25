@@ -2,9 +2,26 @@
 // the rewards guide. They mirror the backend rate limiter
 // (internal/services/scrape_service.go in neoassets-service).
 
-// EXAMPLE_GAMES is the library size used in every time estimate: a guest's
-// whole daily quota, so every account (guests included) gets a time.
+// EXAMPLE_GAMES is the library size used in every time estimate.
 export const EXAMPLE_GAMES = 1000;
+
+// DEFAULT_RPM_PER_THREAD and DEFAULT_GUEST_RPM_PER_THREAD mirror the backend
+// defaults, used until the public config loads.
+export const DEFAULT_RPM_PER_THREAD = 60;
+export const DEFAULT_GUEST_RPM_PER_THREAD = 30;
+
+// ratePerMinute is an account's requests per minute: its threads times the
+// per-thread rate (lower for guests).
+export function ratePerMinute(
+	threads: number,
+	guest: boolean,
+	cfg?: { rpm_per_thread?: number; guest_rpm_per_thread?: number } | null,
+): number {
+	const perThread = guest
+		? (cfg?.guest_rpm_per_thread ?? DEFAULT_GUEST_RPM_PER_THREAD)
+		: (cfg?.rpm_per_thread ?? DEFAULT_RPM_PER_THREAD);
+	return threads * perThread;
+}
 
 // rateBurst mirrors the backend: about five seconds of the rate, never fewer
 // than the threads.
@@ -32,10 +49,9 @@ export function formatDuration(seconds: number): string {
 	return `~${s} s`;
 }
 
-// exampleTime is the formatted time an account with `threads` needs for
-// EXAMPLE_GAMES lookups, or null when its daily quota is smaller than that
-// (it can't finish in one day).
-export function exampleTime(threads: number, rpmPerThread: number, dailyPerThread: number): string | null {
-	if (threads * dailyPerThread < EXAMPLE_GAMES) return null;
-	return formatDuration(scrapeSeconds(EXAMPLE_GAMES, threads * rpmPerThread, threads));
+// exampleTime is the formatted time an account with `threads` and `rpm`
+// requests per minute needs for EXAMPLE_GAMES lookups. There is no daily
+// limit, so every account finishes.
+export function exampleTime(threads: number, rpm: number): string {
+	return formatDuration(scrapeSeconds(EXAMPLE_GAMES, rpm, threads));
 }

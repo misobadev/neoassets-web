@@ -381,10 +381,10 @@ export default function ProfilePage() {
 								</div>
 								<div>
 									<p className="font-display text-2xl font-bold text-[var(--color-meta)]">
-										{rewards.daily_games.toLocaleString()}
+										{rewards.rate_per_minute.toLocaleString()}
 									</p>
 									<p className="text-[11px] text-[var(--color-base-content)]/50">
-										{t("profile.gamesPerDay")}
+										{t("profile.requestsPerMinute")}
 									</p>
 								</div>
 							</div>

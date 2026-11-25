@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import CopyButton from "../components/CopyButton";
 import { usePageMeta } from "../lib/seo";
 import { fetchConfig, type PublicConfig } from "../lib/api";
-import { EXAMPLE_GAMES, exampleTime } from "../lib/scrapeEstimate";
+import { EXAMPLE_GAMES, exampleTime, ratePerMinute } from "../lib/scrapeEstimate";
 
 const BASE_URL = "https://api.neoassets.dev";
 
@@ -116,7 +116,8 @@ function ParamTable({ params }: { params: Param[] }) {
 
 // The backend defaults, shown until /api/v1/config answers (or if it fails),
 // so the limits table is never empty. The live config replaces them.
-const DEFAULT_RPM_PER_THREAD = 100;
+const DEFAULT_USER_OPEN_THREADS = 8192;
+const DEFAULT_GUEST_OPEN_THREADS = 512;
 const DEFAULT_RANKS: PublicConfig["ranks"] = [
 	["novice", 1, 2],
 	["amateur", 11, 4],
@@ -153,23 +154,30 @@ export default function ApiDocsPage() {
 			.catch(() => {});
 	}, []);
 
-	const perThread = cfg?.daily_games_per_thread ?? 1000;
-	const rpmPerThread = cfg?.rpm_per_thread ?? DEFAULT_RPM_PER_THREAD;
 	const guestThreads = cfg?.guest_threads ?? 1;
+	// Requests per minute per thread (lower for guests).
+	const rpmPerThread = ratePerMinute(1, false, cfg);
+	const guestRpm = ratePerMinute(1, true, cfg);
+	const rowRpm = (key: string, threads: number) => ratePerMinute(threads, key === "guest", cfg);
 	const ranks = cfg?.ranks.length ? cfg.ranks : DEFAULT_RANKS;
 	const maxThreads = ranks[ranks.length - 1].threads;
-	const supporter = cfg?.donor_tiers.find((d) => d.status === "supporter")?.bonus_threads ?? 2;
-	const monthly = cfg?.donor_tiers.find((d) => d.status === "monthly_supporter")?.bonus_threads ?? 4;
+	const supporter = cfg?.donor_tiers.find((d) => d.status === "supporter")?.bonus_threads ?? 8;
+	const monthly = cfg?.donor_tiers.find((d) => d.status === "monthly_supporter")?.bonus_threads ?? 12;
 
 	// Typical accounts rather than every rank (the rewards guide lists them
-	// all): a guest, the first rank, the first rank as a monthly supporter, and
-	// the top rank. Threads come from the live config.
+	// all): a guest, the first rank, the first rank as each kind of supporter,
+	// and the top rank. Threads come from the live config.
 	const first = ranks[0];
 	const top = ranks[ranks.length - 1];
 	const rankLabel = (rank: string) => t("guide.ranks." + rank, { defaultValue: rank });
 	const limitRows: { key: string; label: string; threads: number }[] = [
 		{ key: "guest", label: t("guide.tiers.guest.name"), threads: guestThreads },
 		{ key: first.rank, label: rankLabel(first.rank), threads: first.threads },
+		{
+			key: first.rank + "-supporter",
+			label: `${rankLabel(first.rank)} + ${t("donor.supporter")}`,
+			threads: Math.min(first.threads + supporter, maxThreads),
+		},
 		{
 			key: first.rank + "-monthly",
 			label: `${rankLabel(first.rank)} + ${t("donor.monthly_supporter")}`,
@@ -189,15 +197,11 @@ export default function ApiDocsPage() {
 		{ name: "roms", type: "boolean", required: false, description: t("apiDocs.pRoms") },
 		{ name: "softname", type: "string", required: false, description: t("apiDocs.pSoftname") },
 		{ name: "X-Debug-Password", type: "header", required: false, description: t("apiDocs.pDebug") },
-		{ name: "forcerequestok", type: "integer", required: false, description: t("apiDocs.pForceUsed") },
 		{ name: "forcethreads", type: "integer", required: false, description: t("apiDocs.pForceThreads") },
 		{ name: "forceratelimit", type: "1", required: false, description: t("apiDocs.pForceRate") },
 	];
 
 	const responseHeaders: { name: string; desc: string }[] = [
-		{ name: "X-Quota-Limit", desc: t("apiDocs.hQuotaLimit") },
-		{ name: "X-Quota-Remaining", desc: t("apiDocs.hQuotaRemaining") },
-		{ name: "X-Quota-Reset", desc: t("apiDocs.hQuotaReset") },
 		{ name: "X-RateLimit-Limit", desc: t("apiDocs.hRateLimit") },
 		{ name: "X-RateLimit-Remaining", desc: t("apiDocs.hRateRemaining") },
 		{ name: "X-Concurrency-Limit", desc: t("apiDocs.hConcurrency") },
@@ -289,7 +293,7 @@ export default function ApiDocsPage() {
 						{t("apiDocs.guestTitle")}
 					</p>
 					<p className="text-xs text-[var(--color-base-content)]/70">
-						{t("apiDocs.guestDesc", { threads: guestThreads })}
+						{t("apiDocs.guestDesc", { threads: guestThreads, rpm: guestRpm })}
 					</p>
 				</div>
 				<p className={small}>
@@ -312,9 +316,15 @@ export default function ApiDocsPage() {
 				<div className="grid gap-3 sm:grid-cols-2">
 					{[
 						["limitThreadsTitle", t("apiDocs.limitThreadsDesc")],
-						["limitRateTitle", t("apiDocs.limitRateDesc", { rpm: rpmPerThread })],
-						["limitDailyTitle", t("apiDocs.limitDailyDesc", { per: perThread.toLocaleString() })],
-						["limitGlobalTitle", t("apiDocs.limitGlobalDesc")],
+						["limitRateTitle", t("apiDocs.limitRateDesc", { rpm: rpmPerThread, guestRpm })],
+						["limitDailyTitle", t("apiDocs.limitDailyDesc")],
+						[
+							"limitGlobalTitle",
+							t("apiDocs.limitGlobalDesc", {
+								users: DEFAULT_USER_OPEN_THREADS.toLocaleString(),
+								guests: DEFAULT_GUEST_OPEN_THREADS.toLocaleString(),
+							}),
+						],
 					].map(([title, desc]) => (
 						<div key={title} className="rounded-lg border border-[var(--color-base-300)] p-3">
 							<p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-primary)]">
@@ -331,7 +341,6 @@ export default function ApiDocsPage() {
 								<Th>{t("apiDocs.colAccount")}</Th>
 								<Th>{t("apiDocs.colThreads")}</Th>
 								<Th>{t("apiDocs.colRate")}</Th>
-								<Th>{t("apiDocs.colDaily")}</Th>
 								<th className="py-2">{t("apiDocs.colGames", { n: EXAMPLE_GAMES.toLocaleString() })}</th>
 							</tr>
 						</thead>
@@ -341,16 +350,10 @@ export default function ApiDocsPage() {
 									<td className="py-2 pr-4">{r.label}</td>
 									<td className="py-2 pr-4 tabular-nums">{r.threads}</td>
 									<td className="py-2 pr-4 tabular-nums">
-										{(r.threads * rpmPerThread).toLocaleString()}
-									</td>
-									<td className="py-2 pr-4 tabular-nums">
-										{(r.threads * perThread).toLocaleString()}
+										{rowRpm(r.key, r.threads).toLocaleString()}
 									</td>
 									<td className="py-2 tabular-nums">
-										{exampleTime(r.threads, rpmPerThread, perThread) ??
-											t("guide.progression.overQuota", {
-												daily: (r.threads * perThread).toLocaleString(),
-											})}
+										{exampleTime(r.threads, rowRpm(r.key, r.threads))}
 									</td>
 								</tr>
 							))}
@@ -390,10 +393,7 @@ export default function ApiDocsPage() {
 						</tbody>
 					</table>
 				</div>
-				<Code lang="text">{`X-Quota-Limit: 4000
-X-Quota-Remaining: 3877
-X-Quota-Reset: 2026-11-25T00:00:00Z
-X-RateLimit-Limit: 400
+				<Code lang="text">{`X-RateLimit-Limit: 240
 X-RateLimit-Remaining: 31
 X-Concurrency-Limit: 4`}</Code>
 			</section>
@@ -411,7 +411,7 @@ X-Concurrency-Limit: 4`}</Code>
   GET /api/v1/scrape/games?system_id=...&crc=...&name=<file name>
   200 -> use "game" (null = not in the catalog)
   429 / 503 -> sleep Retry-After seconds, then retry the same ROM
-  429 "daily scrape quota exceeded" -> stop until X-Quota-Reset`}</Code>
+  (no daily limit: a long library just keeps going)`}</Code>
 			</section>
 
 			<section className="card p-6 space-y-4 tone-meta">
@@ -519,7 +519,8 @@ curl "${BASE_URL}/api/v1/scrape/games?group=mame-fbneo&name=sfa3.zip"`}</Code>
   "client": { "id": "nsapp_...", "name": "My Scraper" },
   "user": { "username": "miguel", "threads": 4 },
   "threads": 4,
-  "quota": { "daily_limit": 4000, "used": 123, "remaining": 3877,
+  "rate_per_minute": 240,
+  "quota": { "unlimited": true, "daily_limit": null, "used": 123,
              "resets_at": "2026-11-25T00:00:00Z" }
 }`}</Code>
 				</div>
@@ -578,6 +579,20 @@ curl "${BASE_URL}/api/v1/scrape/games?group=mame-fbneo&name=sfa3.zip"`}</Code>
     { "id": "a2e4dc77-...", "system_id": "snes", "name": "Chrono Trigger",
       "scrapes": 1240, "last_scraped_at": "2026-11-24T20:15:00Z" }
   ]
+}`}</Code>
+				</div>
+
+				<div className="space-y-2 pt-2 border-t border-[var(--color-base-300)]">
+					<p className="font-mono text-sm">
+						<span className="badge badge-success badge-sm mr-2">GET</span>/api/v1/scrape/status
+						<span className="badge badge-ghost badge-sm ml-2">{t("apiDocs.publicBadge")}</span>
+					</p>
+					<p className={muted}>{t("apiDocs.statusDesc")}</p>
+					<Code>{`{
+  "requests_per_minute": 4009,
+  "open_threads": { "users": 157, "users_max": 8192, "guests": 31, "guests_max": 512 },
+  "scrapers": { "users": 301, "guests": 124 },
+  "updated_at": "2026-11-25T18:30:05Z"
 }`}</Code>
 				</div>
 
@@ -666,9 +681,8 @@ curl "${BASE_URL}/api/v1/scrape/games?group=mame-fbneo&name=sfa3.zip"`}</Code>
 						</tbody>
 					</table>
 				</div>
-				<Code lang="text">{`429  { "error": "rate limit exceeded: this account allows 400 requests per minute" }   Retry-After: 1
+				<Code lang="text">{`429  { "error": "rate limit exceeded: this account allows 240 requests per minute" }   Retry-After: 1
 429  { "error": "too many concurrent requests: this account allows 4 at once" }       Retry-After: 1
-429  { "error": "daily scrape quota exceeded" }
 503  { "error": "server busy, retry shortly" }                                        Retry-After: 2`}</Code>
 			</section>
 		</div>
