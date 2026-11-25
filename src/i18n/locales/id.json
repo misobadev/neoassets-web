@@ -253,12 +253,12 @@
 			"colLevels": "Level",
 			"colRank": "Peringkat",
 			"colThreads": "Thread",
-			"intro": "Level kamu berasal dari total XP. Setiap peringkat membuka lebih banyak thread. Thread adalah permintaan scraping simultanmu, dan masing-masing menambah {{rpm}} permintaan per menit ({{guestRpm}} untuk tamu). Tidak ada batas harian.",
+			"intro": "Level kamu berasal dari total XP. Setiap peringkat membuka lebih banyak thread. Thread adalah permintaan scraping simultanmu: makin banyak thread, makin cepat scraping. Tidak ada batas harian.",
 			"title": "Level, peringkat & kecepatan",
 			"xpCurve": "XP yang dibutuhkan meningkat tajam seiring level, jadi peringkat teratas adalah tujuan jangka panjang.",
-			"colRate": "Request / menit",
-			"colTime": "{{n}} game",
-			"timeNote": "Waktu untuk {{n}} game: lama scraper menyelesaikan {{n}} game dengan memakai semua thread-nya dan menunggu Retry-After saat diminta. Unduhan gambar dan video ditambahkan terpisah, tergantung koneksi Anda."
+			"colTime": "{{n}} game (perkiraan)",
+			"timeNote": "Angka perkiraan, diukur dengan NeoStation di perangkat genggam dengan disk eksternal sambil mengunduh gambar: setiap thread menyelesaikan sekitar {{perThread}} game per menit.",
+			"colGamesPerMin": "Game / menit (perkiraan)"
 		},
 		"ranks": {
 			"amateur": "Amatir",
@@ -271,7 +271,8 @@
 			"master": "Master",
 			"novice": "Pemula",
 			"scholar": "Cendekiawan"
-		}
+		},
+		"speedDisclaimer": "Waktu ini adalah perkiraan. Kecepatan sebenarnya bergantung pada perangkatmu (prosesor, penyimpanan, dan koneksi) dan media apa saja yang kamu aktifkan untuk diunduh: gambar, video, manual, dan lainnya. Scraping metadata saja jauh lebih cepat; mengunduh semua jenis media, terutama video, lebih lambat."
 	},
 	"home": {
 		"title": "Berkontribusi untuk",
@@ -1192,9 +1193,10 @@
 		"errorsIntro": "Error berupa objek JSON dengan field error. 429 dan 503 menyertakan Retry-After jika menunggu membantu.",
 		"err500": "Error server tak terduga. Coba lagi nanti.",
 		"err503": "Server sedang sibuk. Tunggu Retry-After lalu coba lagi.",
-		"colGames": "{{n}} game",
-		"limitsTimeNote": "Contoh akun umum; semua rank ada di panduan hadiah. Waktu untuk {{n}} game berlaku untuk klien yang memakai thread-nya dan mematuhi Retry-After, seperti diukur dalam simulasi pada salinan server produksi. Unduhan file media tidak termasuk.",
-		"statusDesc": "Status publik langsung API scraping: permintaan dalam satu menit terakhir, thread terbuka pengguna terdaftar dan tamu terhadap batasnya, serta scraper yang aktif dalam 5 menit terakhir. Tanpa kredensial; diperbarui setiap beberapa detik."
+		"colGames": "{{n}} game (perkiraan)",
+		"limitsTimeNote": "Akun tipikal; semua peringkat ada di panduan hadiah. Permintaan / menit adalah batas API. Game / menit dan waktu untuk {{n}} game adalah perkiraan: klien sungguhan juga menghitung hash ROM dan mengunduh gambar, jadi thread-nya yang menentukan laju (sekitar {{perThread}} game per menit per thread di perangkat genggam dengan disk eksternal). Perangkat atau koneksi yang lebih cepat makin mendekati batas API.",
+		"statusDesc": "Status publik langsung API scraping: permintaan dalam satu menit terakhir, thread terbuka pengguna terdaftar dan tamu terhadap batasnya, serta scraper yang aktif dalam 5 menit terakhir. Tanpa kredensial; diperbarui setiap beberapa detik.",
+		"colGamesPerMin": "Game / menit (perkiraan)"
 	},
 	"developer": {
 		"title": "Developer",

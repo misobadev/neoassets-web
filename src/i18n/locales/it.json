@@ -253,12 +253,12 @@
 			"colLevels": "Livelli",
 			"colRank": "Rango",
 			"colThreads": "Thread",
-			"intro": "Il tuo livello dipende dai tuoi XP totali. Ogni rango sblocca più thread. I thread sono le tue richieste di scraping simultanee e ognuno aggiunge {{rpm}} richieste al minuto ({{guestRpm}} per gli ospiti). Non c'è un limite giornaliero.",
+			"intro": "Il tuo livello dipende dai tuoi XP totali. Ogni rango sblocca più thread. I thread sono le tue richieste di scraping simultanee: più thread, scraping più veloce. Non c'è un limite giornaliero.",
 			"title": "Livelli, ranghi e velocità",
 			"xpCurve": "Gli XP richiesti crescono rapidamente con il livello, quindi i ranghi più alti sono un obiettivo a lungo termine.",
-			"colRate": "Richieste / min",
-			"colTime": "{{n}} giochi",
-			"timeNote": "Tempo per {{n}} giochi: quanto impiega uno scraper a risolvere {{n}} giochi usando tutti i suoi thread e attendendo Retry-After quando richiesto. Il download di immagini e video si aggiunge, in base alla tua connessione."
+			"colTime": "{{n}} giochi (circa)",
+			"timeNote": "Valori approssimativi, misurati con NeoStation su una console portatile con disco esterno scaricando le immagini: ogni thread risolve circa {{perThread}} giochi al minuto.",
+			"colGamesPerMin": "Giochi / min (circa)"
 		},
 		"ranks": {
 			"amateur": "Dilettante",
@@ -271,7 +271,8 @@
 			"master": "Maestro",
 			"novice": "Novizio",
 			"scholar": "Studioso"
-		}
+		},
+		"speedDisclaimer": "Questi tempi sono stime. La velocità reale dipende dal tuo dispositivo (processore, memoria e connessione) e da quali media hai attivato per il download: immagini, video, manuali, ecc. Fare scraping dei soli metadati è molto più veloce; scaricare tutti i tipi di media, soprattutto i video, è più lento."
 	},
 	"home": {
 		"title": "Contribuisci all'",
@@ -1192,9 +1193,10 @@
 		"errorsIntro": "Gli errori sono oggetti JSON con un campo error. 429 e 503 includono Retry-After quando attendere serve.",
 		"err500": "Errore imprevisto del server. Riprova più tardi.",
 		"err503": "Il server è occupato. Attendi il Retry-After e riprova.",
-		"colGames": "{{n}} giochi",
-		"limitsTimeNote": "Account tipici; tutti i ranghi sono nella guida ai premi. Il tempo per {{n}} giochi è quello di un client che usa i suoi thread e rispetta Retry-After, come misurato in una simulazione su una copia del server di produzione. Il download dei file multimediali è a parte.",
-		"statusDesc": "Stato pubblico in tempo reale dell'API di scraping: richieste dell'ultimo minuto, thread aperti di utenti registrati e ospiti rispetto ai loro limiti, e scraper attivi negli ultimi 5 minuti. Nessuna credenziale richiesta; si aggiorna ogni pochi secondi."
+		"colGames": "{{n}} giochi (circa)",
+		"limitsTimeNote": "Account tipici; tutti i ranghi sono nella guida alle ricompense. Richieste / min è il limite dell'API. Giochi / min e il tempo per {{n}} giochi sono approssimativi: un client reale calcola anche gli hash delle ROM e scarica le immagini, quindi sono i suoi thread a dettare il ritmo (circa {{perThread}} giochi al minuto per thread su una console portatile con disco esterno). Un dispositivo o una connessione più veloci si avvicinano al limite dell'API.",
+		"statusDesc": "Stato pubblico in tempo reale dell'API di scraping: richieste dell'ultimo minuto, thread aperti di utenti registrati e ospiti rispetto ai loro limiti, e scraper attivi negli ultimi 5 minuti. Nessuna credenziale richiesta; si aggiorna ogni pochi secondi.",
+		"colGamesPerMin": "Giochi / min (circa)"
 	},
 	"developer": {
 		"title": "Sviluppatore",

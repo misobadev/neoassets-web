@@ -253,12 +253,12 @@
 			"colLevels": "Level",
 			"colRank": "Rang",
 			"colThreads": "Threads",
-			"intro": "Dein Level ergibt sich aus deinem gesamten XP. Jeder Rang schaltet mehr Threads frei. Threads sind deine gleichzeitigen Scraping-Anfragen, und jeder bringt {{rpm}} Anfragen pro Minute ({{guestRpm}} für Gäste). Es gibt kein Tageslimit.",
+			"intro": "Dein Level ergibt sich aus deinem gesamten XP. Jeder Rang schaltet mehr Threads frei. Threads sind deine gleichzeitigen Scraping-Anfragen: mehr Threads, schnelleres Scraping. Es gibt kein Tageslimit.",
 			"title": "Level, Ränge & Tempo",
 			"xpCurve": "Die benötigten XP steigen stark mit dem Level, daher sind die Top-Ränge ein langfristiges Ziel.",
-			"colRate": "Anfragen / Min.",
-			"colTime": "{{n}} Spiele",
-			"timeNote": "Zeit für {{n}} Spiele: so lange braucht ein Scraper für {{n}} Spiele, wenn er alle Threads nutzt und bei Aufforderung Retry-After abwartet. Das Herunterladen von Bildern und Videos kommt je nach Verbindung hinzu."
+			"colTime": "{{n}} Spiele (ca.)",
+			"timeNote": "Ungefähre Werte, gemessen mit NeoStation auf einem Handheld mit externer Festplatte beim Herunterladen der Bilder: Jeder Thread schafft etwa {{perThread}} Spiele pro Minute.",
+			"colGamesPerMin": "Spiele / Min. (ca.)"
 		},
 		"ranks": {
 			"amateur": "Amateur",
@@ -271,7 +271,8 @@
 			"master": "Meister",
 			"novice": "Neuling",
 			"scholar": "Gelehrter"
-		}
+		},
+		"speedDisclaimer": "Diese Zeiten sind Schätzungen. Das echte Tempo hängt von deinem Gerät (Prozessor, Speicher und Verbindung) und davon ab, welche Medien du zum Herunterladen aktiviert hast: Bilder, Videos, Handbücher usw. Nur Metadaten zu scrapen ist viel schneller; alle Medientypen herunterzuladen, besonders Videos, ist langsamer."
 	},
 	"home": {
 		"title": "Trage zum",
@@ -1192,9 +1193,10 @@
 		"errorsIntro": "Fehler sind JSON-Objekte mit einem Feld error. 429 und 503 enthalten Retry-After, wenn Warten hilft.",
 		"err500": "Unerwarteter Serverfehler. Später erneut versuchen.",
 		"err503": "Der Server ist ausgelastet. Warte Retry-After ab und versuche es erneut.",
-		"colGames": "{{n}} Spiele",
-		"limitsTimeNote": "Typische Konten; alle Ränge stehen im Belohnungsleitfaden. Die Zeit für {{n}} Spiele gilt für einen Client, der seine Threads nutzt und Retry-After beachtet, wie in einer Simulation auf einer Kopie des Produktionsservers gemessen. Das Herunterladen der Mediendateien kommt hinzu.",
-		"statusDesc": "Öffentlicher Live-Status der Scraping-API: Anfragen der letzten Minute, offene Threads registrierter Nutzer und Gäste gegenüber ihren Obergrenzen und Scraper, die in den letzten 5 Minuten aktiv waren. Keine Zugangsdaten nötig; wird alle paar Sekunden aktualisiert."
+		"colGames": "{{n}} Spiele (ca.)",
+		"limitsTimeNote": "Typische Konten; alle Ränge stehen im Belohnungsleitfaden. Anfragen / Min. ist das API-Limit. Spiele / Min. und die Zeit für {{n}} Spiele sind ungefähr: Ein echter Client berechnet auch die Hashes der ROMs und lädt die Bilder herunter, daher bestimmen seine Threads das Tempo (etwa {{perThread}} Spiele pro Minute und Thread auf einem Handheld mit externer Festplatte). Ein schnelleres Gerät oder eine schnellere Verbindung kommt näher an das API-Limit.",
+		"statusDesc": "Öffentlicher Live-Status der Scraping-API: Anfragen der letzten Minute, offene Threads registrierter Nutzer und Gäste gegenüber ihren Obergrenzen und Scraper, die in den letzten 5 Minuten aktiv waren. Keine Zugangsdaten nötig; wird alle paar Sekunden aktualisiert.",
+		"colGamesPerMin": "Spiele / Min. (ca.)"
 	},
 	"developer": {
 		"title": "Entwickler",

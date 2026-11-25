@@ -5,8 +5,15 @@ import { BookOpen, Gauge, HeartHandshake, HelpCircle, Star, Sparkles } from "luc
 import { useTranslation } from "react-i18next";
 import { fetchConfig, type PublicConfig } from "../lib/api";
 import DonorBadge from "../components/DonorBadge";
+import SpeedDisclaimer from "../components/SpeedDisclaimer";
 import { usePageMeta } from "../lib/seo";
-import { EXAMPLE_GAMES, exampleTime, ratePerMinute } from "../lib/scrapeEstimate";
+import {
+	EXAMPLE_GAMES,
+	TYPICAL_GAMES_PER_MIN_PER_THREAD,
+	ratePerMinute,
+	typicalGamesPerMinute,
+	typicalTime,
+} from "../lib/scrapeEstimate";
 
 export default function GuidePage() {
 	const { t } = useTranslation();
@@ -27,10 +34,12 @@ export default function GuidePage() {
 		return <p className="text-sm text-[var(--color-base-content)]/50 py-10 text-center">{t("common.loading")}</p>;
 	}
 
-	// Requests per minute: threads times the per-thread rate (lower for guests).
-	const rate = (threads: number, guest = false) => ratePerMinute(threads, guest, cfg);
-	const time = (threads: number, guest = false) => exampleTime(threads, rate(threads, guest));
-	const examples = { n: EXAMPLE_GAMES.toLocaleString() };
+	// Approximate real speed: what the threads manage, capped by the API limit
+	// (threads times the per-thread rate, lower for guests).
+	const apiRate = (threads: number, guest = false) => ratePerMinute(threads, guest, cfg);
+	const rate = (threads: number, guest = false) => typicalGamesPerMinute(threads, apiRate(threads, guest));
+	const time = (threads: number, guest = false) => typicalTime(threads, apiRate(threads, guest));
+	const examples = { n: EXAMPLE_GAMES.toLocaleString(), perThread: TYPICAL_GAMES_PER_MIN_PER_THREAD };
 	const topRank = cfg.ranks[cfg.ranks.length - 1];
 	const maxThreads = topRank?.threads ?? cfg.admin_threads;
 
@@ -105,12 +114,7 @@ export default function GuidePage() {
 				<SectionTitle icon={Gauge} className="">
 					{t("guide.progression.title")}
 				</SectionTitle>
-				<p className="text-sm text-[var(--color-base-content)]/70">
-					{t("guide.progression.intro", {
-						rpm: ratePerMinute(1, false, cfg),
-						guestRpm: ratePerMinute(1, true, cfg),
-					})}
-				</p>
+				<p className="text-sm text-[var(--color-base-content)]/70">{t("guide.progression.intro")}</p>
 				<div className="overflow-x-auto">
 					<table className="w-full text-sm">
 						<thead>
@@ -118,7 +122,7 @@ export default function GuidePage() {
 								<th className="py-2 pr-4">{t("guide.progression.colLevels")}</th>
 								<th className="py-2 pr-4">{t("guide.progression.colRank")}</th>
 								<th className="py-2 pr-4">{t("guide.progression.colThreads")}</th>
-								<th className="py-2 pr-4">{t("guide.progression.colRate")}</th>
+								<th className="py-2 pr-4">{t("guide.progression.colGamesPerMin")}</th>
 								<th className="py-2">{t("guide.progression.colTime", examples)}</th>
 							</tr>
 						</thead>
@@ -127,7 +131,7 @@ export default function GuidePage() {
 								<td className="py-2 pr-4 text-[var(--color-base-content)]/60">-</td>
 								<td className="py-2 pr-4">{t("guide.tiers.guest.name")}</td>
 								<td className="py-2 pr-4">{cfg.guest_threads}</td>
-								<td className="py-2 pr-4">{rate(cfg.guest_threads, true).toLocaleString()}</td>
+								<td className="py-2 pr-4">~{rate(cfg.guest_threads, true).toLocaleString()}</td>
 								<td className="py-2 tabular-nums">{time(cfg.guest_threads, true)}</td>
 							</tr>
 							{cfg.ranks.map((r) => (
@@ -139,13 +143,14 @@ export default function GuidePage() {
 										{t("guide.ranks." + r.rank, { defaultValue: r.rank })}
 									</td>
 									<td className="py-2 pr-4">{r.threads}</td>
-									<td className="py-2 pr-4">{rate(r.threads).toLocaleString()}</td>
+									<td className="py-2 pr-4">~{rate(r.threads).toLocaleString()}</td>
 									<td className="py-2 tabular-nums">{time(r.threads)}</td>
 								</tr>
 							))}
 						</tbody>
 					</table>
 				</div>
+				<SpeedDisclaimer />
 				<p className="text-xs text-[var(--color-base-content)]/50">
 					{t("guide.progression.timeNote", examples)}
 				</p>
@@ -171,7 +176,7 @@ export default function GuidePage() {
 									<tr className="text-left text-xs uppercase tracking-wide text-[var(--color-base-content)]/50">
 										<th className="py-2 pr-4">{t("apiDocs.colAccount")}</th>
 										<th className="py-2 pr-4">{t("guide.progression.colThreads")}</th>
-										<th className="py-2 pr-4">{t("guide.progression.colRate")}</th>
+										<th className="py-2 pr-4">{t("guide.progression.colGamesPerMin")}</th>
 										<th className="py-2">{t("guide.progression.colTime", examples)}</th>
 									</tr>
 								</thead>
@@ -181,7 +186,7 @@ export default function GuidePage() {
 											<td className="py-2 pr-4 font-medium">{r.label}</td>
 											<td className="py-2 pr-4 tabular-nums">{r.threads}</td>
 											<td className="py-2 pr-4 tabular-nums">
-												{rate(r.threads, r.key === "guest").toLocaleString()}
+												~{rate(r.threads, r.key === "guest").toLocaleString()}
 											</td>
 											<td className="py-2 tabular-nums">{time(r.threads, r.key === "guest")}</td>
 										</tr>
@@ -189,6 +194,7 @@ export default function GuidePage() {
 								</tbody>
 							</table>
 						</div>
+						<SpeedDisclaimer />
 						<p className="text-xs text-[var(--color-base-content)]/50">
 							{t("guide.donations.compareNote")}
 						</p>
