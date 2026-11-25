@@ -225,15 +225,15 @@
 		},
 		"progression": {
 			"title": "Niveles, rangos y velocidad",
-			"intro": "Tu nivel sale de tu XP total. Cada rango desbloquea más hilos. Los hilos son tus peticiones de scraping simultáneas, y cada uno suma {{rpm}} peticiones por minuto ({{guestRpm}} para invitados). No hay límite diario.",
+			"intro": "Tu nivel sale de tu XP total. Cada rango desbloquea más hilos. Los hilos son tus peticiones de scraping simultáneas: más hilos, scraping más rápido. No hay límite diario.",
 			"colLevels": "Niveles",
 			"colRank": "Rango",
 			"colThreads": "Hilos",
 			"xpCurve": "La XP necesaria crece pronunciadamente con el nivel, así que los rangos más altos son un objetivo a largo plazo.",
 			"adminNote": "Los administradores reciben {{threads}} hilos independientemente de su nivel.",
-			"colRate": "Peticiones / min",
-			"colTime": "{{n}} juegos",
-			"timeNote": "Tiempo para {{n}} juegos: lo que tarda un scraper en resolver {{n}} juegos usando todos sus hilos y esperando Retry-After cuando se lo piden. La descarga de imágenes y videos se suma aparte, según tu conexión."
+			"colTime": "{{n}} juegos (aprox.)",
+			"timeNote": "Cifras aproximadas, medidas con NeoStation en una consola portátil con disco externo descargando las imágenes: cada hilo resuelve unos {{perThread}} juegos por minuto.",
+			"colGamesPerMin": "Juegos / min (aprox.)"
 		},
 		"ranks": {
 			"novice": "Novato",
@@ -279,7 +279,8 @@
 			},
 			"compareTitle": "Ejemplo: una cuenta {{rank}} scrapeando {{n}} juegos",
 			"compareNote": "Misma cuenta, mismo scraper: una donación suma hilos, así que scrapea más rápido. Nadie tiene límite diario."
-		}
+		},
+		"speedDisclaimer": "Estos tiempos son estimados. La velocidad real depende de tu dispositivo (procesador, almacenamiento y conexión) y de qué media tengas activada para descargar: imágenes, videos, manuales, etc. Scrapear solo metadatos es mucho más rápido; descargar todos los tipos de media, sobre todo videos, es más lento."
 	},
 	"home": {
 		"title": "Contribuye a la",
@@ -1216,9 +1217,10 @@
 		"errorsIntro": "Los errores son objetos JSON con un campo error. 429 y 503 incluyen Retry-After cuando esperar sirve.",
 		"err500": "Error inesperado del servidor. Reintenta más tarde.",
 		"err503": "El servidor está ocupado. Espera el Retry-After y reintenta.",
-		"colGames": "{{n}} juegos",
-		"limitsTimeNote": "Cuentas típicas; todos los rangos están en la guía de recompensas. El tiempo para {{n}} juegos es el de un cliente que usa sus hilos y respeta Retry-After, como se comportó en una simulación sobre una copia del servidor de producción. La descarga de los archivos de medios se suma aparte.",
-		"statusDesc": "Estado público en vivo de la API de scraping: peticiones del último minuto, hilos abiertos de usuarios registrados e invitados frente a sus topes, y scrapers activos en los últimos 5 minutos. No necesita credenciales; se actualiza cada pocos segundos."
+		"colGames": "{{n}} juegos (aprox.)",
+		"limitsTimeNote": "Cuentas típicas; todos los rangos están en la guía de recompensas. Peticiones / min es el límite de la API. Juegos / min y el tiempo para {{n}} juegos son aproximados: un cliente real también calcula hashes de las ROMs y descarga las imágenes, así que sus hilos marcan el ritmo (unos {{perThread}} juegos por minuto por hilo en una consola portátil con disco externo). Un dispositivo o una conexión más rápidos se acercan más al límite de la API.",
+		"statusDesc": "Estado público en vivo de la API de scraping: peticiones del último minuto, hilos abiertos de usuarios registrados e invitados frente a sus topes, y scrapers activos en los últimos 5 minutos. No necesita credenciales; se actualiza cada pocos segundos.",
+		"colGamesPerMin": "Juegos / min (aprox.)"
 	},
 	"developer": {
 		"title": "Desarrollador",

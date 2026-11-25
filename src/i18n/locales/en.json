@@ -225,15 +225,15 @@
 		},
 		"progression": {
 			"title": "Levels, ranks & speed",
-			"intro": "Your level comes from your total XP. Each rank unlocks more threads. Threads are your simultaneous scraping requests, and each one adds {{rpm}} requests per minute ({{guestRpm}} for guests). There is no daily limit.",
+			"intro": "Your level comes from your total XP. Each rank unlocks more threads. Threads are your simultaneous scraping requests: more threads, faster scraping. There is no daily limit.",
 			"colLevels": "Levels",
 			"colRank": "Rank",
 			"colThreads": "Threads",
 			"xpCurve": "The XP required grows steeply with the level, so the top ranks are a long-term goal.",
 			"adminNote": "Admins get {{threads}} threads regardless of their level.",
-			"colRate": "Requests / min",
-			"colTime": "{{n}} games",
-			"timeNote": "Time for {{n}} games: the time a scraper needs to resolve {{n}} games when it uses all its threads and waits Retry-After when asked. Downloading the images and videos adds to it, depending on your connection."
+			"colTime": "{{n}} games (approx.)",
+			"timeNote": "Approximate figures, measured with NeoStation on a handheld with an external disk while downloading the images: each thread resolves about {{perThread}} games per minute.",
+			"colGamesPerMin": "Games / min (approx.)"
 		},
 		"ranks": {
 			"novice": "Novice",
@@ -279,7 +279,8 @@
 			},
 			"compareTitle": "Example: a {{rank}} account scraping {{n}} games",
 			"compareNote": "Same account, same scraper: a donation adds threads, so it scrapes faster. There is no daily limit for anyone."
-		}
+		},
+		"speedDisclaimer": "These times are estimates. The real speed depends on your device (processor, storage and connection) and on which media you have turned on to download: images, videos, manuals and so on. Scraping metadata only is much faster; downloading every media type, especially videos, is slower."
 	},
 	"home": {
 		"title": "Contribute to the",
@@ -1216,9 +1217,10 @@
 		"errorsIntro": "Errors are JSON objects with an error field. 429 and 503 include Retry-After when waiting will help.",
 		"err500": "Unexpected server error. Retry later.",
 		"err503": "The server is busy. Wait Retry-After and retry.",
-		"colGames": "{{n}} games",
-		"limitsTimeNote": "Typical accounts; every rank is in the rewards guide. The time for {{n}} games is for a client that uses its threads and honors Retry-After, which is how it behaved in a simulation on a copy of the production server. Downloading the media files adds to it.",
-		"statusDesc": "Live public state of the scraping API: requests in the last minute, open threads of registered users and guests against their caps, and scrapers active in the last 5 minutes. No credentials needed; refreshed every few seconds."
+		"colGames": "{{n}} games (approx.)",
+		"limitsTimeNote": "Typical accounts; every rank is in the rewards guide. Requests / min is the API limit. Games / min and the time for {{n}} games are approximate: a real client also hashes ROMs and downloads the images, so its threads set the pace (about {{perThread}} games per minute per thread on a handheld with an external disk). A faster device or connection gets closer to the API limit.",
+		"statusDesc": "Live public state of the scraping API: requests in the last minute, open threads of registered users and guests against their caps, and scrapers active in the last 5 minutes. No credentials needed; refreshed every few seconds.",
+		"colGamesPerMin": "Games / min (approx.)"
 	},
 	"developer": {
 		"title": "Developer",

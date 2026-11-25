@@ -5,9 +5,16 @@ import { Link } from "react-router-dom";
 import { Terminal, KeyRound, Gauge, BookOpen, Braces, TriangleAlert, Rocket, ListChecks, Activity } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import CopyButton from "../components/CopyButton";
+import SpeedDisclaimer from "../components/SpeedDisclaimer";
 import { usePageMeta } from "../lib/seo";
 import { fetchConfig, type PublicConfig } from "../lib/api";
-import { EXAMPLE_GAMES, exampleTime, ratePerMinute } from "../lib/scrapeEstimate";
+import {
+	EXAMPLE_GAMES,
+	TYPICAL_GAMES_PER_MIN_PER_THREAD,
+	ratePerMinute,
+	typicalGamesPerMinute,
+	typicalTime,
+} from "../lib/scrapeEstimate";
 
 const BASE_URL = "https://api.neoassets.dev";
 
@@ -341,6 +348,7 @@ export default function ApiDocsPage() {
 								<Th>{t("apiDocs.colAccount")}</Th>
 								<Th>{t("apiDocs.colThreads")}</Th>
 								<Th>{t("apiDocs.colRate")}</Th>
+								<Th>{t("apiDocs.colGamesPerMin")}</Th>
 								<th className="py-2">{t("apiDocs.colGames", { n: EXAMPLE_GAMES.toLocaleString() })}</th>
 							</tr>
 						</thead>
@@ -352,16 +360,25 @@ export default function ApiDocsPage() {
 									<td className="py-2 pr-4 tabular-nums">
 										{rowRpm(r.key, r.threads).toLocaleString()}
 									</td>
+									<td className="py-2 pr-4 tabular-nums">
+										~{typicalGamesPerMinute(r.threads, rowRpm(r.key, r.threads)).toLocaleString()}
+									</td>
 									<td className="py-2 tabular-nums">
-										{exampleTime(r.threads, rowRpm(r.key, r.threads))}
+										{typicalTime(r.threads, rowRpm(r.key, r.threads))}
 									</td>
 								</tr>
 							))}
 						</tbody>
 					</table>
 				</div>
+				<SpeedDisclaimer />
 				<p className={small}>{t("apiDocs.limitsDonorNote", { supporter, monthly, max: maxThreads })}</p>
-				<p className={small}>{t("apiDocs.limitsTimeNote", { n: EXAMPLE_GAMES.toLocaleString() })}</p>
+				<p className={small}>
+					{t("apiDocs.limitsTimeNote", {
+						n: EXAMPLE_GAMES.toLocaleString(),
+						perThread: TYPICAL_GAMES_PER_MIN_PER_THREAD,
+					})}
+				</p>
 				<p className={small}>
 					<Link to="/app/guide" className="link link-primary">
 						{t("nav.rewardsGuide")}
