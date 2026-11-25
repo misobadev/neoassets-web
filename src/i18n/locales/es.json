@@ -265,7 +265,7 @@
 		},
 		"donations": {
 			"title": "Apoya a NeoAssets y obtén ventajas",
-			"intro": "No todos tienen tiempo de contribuir metadatos, pero puedes ayudar a cubrir los costos del servidor (Cloudflare R2, bases de datos). Las donaciones otorgan ventajas técnicas inmediatas, pero nunca XP ni rangos - los rangos se ganan con contribuciones reales.",
+			"intro": "No todos tienen tiempo de contribuir metadatos, pero puedes ayudar a cubrir los costos del servidor (infraestructura, almacenamiento y base de datos). Las donaciones otorgan ventajas técnicas inmediatas, pero nunca XP ni rangos - los rangos se ganan con contribuciones reales.",
 			"fairPlay": "Tus hilos activos son tus hilos base (por tu nivel) más tu bono de donador, con tope de {{max}} hilos. Así, un Supporter mensual alcanza la velocidad máxima de scraping en un nivel más bajo; los niveles más altos siguen siendo prestigio puro de la comunidad.",
 			"supporter": {
 				"perk": "+{{threads}} hilos de bono sumados a tus hilos base, y +{{xp}}% de XP en todas tus contribuciones futuras.",
@@ -280,7 +280,7 @@
 			"compareTitle": "Ejemplo: una cuenta {{rank}} scrapeando {{n}} juegos",
 			"compareNote": "Misma cuenta, mismo scraper: una donación suma hilos, así que scrapea más rápido. Nadie tiene límite diario."
 		},
-		"speedDisclaimer": "Estos tiempos son estimados. La velocidad real depende de tu dispositivo (procesador, almacenamiento y conexión) y de qué media tengas activada para descargar: imágenes, videos, manuales, etc. Scrapear solo metadatos es mucho más rápido; descargar todos los tipos de media, sobre todo videos, es más lento."
+		"speedDisclaimer": "Estos tiempos son estimados. La velocidad real depende de tu dispositivo (procesador, almacenamiento y conexión) y de qué media tengas activada para descargar, como imágenes y videos. Scrapear solo metadatos es mucho más rápido; descargar todos los tipos de media, sobre todo videos, es más lento."
 	},
 	"home": {
 		"title": "Contribuye a la",

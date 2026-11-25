@@ -265,7 +265,7 @@
 		},
 		"donations": {
 			"title": "Support NeoAssets & get boosted",
-			"intro": "Not everyone has time to contribute metadata, but you can still help cover server costs (Cloudflare R2, databases). Donations grant immediate technical perks, but they never grant XP or ranks - ranks must be earned with real contributions.",
+			"intro": "Not everyone has time to contribute metadata, but you can still help cover the server costs (infrastructure, storage and database). Donations grant immediate technical perks, but they never grant XP or ranks - ranks must be earned with real contributions.",
 			"fairPlay": "Your active threads are your base threads (from your level) plus your donor bonus, hard-capped at {{max}} threads. That means a monthly supporter already reaches maximum scraping speed at a lower level; the top levels stay pure community prestige.",
 			"supporter": {
 				"perk": "+{{threads}} bonus threads added to your base threads, and +{{xp}}% XP on all future contributions.",
@@ -280,7 +280,7 @@
 			"compareTitle": "Example: a {{rank}} account scraping {{n}} games",
 			"compareNote": "Same account, same scraper: a donation adds threads, so it scrapes faster. There is no daily limit for anyone."
 		},
-		"speedDisclaimer": "These times are estimates. The real speed depends on your device (processor, storage and connection) and on which media you have turned on to download: images, videos, manuals and so on. Scraping metadata only is much faster; downloading every media type, especially videos, is slower."
+		"speedDisclaimer": "These times are estimates. The real speed depends on your device (processor, storage and connection) and on which media you have turned on to download, such as images and videos. Scraping metadata only is much faster; downloading every media type, especially videos, is slower."
 	},
 	"home": {
 		"title": "Contribute to the",

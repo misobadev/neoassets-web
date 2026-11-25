@@ -233,7 +233,7 @@
 		},
 		"donations": {
 			"fairPlay": "Vos threads actifs sont vos threads de base (selon votre niveau) plus votre bonus de donateur, plafonnés à {{max}} threads. Un supporter mensuel atteint donc la vitesse de scraping maximale à un niveau inférieur ; les niveaux supérieurs restent du pur prestige communautaire.",
-			"intro": "Tout le monde n'a pas le temps de contribuer des métadonnées, mais vous pouvez quand même aider à couvrir les coûts serveur (Cloudflare R2, bases de données). Les dons accordent des avantages techniques immédiats, mais jamais d'XP ni de rangs : les rangs doivent être gagnés par de vraies contributions.",
+			"intro": "Tout le monde n'a pas le temps de contribuer des métadonnées, mais vous pouvez aider à couvrir les coûts du serveur (infrastructure, stockage et base de données). Les dons offrent des avantages techniques immédiats, mais jamais d'XP ni de rangs - les rangs se gagnent par de vraies contributions.",
 			"monthly_supporter": {
 				"bonus": "Un badge Supporter mensuel lumineux sur votre profil.",
 				"note": "Si vous annulez, vous restez Supporter avec ses threads bonus.",
@@ -272,7 +272,7 @@
 			"novice": "Novice",
 			"scholar": "Érudit"
 		},
-		"speedDisclaimer": "Ces durées sont des estimations. La vitesse réelle dépend de votre appareil (processeur, stockage et connexion) et des médias que vous avez activés au téléchargement : images, vidéos, manuels, etc. Ne récupérer que les métadonnées est bien plus rapide ; télécharger tous les types de médias, surtout les vidéos, est plus lent."
+		"speedDisclaimer": "Ces durées sont des estimations. La vitesse réelle dépend de votre appareil (processeur, stockage et connexion) et des médias que vous avez activés au téléchargement, comme les images et les vidéos. Ne récupérer que les métadonnées est bien plus rapide ; télécharger tous les types de médias, surtout les vidéos, est plus lent."
 	},
 	"home": {
 		"title": "Contribuez à l'",

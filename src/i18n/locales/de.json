@@ -233,7 +233,7 @@
 		},
 		"donations": {
 			"fairPlay": "Deine aktiven Threads sind deine Basis-Threads (aus deinem Level) plus dein Spenderbonus, hart begrenzt auf {{max}} Threads. Ein monatlicher Supporter erreicht die maximale Scraping-Geschwindigkeit also schon auf niedrigerem Level; die Top-Level bleiben reines Community-Prestige.",
-			"intro": "Nicht jeder hat Zeit, Metadaten beizutragen, aber du kannst trotzdem helfen, die Serverkosten zu decken (Cloudflare R2, Datenbanken). Spenden gewähren sofort technische Vorteile, aber niemals XP oder Ränge: Ränge müssen mit echten Beiträgen verdient werden.",
+			"intro": "Nicht jeder hat Zeit, Metadaten beizutragen, aber du kannst trotzdem helfen, die Serverkosten zu decken (Infrastruktur, Speicher und Datenbank). Spenden bringen sofortige technische Vorteile, aber niemals XP oder Ränge - Ränge verdient man nur mit echten Beiträgen.",
 			"monthly_supporter": {
 				"bonus": "Ein leuchtendes Badge „Monatlicher Supporter“ in deinem Profil.",
 				"note": "Wenn du kündigst, bleibst du Supporter mit dessen Bonus-Threads.",
@@ -272,7 +272,7 @@
 			"novice": "Neuling",
 			"scholar": "Gelehrter"
 		},
-		"speedDisclaimer": "Diese Zeiten sind Schätzungen. Das echte Tempo hängt von deinem Gerät (Prozessor, Speicher und Verbindung) und davon ab, welche Medien du zum Herunterladen aktiviert hast: Bilder, Videos, Handbücher usw. Nur Metadaten zu scrapen ist viel schneller; alle Medientypen herunterzuladen, besonders Videos, ist langsamer."
+		"speedDisclaimer": "Diese Zeiten sind Schätzungen. Das echte Tempo hängt von deinem Gerät (Prozessor, Speicher und Verbindung) und davon ab, welche Medien du zum Herunterladen aktiviert hast, etwa Bilder und Videos. Nur Metadaten zu scrapen ist viel schneller; alle Medientypen herunterzuladen, besonders Videos, ist langsamer."
 	},
 	"home": {
 		"title": "Trage zum",

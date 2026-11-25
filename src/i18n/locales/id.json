@@ -233,7 +233,7 @@
 		},
 		"donations": {
 			"fairPlay": "Thread aktif Anda adalah thread dasar (dari level) ditambah bonus donatur, dibatasi maksimal {{max}} thread. Jadi supporter bulanan sudah mencapai kecepatan scraping maksimum pada level lebih rendah; level teratas tetap murni prestise komunitas.",
-			"intro": "Tidak semua orang punya waktu berkontribusi metadata, tetapi Anda tetap bisa membantu menutup biaya server (Cloudflare R2, basis data). Donasi memberi keuntungan teknis langsung, tetapi tidak pernah memberi XP atau peringkat - peringkat harus diraih dengan kontribusi nyata.",
+			"intro": "Tidak semua orang punya waktu untuk menyumbang metadata, tetapi kamu tetap bisa membantu menutup biaya server (infrastruktur, penyimpanan, dan database). Donasi memberi keuntungan teknis langsung, tetapi tidak pernah memberi XP atau peringkat - peringkat hanya didapat dari kontribusi nyata.",
 			"monthly_supporter": {
 				"bonus": "Lencana Supporter Bulanan yang bersinar di profil Anda.",
 				"note": "Jika kamu berhenti, kamu tetap Supporter dengan thread bonusnya.",
@@ -272,7 +272,7 @@
 			"novice": "Pemula",
 			"scholar": "Cendekiawan"
 		},
-		"speedDisclaimer": "Waktu ini adalah perkiraan. Kecepatan sebenarnya bergantung pada perangkatmu (prosesor, penyimpanan, dan koneksi) dan media apa saja yang kamu aktifkan untuk diunduh: gambar, video, manual, dan lainnya. Scraping metadata saja jauh lebih cepat; mengunduh semua jenis media, terutama video, lebih lambat."
+		"speedDisclaimer": "Waktu ini adalah perkiraan. Kecepatan sebenarnya bergantung pada perangkatmu (prosesor, penyimpanan, dan koneksi) dan media apa saja yang kamu aktifkan untuk diunduh, seperti gambar dan video. Scraping metadata saja jauh lebih cepat; mengunduh semua jenis media, terutama video, lebih lambat."
 	},
 	"home": {
 		"title": "Berkontribusi untuk",

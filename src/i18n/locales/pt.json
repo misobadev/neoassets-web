@@ -233,7 +233,7 @@
 		},
 		"donations": {
 			"fairPlay": "As suas threads ativas são as threads base (do seu nível) mais o bónus de doador, com limite de {{max}} threads. Um supporter mensal atinge assim a velocidade máxima de scraping num nível mais baixo; os níveis superiores continuam a ser puro prestígio da comunidade.",
-			"intro": "Nem todos têm tempo para contribuir com metadados, mas ainda pode ajudar a cobrir os custos do servidor (Cloudflare R2, bases de dados). As doações concedem vantagens técnicas imediatas, mas nunca XP ou ranks: os ranks têm de ser conquistados com contribuições reais.",
+			"intro": "Nem todo mundo tem tempo para contribuir com metadados, mas você ainda pode ajudar a cobrir os custos do servidor (infraestrutura, armazenamento e banco de dados). Doações dão vantagens técnicas imediatas, mas nunca XP nem níveis - os níveis são conquistados com contribuições reais.",
 			"monthly_supporter": {
 				"bonus": "Um badge Supporter mensal brilhante no seu perfil.",
 				"note": "Se você cancelar, continua Supporter com as threads extras.",
@@ -272,7 +272,7 @@
 			"novice": "Novato",
 			"scholar": "Erudito"
 		},
-		"speedDisclaimer": "Estes tempos são estimativas. A velocidade real depende do seu dispositivo (processador, armazenamento e conexão) e de quais mídias você ativou para baixar: imagens, vídeos, manuais etc. Fazer scraping só de metadados é bem mais rápido; baixar todos os tipos de mídia, principalmente vídeos, é mais lento."
+		"speedDisclaimer": "Estes tempos são estimativas. A velocidade real depende do seu dispositivo (processador, armazenamento e conexão) e de quais mídias você ativou para baixar, como imagens e vídeos. Fazer scraping só de metadados é bem mais rápido; baixar todos os tipos de mídia, principalmente vídeos, é mais lento."
 	},
 	"home": {
 		"title": "Contribua para o",
