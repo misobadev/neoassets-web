@@ -867,7 +867,12 @@
 		"maxLevel": "Nível máximo atingido.",
 		"progressToLevel": "Progresso para o nível {{level}}",
 		"removeAvatar": "Remover avatar",
-		"requestsPerMinute": "Requisições / min"
+		"requestsPerMinute": "Requisições / min",
+		"emailPasswordHint": "Digite sua senha atual para alterar o email.",
+		"emailPending": "Enviamos um link de confirmação para {{email}}. Seu email só muda quando você abrir o link.",
+		"emailPendingHint": "Aguardando confirmação: {{email}}",
+		"emailConfirming": "Confirmando seu novo email...",
+		"emailChanged": "Email alterado. Entre novamente com seu novo email."
 	},
 	"publicProfile": {
 		"contributions": "Contribuições",

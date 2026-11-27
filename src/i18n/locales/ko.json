@@ -867,7 +867,12 @@
 		"maxLevel": "최대 레벨에 도달했습니다.",
 		"progressToLevel": "레벨 {{level}} 진행도",
 		"removeAvatar": "아바타 삭제",
-		"requestsPerMinute": "요청 / 분"
+		"requestsPerMinute": "요청 / 분",
+		"emailPasswordHint": "이메일을 변경하려면 현재 비밀번호를 입력하세요.",
+		"emailPending": "{{email}}(으)로 확인 링크를 보냈습니다. 링크를 열기 전까지 이메일은 바뀌지 않습니다.",
+		"emailPendingHint": "확인 대기 중: {{email}}",
+		"emailConfirming": "새 이메일을 확인하는 중...",
+		"emailChanged": "이메일이 변경되었습니다. 새 이메일로 다시 로그인하세요."
 	},
 	"publicProfile": {
 		"contributions": "기여",

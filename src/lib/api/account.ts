@@ -13,6 +13,8 @@ export interface User {
 	donor_status: string;
 	avatar_key: string;
 	email_verified: boolean;
+	// A new address waiting for its confirmation link; email stays in use until then.
+	pending_email?: string;
 	created_at: string;
 	updated_at: string;
 }
@@ -30,8 +32,16 @@ export function fetchMe(): Promise<User> {
 	return api<User>("/api/v1/auth/me");
 }
 
-export function updateProfile(body: { username?: string; email?: string }): Promise<User> {
+// A new email needs the current password and only takes effect once the link
+// mailed to it is opened (confirmEmailChange).
+export function updateProfile(body: { username?: string; email?: string; current_password?: string }): Promise<User> {
 	return api<User>("/api/v1/auth/me", { method: "PUT", body });
+}
+
+// confirmEmailChange applies the pending email. The server then signs the
+// account out everywhere, so the caller has to sign in again.
+export function confirmEmailChange(token: string): Promise<{ message: string }> {
+	return api<{ message: string }>("/api/v1/auth/me/email/confirm", { method: "POST", body: { token } });
 }
 
 export function changePassword(body: { current_password: string; new_password: string }): Promise<{ message: string }> {

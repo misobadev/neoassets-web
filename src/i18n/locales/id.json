@@ -867,7 +867,12 @@
 		"maxLevel": "Level maksimum tercapai.",
 		"progressToLevel": "Kemajuan ke level {{level}}",
 		"removeAvatar": "Hapus avatar",
-		"requestsPerMinute": "Permintaan / menit"
+		"requestsPerMinute": "Permintaan / menit",
+		"emailPasswordHint": "Masukkan kata sandi saat ini untuk mengubah email.",
+		"emailPending": "Kami mengirim tautan konfirmasi ke {{email}}. Email kamu tidak berubah sampai kamu membukanya.",
+		"emailPendingHint": "Menunggu konfirmasi: {{email}}",
+		"emailConfirming": "Mengonfirmasi email baru kamu...",
+		"emailChanged": "Email diubah. Masuk lagi dengan email baru kamu."
 	},
 	"publicProfile": {
 		"contributions": "Kontribusi",

@@ -875,7 +875,12 @@
 		"passwordMismatch": "Las contraseñas no coinciden.",
 		"passwordUpdated": "Contraseña actualizada.",
 		"updatePassword": "Actualizar contraseña",
-		"requestsPerMinute": "Peticiones / min"
+		"requestsPerMinute": "Peticiones / min",
+		"emailPasswordHint": "Escribe tu contraseña actual para cambiar el email.",
+		"emailPending": "Enviamos un enlace de confirmación a {{email}}. Tu email no cambia hasta que lo abras.",
+		"emailPendingHint": "Pendiente de confirmar: {{email}}",
+		"emailConfirming": "Confirmando tu nuevo email...",
+		"emailChanged": "Email cambiado. Inicia sesión de nuevo con tu nuevo email."
 	},
 	"publicProfile": {
 		"contributions": "Contribuciones",

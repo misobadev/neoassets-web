@@ -867,7 +867,12 @@
 		"maxLevel": "最大レベルに到達しました。",
 		"progressToLevel": "レベル {{level}} への進捗",
 		"removeAvatar": "アバターを削除",
-		"requestsPerMinute": "リクエスト / 分"
+		"requestsPerMinute": "リクエスト / 分",
+		"emailPasswordHint": "メールアドレスを変更するには現在のパスワードを入力してください。",
+		"emailPending": "{{email}} に確認リンクを送信しました。リンクを開くまでメールアドレスは変わりません。",
+		"emailPendingHint": "確認待ち: {{email}}",
+		"emailConfirming": "新しいメールアドレスを確認しています...",
+		"emailChanged": "メールアドレスを変更しました。新しいメールアドレスで再度サインインしてください。"
 	},
 	"publicProfile": {
 		"contributions": "コントリビューション",

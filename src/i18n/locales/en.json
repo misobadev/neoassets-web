@@ -875,7 +875,12 @@
 		"passwordMismatch": "Passwords do not match.",
 		"passwordUpdated": "Password updated.",
 		"updatePassword": "Update password",
-		"requestsPerMinute": "Requests / min"
+		"requestsPerMinute": "Requests / min",
+		"emailPasswordHint": "Enter your current password to change your email.",
+		"emailPending": "We sent a confirmation link to {{email}}. Your email doesn't change until you open it.",
+		"emailPendingHint": "Waiting for confirmation: {{email}}",
+		"emailConfirming": "Confirming your new email...",
+		"emailChanged": "Email changed. Sign in again with your new email."
 	},
 	"publicProfile": {
 		"contributions": "Contributions",
