@@ -867,7 +867,12 @@
 		"maxLevel": "已达到最高等级。",
 		"progressToLevel": "升级到 {{level}} 级的进度",
 		"removeAvatar": "移除头像",
-		"requestsPerMinute": "请求 / 分钟"
+		"requestsPerMinute": "请求 / 分钟",
+		"emailPasswordHint": "输入当前密码以更改邮箱。",
+		"emailPending": "我们已向 {{email}} 发送确认链接。在你打开链接之前，邮箱不会更改。",
+		"emailPendingHint": "等待确认：{{email}}",
+		"emailConfirming": "正在确认你的新邮箱...",
+		"emailChanged": "邮箱已更改。请使用新邮箱重新登录。"
 	},
 	"publicProfile": {
 		"contributions": "贡献",

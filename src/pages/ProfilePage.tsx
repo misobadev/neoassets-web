@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import SectionTitle from "../components/ui/SectionTitle";
 import PageTitle from "../components/ui/PageTitle";
 import { useTranslation } from "react-i18next";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
 	HeartHandshake,
 	KeyRound,
@@ -21,6 +22,8 @@ import { uploadWithProgress } from "../lib/upload";
 import {
 	changePassword,
 	cdnUrl,
+	clearStoredAuth,
+	confirmEmailChange,
 	createAPIKey,
 	deleteAPIKey,
 	fetchAPIKeys,
@@ -51,6 +54,7 @@ export default function ProfilePage() {
 	const [me, setMe] = useState<User | null>(null);
 	const [username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
+	const [emailPass, setEmailPass] = useState("");
 	const [curPass, setCurPass] = useState("");
 	const [newPass, setNewPass] = useState("");
 	const [confirmPass, setConfirmPass] = useState("");
@@ -72,6 +76,35 @@ export default function ProfilePage() {
 	const [claimBusy, setClaimBusy] = useState(false);
 	const [claimSent, setClaimSent] = useState(false);
 	const [claimMsg, setClaimMsg] = useState<{ text: string; tone: string } | null>(null);
+	const navigate = useNavigate();
+	const [searchParams, setSearchParams] = useSearchParams();
+	const confirmToken = searchParams.get("confirm-email");
+	const confirmStarted = useRef(false);
+
+	// The link mailed to a new address opens this page with ?confirm-email=.
+	// Confirming signs the account out everywhere, so it ends at the login.
+	// The ref keeps a one-use token from being sent twice.
+	useEffect(() => {
+		if (!confirmToken || confirmStarted.current) return;
+		confirmStarted.current = true;
+		setSearchParams(
+			(prev) => {
+				prev.delete("confirm-email");
+				return prev;
+			},
+			{ replace: true },
+		);
+		setProfileMsg({ text: t("profile.emailConfirming"), tone: "info" });
+		confirmEmailChange(confirmToken)
+			.then(() => {
+				clearStoredAuth();
+				navigate("/app/login", {
+					replace: true,
+					state: { from: "/app/profile", notice: t("profile.emailChanged") },
+				});
+			})
+			.catch((e: Error) => setProfileMsg({ text: e.message, tone: "error" }));
+	}, [confirmToken, navigate, setSearchParams, t]);
 
 	async function sendClaimCode() {
 		if (!claimEmail.trim()) return;
@@ -170,7 +203,9 @@ export default function ProfilePage() {
 				setUsername(u.username);
 				setEmail(u.email);
 			})
-			.catch((e: Error) => setProfileMsg({ text: e.message, tone: "error" }));
+			.catch((e: Error) => {
+				if (!confirmStarted.current) setProfileMsg({ text: e.message, tone: "error" });
+			});
 		fetchRewards()
 			.then(setRewards)
 			.catch(() => {});
@@ -211,14 +246,25 @@ export default function ProfilePage() {
 		}
 	}
 
+	// A new email needs the current password; it applies once confirmed.
+	const emailChanging = !!me && email.trim() !== "" && email.trim().toLowerCase() !== me.email.toLowerCase();
+
 	async function saveProfile() {
 		setBusyProfile(true);
 		setProfileMsg(null);
 		try {
-			const u = await updateProfile({ username, email });
+			const u = await updateProfile(
+				emailChanging ? { username, email, current_password: emailPass } : { username },
+			);
 			setMe(u);
+			setEmail(u.email);
+			setEmailPass("");
 			storeCachedUser({ username: u.username || undefined, email: u.email || undefined });
-			setProfileMsg({ text: t("profile.updated"), tone: "success" });
+			setProfileMsg(
+				emailChanging && u.pending_email
+					? { text: t("profile.emailPending", { email: u.pending_email }), tone: "info" }
+					: { text: t("profile.updated"), tone: "success" },
+			);
 		} catch (e) {
 			setProfileMsg({ text: (e as Error).message, tone: "error" });
 		} finally {
@@ -334,13 +380,37 @@ export default function ProfilePage() {
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 						/>
+						{me.pending_email && !emailChanging ? (
+							<p className="text-xs text-[var(--color-info)] mt-1">
+								{t("profile.emailPendingHint", { email: me.pending_email })}
+							</p>
+						) : null}
 					</div>
+					{emailChanging ? (
+						<div className="sm:col-span-2">
+							<label className="label-text">{t("profile.currentPassword")}</label>
+							<input
+								className="input w-full"
+								type="password"
+								autoComplete="current-password"
+								value={emailPass}
+								onChange={(e) => setEmailPass(e.target.value)}
+							/>
+							<p className="text-xs text-[var(--color-base-content)]/60 mt-1">
+								{t("profile.emailPasswordHint")}
+							</p>
+						</div>
+					) : null}
 				</div>
 				{profileMsg ? (
 					<p className={`text-sm font-semibold ${toneColor(profileMsg.tone)}`}>{profileMsg.text}</p>
 				) : null}
 				<div className="flex justify-end">
-					<button className="btn btn-primary" onClick={saveProfile} disabled={busyProfile}>
+					<button
+						className="btn btn-primary"
+						onClick={saveProfile}
+						disabled={busyProfile || (emailChanging && !emailPass)}
+					>
 						{busyProfile ? t("common.saving") : t("common.saveChanges")}
 					</button>
 				</div>

@@ -887,7 +887,12 @@
 		"maxLevel": "Достигнут максимальный уровень.",
 		"progressToLevel": "Прогресс до уровня {{level}}",
 		"removeAvatar": "Удалить аватар",
-		"requestsPerMinute": "Запросов / мин"
+		"requestsPerMinute": "Запросов / мин",
+		"emailPasswordHint": "Введите текущий пароль, чтобы изменить email.",
+		"emailPending": "Мы отправили ссылку для подтверждения на {{email}}. Email не изменится, пока вы её не откроете.",
+		"emailPendingHint": "Ожидает подтверждения: {{email}}",
+		"emailConfirming": "Подтверждаем новый email...",
+		"emailChanged": "Email изменён. Войдите снова с новым email."
 	},
 	"publicProfile": {
 		"contributions": "Вклады",

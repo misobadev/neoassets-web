@@ -13,7 +13,8 @@ export default function AuthPage({ mode }: { mode: "login" | "register" }) {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { t } = useTranslation();
-	const from = (location.state as { from?: string } | null)?.from || "/app/home";
+	const state = location.state as { from?: string; notice?: string } | null;
+	const from = state?.from || "/app/home";
 
 	return (
 		<div className="min-h-[70vh] flex items-center justify-center px-4 py-8">
@@ -25,6 +26,11 @@ export default function AuthPage({ mode }: { mode: "login" | "register" }) {
 					</h1>
 					<p className="text-[var(--color-base-content)]/60 mt-1">{t("auth.pageSubtitle")}</p>
 				</div>
+				{state?.notice ? (
+					<p role="status" className="text-sm font-semibold text-center text-[var(--color-success)] mb-4">
+						{state.notice}
+					</p>
+				) : null}
 				<div className="card card-tone p-6 md:p-8">
 					{/* key forces a remount when navigating between /app/login and
 					    /app/register, so the form opens on the route's mode. */}
